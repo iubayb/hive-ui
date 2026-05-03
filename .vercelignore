@@ -1,0 +1,8 @@
+# Vercel deployment exclusions
+__pycache__/
+*.pyc
+*.pyo
+tests/
+node_modules/
+.env.local
+.env.*.local

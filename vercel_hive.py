@@ -25,7 +25,7 @@ Modes
 Env vars
 --------
   OPENROUTER_API_KEY  — required for chat in standalone mode
-  OPENROUTER_MODEL    — model to use (default: qwen/qwen3-235b-a22b:free)
+  OPENROUTER_MODEL    — model to use (default: openai/gpt-oss-120b:free)
   HIVE_BACKEND_URL    — if set, enables proxy mode (no chat)
   PORT                — local dev port (default 8080)
 """
@@ -41,7 +41,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 HIVE_BACKEND_URL = os.environ.get("HIVE_BACKEND_URL", "").rstrip("/")
 STANDALONE       = not bool(HIVE_BACKEND_URL)
 OPENROUTER_KEY   = os.environ.get("OPENROUTER_API_KEY", "")
-OPENROUTER_MODEL = os.environ.get("OPENROUTER_MODEL", "qwen/qwen3-235b-a22b:free")
+OPENROUTER_MODEL = os.environ.get("OPENROUTER_MODEL", "openai/gpt-oss-120b:free")
 PORT             = int(os.environ.get("PORT", 8080))
 
 # Whitelist for proxy mode
@@ -57,11 +57,11 @@ _PROXY_PATHS = {
 }
 
 DEFAULT_FAVORITES = [
-    "qwen/qwen3-235b-a22b:free",
-    "nousresearch/hermes-3-llama-3.1-405b:free",
     "openai/gpt-oss-120b:free",
-    "qwen/qwen3-coder:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
     "google/gemma-4-31b-it:free",
+    "nousresearch/hermes-3-llama-3.1-405b:free",
+    "qwen/qwen3-coder:free",
     "meta-llama/llama-3.3-70b-instruct:free",
 ]
 
