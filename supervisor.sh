@@ -48,6 +48,7 @@ INTERVAL_STEP=20     # add this many seconds per fully-clean sweep
 GH_CHECK_INTERVAL=300       # check GitHub Actions every 5 minutes
 HIVE_IDLE_THRESHOLD=300     # orchestrator silent >5min → hive-status blocker
 HEARTBEAT_EVERY=5           # print heartbeat every N sweeps
+SELF_TEST_EVERY=10          # run system invariant tests every N sweeps (~25 min)
 
 # ── watchdog paths ────────────────────────────────────────────────────────────
 PS5_LOG=~/research/ps5-hive.log
@@ -458,6 +459,48 @@ watchdog_heartbeat() {
     log "HEARTBEAT | WeGIA=$WEGIA_STATUS | PS5: done=$PS5_DONE pending=$PS5_PENDING running=$PS5_RUNNING"
 }
 
+run_self_test() {
+    local script="/home/ayoub/hive-ui/tests/test_system.sh"
+    [[ -f "$script" ]] || { log "SELF-TEST: test_system.sh not found — skipping"; return; }
+    log "SELF-TEST: running system invariants..."
+    local result
+    result=$(timeout 60 bash "$script" 2>&1 || true)
+    local failed_count
+    failed_count=$(echo "$result" | grep -c "^FAIL:" || true)
+    if [[ "$failed_count" -gt 0 ]]; then
+        log "SELF-TEST: $failed_count invariant(s) FAILED"
+        echo "$result" | grep "^FAIL:" | while IFS= read -r line; do
+            log "  $line"
+            # Raise hive-status blocker for each failure
+            python3 - <<PYEOF 2>/dev/null || true
+import sys, re
+sys.path.insert(0, '/home/ayoub/hive-ui')
+import hive_status
+line = """$line"""
+hive_status.add_blocker('default', 'supervisor', 'self-test: ' + line.strip(), severity='high')
+PYEOF
+        done
+        # Attempt auto-fixes via the orchestrator's registry (fire-and-forget)
+        echo "$result" | grep "^FIX_CMD_" | while IFS= read -r fixline; do
+            local fix_cmd="${fixline#FIX_CMD_*: }"
+            log "SELF-TEST: applying fix: ${fix_cmd:0:80}"
+            eval "$fix_cmd" 2>/dev/null || true
+        done
+    else
+        log "SELF-TEST: all system invariants PASS"
+        # Resolve any open self-test blockers
+        python3 - <<PYEOF 2>/dev/null || true
+import sys
+sys.path.insert(0, '/home/ayoub/hive-ui')
+import hive_status
+s = hive_status.load()
+for b in s.get('blockers', []):
+    if b.get('status') == 'open' and 'self-test' in b.get('description', '').lower():
+        hive_status.resolve_blocker(b['id'], 'supervisor self-test: all invariants passing')
+PYEOF
+    fi
+}
+
 # ── main loop ─────────────────────────────────────────────────────────────────
 
 log "=== Supervisor+Watchdog started (adaptive interval ${INTERVAL_MIN}–${INTERVAL_MAX}s, backoff ${BACKOFF_INIT}–${BACKOFF_MAX}s, conf: $CONF) ==="
@@ -548,6 +591,11 @@ PYEOF
     # Heartbeat every N sweeps
     if (( sweep_count % HEARTBEAT_EVERY == 0 )); then
         watchdog_heartbeat
+    fi
+
+    # Self-test every N sweeps
+    if (( sweep_count % SELF_TEST_EVERY == 0 )); then
+        run_self_test &   # run in background — non-blocking
     fi
 
     # ── adaptive interval ────────────────────────────────────────────────────

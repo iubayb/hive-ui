@@ -65,6 +65,7 @@ HIVE_NAME        = "default"
 HEARTBEAT_INTERVAL  = 120    # 2 min — print a visible line
 COMPACTION_INTERVAL = 900    # 15 min — LLM compaction call
 TRIAGE_INTERVAL     = 60     # 1 min — check session liveness
+SELF_TEST_INTERVAL  = 300    # 5 min — system invariant self-test
 
 # ── rate limiting ─────────────────────────────────────────────────────────────
 _MAX_LLM_CALLS_HR = 8        # conservative — shares OpenRouter free quota
@@ -186,7 +187,7 @@ def alert_watchdog(msg: str):
 # ── triage ────────────────────────────────────────────────────────────────────
 # Sessions that are critical and must be alerted if dead.
 # supervisor.conf handles restarts; we handle alerting.
-CRITICAL_SESSIONS = {"hive-dev", "watchdog", "hive-watch"}
+CRITICAL_SESSIONS = {"hive-dev", "hive-live", "hive-watch"}
 
 _alerted: dict = {}   # session -> last alert epoch (throttle: 10 min between alerts)
 
@@ -287,6 +288,343 @@ def triage():
             for b in s2.get("blockers", []):
                 if b.get("status") == "open" and "avahi" in b.get("description", "").lower():
                     hive_status.resolve_blocker(b["id"], "avahi watchdog: desktop.local resolving normally")
+
+
+# ── self-test ─────────────────────────────────────────────────────────────────
+# Maps test IDs → shell fix commands (run as the ayoub user).
+# Sudo commands use -S to read password from stdin.
+_AUTO_FIX_REGISTRY: dict = {
+    "TS1":  "mkdir -p /etc/systemd/system/ollama.service.d",
+    "TS2":  (
+        "bash -c 'mkdir -p /etc/systemd/system/ollama.service.d && "
+        "printf \"[Service]\\nCPUQuota=1000%%\\nNice=15\\nIOWeight=50\\n"
+        "Environment=OLLAMA_NUM_THREAD=10\\nEnvironment=OLLAMA_MAX_LOADED_MODELS=1\\n\" "
+        "> /etc/systemd/system/ollama.service.d/throttle.conf'"
+    ),
+    "TS3":  (
+        "bash -c 'grep -q CPUQuota=1000%% /etc/systemd/system/ollama.service.d/throttle.conf "
+        "|| echo CPUQuota=1000%% >> /etc/systemd/system/ollama.service.d/throttle.conf'"
+    ),
+    "TS4":  "systemctl daemon-reload && systemctl restart ollama",
+    "TS5":  "pgrep -x ollama | head -1 | xargs -r renice +15 -p",
+    "TS6":  "ln -sf /dev/null /etc/systemd/system/sleep.target",
+    "TS7":  "ln -sf /dev/null /etc/systemd/system/suspend.target",
+    "TS8":  "ln -sf /dev/null /etc/systemd/system/hibernate.target",
+    "TS9":  "ln -sf /dev/null /etc/systemd/system/hybrid-sleep.target",
+    "TS10": f"loginctl enable-linger {os.environ.get('USER', 'ayoub')}",
+    "TS11": "systemctl --user daemon-reload && systemctl --user restart hive-supervisor",
+    "TS12": "systemctl --user restart research-loop.service",
+    "TS13": "systemctl restart nginx",
+    "TS14": "systemctl restart ollama",
+    "TS15": (
+        "(crontab -l 2>/dev/null; echo '* * * * * "
+        "renice +15 -p $(pgrep -x ollama 2>/dev/null | head -1) 2>/dev/null; "
+        "pgrep -f research_loop.py 2>/dev/null | xargs -r renice +10 2>/dev/null; true') "
+        "| crontab -"
+    ),
+    "TS19": "",   # handled per-session in the script itself
+    "TS20": "pgrep -f research_loop.py | head -5 | xargs -r kill -STOP",
+    "TS21": "find /tmp -mtime +1 -delete 2>/dev/null; journalctl --vacuum-size=500M 2>/dev/null; true",
+}
+
+# Track last self-test result to avoid flooding blockers
+_last_self_test_failures: set = set()
+_self_test_auto_fixed_total: int = 0
+
+
+def _run_self_test_script() -> tuple[bool, list[str], list[str]]:
+    """Run tests/test_system.sh, return (all_passed, fail_ids, output_lines)."""
+    script = os.path.join(SCRIPT_DIR, "tests", "test_system.sh")
+    if not os.path.isfile(script):
+        return False, ["SCRIPT_MISSING"], [f"test_system.sh not found at {script}"]
+    try:
+        r = subprocess.run(
+            ["bash", script],
+            capture_output=True, text=True, timeout=60,
+        )
+        lines = r.stdout.splitlines() + r.stderr.splitlines()
+        fail_ids = [
+            ln.split(":")[1].split()[0].strip()
+            for ln in lines
+            if ln.startswith("FAIL:") and len(ln.split(":")) >= 2
+        ]
+        return r.returncode == 0, fail_ids, lines
+    except subprocess.TimeoutExpired:
+        return False, ["TIMEOUT"], ["test_system.sh timed out after 60s"]
+    except Exception as e:
+        return False, ["ERROR"], [f"test_system.sh error: {e}"]
+
+
+def _apply_fix(test_id: str) -> bool:
+    """Apply the auto-fix for a test ID. Returns True if command ran without error."""
+    cmd = _AUTO_FIX_REGISTRY.get(test_id, "")
+    if not cmd:
+        _log(f"[self-test] no auto-fix for {test_id}")
+        return False
+    _log(f"[self-test] applying fix for {test_id}: {cmd[:80]}")
+    try:
+        # Some fixes need sudo - they use ln -sf or systemctl as root
+        # Try as user first; sudo commands will silently fail if no NOPASSWD
+        r = subprocess.run(
+            cmd, shell=True, capture_output=True, text=True,
+            timeout=30, env={**os.environ, "HOME": os.path.expanduser("~")},
+        )
+        if r.returncode == 0:
+            _log(f"[self-test] fix applied OK for {test_id}")
+            return True
+        # If it needs sudo, retry with sudo -S ayb
+        if "sudo" in cmd or any(
+            tok in cmd for tok in ["systemctl restart", "systemctl mask",
+                                    "ln -sf /dev/null /etc/", "loginctl enable-linger"]
+        ):
+            r2 = subprocess.run(
+                cmd, shell=True, capture_output=True, text=True, timeout=30,
+                input="ayb\n",
+                env={**os.environ, "HOME": os.path.expanduser("~")},
+            )
+            if r2.returncode == 0:
+                _log(f"[self-test] fix applied OK (sudo) for {test_id}")
+                return True
+        _log(f"[self-test] fix failed for {test_id}: {r.stderr[:80]}")
+        return False
+    except Exception as e:
+        _log(f"[self-test] fix exception for {test_id}: {e}")
+        return False
+
+
+def self_test():
+    """Run test_system.sh, auto-fix failures, raise/resolve blockers, log achievements."""
+    global _last_self_test_failures, _self_test_auto_fixed_total
+
+    _log("[self-test] running system invariant checks...")
+    passed, fail_ids, lines = _run_self_test_script()
+
+    if passed:
+        _log("[self-test] all system invariants PASS")
+        # Resolve any open self-test blockers
+        s = hive_status.load()
+        for b in s.get("blockers", []):
+            if (b.get("status") == "open"
+                    and b.get("agent") == "orchestrator"
+                    and "self-test" in b.get("description", "").lower()):
+                hive_status.resolve_blocker(b["id"], "self-test: all invariants passing")
+                _log(f"[self-test] resolved blocker {b['id']}")
+        _last_self_test_failures = set()
+        return
+
+    _log(f"[self-test] {len(fail_ids)} invariant(s) failed: {fail_ids}")
+
+    new_failures   = set(fail_ids) - _last_self_test_failures
+    fixed_this_run = []
+
+    for tid in fail_ids:
+        if tid in ("TIMEOUT", "ERROR", "SCRIPT_MISSING"):
+            hive_status.add_blocker(
+                HIVE_NAME, "orchestrator",
+                f"self-test: {tid} — could not run test_system.sh",
+                severity="high",
+            )
+            continue
+
+        # Try auto-fix
+        fix_ok = _apply_fix(tid)
+        if fix_ok:
+            # Re-verify: re-run full script and check this ID passed
+            _, recheck_ids, _ = _run_self_test_script()
+            if tid not in recheck_ids:
+                fixed_this_run.append(tid)
+                _self_test_auto_fixed_total += 1
+                _log(f"[self-test] {tid} auto-fixed and verified ✓")
+                hive_status.add_achievement(
+                    HIVE_NAME, "orchestrator",
+                    f"Auto-fixed system invariant {tid}",
+                    evidence=f"test_system.sh {tid} now passes after auto-fix",
+                )
+                # Register capability once per test ID
+                hive_status.add_capability(
+                    HIVE_NAME, "orchestrator",
+                    skill=f"auto_fix_{tid}",
+                    description=f"Automatically detects and repairs {tid} system invariant failures",
+                    example=f"Applied fix for {tid}: {_AUTO_FIX_REGISTRY.get(tid,'')[:60]}",
+                    tags=["self-healing", "system-invariant", "auto-fix"],
+                )
+                # Resolve any open blocker for this test
+                s = hive_status.load()
+                for b in s.get("blockers", []):
+                    if (b.get("status") == "open"
+                            and b.get("agent") == "orchestrator"
+                            and tid in b.get("description", "")):
+                        hive_status.resolve_blocker(b["id"], f"self-test: {tid} auto-fixed")
+            else:
+                _log(f"[self-test] {tid} fix ran but test still failing")
+                if tid in new_failures:
+                    hive_status.add_blocker(
+                        HIVE_NAME, "orchestrator",
+                        f"self-test: {tid} failing — auto-fix attempted but not sufficient",
+                        severity="high",
+                    )
+        else:
+            # No fix or fix failed — raise blocker only if new
+            if tid in new_failures:
+                hive_status.add_blocker(
+                    HIVE_NAME, "orchestrator",
+                    f"self-test: {tid} failing — no auto-fix available or fix failed",
+                    severity="high",
+                )
+
+    _last_self_test_failures = set(fail_ids) - set(fixed_this_run)
+
+    if fixed_this_run:
+        _log(f"[self-test] auto-fixed {len(fixed_this_run)} invariant(s): {fixed_this_run} "
+             f"(total auto-fixes all time: {_self_test_auto_fixed_total})")
+
+
+# ── issue → test pipeline ─────────────────────────────────────────────────────
+# When a new failure type arrives that isn't in test_system.sh, generate a
+# minimal test stub and commit it — the suite grows permanently.
+
+_ISSUE_TEST_PATTERNS: dict = {
+    # Maps regex pattern → (test_id_prefix, test_body_template)
+    # These are match patterns for blocker descriptions.
+    r"ollama.*cpu|cpu.*ollama|933%|ollama.*throttl": (
+        "ollama_cpu",
+        """# Auto-generated: Ollama CPU throttle check
+id=TSauto_ollama_cpu
+desc="Ollama CPUQuota=1000% in throttle.conf (auto-generated)"
+fix="echo 'CPUQuota=1000%' | sudo tee -a /etc/systemd/system/ollama.service.d/throttle.conf"
+if grep -q 'CPUQuota=1000%' /etc/systemd/system/ollama.service.d/throttle.conf 2>/dev/null; then
+    _pass "$id" "$desc"
+else
+    _fail "$id" "$desc" "CPUQuota=1000% not set" "$fix"
+fi
+""",
+    ),
+    r"sleep.*target|suspend.*target|hibernate": (
+        "sleep_targets",
+        """# Auto-generated: Sleep targets masked check
+id=TSauto_sleep_targets
+desc="Sleep/suspend targets masked (auto-generated)"
+fix="sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target"
+all_masked=1
+for t in sleep.target suspend.target hibernate.target; do
+    [[ "$(readlink /etc/systemd/system/$t 2>/dev/null)" == "/dev/null" ]] || all_masked=0
+done
+if [[ $all_masked -eq 1 ]]; then _pass "$id" "$desc"
+else _fail "$id" "$desc" "one or more targets not masked" "$fix"; fi
+""",
+    ),
+    r"disk.*full|disk.*90|no space": (
+        "disk_space",
+        """# Auto-generated: Disk space check
+id=TSauto_disk_space
+desc="Disk / usage < 90% (auto-generated)"
+fix="find /tmp -mtime +1 -delete 2>/dev/null; journalctl --vacuum-size=200M 2>/dev/null"
+pct=$(df / | awk 'NR==2{gsub(/%/,""); print $5}')
+if [[ "$pct" -lt 90 ]]; then _pass "$id" "$desc (${pct}%)"
+else _fail "$id" "$desc" "${pct}% >= 90%" "$fix"; fi
+""",
+    ),
+    r"oom|out of memory|killed|ram.*low": (
+        "oom",
+        """# Auto-generated: Available RAM check
+id=TSauto_oom
+desc="Available RAM > 500MB (auto-generated)"
+fix="pgrep -f research_loop.py | head -5 | xargs -r kill -STOP"
+avail=$(awk '/^MemAvailable:/{print $2}' /proc/meminfo)
+if [[ "$avail" -gt 512000 ]]; then _pass "$id" "$desc (${avail}kB)"
+else _fail "$id" "$desc" "only ${avail}kB available" "$fix"; fi
+""",
+    ),
+}
+
+_issue_test_committed: set = set()   # patterns already turned into tests
+
+
+def _issue_to_test(blocker_description: str) -> None:
+    """If blocker matches a known pattern and no test exists yet, generate + commit a test."""
+    learned_dir = os.path.join(SCRIPT_DIR, "tests", "learned")
+    os.makedirs(learned_dir, exist_ok=True)
+
+    for pattern, (name, body_template) in _ISSUE_TEST_PATTERNS.items():
+        if name in _issue_test_committed:
+            continue
+        if not re.search(pattern, blocker_description, re.IGNORECASE):
+            continue
+
+        # Check if already on disk
+        dest = os.path.join(learned_dir, f"test_{name}.sh")
+        if os.path.isfile(dest):
+            _issue_test_committed.add(name)
+            continue
+
+        # Write the test stub
+        header = f"""#!/usr/bin/env bash
+# AUTO-GENERATED by orchestrator issue→test pipeline
+# Source blocker: {blocker_description[:80]}
+# Generated at: {_now_iso()}
+set -euo pipefail
+pass=0; fail=0
+_pass(){{ echo "PASS: $1 $2"; (( pass++ )) || true; }}
+_fail(){{ echo "FAIL: $1 $2 — $3"; [[ -n "${{4:-}}" ]] && echo "FIX_CMD_$1: $4"; (( fail++ )) || true; }}
+
+"""
+        footer = """
+echo ""
+echo "SYSTEM_TEST_RESULT: pass=$pass fail=$fail total=$((pass+fail))"
+[[ "$fail" -eq 0 ]]
+"""
+        try:
+            with open(dest, "w") as f:
+                f.write(header + body_template + footer)
+            os.chmod(dest, 0o755)
+            _log(f"[issue→test] generated test: {dest}")
+
+            # Auto-commit to git
+            _git_commit_test(dest, name, blocker_description)
+            _issue_test_committed.add(name)
+
+            hive_status.add_capability(
+                HIVE_NAME, "orchestrator",
+                skill=f"auto_test_{name}",
+                description=f"Auto-generated test for '{name}' from incident: {blocker_description[:60]}",
+                example=f"tests/learned/test_{name}.sh",
+                tags=["self-improving", "auto-generated", "issue-to-test"],
+            )
+        except Exception as e:
+            _log(f"[issue→test] failed to write test for {name}: {e}")
+
+
+def _git_commit_test(filepath: str, name: str, source_desc: str) -> None:
+    """Commit a newly generated test file to git."""
+    try:
+        # Verify we're in a git repo
+        subprocess.run(
+            ["git", "rev-parse", "--git-dir"],
+            cwd=SCRIPT_DIR, capture_output=True, check=True, timeout=5,
+        )
+        subprocess.run(
+            ["git", "add", filepath],
+            cwd=SCRIPT_DIR, capture_output=True, check=True, timeout=5,
+        )
+        msg = (
+            f"auto: add learned test test_{name}.sh\n\n"
+            f"Generated by orchestrator issue→test pipeline.\n"
+            f"Source incident: {source_desc[:120]}\n"
+            f"Generated: {_now_iso()}"
+        )
+        subprocess.run(
+            ["git", "commit", "-m", msg],
+            cwd=SCRIPT_DIR, capture_output=True, timeout=15,
+            env={**os.environ, "GIT_AUTHOR_NAME": "orchestrator",
+                 "GIT_AUTHOR_EMAIL": "orchestrator@hive.local",
+                 "GIT_COMMITTER_NAME": "orchestrator",
+                 "GIT_COMMITTER_EMAIL": "orchestrator@hive.local"},
+        )
+        _log(f"[issue→test] committed {os.path.basename(filepath)} to git")
+    except subprocess.CalledProcessError:
+        pass   # not a git repo or staging failed — test still written to disk
+    except Exception as e:
+        _log(f"[issue→test] git commit failed (non-fatal): {e}")
 
 
 # ── compaction ────────────────────────────────────────────────────────────────
@@ -492,6 +830,7 @@ def main():
     last_heartbeat  = 0.0
     last_compaction = 0.0
     last_triage     = 0.0
+    last_self_test  = 0.0
 
     while True:
         now = time.time()
@@ -553,6 +892,23 @@ def main():
             except Exception as e:
                 _log(f"compaction error (non-fatal): {e}")
             last_compaction = now
+
+        # ── self-test ─────────────────────────────────────────────────────────
+        if now - last_self_test >= SELF_TEST_INTERVAL:
+            try:
+                self_test()
+            except Exception as e:
+                _log(f"self-test error (non-fatal): {e}")
+            last_self_test = now
+
+            # Issue→test pipeline: scan recent blockers for novel patterns
+            try:
+                s = hive_status.load()
+                for b in s.get("blockers", [])[-20:]:
+                    if b.get("status") == "open":
+                        _issue_to_test(b.get("description", ""))
+            except Exception as e:
+                _log(f"issue→test error (non-fatal): {e}")
 
         time.sleep(10)   # base tick — tight loop would waste CPU
 
