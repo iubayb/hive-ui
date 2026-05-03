@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "functions": {
+    "api/index.py": { "maxDuration": 60 }
+  },
+  "builds": [
+    { "src": "api/index.py", "use": "@vercel/python" },
+    { "src": "api/chat.js",  "use": "@vercel/edge"   }
+  ],
+  "routes": [
+    { "src": "/api/chat",  "dest": "api/chat.js"  },
+    { "src": "/(.*)",      "dest": "api/index.py" }
+  ],
+  "env": {
+    "OPENROUTER_API_KEY": "@openrouter_api_key",
+    "OPENROUTER_MODEL":   "@openrouter_model"
+  }
+}
