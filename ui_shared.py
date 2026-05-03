@@ -259,6 +259,10 @@ LOCAL_CSS = r"""
     font-weight:bold;font-size:15px;cursor:pointer;min-height:44px;min-width:52px;flex-shrink:0}
   #send-btn:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
   #send-btn:active:not(:disabled){opacity:.8}
+  #priority-btn{background:#e5c07b;color:#000;border:none;border-radius:4px;
+    font-size:15px;cursor:pointer;min-height:44px;min-width:44px;flex-shrink:0;font-weight:bold}
+  #priority-btn:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
+  #priority-btn:active:not(:disabled){opacity:.8}
   #file-input{display:none}
 
   /* settings modal */
@@ -323,11 +327,75 @@ function renderStatus(s){
   _renderNextSteps(s.next_steps||[]);
   _renderCaps(s.capabilities||{});
   _renderQuestions(s.pending_questions||[]);
+  _renderHiveFeed(s);
   const mc=s.model_champions||{};
   const tc=document.getElementById('arena-text-champ');
   const vc=document.getElementById('arena-vision-champ');
   if(tc)tc.textContent=mc.text||'—';
   if(vc)vc.textContent=mc.vision||'—';
+}
+
+// ── Unified hive feed — blockers + next steps + recent achievements ─────────
+function _renderHiveFeed(s){
+  const feed=document.getElementById('hive-feed');
+  if(!feed)return;
+  feed.innerHTML='';
+  const blockers=(s.blockers||[]).filter(b=>b.status==='open');
+  const steps=(s.next_steps||[]).filter(ns=>ns.status!=='done');
+  const achs=(s.achievements||[]).slice(0,3);
+  const caps=s.capabilities||{};
+  const capCount=caps.count||(caps.learned||caps.recent||[]).length||0;
+
+  if(!blockers.length&&!steps.length&&!achs.length){
+    feed.innerHTML='<div class="empty-state" style="padding:8px 0">All clear \u2713</div>';
+    return;
+  }
+
+  // Blockers
+  blockers.forEach(b=>{
+    const d=document.createElement('div');
+    d.className='blocker-item feed-item'; d.id='blocker-'+b.id;
+    d.dataset.testid='blocker-item';
+    d.innerHTML=
+      '<span class="sev-badge '+esc(b.severity||'medium')+'">'+esc(b.severity||'?')+'</span>'+
+      '<div class="blocker-desc">'+esc(b.description)+
+        '<div class="blocker-meta">'+esc(b.hive||'')+' \xb7 '+esc((b.ts||'').slice(11,19))+'</div>'+
+      '</div>'+
+      '<button class="resolve-btn" onclick="resolveBlocker(\''+esc(b.id)+'\',this)">Resolve</button>';
+    feed.appendChild(d);
+  });
+
+  // Pending next steps (top 5 by priority)
+  steps.slice(0,5).forEach(ns=>{
+    const d=document.createElement('div');
+    d.className='ns-item feed-item'; d.dataset.testid='next-step-item';
+    d.innerHTML=
+      '<div class="ns-check" onclick="toggleStep(\''+esc(ns.id)+'\',this)"></div>'+
+      '<div class="ns-text">'+esc(ns.description)+'</div>'+
+      '<div class="ns-meta">P'+(ns.priority||5)+'</div>';
+    feed.appendChild(d);
+  });
+
+  // Recent achievements
+  achs.forEach(a=>{
+    const d=document.createElement('div');
+    d.className='achievement-item feed-item'; d.dataset.testid='achievement-item';
+    d.innerHTML=
+      '<div class="ach-icon">\uD83C\uDFC6</div>'+
+      '<div class="ach-body">'+
+        '<div class="ach-desc">'+esc(a.description)+'</div>'+
+        '<div class="ach-meta">'+esc(a.hive||'')+' \xb7 '+esc((a.ts||'').slice(11,19))+'</div>'+
+      '</div>';
+    feed.appendChild(d);
+  });
+
+  // Capabilities summary
+  if(capCount>0){
+    const d=document.createElement('div');
+    d.className='feed-item'; d.style.cssText='padding:6px 8px;font-size:11px;color:var(--muted)';
+    d.textContent=capCount+' learned capabilities \u2014 see Config \u2192 Arena for details';
+    feed.appendChild(d);
+  }
 }
 
 function _renderHiveHealth(hives){
@@ -649,7 +717,7 @@ window.addEventListener('DOMContentLoaded', () => {
   populateSettings();
   fetchQueue();
   restoreChat();
-  fetch('/api/sessions').then(r=>r.json()).then(list=>list.forEach(ensurePanel)).catch(()=>{});
+  // Sessions are shown in the combined log with badges — no individual panels needed
   fetch('/api/groups').then(r=>r.json()).then(g=>renderGroupTabs(g)).catch(()=>{});
   startStatusStream();
   fetchArenaStatus();
@@ -780,27 +848,48 @@ function lineClass(t){
   return '';
 }
 // ── ANSI → HTML ───────────────────────────────────────────────────────────────
-// Converts common ANSI escape codes to styled <span> elements.
-// Covers 3/4-bit colors (30-37, 90-97, 40-47, 100-107) + bold + reset.
-const _ANSI_COLORS={30:'#888',31:'#e06c75',32:'#98c379',33:'#e5c07b',34:'#61afef',
-  35:'#c678dd',36:'#56b6c2',37:'#dcdfe4',90:'#555',91:'#ff6b6b',92:'#a8e6a3',
-  93:'#ffd93d',94:'#74b9ff',95:'#fd79a8',96:'#81ecec',97:'#fff'};
+// Full ANSI renderer: 3/4-bit, 256-color (38;5;n), 24-bit TrueColor (38;2;r;g;b),
+// bold, dim, italic, underline, strikethrough, blink, reverse, reset.
+const _A3={30:'#888',31:'#e06c75',32:'#98c379',33:'#e5c07b',34:'#61afef',
+  35:'#c678dd',36:'#56b6c2',37:'#dcdfe4',
+  90:'#555',91:'#ff6b6b',92:'#a8e6a3',93:'#ffd93d',
+  94:'#74b9ff',95:'#fd79a8',96:'#81ecec',97:'#fff'};
+// xterm 256-color palette (indices 0-15 use named, 16-231 color cube, 232-255 grayscale)
+function _ansi256(n){
+  if(n<16){const m={0:'#000',1:'#800000',2:'#008000',3:'#808000',4:'#000080',5:'#800080',6:'#008080',7:'#c0c0c0',8:'#808080',9:'#ff0000',10:'#00ff00',11:'#ffff00',12:'#0000ff',13:'#ff00ff',14:'#00ffff',15:'#fff'};return m[n]||'#888';}
+  if(n<232){n-=16;const b=n%6,g=Math.floor(n/6)%6,r=Math.floor(n/36);const v=x=>x?x*40+55:0;return 'rgb('+v(r)+','+v(g)+','+v(b)+')';}
+  const l=8+(n-232)*10; return 'rgb('+l+','+l+','+l+')';
+}
 function ansiToHtml(raw){
-  // Sanitise first (no existing HTML)
   let s=String(raw).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  let out=''; let open=0;
+  // Strip non-SGR sequences (cursor movement, erase, etc.) cleanly
+  s=s.replace(/\x1b\[[0-9;]*[ABCDEFGHJKSTfmisu]/g,m=>m.endsWith('m')?m:'');
+  let open=0;
   s=s.replace(/\x1b\[([0-9;]*)m/g,(_,codes)=>{
-    const parts=(codes||'0').split(';').map(Number);
-    let tag='';
-    for(const c of parts){
+    const parts=(codes||'0').split(';'); let tag=''; let i=0;
+    while(i<parts.length){
+      const c=+parts[i++];
       if(c===0){if(open){tag+='</span>'.repeat(open);open=0;}}
       else if(c===1){tag+='<span style="font-weight:bold">';open++;}
-      else if(_ANSI_COLORS[c]){tag+='<span style="color:'+_ANSI_COLORS[c]+'">';open++;}
-      else if(c>=40&&c<=47){tag+='<span style="background:'+(_ANSI_COLORS[c-10]||'')+'">'; open++;}
+      else if(c===2){tag+='<span style="opacity:.6">';open++;}
+      else if(c===3){tag+='<span style="font-style:italic">';open++;}
+      else if(c===4){tag+='<span style="text-decoration:underline">';open++;}
+      else if(c===9){tag+='<span style="text-decoration:line-through">';open++;}
+      else if(_A3[c]){tag+='<span style="color:'+_A3[c]+'">';open++;}
+      else if(c>=40&&c<=47){tag+='<span style="background:'+(_A3[c-10]||'')+'">'; open++;}
+      else if(c>=100&&c<=107){tag+='<span style="background:'+(_A3[c-60]||'')+'">'; open++;}
+      else if(c===38||c===48){
+        const isBg=c===48;
+        const mode=+parts[i++];
+        let color='';
+        if(mode===5&&i<parts.length){color=_ansi256(+parts[i++]);}
+        else if(mode===2&&i+2<parts.length){color='rgb('+parts[i++]+','+parts[i++]+','+parts[i++]+')';}
+        if(color){tag+='<span style="'+(isBg?'background':'color')+':'+color+'">';open++;}
+      }
     }
     return tag;
   });
-  return out+s+(open?'</span>'.repeat(open):'');
+  return s+(open?'</span>'.repeat(open):'');
 }
 
 function addLogLine(box,session,text,ts){
@@ -809,19 +898,8 @@ function addLogLine(box,session,text,ts){
   const badge=session?'<span class="badge" style="'+badgeStyle(session)+'">'+esc(session)+'</span>':'';
   d.innerHTML='<span class="ts">'+esc(ts)+'</span>'+badge+ansiToHtml(text);
   box.appendChild(d);
-  while(box.children.length>200)box.removeChild(box.firstChild);
+  while(box.children.length>300)box.removeChild(box.firstChild);
   box.scrollTop=box.scrollHeight;
-}
-const _knownSessions=new Set();
-function ensurePanel(session){
-  if(_knownSessions.has(session))return;
-  _knownSessions.add(session);
-  const wrap=document.getElementById('panels');
-  const sec=document.createElement('details'); sec.className='section';
-  sec.innerHTML=
-    '<summary><span>'+esc(session)+'</span><span class="count" id="cnt-'+CSS.escape(session)+'">0 lines</span></summary>'+
-    '<div class="log-box" id="box-'+CSS.escape(session)+'"></div>';
-  wrap.appendChild(sec);
 }
 
 let lastEventTime=Date.now();
@@ -838,18 +916,9 @@ const logEs=new EventSource('/stream');
 logEs.onmessage=function(e){
   lastEventTime=Date.now();
   const data=JSON.parse(e.data);
-  (data.combined||[]).forEach(entry=>ensurePanel(entry.session));
-  Object.keys(data.sessions||{}).forEach(s=>ensurePanel(s));
   const cb=document.getElementById('combined');
   (data.combined||[]).forEach(entry=>addLogLine(cb,entry.session,entry.line,entry.ts));
-  document.getElementById('combined-count').textContent=cb.children.length+' lines';
-  Object.entries(data.sessions||{}).forEach(([s,entries])=>{
-    const box=document.getElementById('box-'+CSS.escape(s));
-    const cnt=document.getElementById('cnt-'+CSS.escape(s));
-    if(!box)return;
-    entries.forEach(entry=>addLogLine(box,null,entry.line,entry.ts));
-    if(cnt)cnt.textContent=box.children.length+' lines';
-  });
+  if(cb)document.getElementById('combined-count').textContent=cb.children.length+' lines';
 };
 logEs.onerror=function(){dot.classList.add('dead');statusBar.textContent='SSE disconnected \u2014 retrying...';};
 logEs.onopen=function(){dot.classList.remove('dead');statusBar.textContent='';};
@@ -988,13 +1057,16 @@ function addBubble(role,text){
   return d.querySelector('.bubble-text');
 }
 let _sending=false;
-async function sendPrompt(){
+async function sendPrompt(priority=false){
   if(_sending)return;
   const input=document.getElementById('prompt-input');
   const prompt=input.value.trim(); if(!prompt)return;
-  _sending=true; document.getElementById('send-btn').disabled=true;
+  _sending=true;
+  document.getElementById('send-btn').disabled=true;
+  const pb=document.getElementById('priority-btn');
+  if(pb)pb.disabled=true;
   input.value=''; autoGrow(input);
-  addBubble('user',prompt);
+  addBubble('user', priority ? '⚡ [PRIORITY] '+prompt : prompt);
   const attachIds=pendingAttachments.map(a=>a.id);
   pendingAttachments.length=0; renderChips();
   const thread=document.getElementById('chat-thread');
@@ -1003,7 +1075,7 @@ async function sendPrompt(){
   thread.appendChild(aiBubble); thread.scrollTop=thread.scrollHeight;
   const textNode=aiBubble.querySelector('.bubble-text');
   try{
-    const body=JSON.stringify({prompt,attachment_ids:attachIds,
+    const body=JSON.stringify({prompt,attachment_ids:attachIds,priority:priority,
       model:cfg.model||DEFAULT_FAVORITES[0],task_dest:cfg.task_dest||'',instructions:cfg.instructions||''});
     const resp=await fetch('/api/prompt',{method:'POST',headers:{'Content-Type':'application/json'},body});
     if(!resp.ok){textNode.textContent='Error: HTTP '+resp.status;return;}
@@ -1027,7 +1099,11 @@ async function sendPrompt(){
     if(!fullText)textNode.textContent='(no response)';
     _saveChatHistory();
   }catch(e){textNode.textContent='Error: '+e.message;}
-  finally{_sending=false;document.getElementById('send-btn').disabled=false;}
+  finally{
+    _sending=false;
+    document.getElementById('send-btn').disabled=false;
+    if(pb)pb.disabled=false;
+  }
 }
 async function clearChat(evt){
   evt.stopPropagation();

@@ -1124,64 +1124,38 @@ _DASHBOARD_TMPL = r"""<!DOCTYPE html>
   <button id="ob-submit" onclick="submitOnboarding()">Begin →</button>
 </div>
 
-<!-- STATUS PANEL -->
-<details class="section" id="status-panel" open>
+<!-- STATUS PANEL — unified feed: health + blockers + next steps + achievements + capabilities -->
+<details class="section" id="status-panel">
   <summary>
     <span><span class="status-dot dead" id="status-dot"></span>Hive Status</span>
     <span id="status-updated" class="count">—</span>
   </summary>
 
-  <!-- health cards -->
+  <!-- health cards + metrics inline -->
   <div id="hive-health-grid"></div>
-
-  <!-- metrics -->
   <div id="metrics-row"></div>
 
-  <!-- blockers -->
-  <details class="section" id="blockers-section" style="margin:8px">
-    <summary>
-      <span>Blockers</span>
-      <span class="count" id="blockers-count">0 open</span>
-    </summary>
-    <div id="blockers-list">
-      <div class="empty-state" id="blockers-empty">No open blockers</div>
-    </div>
-  </details>
+  <!-- unified activity feed — blockers, next_steps, achievements merged, no nested details -->
+  <div id="hive-feed" style="padding:4px 8px 8px"></div>
 
-  <!-- achievements -->
-  <details class="section" id="achievements-section" style="margin:8px">
-    <summary><span>Achievements</span><span class="count" id="ach-count">0</span></summary>
-    <div id="achievements-list">
-      <div class="empty-state">No achievements yet</div>
-    </div>
-  </details>
-
-  <!-- next steps -->
-  <details class="section" id="nextsteps-section" style="margin:8px">
-    <summary><span>Next Steps</span><span class="count" id="ns-count">0</span></summary>
-    <div id="nextsteps-list">
-      <div class="empty-state">No next steps</div>
-    </div>
-  </details>
-
-  <!-- capabilities -->
-  <details class="section" id="caps-section" style="margin:8px">
-    <summary><span>Capabilities Library</span><span class="count" id="caps-count">0</span></summary>
-    <div id="caps-list">
-      <div class="empty-state">No capabilities learned yet</div>
-    </div>
-  </details>
+  <!-- hidden anchors kept for JS compatibility -->
+  <span id="blockers-count" style="display:none">0 open</span>
+  <span id="ach-count" style="display:none">0</span>
+  <span id="ns-count" style="display:none">0</span>
+  <span id="caps-count" style="display:none">0</span>
+  <div id="blockers-list" style="display:none"></div>
+  <div id="achievements-list" style="display:none"></div>
+  <div id="nextsteps-list" style="display:none"></div>
+  <div id="caps-list" style="display:none"></div>
 </details>
 
-<!-- task queue -->
-<details class="section" open id="queue-section">
+<!-- logs — primary landing view (top) -->
+<details class="section" id="logs-section" open>
   <summary>
-    <span>Task Queue</span>
-    <span class="count" id="queue-count">0 tasks</span>
+    <span>Logs</span>
+    <span class="count" id="combined-count">0 lines</span>
   </summary>
-  <div id="queue-list">
-    <div id="queue-empty" style="display:none">No tasks yet. Submit a prompt below.</div>
-  </div>
+  <div class="log-box combined" id="combined"></div>
 </details>
 
 <!-- chat -->
@@ -1195,16 +1169,16 @@ _DASHBOARD_TMPL = r"""<!DOCTYPE html>
   </div>
 </details>
 
-<!-- logs — open by default (primary landing view) -->
-<details class="section" id="logs-section" open>
+<!-- task queue -->
+<details class="section" open id="queue-section">
   <summary>
-    <span>Logs</span>
-    <span class="count" id="combined-count">0 lines</span>
+    <span>Task Queue</span>
+    <span class="count" id="queue-count">0 tasks</span>
   </summary>
-  <div class="log-box combined" id="combined"></div>
+  <div id="queue-list">
+    <div id="queue-empty" style="display:none">No tasks yet. Submit a prompt below.</div>
+  </div>
 </details>
-
-<div id="panels"></div>
 
 </div><!-- /main -->
 
@@ -1215,6 +1189,7 @@ _DASHBOARD_TMPL = r"""<!DOCTYPE html>
     <button id="attach-btn" onclick="triggerAttach()" title="Attach file">📎</button>
     <textarea id="prompt-input" rows="1" placeholder="Ask the hive anything…"
               oninput="autoGrow(this)" onkeydown="handleKey(event)"></textarea>
+    <button id="priority-btn" onclick="sendPrompt(true)" title="Force-prioritize this prompt — added to front of queue">⚡</button>
     <button id="send-btn" onclick="sendPrompt()">▶</button>
   </div>
   <input id="file-input" type="file" multiple accept="*/*" onchange="handleFiles(event)">
@@ -1485,28 +1460,17 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
         last_combined_len  = 0
-        last_session_lens  = {}
         try:
             while True:
                 with lock:
                     clist        = list(combined)
                     new_combined = clist[last_combined_len:]
                     last_combined_len = len(clist)
-                    new_sessions = {}
-                    for s, buf in buffers.items():
-                        bl  = list(buf)
-                        ll  = last_session_lens.get(s, 0)
-                        nls = bl[ll:]
-                        if nls:
-                            new_sessions[s] = [
-                                {"line": l, "ts": time.strftime("%H:%M:%S")}
-                                for l in nls
-                            ]
-                        last_session_lens[s] = len(bl)
-                payload = json.dumps({"combined": new_combined,
-                                      "sessions": new_sessions})
-                self.wfile.write(f"data: {payload}\n\n".encode())
-                self.wfile.flush()
+                # Only send combined — per-session panels removed, no redundant data
+                if new_combined:
+                    payload = json.dumps({"combined": new_combined})
+                    self.wfile.write(f"data: {payload}\n\n".encode())
+                    self.wfile.flush()
                 time.sleep(POLL_INTERVAL)
         except (BrokenPipeError, ConnectionResetError, OSError):
             pass
@@ -1795,6 +1759,7 @@ class Handler(BaseHTTPRequestHandler):
         model          = body.get("model") or OPENROUTER_MODEL
         task_dest      = body.get("task_dest", "").strip()
         instructions   = body.get("instructions", "").strip()
+        is_priority    = bool(body.get("priority", False))
 
         if not prompt:
             self._send_json({"error": "empty prompt"}, 400)
@@ -1813,6 +1778,7 @@ class Handler(BaseHTTPRequestHandler):
             "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "summary":    summary,
             "status":     "queued",
+            "priority":   is_priority,
             "pr_number":  None,
             "pr_url":     None,
             "model":      model,
@@ -1820,7 +1786,10 @@ class Handler(BaseHTTPRequestHandler):
             "thread":     [{"role": "user", "content": prompt}],
         }
         with queue_lock:
-            task_queue.append(item)
+            if is_priority:
+                task_queue.insert(0, item)  # front of queue
+            else:
+                task_queue.append(item)
         _save_queue()
 
         self.send_response(200)
