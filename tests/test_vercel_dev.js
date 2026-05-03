@@ -128,10 +128,15 @@ function waitReady(ms = 30000) {
 
 (async () => {
   // ── start local mock dev server (mirrors Vercel routing without needing login) ─
+  // ── ensure .env.local exists (create from env var when missing, e.g. in CI) ──
   const envLocal = path.join(ROOT, '.env.local');
   if (!fs.existsSync(envLocal)) {
-    console.error('FATAL: .env.local missing — run: echo "OPENROUTER_API_KEY=sk-..." > .env.local');
-    process.exit(1);
+    const key = process.env.OPENROUTER_API_KEY || '';
+    const model = process.env.OPENROUTER_MODEL || 'openai/gpt-oss-120b:free';
+    fs.writeFileSync(envLocal,
+      `OPENROUTER_API_KEY=${key}\nOPENROUTER_MODEL=${model}\n`);
+    if (key) console.log('[test] Created .env.local from OPENROUTER_API_KEY env var');
+    else     console.log('[test] Created empty .env.local (VD12-16 will be skipped)');
   }
 
   const mockScript = path.join(ROOT, 'tests', 'local_dev_server.js');
@@ -166,7 +171,8 @@ function waitReady(ms = 30000) {
   const root = await get('/').catch(() => ({ status: 0, body: '', headers: {} }));
   assert('VD1', 'GET / returns 200 via vercel dev', root.status === 200, `status=${root.status}`);
   assert('VD2', 'GET / is HTML', (root.headers['content-type'] || '').includes('text/html'), root.headers['content-type']);
-  assert('VD3', 'Dashboard has #chat-input', root.body.includes('chat-input'), 'not found');
+  assert('VD3', 'Dashboard has #chat-input', root.body.includes('chat-input'),
+    root.body.includes('chat-input') ? 'found' : 'not found in HTML response');
 
   const status = await get('/api/status').catch(() => ({ status: 0, body: '{}' }));
   assert('VD4', 'GET /api/status returns 200', status.status === 200, `status=${status.status}`);
