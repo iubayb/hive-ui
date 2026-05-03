@@ -1,0 +1,15 @@
+{
+  "name": "hive-ui-tests",
+  "version": "1.0.0",
+  "description": "Hive UI test suite",
+  "private": true,
+  "scripts": {
+    "test": "node tests/test_all.js",
+    "test:visual": "node tests/test_visual.js",
+    "test:arena": "node tests/test_arena.js",
+    "test:all": "bash tests/run_all.sh"
+  },
+  "dependencies": {
+    "playwright": "1.49.0"
+  }
+}

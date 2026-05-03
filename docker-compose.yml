@@ -1,0 +1,22 @@
+services:
+  hive-ui:
+    build: .
+    ports:
+      - "${PORT:-8888}:${PORT:-8888}"
+    volumes:
+      # Mount host tmux socket so the container can run tmux capture-pane
+      - /tmp/tmux-1000:/tmp/tmux-1000:ro
+      - /run/user/1000:/run/user/1000:ro
+      # Mount gh auth so GitHub PR creation works
+      - ${HOME}/.config/gh:/root/.config/gh:ro
+      # Mount hive env for OPENROUTER_API_KEY fallback
+      - ${HOME}/.config/research-hive:/root/.config/research-hive:ro
+    environment:
+      - PORT=${PORT:-8888}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - OPENROUTER_MODEL=${OPENROUTER_MODEL:-deepseek/deepseek-r1:free}
+      - LLM_BASE_URL=${LLM_BASE_URL:-https://openrouter.ai/api/v1}
+      - GITHUB_TASKS_REPO=${GITHUB_TASKS_REPO:-iubayb/hive-tasks}
+    restart: unless-stopped
+    # Set TMUX_TMPDIR so tmux inside the container finds the host socket
+    # For cloud mode (no host tmux): remove the volumes block above

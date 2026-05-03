@@ -1,0 +1,10 @@
+# supervisor.conf — restart commands for managed tmux sessions
+# Format: session_name:command  (split on first colon)
+# Sessions in tmux but NOT listed here are health-checked only (no restart).
+# Reload without restarting the supervisor — config is read each sweep.
+
+# Examples (uncomment and adapt):
+# build_monitor:while true; do bash /tmp/monitor_builds.sh; echo "[$(date +%H:%M:%S)] script exited — restarting in 5s"; sleep 5; done
+# hive-watch:journalctl --user -fu research-loop.service
+# ps5-hive:python3 /home/user/research_loop.py --mission 'mission text' --target-dir /tmp/work
+# watchdog:bash /home/user/hive-watchdog.sh
