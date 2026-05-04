@@ -583,10 +583,14 @@ _BG_MAX_TOKENS    = 512     # hard cap per background call
 _BG_MAX_CALLS_HR  = 20      # max background LLM calls per hour
 _bg_budget_lock   = threading.Lock()
 _bg_calls_this_hr: list = []   # timestamps of recent calls
+_bg_retry_after: float = 0.0   # epoch time before which bg LLM calls are blocked
 
 def _bg_budget_ok() -> bool:
     """Return True if we are within the per-hour budget."""
+    global _bg_retry_after
     now = time.time()
+    if now < _bg_retry_after:
+        return False
     with _bg_budget_lock:
         # Evict calls older than 1 hour
         cutoff = now - 3600
@@ -660,7 +664,9 @@ def _call_bg_llm(messages: list, model: str = None,
         raw  = resp.read().decode("utf-8", errors="replace")
         conn.close()
         if resp.status == 429:
-            _log("[llm] rate-limited (429) — budget slot preserved for retry")
+            global _bg_retry_after
+            _bg_retry_after = time.time() + 60
+            _log("[llm-bg] rate-limited (429) — backing off 60s")
             return "", "rate_limited"
         if resp.status == 401:
             _log("[llm] CRITICAL: 401 Unauthorized — API key invalid or expired")

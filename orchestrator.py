@@ -791,7 +791,26 @@ else _fail "$id" "$desc" "HIVE_GITHUB_REPO not in environment" "$fix"; fi
     ),
 }
 
-_issue_test_committed: set = set()   # patterns already turned into tests
+_COMMITTED_TESTS_FILE = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "tests", "learned", ".committed.json"
+)
+
+def _load_committed_tests() -> set:
+    try:
+        with open(_COMMITTED_TESTS_FILE) as f:
+            return set(json.load(f))
+    except (FileNotFoundError, Exception):
+        return set()
+
+def _save_committed_tests(names: set) -> None:
+    try:
+        os.makedirs(os.path.dirname(_COMMITTED_TESTS_FILE), exist_ok=True)
+        with open(_COMMITTED_TESTS_FILE, "w") as f:
+            json.dump(sorted(names), f)
+    except Exception as e:
+        _log(f"[issue→test] failed to persist committed tests: {e}")
+
+_issue_test_committed: set = _load_committed_tests()   # patterns already turned into tests
 
 
 def _issue_to_test(blocker_description: str) -> None:
@@ -809,6 +828,7 @@ def _issue_to_test(blocker_description: str) -> None:
         dest = os.path.join(learned_dir, f"test_{name}.sh")
         if os.path.isfile(dest):
             _issue_test_committed.add(name)
+            _save_committed_tests(_issue_test_committed)
             continue
 
         # Write the test stub
@@ -853,6 +873,7 @@ echo "SYSTEM_TEST_RESULT: pass=$pass fail=$fail total=$((pass+fail))"
                 ),
             )
             _issue_test_committed.add(name)
+            _save_committed_tests(_issue_test_committed)
 
             _record_improvement(
                 skill=f"auto_test_{name}",
