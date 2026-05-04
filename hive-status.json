@@ -1,18 +1,19 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-04T16:46:56Z",
+  "last_updated": "2026-05-04T16:51:01Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.55,
-      "last_seen": "2026-05-04T16:46:36Z",
+      "health_score": 0.9,
+      "last_seen": "2026-05-04T16:50:57Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
         "hive-live",
         "hive-nextjs",
         "hive-watch",
+        "nextjs-prod",
         "opencode",
         "orchestrator",
         "ps5-hive",
@@ -20,7 +21,7 @@
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
-      "errors_last_hour": 1,
+      "errors_last_hour": 9,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -92,6 +93,18 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_efe6b7d6",
+      "ts": "2026-05-04T16:51:00Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Worker stuck in failure loop: 4846 consecutive failures with 1 task perpetually running, indicating deadlocked worker or broken dependency preventing task completion.",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null
+    },
     {
       "id": "b_fc7a18a8",
       "ts": "2026-05-04T16:27:25Z",
@@ -1269,17 +1282,6 @@
       "status": "resolved",
       "resolved_at": "2026-05-04T03:04:06Z",
       "resolution": "supervisor self-test: all invariants passing"
-    },
-    {
-      "id": "b_b3316ce6",
-      "ts": "2026-05-04T03:01:57Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "self-test: TS17 failing \u2014 no auto-fix available or fix failed",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-04T03:04:06Z",
-      "resolution": "supervisor self-test: all invariants passing"
     }
   ],
   "next_steps": [
@@ -1538,6 +1540,20 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_d78ba75f",
+        "ts": "2026-05-04T16:51:01Z",
+        "hive": "default",
+        "summary": "Critical worker deadlock causing infinite failure loop; requires process kill, dependency validation, and orchestrator resume.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_368eee28",
+        "ts": "2026-05-04T16:51:01Z",
+        "hive": "default",
+        "summary": "Auto-fix failed (exit -15): `pkill -f 'hive.*worker' && sleep 2 && hash -r && curl -s http://127.0.0.1:11434/`",
+        "source": "hive-doctor-rollback"
+      },
       {
         "id": "f_3b79ea47",
         "ts": "2026-05-04T16:20:57Z",
@@ -2230,7 +2246,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 144
+    "openrouter_calls_today": 145
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -2452,9 +2468,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
-    "status": "running",
-    "started_at": "2026-05-04T16:46:56Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-04T16:50:39Z",
+    "completed_at": "2026-05-04T16:50:40Z"
   }
 }
