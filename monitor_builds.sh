@@ -3,7 +3,8 @@
 # Loops forever: idles between builds, auto-monitors each new PS5 Kernel Build
 # end-to-end (kernel → image → release). Crashes are caught by the tmux wrapper.
 
-# GH_TOKEN loaded from env or gh CLI — never hardcode
+# GH_TOKEN is read from the environment or gh CLI keychain — never hardcode here
+export GH_TOKEN="${GH_TOKEN:-$(gh auth token 2>/dev/null)}"
 REPO=iubayb/ps5_bazzite
 LOG=/tmp/build_monitor.log
 STATE_FILE=/tmp/build_monitor_last_run   # persists last-seen run ID across restarts
