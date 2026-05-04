@@ -41,7 +41,7 @@ CLI:
   python3 hive_status.py --compact    → print build_context_block() output
 """
 
-import hashlib, json, os, subprocess, threading, time, uuid
+import fcntl, hashlib, json, os, subprocess, threading, time, uuid
 import org_guard  # org isolation — must stay imported
 
 STATUS_FILE   = "/tmp/hive-status.json"
@@ -137,14 +137,23 @@ def _uid(prefix: str) -> str:
 def load() -> dict:
     try:
         with open(STATUS_FILE) as f:
-            data = json.load(f)
+            fcntl.flock(f, fcntl.LOCK_SH)
+            try:
+                data = json.load(f)
+            finally:
+                fcntl.flock(f, fcntl.LOCK_UN)
         # Migrate missing keys
         empty = _empty_status()
         for k, v in empty.items():
             if k not in data:
                 data[k] = v
         return data
-    except Exception:
+    except FileNotFoundError:
+        return _empty_status()
+    except Exception as e:
+        import sys
+        print(f"[hive_status] WARNING: load() failed ({e}) — returning empty state",
+              file=sys.stderr, flush=True)
         return _empty_status()
 
 def save(status: dict, updated_by: str = "system"):
@@ -153,7 +162,11 @@ def save(status: dict, updated_by: str = "system"):
     try:
         tmp = STATUS_FILE + ".tmp"
         with open(tmp, "w") as f:
-            json.dump(status, f, indent=2)
+            fcntl.flock(f, fcntl.LOCK_EX)
+            try:
+                json.dump(status, f, indent=2)
+            finally:
+                fcntl.flock(f, fcntl.LOCK_UN)
         os.replace(tmp, STATUS_FILE)
     except Exception:
         pass
