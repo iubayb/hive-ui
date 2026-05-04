@@ -120,6 +120,15 @@ def call_llm(messages: list, max_tokens: int = 512, timeout: int = 60):
         resp = conn.getresponse()
         raw  = resp.read().decode("utf-8", errors="replace")
         conn.close()
+        if resp.status == 429:
+            _log("[llm] rate-limited (429) — budget slot preserved for retry")
+            return "", "rate_limited"
+        if resp.status == 401:
+            _log("[llm] CRITICAL: 401 Unauthorized — API key invalid or expired")
+            return "", "auth_error"
+        if resp.status == 503:
+            _log("[llm] service unavailable (503)")
+            return "", "service_unavailable"
         if resp.status != 200:
             return "", f"HTTP {resp.status}"
         data = json.loads(raw)
@@ -766,6 +775,16 @@ fix="pgrep -f research_loop.py | head -5 | xargs -r kill -STOP"
 avail=$(awk '/^MemAvailable:/{print $2}' /proc/meminfo)
 if [[ "$avail" -gt 512000 ]]; then _pass "$id" "$desc (${avail}kB)"
 else _fail "$id" "$desc" "only ${avail}kB available" "$fix"; fi
+""",
+    ),
+    r"hive_github_repo.*not set|github.*repo.*missing|env.*not set": (
+        "env_github_repo",
+        """# Auto-generated: HIVE_GITHUB_REPO env var check
+id=TSauto_env_github_repo
+desc="HIVE_GITHUB_REPO is set in environment"
+fix="grep -q HIVE_GITHUB_REPO /home/ayoub/hive-ui/.env || echo 'HIVE_GITHUB_REPO=iubayb/hive-ui' >> /home/ayoub/hive-ui/.env"
+if [[ -n "${HIVE_GITHUB_REPO:-}" ]]; then _pass "$id" "$desc"
+else _fail "$id" "$desc" "HIVE_GITHUB_REPO not in environment" "$fix"; fi
 """,
     ),
 }
@@ -1490,7 +1509,7 @@ def main():
                 try:
                     hive_status.set_active_task("orchestrator", "issue→test: scanning blockers for new test patterns")
                     s = hive_status.load()
-                    for b in s.get("blockers", [])[-20:]:
+                    for b in s.get("blockers", [])[:20]:
                         if b.get("status") == "open":
                             _issue_to_test(b.get("description", ""))
                 except Exception as e:

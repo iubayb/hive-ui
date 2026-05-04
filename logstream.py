@@ -39,7 +39,7 @@ Endpoints:
    DELETE /api/tracker/remove    → remove tracked researcher
 """
 import email.message, email.policy, hashlib, http.client, io, json
-import os, queue, re, subprocess, ssl, threading, time, traceback, uuid
+import os, queue, re, shlex, subprocess, ssl, threading, time, traceback, uuid
 from collections import deque
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse, parse_qs
@@ -659,6 +659,15 @@ def _call_bg_llm(messages: list, model: str = None,
         resp = conn.getresponse()
         raw  = resp.read().decode("utf-8", errors="replace")
         conn.close()
+        if resp.status == 429:
+            _log("[llm] rate-limited (429) — budget slot preserved for retry")
+            return "", "rate_limited"
+        if resp.status == 401:
+            _log("[llm] CRITICAL: 401 Unauthorized — API key invalid or expired")
+            return "", "auth_error"
+        if resp.status == 503:
+            _log("[llm] service unavailable (503)")
+            return "", "service_unavailable"
         if resp.status != 200:
             return "", f"HTTP {resp.status}"
         data = json.loads(raw)
@@ -912,7 +921,7 @@ def _safe_apply(cmd: str, blocker_id: str, session: str = "",
         return False
     try:
         result = subprocess.run(
-            cmd_stripped, shell=True, timeout=10,
+            shlex.split(cmd_stripped), shell=False, timeout=10,
             capture_output=True, text=True
         )
         if result.returncode == 0:
