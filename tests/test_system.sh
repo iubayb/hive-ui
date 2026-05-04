@@ -250,18 +250,12 @@ done
 if [[ ${#missing[@]} -eq 0 ]]; then
     _pass "$id" "$desc"
 else
-    # Fix: try to restart missing sessions that are in supervisor.conf
-    fix_cmds=()
-    for m in "${missing[@]}"; do
-        case "$m" in
-            hive-dev)   fix_cmds+=("tmux new-session -d -s hive-dev 'cd $HIVE_DIR && PORT=8889 python3 logstream.py'") ;;
-            hive-live)  fix_cmds+=("tmux new-session -d -s hive-live 'cd $HIVE_DIR && PORT=8888 python3 logstream.py'") ;;
-            orchestrator) fix_cmds+=("tmux new-session -d -s orchestrator 'cd $HIVE_DIR && python3 orchestrator.py'") ;;
-            supervisor) fix_cmds+=("# supervisor manages itself — if missing, run: bash $HIVE_DIR/supervisor.sh") ;;
-            *) fix_cmds+=("# $m: check supervisor.conf for restart command") ;;
-        esac
-    done
-    fix=$(IFS='; '; echo "${fix_cmds[*]}")
+    # Fix: call ensure_all_sessions from supervisor.sh to bootstrap missing sessions
+    fix="bash -c 'source /home/ayoub/hive-ui/supervisor.sh --bootstrap-only 2>/dev/null || \
+    tmux new-session -d -s hive-dev 2>/dev/null && tmux send-keys -t hive-dev \"PORT=8889 python3 /home/ayoub/hive-ui/logstream.py\" ENTER; \
+    tmux new-session -d -s hive-live 2>/dev/null && tmux send-keys -t hive-live \"PORT=8888 python3 /home/ayoub/hive-ui/logstream.py\" ENTER; \
+    tmux new-session -d -s orchestrator 2>/dev/null && tmux send-keys -t orchestrator \"cd /home/ayoub/hive-ui && python3 orchestrator.py\" ENTER; \
+    tmux new-session -d -s hive-watch 2>/dev/null && tmux send-keys -t hive-watch \"while true; do journalctl --user -f -u research-loop.service; sleep 2; done\" ENTER'"
     _fail "$id" "$desc" "missing: ${missing[*]}" "$fix"
 fi
 

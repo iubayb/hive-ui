@@ -155,8 +155,15 @@ PYEOF
     local count=$(( ${RESTART_COUNT[$session]:-0} + 1 ))
     log "RESTART    [$session] attempt=$count backoff=${backoff}s → ${CMD[$session]:0:80}..."
 
-    tmux send-keys -t "$session" "" Enter 2>/dev/null
-    sleep 0.3
+    # Create session if it doesn't exist — this is the critical fix for post-reboot recovery
+    if ! tmux has-session -t "$session" 2>/dev/null; then
+        log "CREATE     [$session] — session missing from tmux, creating fresh"
+        tmux new-session -d -s "$session" 2>/dev/null || true
+    else
+        # Clear any stale command first
+        tmux send-keys -t "$session" "" Enter 2>/dev/null
+        sleep 0.3
+    fi
     tmux send-keys -t "$session" "${CMD[$session]}" Enter
 
     LAST_RESTART[$session]=$now
@@ -168,6 +175,36 @@ PYEOF
 
     had_event=1
     http_check "$session"
+}
+
+# ── session bootstrap — creates any configured session missing from tmux ──────
+# This is the critical post-reboot recovery path. After a reboot tmux starts
+# with zero sessions. The main loop only iterates over existing sessions, so
+# without this function sessions would never be created after a reboot.
+ensure_all_sessions() {
+    load_conf
+    local existing_sessions
+    existing_sessions=$(tmux ls -F "#{session_name}" 2>/dev/null || true)
+    for session in "${!CMD[@]}"; do
+        [[ "$session" == "$SELF" ]] && continue
+        if ! echo "$existing_sessions" | grep -qx "$session"; then
+            log "BOOTSTRAP  [$session] — not in tmux, creating and launching"
+            tmux new-session -d -s "$session" 2>/dev/null || true
+            sleep 0.2
+            tmux send-keys -t "$session" "${CMD[$session]}" Enter
+            had_event=1
+            # Brief health check for servers with a URL
+            local url="${HEALTHCHECK[$session]:-}"
+            if [[ -n "$url" ]]; then
+                sleep 6
+                if curl -sf --max-time 5 "$url" >/dev/null 2>&1; then
+                    log "BOOTSTRAP  [$session] health check OK — $url"
+                else
+                    log "BOOTSTRAP  [$session] health check PENDING — $url (may still be starting)"
+                fi
+            fi
+        fi
+    done
 }
 
 # ── watchdog: WeGIA service ────────────────────────────────────────────────────
@@ -530,10 +567,18 @@ _apply_oom_scores() {
 _apply_oom_scores
 log "INFO startup: OOM scores and nice levels applied"
 
+# Bootstrap: create all configured sessions that don't exist yet (post-reboot recovery)
+log "INFO startup: bootstrapping missing sessions from $CONF"
+ensure_all_sessions
+log "INFO startup: bootstrap complete"
+
 while true; do
     load_conf
     had_event=0
     sweep_count=$(( sweep_count + 1 ))
+
+    # ── session bootstrap (every sweep) — catches sessions killed outside supervisor ─
+    ensure_all_sessions
 
     # ── session process supervision ──────────────────────────────────────────
     mapfile -t sessions < <(tmux ls -F "#{session_name}" 2>/dev/null || true)
