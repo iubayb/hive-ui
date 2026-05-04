@@ -40,29 +40,36 @@ const DOT_COLOR: Record<DotState, string> = {
 export function ActiveTaskBar() {
   const hiveStatus = useHiveStore((s) => s.hiveStatus);
 
-  // active_task in the store is a plain string like "[agent] description"
-  // We try to parse "[agent]" prefix; fall back gracefully.
-  const rawTask = hiveStatus?.active_task ?? "";
-  const isActive = Boolean(rawTask);
+  // active_task is either a string "[agent] desc" or an object {agent, task, started_at}
+  const rawTaskObj = hiveStatus?.active_task;
+  let agent: string | null = null;
+  let description = "";
+  let objStartedAt: string | undefined;
 
-  const agentMatch = rawTask.match(/^\[([^\]]+)\]/);
-  const agent = agentMatch ? agentMatch[1] : null;
-  const description = agentMatch
-    ? rawTask.slice(agentMatch[0].length).trim()
-    : rawTask;
-  const truncated =
-    description.length > 80 ? description.slice(0, 80) + "…" : description;
+  if (rawTaskObj && typeof rawTaskObj === "object") {
+    agent = rawTaskObj.agent ?? null;
+    description = rawTaskObj.task ?? "";
+    objStartedAt = rawTaskObj.started_at;
+  } else if (typeof rawTaskObj === "string") {
+    const agentMatch = rawTaskObj.match(/^\[([^\]]+)\]/);
+    agent = agentMatch ? agentMatch[1] : null;
+    description = agentMatch ? rawTaskObj.slice(agentMatch[0].length).trim() : rawTaskObj;
+  }
 
-  // started_at isn't in HiveStatus; we approximate by tracking when active_task last changed.
-  const [startedAt, setStartedAt] = useState<string | undefined>(undefined);
+  const isActive = Boolean(rawTaskObj);
+  const truncated = description.length > 80 ? description.slice(0, 80) + "…" : description;
+
+  // Track when task last changed for elapsed time
+  const [startedAt, setStartedAt] = useState<string | undefined>(objStartedAt);
   const [prevTask, setPrevTask] = useState<string>("");
+  const taskKey = typeof rawTaskObj === "object" ? (rawTaskObj?.task ?? "") : (rawTaskObj ?? "");
 
   useEffect(() => {
-    if (rawTask !== prevTask) {
-      setPrevTask(rawTask);
-      setStartedAt(rawTask ? new Date().toISOString() : undefined);
+    if (taskKey !== prevTask) {
+      setPrevTask(taskKey);
+      setStartedAt(objStartedAt ?? (taskKey ? new Date().toISOString() : undefined));
     }
-  }, [rawTask, prevTask]);
+  }, [taskKey, prevTask, objStartedAt]);
 
   const elapsed = useElapsed(startedAt);
   const dotState = getDotState(startedAt, isActive);

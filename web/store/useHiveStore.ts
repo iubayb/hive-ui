@@ -32,10 +32,20 @@ export interface NextStep {
   assigned_to?: string;
 }
 
+export interface OrchestratorSession {
+  id: string;
+  ts: string;
+  goal?: string;
+  summary?: string;
+  progress?: string;
+  next_steps?: string[];
+  decisions?: string[];
+}
+
 export interface HiveStatus {
   schema_version?: string;
   last_updated?: string;
-  active_task?: string;
+  active_task?: { agent?: string; task?: string; status?: string; started_at?: string; completed_at?: string } | string;
   hives?: {
     default?: {
       status: string;
@@ -50,6 +60,7 @@ export interface HiveStatus {
   achievements?: Achievement[];
   blockers?: Blocker[];
   next_steps?: NextStep[];
+  orchestrator_sessions?: OrchestratorSession[];
   metrics?: {
     tasks_completed_total: number;
     openrouter_calls_today: number;
