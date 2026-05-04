@@ -111,7 +111,46 @@ jobs:
           print(f"All required symbols present: {required}")
           EOF
 
-      - name: test_system.sh is executable
+       - name: test_system.sh is executable
         run: |
           [[ -x tests/test_system.sh ]] || { echo "tests/test_system.sh not executable"; exit 1; }
           echo "tests/test_system.sh is executable"
+
+      - name: web/package.json exists
+        run: |
+          [[ -f web/package.json ]] || { echo "web/package.json not found"; exit 1; }
+          echo "web/package.json present"
+
+  # ── Job 4: Next.js web build ────────────────────────────────────────────────
+  web-build:
+    name: Next.js web build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        working-directory: web
+        run: npm ci --prefer-offline || npm install
+
+      - name: Create .env.local for build
+        working-directory: web
+        run: |
+          cat > .env.local <<'EOF'
+          HIVE_BACKEND_URL=http://localhost:8888
+          GITHUB_TOKEN=dummy
+          GITHUB_OWNER=dummy
+          GITHUB_REPO=dummy
+          OPENROUTER_API_KEY=dummy
+          OPENROUTER_MODEL=meta-llama/llama-3.3-70b-instruct:free
+          VAULT_ENCRYPTION_KEY=0000000000000000000000000000000000000000000000000000000000000000
+          REVALIDATE_SECRET=dummy
+          EOF
+
+      - name: Build Next.js app
+        working-directory: web
+        run: npm run build
