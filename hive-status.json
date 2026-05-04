@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-04T16:52:02Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-04T16:52:47Z",
+  "updated_by": "ui",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-04T16:52:02Z",
+      "health_score": 0.75,
+      "last_seen": "2026-05-04T16:52:42Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -163,9 +163,9 @@
       "agent": "supervisor",
       "description": "self-test: FAIL: TS34 HIVE_GITHUB_REPO env var is set \u2014 HIVE_GITHUB_REPO is not set",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-04T16:52:47Z",
+      "resolution": "Env var propagation fixed \u2014 supervisor.sh now sources .env and exports HIVE_GITHUB_REPO",
       "github_issue": null
     },
     {
@@ -175,9 +175,9 @@
       "agent": "supervisor",
       "description": "self-test: FAIL: TS34 HIVE_GITHUB_REPO env var is set \u2014 HIVE_GITHUB_REPO is not set",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-04T16:52:47Z",
+      "resolution": "Env var propagation fixed \u2014 supervisor.sh now sources .env and exports HIVE_GITHUB_REPO",
       "github_issue": null
     },
     {
@@ -223,9 +223,9 @@
       "agent": "supervisor",
       "description": "self-test: FAIL: TS34 HIVE_GITHUB_REPO env var is set \u2014 HIVE_GITHUB_REPO is not set",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-04T16:52:47Z",
+      "resolution": "Env var propagation fixed \u2014 supervisor.sh now sources .env and exports HIVE_GITHUB_REPO",
       "github_issue": null
     },
     {
@@ -247,9 +247,9 @@
       "agent": "supervisor",
       "description": "self-test: FAIL: TS34 HIVE_GITHUB_REPO env var is set \u2014 HIVE_GITHUB_REPO is not set",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-04T16:52:47Z",
+      "resolution": "Env var propagation fixed \u2014 supervisor.sh now sources .env and exports HIVE_GITHUB_REPO",
       "github_issue": null
     },
     {
@@ -2468,9 +2468,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
-    "status": "running",
-    "started_at": "2026-05-04T16:52:01Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-04T16:52:42Z",
+    "completed_at": "2026-05-04T16:52:43Z"
   }
 }
