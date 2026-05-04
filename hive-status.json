@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-04T17:15:49Z",
+  "last_updated": "2026-05-04T17:16:56Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -2254,7 +2254,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 146
+    "openrouter_calls_today": 147
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -2263,29 +2263,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_73584ccb",
-      "ts": "2026-05-04T15:20:12Z",
-      "updated_by": "opencode",
-      "goal": "Stabilise bolder-transformer with three consolidated bug fixes; harden hive with org isolation + full self-test coverage; fix ps5-hive infinite synthesis loop; validate and capture all learnings.",
-      "summary": "Completed full bolder-transformer release cycle as orchestrator. Merged PRs #34 (field mappings + null FK fix + router skip), #35 (soft-delete for access revocation ticket #29672), #36 (security hardening: API key, HMAC webhook, SQL identifier allowlist) into release branch. Resolved one test_transformers.py merge conflict manually. Cleaned duplicate logger in lookup_resolver.py. Added 9 new tests. 568/568 tests pass. PR #37 open for Tim's review. Hive self-tests: 34/34 pass (HIVE_GITHUB_REPO fix applied, org_guard.py operational). research_loop.py: infinite synthesis loop fixed (synth_done_count + permanent-error classification). LLM validation (ling-2.6-1t:free) confirmed config correctness, security implementation, and test coverage. 30 stale blockers resolved. 7 capabilities + 3 solutions + 3 LLM findings recorded. 3 new next-steps added. Tiered LLM framework implemented: Ollama primary \u2192 OpenRouter fallback.",
-      "progress": "PR #37 open (not yet merged \u2014 awaiting Tim). ps5-hive task 5025 running, 253KB output. All 34 hive self-tests green. 0 open blockers remaining (30 resolved today). Knowledge base: 10 capabilities, 5+ solutions, 3 LLM-validated findings.",
-      "next_steps": [
-        "Tim: review and merge PR #37 \u2192 https://github.com/HatcherHQ/bolder-transformer/pull/37",
-        "FAAST SQS consumer: UPDATE investment_profiles on null investment_group_id (not skip-on-duplicate)",
-        "Future hardening: replay window + algorithm-downgrade rejection for webhook sig; comment-injection SQL tests",
-        "Bolder: clarify forward-fill requirement for ticket #29671 (portfolio graph)",
-        "Bello: confirm DNS cutover readiness for bgx.hatcher.com / bolder.hatcher.com"
-      ],
-      "decisions": [
-        "optional_fk + default=None is the correct pattern for nullable Dataverse FKs (not required_fk + skip_if_null)",
-        "soft_delete:True required on any output that gates user access in FAAST",
-        "Env-gated security (fail-open when var unset) is correct for zero-disruption rollout",
-        "build_soft_deleted_record bypasses FK resolution by design \u2014 tests must not assert FK fields for inactive records",
-        "LLM validation tiering: local Ollama primary (zero rate-limit), OpenRouter secondary, self-review tertiary",
-        "30 stale TS34/org-guard/ps5-hive blockers resolved in batch \u2014 deduplication needs improvement in orchestrator"
-      ]
-    },
     {
       "id": "sess_c5e453f0",
       "ts": "2026-05-04T15:21:14Z",
@@ -2465,6 +2442,26 @@
         "Merge PR #37 to main only after Tim\u2019s review and canary promotion; rollback plan on first elevated-error spike.",
         "Prioritize P8 SQS consumer and P4 transformer hardening over non-critical enhancements until load stabilizes."
       ]
+    },
+    {
+      "id": "sess_d3213bfd",
+      "ts": "2026-05-04T17:16:56Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive under high load and unblock release/combined-fixes \u2192 main merge while preserving self-test gains.",
+      "summary": "Hive self-tests are all passing (34/34) and PR #37 consolidates recent fixes, but critical load spikes have paused research_loop and require immediate resource rebalancing. We will renice and reschedule noncritical jobs, verify PR readiness, and clear P4/P8/P9 items to restore throughput.",
+      "progress": "Fixed TS34 propagation, resolved research_loop infinite-synthesis loop, and opened PR #37 merging fixes #34/#35/#36 into a single release branch.",
+      "next_steps": [
+        "Renice and reschedule low-priority background jobs to lower core load below 0.85 and free memory; resume research_loop and monitor for 10 minutes.",
+        "Run PR #37 final CI (unit, integration, e2e) and security gate; address any failures and tag ready-for-merge.",
+        "Merge PR #37 (release/combined-fixes \u2192 main) after approvals and deploy to canary; confirm hive health and self-tests remain green.",
+        "Implement P4 bolder-transformer hardening (LLM-identified gaps) and add regression tests to prevent recurrence.",
+        "Implement P8 FAAST SQS consumer fix (update investment_profiles on null investment) and add nullable FK passthrough test."
+      ],
+      "decisions": [
+        "Resume research_loop only after load < 0.85 and memory headroom > 20%; otherwise keep paused to protect hive stability.",
+        "Merge PR #37 with required approvals and successful canary; rollback plan active for 30 minutes post-merge.",
+        "Apply soft-delete/null FK passthrough pattern for P8 to avoid FK resolution failures and maintain referential safety."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -2476,9 +2473,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-04T17:15:09Z",
-    "completed_at": "2026-05-04T17:15:09Z"
+    "started_at": "2026-05-04T17:16:50Z",
+    "completed_at": "2026-05-04T17:16:56Z"
   }
 }
