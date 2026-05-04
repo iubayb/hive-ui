@@ -1,37 +1,91 @@
-export const runtime = "edge";
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const STATUS_URL =
-  "https://raw.githubusercontent.com/iubayb/hive-ui/status/hive-status.json";
-const POLL_MS = 5000;
+const BACKEND_URL =
+  process.env.HIVE_BACKEND_URL || "http://localhost:8888";
 
 export async function GET() {
   const enc = new TextEncoder();
-  let closed = false;
 
   const stream = new ReadableStream({
     async start(ctrl) {
       const send = (d: string) => {
-        if (closed) return;
-        try { ctrl.enqueue(enc.encode(`data: ${d}\n\n`)); } catch {}
+        try {
+          ctrl.enqueue(enc.encode(`data: ${d}\n\n`));
+        } catch {}
       };
 
-      send(JSON.stringify({ type: "connected", ts: Date.now() }));
+      let upstream: Response;
+      try {
+        upstream = await fetch(`${BACKEND_URL}/status/stream`, {
+          cache: "no-store",
+          headers: { Accept: "text/event-stream" },
+        });
+      } catch (e) {
+        // Backend unreachable — send error event and close
+        send(JSON.stringify({ type: "error", msg: String(e) }));
+        ctrl.close();
+        return;
+      }
 
-      while (!closed) {
-        await new Promise((r) => setTimeout(r, POLL_MS));
-        try {
-          const res = await fetch(STATUS_URL, { cache: "no-store" });
-          if (res.ok) {
-            const data = await res.json();
-            send(JSON.stringify({ type: "status", data, ts: Date.now() }));
+      if (!upstream.ok || !upstream.body) {
+        send(
+          JSON.stringify({
+            type: "error",
+            msg: `Backend responded ${upstream.status}`,
+          })
+        );
+        ctrl.close();
+        return;
+      }
+
+      // SSE framing: accumulate chunks, split on \n\n boundaries
+      const reader = upstream.body.getReader();
+      const dec = new TextDecoder();
+      let buf = "";
+
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buf += dec.decode(value, { stream: true });
+
+          // Split on double-newline SSE frame boundaries
+          const frames = buf.split(/\n\n/);
+          buf = frames.pop() ?? "";
+
+          for (const frame of frames) {
+            const trimmed = frame.trim();
+            if (!trimmed) continue;
+
+            // Skip SSE comment lines (heartbeats like ": ping")
+            if (trimmed.startsWith(":")) continue;
+
+            // Extract "data: ..." lines
+            const dataLine = trimmed
+              .split("\n")
+              .find((l) => l.startsWith("data:"));
+            if (!dataLine) continue;
+
+            const raw = dataLine.slice(5).trim(); // strip "data:"
+            try {
+              const parsed = JSON.parse(raw);
+              // Wrap in the {type:"status", data} envelope SseProvider expects
+              send(JSON.stringify({ type: "status", data: parsed, ts: Date.now() }));
+            } catch {
+              // Not valid JSON — forward as-is (shouldn't happen with Python backend)
+              send(JSON.stringify({ type: "error", msg: `Bad JSON: ${raw}` }));
+            }
           }
-        } catch (e) {
-          send(JSON.stringify({ type: "error", msg: String(e) }));
         }
+      } catch (e) {
+        send(JSON.stringify({ type: "error", msg: String(e) }));
+      } finally {
+        reader.releaseLock();
+        ctrl.close();
       }
     },
-    cancel() { closed = true; },
   });
 
   return new Response(stream, {
@@ -39,6 +93,7 @@ export async function GET() {
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache, no-transform",
       "X-Accel-Buffering": "no",
+      Connection: "keep-alive",
     },
   });
 }
