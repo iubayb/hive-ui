@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-04T16:28:40Z",
+  "last_updated": "2026-05-04T16:32:41Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.55,
-      "last_seen": "2026-05-04T16:28:09Z",
+      "last_seen": "2026-05-04T16:32:20Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -2222,7 +2222,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 142
+    "openrouter_calls_today": 143
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -2231,26 +2231,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_55570605",
-      "ts": "2026-05-04T14:35:58Z",
-      "updated_by": "orchestrator",
-      "goal": "Resolve TS34 HIVE_GITHUB_REPO misconfiguration, validate model integrity, and complete health audits across all eight sessions.",
-      "summary": "Eight sessions are active and the hive is running with zero load; 29 high-severity TS34 failures persist due to an invalid HIVE_GITHUB_REPO env var, blocking full reliability. Recent upgrades added inclusionai/ling-2.6-1t:free as the text champion and three new capabilities (failure-loop-breaker, cli-path-repair, ollama-model-inspector) to accelerate remediation.",
-      "progress": "Validated inclusionai/ling-2.6-1t:free as the active text model and cataloged the three new capabilities for immediate use in repairs and audits.",
-      "next_steps": [
-        "Run a lightweight health audit on each of the eight active sessions and capture per-session load, errors, and exit codes.",
-        "Apply cli-path-repair to normalize PATH and symlinks across the hive environment and verify binary accessibility.",
-        "Use ollama-model-inspector to validate inclusionai/ling-2.6-1t:free integrity and perform a warm-start to confirm runtime readiness.",
-        "Correct HIVE_GITHUB_REPO env var (set to a valid repo URL or unset if unused) and re-run TS34 self-tests to confirm resolution.",
-        "Consolidate findings into a signed health report and schedule follow-up checks for the next 24h window."
-      ],
-      "decisions": [
-        "Prioritize TS34 HIVE_GITHUB_REPO fixes to unblock high-severity failures before broader feature work.",
-        "Use ollama-model-inspector + warm-start as the gating step before promoting inclusionai/ling-2.6-1t:free to production paths.",
-        "Mandate per-session health audit results as the source of truth before any config or model rollout."
-      ]
-    },
     {
       "id": "sess_4da86d97",
       "ts": "2026-05-04T14:51:03Z",
@@ -2433,6 +2413,26 @@
         "Prioritize load mitigation (worker concurrency and GC tuning) before new feature rollouts.",
         "Defer non-critical hardening until PR #37 lands and load stabilizes to avoid compounding risk."
       ]
+    },
+    {
+      "id": "sess_200d2dfa",
+      "ts": "2026-05-04T16:31:19Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive under memory pressure and disk constraints, validate and merge PR #37, and resolve remaining TS34-related env propagation issues.",
+      "summary": "Hive self-tests are fully green (34/34) after fixing HIVE_GITHUB_REPO propagation and research_loop infinite-synthesis; PR #37 is open and ready for review/merge. Memory pressure (30\u201333 GB) and low disk (14%) are causing high-load pauses and job renice events. Three pending P-level hardening items and nine open blockers require immediate triage and resource reclamation.",
+      "progress": "Fixed TS34 HIVE_GITHUB_REPO propagation to bash subprocess and completed research_loop infinite-synthesis correction; PR #37 release/combined-fixes has been opened.",
+      "next_steps": [
+        "Reclaim disk and memory: rotate/compress logs, drop unused temp sets, and raise file-handle limits to stabilize load/core and reduce pauses.",
+        "Review and merge PR #37 (release/combined-fixes \u2192 main) with a targeted smoke test against hive-live and hive-nextjs.",
+        "Resolve remaining TS34 self-test failures by ensuring HIVE_GITHUB_REPO is non-empty and exported for all subprocess scopes and cron contexts.",
+        "Apply P4 bolder-transformer future hardening (LLM-identified gaps from PR #37) to router and cache layers.",
+        "Implement P8 FAAST SQS consumer fix: update investment_profiles rows on null investment_profile_id with safe FK passthrough."
+      ],
+      "decisions": [
+        "Merge PR #37 to main after smoke test and roll back immediately if memory/disk regression occurs.",
+        "Cap research_loop and synthesis workers to memory budgets and enable graceful backpressure under load/core > 0.9.",
+        "Mandate non-empty HIVE_GITHUB_REPO for all runtime contexts; fail fast and surface to logs if missing."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -2446,7 +2446,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-04T16:28:09Z",
-    "completed_at": "2026-05-04T16:28:10Z"
+    "started_at": "2026-05-04T16:32:20Z",
+    "completed_at": "2026-05-04T16:32:21Z"
   }
 }
