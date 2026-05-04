@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
   const paths = ["/hive", "/hive/issues", "/hive/pulls", "/hive/commits", "/hive/workflows"];
-  paths.forEach(revalidatePath);
+  paths.forEach((p) => revalidatePath(p));
 
   return NextResponse.json({ revalidated: true, paths, ts: Date.now() });
 }
