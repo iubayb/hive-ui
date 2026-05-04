@@ -69,7 +69,7 @@ print('import-check OK: $mod')
             shellcheck --severity=error --exclude=SC2044,SC1090,SC1091 "$f" \
               && echo "OK  $f" \
               || { echo "FAIL $f"; failed=1; }
-          done < <(find . -name "*.sh" -not -path "./.git/*")
+          done < <(find . -name "*.sh" -not -path "./.git/*" -not -path "./node_modules/*" -not -path "./vercel-deploy/*")
           exit $failed
 
   # ── Job 3: Static file-presence tests (no live services needed) ────────────
