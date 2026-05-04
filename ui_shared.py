@@ -244,6 +244,14 @@ SHARED_CSS = r"""
   .q-summary{word-break:break-word;font-size:12px;line-height:1.4}
   .q-meta{font-size:10px;color:var(--muted);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap}
   .q-meta a{color:var(--info);text-decoration:none}
+  .q-del{background:none;border:none;color:var(--muted);font-size:14px;line-height:1;
+         cursor:pointer;padding:2px 4px;margin-left:auto;flex-shrink:0;opacity:.5;
+         min-width:24px;min-height:24px;border-radius:3px}
+  .q-del:hover{opacity:1;color:var(--err)}
+  #clear-done-btn{background:none;border:1px solid var(--border);color:var(--muted);
+    padding:2px 7px;border-radius:4px;font-size:10px;cursor:pointer;margin-left:auto;
+    min-height:22px;line-height:1}
+  #clear-done-btn:hover{color:var(--err);border-color:var(--err)}
   #queue-empty{padding:16px;text-align:center;color:var(--muted);font-size:12px}
 
   /* chat bubbles */
@@ -1360,13 +1368,16 @@ async function clearChat(evt){
 }
 
 // ── task queue ────────────────────────────────────────────────────────────────
-const STATUS_ICON={queued:'\uD83D\uDFE1',pr_open:'\uD83D\uDD35',merged:'\u2705',closed:'\u2B1C',local:'\uD83D\uDCDD'};
+const STATUS_ICON ={queued:'\uD83D\uDFE1',pr_open:'\uD83D\uDD35',merged:'\u2705',closed:'\u2B1C',local:'\uD83D\uDCDD'};
+const STATUS_LABEL={queued:'queued',pr_open:'pr open',merged:'merged',closed:'closed',local:'done'};
+const TERMINAL_STATUSES=new Set(['local','merged','closed']);
 function addQueueItem(item){
   const list=document.getElementById('queue-list');
   document.getElementById('queue-empty').style.display='none';
   const existing=document.getElementById('qi-'+item.id); if(existing)existing.remove();
   const d=document.createElement('div'); d.className='q-item'; d.id='qi-'+item.id;
   const icon=STATUS_ICON[item.status]||'\u2753';
+  const label=STATUS_LABEL[item.status]||item.status;
   const prLink=item.pr_url?'<a href="'+esc(item.pr_url)+'" target="_blank">PR#'+item.pr_number+' \u2197</a>':'';
   d.innerHTML=
     '<div class="q-status">'+icon+'</div>'+
@@ -1375,16 +1386,44 @@ function addQueueItem(item){
       '<div class="q-meta">'+
         '<span>'+(item.created_at?item.created_at.slice(11,16):'')+'</span>'+
         '<span>'+esc(item.model||'')+'</span>'+
-        '<span class="q-item-status" data-id="'+item.id+'">'+item.status+'</span>'+
+        '<span class="q-item-status" data-id="'+item.id+'">'+label+'</span>'+
         prLink+
       '</div>'+
-    '</div>';
+    '</div>'+
+    '<button class="q-del" title="Remove" onclick="deleteQueueItem(\''+item.id+'\',this)">\u2715</button>';
   list.insertBefore(d,list.firstChild);
   updateQueueCount();
 }
 function updateQueueCount(){
   const n=document.querySelectorAll('.q-item').length;
   document.getElementById('queue-count').textContent=n+' task'+(n===1?'':'s');
+}
+async function deleteQueueItem(id,btn){
+  if(btn)btn.disabled=true;
+  try{
+    await fetch('/api/queue/'+id,{method:'DELETE'});
+    const el=document.getElementById('qi-'+id);
+    if(el)el.remove();
+    updateQueueCount();
+    const items=document.querySelectorAll('.q-item');
+    if(!items.length){const e=document.getElementById('queue-empty');if(e)e.style.display='block';}
+  }catch{if(btn)btn.disabled=false;}
+}
+async function clearDoneItems(evt){
+  if(evt)evt.stopPropagation();
+  try{
+    await fetch('/api/queue',{method:'DELETE'});
+    document.querySelectorAll('.q-item').forEach(el=>{
+      const sp=el.querySelector('.q-item-status');
+      if(sp&&TERMINAL_STATUSES.has(sp.dataset.id||'')){ el.remove(); return; }
+      // check label text too
+      if(sp&&['done','merged','closed'].includes(sp.textContent.trim()))el.remove();
+    });
+    updateQueueCount();
+    if(!document.querySelectorAll('.q-item').length){
+      const e=document.getElementById('queue-empty');if(e)e.style.display='block';
+    }
+  }catch{}
 }
 async function fetchQueue(){
   try{
@@ -1404,7 +1443,8 @@ setInterval(async()=>{
     items.forEach(item=>{
       const el=document.getElementById('qi-'+item.id); if(!el)return;
       el.querySelector('.q-status').textContent=STATUS_ICON[item.status]||'\u2753';
-      const sp=el.querySelector('.q-item-status'); if(sp)sp.textContent=item.status;
+      const sp=el.querySelector('.q-item-status');
+      if(sp)sp.textContent=STATUS_LABEL[item.status]||item.status;
     });
     updateQueueCount();
     // show/hide empty state based on rendered items

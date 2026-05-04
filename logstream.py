@@ -1179,6 +1179,7 @@ _DASHBOARD_TMPL = r"""<!DOCTYPE html>
   <summary>
     <span>Task Queue</span>
     <span class="count" id="queue-count">0 tasks</span>
+    <button id="clear-done-btn" onclick="clearDoneItems(event)" title="Remove all done/merged/closed items">clear done</button>
   </summary>
   <div id="queue-list">
     <div id="queue-empty" style="display:none">No tasks yet. Submit a prompt below.</div>
@@ -1337,8 +1338,28 @@ class Handler(BaseHTTPRequestHandler):
                 self._send_json({"ok": True, "handle": handle})
             except Exception as e:
                 self._send_json({"error": str(e)}, 400)
+        elif self.path == "/api/queue":
+            # DELETE /api/queue — remove all terminal-state items (local, merged, closed)
+            _TERMINAL = {"local", "merged", "closed"}
+            with queue_lock:
+                before = len(task_queue)
+                task_queue[:] = [i for i in task_queue if i.get("status") not in _TERMINAL]
+                removed = before - len(task_queue)
+            _save_queue()
+            self._send_json({"ok": True, "removed": removed})
         else:
-            self.send_response(404); self.end_headers()
+            # DELETE /api/queue/<id>
+            m = re.match(r"^/api/queue/([^/?]+)$", self.path)
+            if m:
+                qid = m.group(1)
+                with queue_lock:
+                    before = len(task_queue)
+                    task_queue[:] = [i for i in task_queue if i.get("id") != qid]
+                    removed = before - len(task_queue)
+                _save_queue()
+                self._send_json({"ok": True, "removed": removed})
+            else:
+                self.send_response(404); self.end_headers()
 
     def do_PATCH(self):
         with _activity_lock:
