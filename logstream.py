@@ -221,18 +221,17 @@ def capture(session):
 
 def find_new_lines(old, curr):
     if not old:
-        return curr
+        # First capture: emit only the most recent lines, not the full history dump
+        return curr[-30:]
     if not curr:
         return []
     max_k = min(len(old), len(curr))
     for k in range(max_k, 0, -1):
         if old[-k:] == curr[:k]:
             return curr[k:]
-    old_tail = set(old[-20:])
-    for i, line in enumerate(curr):
-        if line not in old_tail:
-            return curr[i:]
-    return []
+    # No overlap — session was restarted or pane was cleared.
+    # Emit only the tail (genuinely new lines) to avoid replaying full history.
+    return curr[-10:]
 
 # ── poll loop ─────────────────────────────────────────────────────────────────
 
@@ -1181,8 +1180,8 @@ _DASHBOARD_TMPL = r"""<!DOCTYPE html>
     <span class="count" id="queue-count">0 tasks</span>
     <button id="clear-done-btn" onclick="clearDoneItems(event)" title="Remove all done/merged/closed items">clear done</button>
   </summary>
-  <div id="queue-list">
-    <div id="queue-empty" style="display:none">No tasks yet. Submit a prompt below.</div>
+    <div id="queue-list">
+    <div id="queue-empty">No tasks yet. Submit a prompt below.</div>
   </div>
 </details>
 
@@ -1421,6 +1420,10 @@ class Handler(BaseHTTPRequestHandler):
         elif p == "/api/queue":
             with queue_lock:
                 self._send_json(list(task_queue))
+
+        elif p == "/api/chat":
+            with chat_lock:
+                self._send_json(list(chat_history))
 
         elif p == "/api/groups":
             with groups_lock:

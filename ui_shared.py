@@ -934,7 +934,6 @@ function hiveFetch(url, opts={}){
 
 // ── config ────────────────────────────────────────────────────────────────────
 const CONFIG_KEY = 'hive_config_v2';
-const CHAT_PERSIST_KEY = 'hive_chat_v1';
 const DEFAULT_FAVORITES = [
   'inclusionai/ling-2.6-1t:free',
   'openai/gpt-oss-120b:free',
@@ -1273,30 +1272,18 @@ function renderChips(){
 function removeChip(idx){pendingAttachments.splice(idx,1);renderChips();}
 
 // ── chat ──────────────────────────────────────────────────────────────────────
-const _CHAT_MAX_PERSIST = 30; // max messages kept in localStorage
 function autoGrow(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
 function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendPrompt();}}
-function _saveChatHistory(){
+async function restoreChat(){
   try{
-    const thread=document.getElementById('chat-thread');
-    const bubbles=[...thread.querySelectorAll('.bubble')];
-    const msgs=bubbles.map(b=>({
-      role:b.classList.contains('user')?'user':'ai',
-      text:b.querySelector('.bubble-text')?.textContent||''
-    })).filter(m=>m.text);
-    const trimmed=msgs.slice(-_CHAT_MAX_PERSIST);
-    localStorage.setItem(CHAT_PERSIST_KEY,JSON.stringify(trimmed));
-  }catch{}
-}
-function restoreChat(){
-  try{
-    const saved=JSON.parse(localStorage.getItem(CHAT_PERSIST_KEY)||'[]');
-    if(!saved.length)return;
+    const r=await fetch('/api/chat'); if(!r.ok)return;
+    const msgs=await r.json(); if(!msgs.length)return;
     const thread=document.getElementById('chat-thread');
     document.getElementById('chat-empty').style.display='none';
-    saved.forEach(m=>{
-      const d=document.createElement('div'); d.className='bubble '+m.role;
-      d.innerHTML='<div class="role-label">'+(m.role==='user'?'You':'Hive')+'</div><div class="bubble-text">'+esc(m.text)+'</div>';
+    msgs.forEach(m=>{
+      const role=m.role==='user'?'user':'ai';
+      const d=document.createElement('div'); d.className='bubble '+role;
+      d.innerHTML='<div class="role-label">'+(role==='user'?'You':'Hive')+'</div><div class="bubble-text">'+esc(m.content||m.text||'')+'</div>';
       thread.appendChild(d);
     });
     thread.scrollTop=thread.scrollHeight;
@@ -1351,7 +1338,6 @@ async function sendPrompt(priority=false){
       }
     }
     if(!fullText)textNode.textContent='(no response)';
-    _saveChatHistory();
   }catch(e){textNode.textContent='Error: '+e.message;}
   finally{
     _sending=false;
@@ -1362,7 +1348,6 @@ async function sendPrompt(priority=false){
 async function clearChat(evt){
   evt.stopPropagation();
   await fetch('/api/chat',{method:'DELETE'}).catch(()=>{});
-  localStorage.removeItem(CHAT_PERSIST_KEY);
   const thread=document.getElementById('chat-thread');
   thread.innerHTML='<div class="chat-empty" id="chat-empty">Start a conversation below.</div>';
 }
