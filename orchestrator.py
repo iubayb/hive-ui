@@ -78,16 +78,10 @@ PING_INTERVAL       = 30     # 30 s  — keep SSE stream alive between cycles
 # ── rate limiting ─────────────────────────────────────────────────────────────
 _MAX_LLM_CALLS_HR = 8        # conservative — shares OpenRouter free quota
 _llm_call_times   = []
-_llm_retry_after: float = 0.0   # epoch time before which LLM calls are suppressed (429 backoff)
 
 
 def _llm_budget_ok() -> bool:
-    global _llm_retry_after
     now = time.time()
-    if now < _llm_retry_after:
-        remaining = int(_llm_retry_after - now)
-        _log(f"[llm] rate-limit backoff active — {remaining}s remaining")
-        return False
     _llm_call_times[:] = [t for t in _llm_call_times if now - t < 3600]
     return len(_llm_call_times) < _MAX_LLM_CALLS_HR
 
@@ -127,11 +121,6 @@ def call_llm(messages: list, max_tokens: int = 512, timeout: int = 60):
         raw  = resp.read().decode("utf-8", errors="replace")
         conn.close()
         if resp.status != 200:
-            if resp.status == 429:
-                global _llm_retry_after
-                _llm_retry_after = time.time() + 60   # 60-second backoff
-                _log("[llm] rate-limited (429) — backing off 60s")
-                return "", "rate_limited"
             return "", f"HTTP {resp.status}"
         data = json.loads(raw)
         # Handle reasoning models (delta.reasoning before delta.content)
@@ -1258,10 +1247,7 @@ Knowledge findings: {s.get("knowledge", {}).get("findings_count", len(s.get("kno
         timeout=30,
     )
 
-    if err == "rate_limited":
-        _log("[llm] skipping cycle — rate-limit backoff active")
-        # do not treat as permanent failure
-    elif err:
+    if err:
         _log(f"compaction LLM error: {err}")
         # Deduplicate: only add a new blocker if no open compaction-failure blocker exists
         _es = hive_status.load()
