@@ -32,22 +32,8 @@ jobs:
       - name: Import-check core modules (no live services)
         run: |
           set -euo pipefail
-          # Stub out file-system side-effects so imports don't block
-          for mod in hive_status logstream; do
-            python3 -c "
-import sys, types
-# Provide a dummy status file path so hive_status loads without crashing
-import os, tempfile, json
-tmp = tempfile.mktemp(suffix='.json')
-with open(tmp, 'w') as fp:
-    json.dump({}, fp)
-os.environ.setdefault('HIVE_STATUS_FILE', tmp)
-import importlib.util, pathlib
-spec = importlib.util.spec_from_file_location('$mod', pathlib.Path('$mod.py'))
-m = importlib.util.module_from_spec(spec)
-# Don't exec — just check the AST compiles cleanly (already done above)
-print('import-check OK: $mod')
-" 2>&1 || true
+          for mod in hive_status logstream ui_shared; do
+            python3 -m py_compile "${mod}.py" && echo "import-check OK: ${mod}"
           done
 
   # ── Job 2: Shell lint ───────────────────────────────────────────────────────
