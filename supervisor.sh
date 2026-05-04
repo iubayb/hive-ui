@@ -182,6 +182,9 @@ PYEOF
 # with zero sessions. The main loop only iterates over existing sessions, so
 # without this function sessions would never be created after a reboot.
 ensure_all_sessions() {
+    # Ensure tmux server is running — if it crashed everything would be gone
+    tmux start-server 2>/dev/null || true
+
     load_conf
     local existing_sessions
     existing_sessions=$(tmux ls -F "#{session_name}" 2>/dev/null || true)
