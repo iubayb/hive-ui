@@ -1302,6 +1302,13 @@ def main():
                 silent_minutes   = 0,
                 updated_by  = "orchestrator",
             )
+            # Show heartbeat in the active-task bar so it's never permanently IDLE
+            hive_status.set_active_task(
+                "orchestrator",
+                f"heartbeat · sessions={len(sessions_alive)} health={live_health:.0%}"
+                f" blockers={open_b}",
+            )
+            hive_status.clear_active_task()
             last_heartbeat = now
 
         # ── triage ────────────────────────────────────────────────────────────
@@ -1360,6 +1367,14 @@ def main():
                 except Exception as e:
                     _log(f"promote error (non-fatal): {e}")
             last_promote = now
+
+        # ── watchdog file — written every tick so supervisor can detect hangs ──
+        # If THIS line stops updating, the main loop itself is stuck.
+        try:
+            with open("/tmp/orchestrator.watchdog", "w") as _wf:
+                _wf.write(f"{now:.0f}\n")
+        except Exception:
+            pass
 
         time.sleep(10)   # base tick — tight loop would waste CPU
 

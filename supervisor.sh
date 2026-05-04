@@ -341,6 +341,31 @@ PYEOF
     fi
 }
 
+# ── watchdog: orchestrator hang detection + self-heal ────────────────────────
+# orchestrator.py writes /tmp/orchestrator.watchdog every 10s main-loop tick.
+# If it goes stale for >5 min the main loop is stuck — kill and restart.
+WATCHDOG_FILE="/tmp/orchestrator.watchdog"
+WATCHDOG_STALE_S=300   # 5 min
+
+check_orchestrator_watchdog() {
+    [[ ! -f "$WATCHDOG_FILE" ]] && return   # not yet created (fresh start)
+    local now file_ts age
+    now=$(date +%s)
+    file_ts=$(cat "$WATCHDOG_FILE" 2>/dev/null | tr -d '[:space:]')
+    [[ -z "$file_ts" || ! "$file_ts" =~ ^[0-9]+$ ]] && return
+    age=$(( now - file_ts ))
+    if (( age > WATCHDOG_STALE_S )); then
+        log "ALERT [watchdog] orchestrator watchdog stale for ${age}s — main loop hung — restarting"
+        # Kill the stuck session and let ensure_all_sessions() revive it
+        tmux kill-session -t orchestrator 2>/dev/null || true
+        sleep 2
+        ensure_all_sessions
+        log "INFO [watchdog] orchestrator session restarted after hang"
+        # Reset the watchdog file so we don't loop-restart
+        echo "$now" > "$WATCHDOG_FILE"
+    fi
+}
+
 # ── watchdog: GitHub Actions failure alert ────────────────────────────────────
 check_github_actions() {
     local now; now=$(date +%s)
@@ -643,7 +668,8 @@ PYEOF
     done
 
     # ── integrated watchdog checks ───────────────────────────────────────────
-    check_resource_guardian   # first — throttle before any other action
+    check_orchestrator_watchdog  # first: restart hung orchestrator before anything else
+    check_resource_guardian      # throttle before other actions
     check_ollama
     check_wegia
     check_hive_ui

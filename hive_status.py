@@ -384,7 +384,9 @@ def set_active_task(agent: str, task: str, updated_by: str = "agent") -> None:
         s["active_task"] = {
             "agent":      agent,
             "task":       task,
+            "status":     "running",
             "started_at": _now(),
+            "completed_at": None,
         }
         save(s, updated_by)
 
@@ -397,6 +399,7 @@ def clear_active_task(updated_by: str = "agent") -> None:
         s["active_task"] = {
             "agent":        prev.get("agent", ""),
             "task":         prev.get("task", ""),
+            "status":       "completed",
             "started_at":   prev.get("started_at", ""),
             "completed_at": _now(),
         }

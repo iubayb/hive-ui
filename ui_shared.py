@@ -348,8 +348,12 @@ function _flash(el){
   el.classList.add('flash');
 }
 
+// ── active task: cache last known status so the 5s tick has real data ────────
+let _lastKnownStatus = null;
+
 function renderStatus(s){
   if(!s)return;
+  _lastKnownStatus = s;   // always keep fresh copy for the hang-detector tick
   const upd=document.getElementById('status-updated');
   if(upd&&s.last_updated)upd.textContent=s.last_updated.slice(11,19)+' UTC';
   _renderActiveTask(s);   // active-task bar always first
@@ -479,24 +483,35 @@ function _renderActiveTask(s){
   }
 
   // ── Layer 2: backend active_task signal ─────────────────────────────────
-  const at = s && s.active_task;
+  // Use passed-in s, OR fall back to last known status from SSE cache
+  const src = s || _lastKnownStatus;
+  const at = src && src.active_task;
 
-  if(!at || !at.task){
-    // Idle — show last completed task if available
+  // No data yet
+  if(!at){
     bar.className='active-task-bar at-idle';
-    const lastLabel = at&&at.completed_at
-      ? ` · last: ${esc(at.task||'—')} (${_atElapsedStr(Date.now()-new Date(at.completed_at).getTime())} ago)`
-      : '';
     bar.innerHTML='<span class="at-dot"></span><span class="at-label">IDLE</span>'+
-      '<span class="at-detail">'+lastLabel+'</span>';
+      '<span class="at-detail"> waiting for first status event\u2026</span>';
     return;
   }
 
-  // Backend says working — check staleness independently
+  // Task completed — show IDLE + last task + elapsed since completion
+  if(at.status==='completed' || at.completed_at){
+    const ago = at.completed_at
+      ? _atElapsedStr(Date.now()-new Date(at.completed_at).getTime())
+      : '?';
+    bar.className='active-task-bar at-idle';
+    bar.innerHTML=
+      '<span class="at-dot"></span>'+
+      '<span class="at-label">IDLE</span>'+
+      '<span class="at-detail"> last: '+esc(at.task||'—')+' \xb7 '+ago+' ago</span>';
+    return;
+  }
+
+  // Task is running — check staleness (backend claims running for >3 min = suspect)
   const startedMs = at.started_at ? new Date(at.started_at).getTime() : 0;
   const ageMs = Date.now() - startedMs;
   if(ageMs > 180000){
-    // Backend claims active but started >3 min ago with no log-level confirmation
     bar.className='active-task-bar at-stale';
     bar.innerHTML=
       '<span class="at-dot"></span>'+
@@ -506,12 +521,12 @@ function _renderActiveTask(s){
     return;
   }
 
-  // Fresh, working
+  // Fresh and running — show with live elapsed counter
   bar.className='active-task-bar at-working';
   bar.innerHTML=
     '<span class="at-dot"></span>'+
     '<span class="at-label">WORKING</span>'+
-    '<span class="at-detail">'+esc((at.agent||'orchestrator')+' · '+at.task)+'</span>'+
+    '<span class="at-detail">'+esc((at.agent||'orchestrator')+' \xb7 '+at.task)+'</span>'+
     '<span class="at-elapsed" id="at-elapsed">0s</span>';
   _atStartTimer(startedMs);
 }
@@ -1106,7 +1121,8 @@ logEs.onmessage=function(e){
 logEs.onerror=function(){dot.classList.add('dead');statusBar.textContent='SSE disconnected \u2014 retrying...';};
 logEs.onopen=function(){dot.classList.remove('dead');statusBar.textContent='';};
 
-// Re-evaluate the hang detector every 5 s even without a status SSE event
+// Re-evaluate the hang detector every 5 s even without a status SSE event.
+// Uses _lastKnownStatus (cached from last SSE) so it has real data, not null.
 // This ensures the bar turns red if logs go silent or loop — independent of backend.
 setInterval(()=>_renderActiveTask(null), 5000);
 
