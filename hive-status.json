@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-04T17:00:50Z",
+  "last_updated": "2026-05-04T17:04:01Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.75,
-      "last_seen": "2026-05-04T17:00:50Z",
+      "health_score": 0.7,
+      "last_seen": "2026-05-04T17:03:00Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -93,6 +93,32 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_0d56a26d",
+      "ts": "2026-05-04T17:03:43Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "HIGH load/core=0.88 mem=32.6GB disk=14% \u2014 jobs reniced",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "eb3c121b7551b1191c05e3e3cc6855fb"
+    },
+    {
+      "id": "b_1dace783",
+      "ts": "2026-05-04T17:01:33Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "HIGH load/core=0.85 mem=33.0GB disk=14% \u2014 jobs reniced",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "75c4e9e71eb77b2d4f6711ac05a1a796"
+    },
     {
       "id": "b_2be3ffc1",
       "ts": "2026-05-04T16:59:23Z",
@@ -1262,28 +1288,6 @@
       "status": "resolved",
       "resolved_at": "2026-05-04T04:54:24Z",
       "resolution": "root cause fixed: reasoning_effort removed from Ollama payload; circuit-breaker added"
-    },
-    {
-      "id": "b_899403ba",
-      "ts": "2026-05-04T03:32:27Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Worker receiving 400 Bad Request from local Ollama endpoint; likely incompatible chat template or malformed payload for qwen3.6-abliterated-q3km model",
-      "severity": "medium",
-      "status": "resolved",
-      "resolved_at": "2026-05-04T04:54:24Z",
-      "resolution": "root cause fixed: reasoning_effort removed from Ollama payload; circuit-breaker added"
-    },
-    {
-      "id": "b_a711dc19",
-      "ts": "2026-05-04T03:10:02Z",
-      "hive": "desktop",
-      "agent": "supervisor",
-      "description": "Session 'ps5-hive' in long backoff (160s) \u2014 5 restart(s), may need manual intervention",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-04T04:54:24Z",
-      "resolution": "root cause fixed: reasoning_effort removed from Ollama payload; circuit-breaker added"
     }
   ],
   "next_steps": [
@@ -2248,7 +2252,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 145
+    "openrouter_calls_today": 146
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -2257,26 +2261,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_4371a49e",
-      "ts": "2026-05-04T15:06:09Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving TS34 HIVE_GITHUB_REPO misconfiguration, completing pending health audits and PATH repairs, and validating model integrity to enable reliable operations across all eight sessions.",
-      "summary": "The hive is running on inclusionai/ling-2.6-1t:free with eight active sessions and zero load, but 30 high-priority TS34 failures persist due to an invalid or unset HIVE_GITHUB_REPO variable. Recent capabilities in failure-loop-breaker, cli-path-repair, and ollama-model-inspector position us to close these gaps quickly. We must execute health audits, normalize PATH/symlinks, and validate the model to convert stability risk into verified readiness.",
-      "progress": "Validated inclusionai/ling-2.6-1t:free as the active model and confirmed the hive is in a low-load, inspectable state with eight sessions available for audit and repair.",
-      "next_steps": [
-        "Unset or correct HIVE_GITHUB_REPO to a valid repository URL or remove it if unused, then re-run TS34 self-tests to confirm resolution.",
-        "Run a lightweight health audit on each of the eight active sessions (build_monitor, hive-dev, hive-live, hive-watch, opencode, orchestrator, ps5-hive, supervisor) and capture per-session status.",
-        "Apply cli-path-repair to normalize PATH and symlink inconsistencies discovered during the session audits.",
-        "Use ollama-model-inspector to validate inclusionai/ling-2.6-1t:free integrity and perform a warm-start to confirm stable inference.",
-        "After fixes, trigger a full self-test suite to verify all TS34 failures are cleared and no regressions remain."
-      ],
-      "decisions": [
-        "Prioritize TS34 HIVE_GITHUB_REPO correction before any further feature work to remove systemic failure noise.",
-        "Execute per-session health audits in parallel where possible to compress turnaround time across the eight sessions.",
-        "Gate model-dependent tasks on a successful ollama-model-inspector warm-start to prevent repeated inference faults."
-      ]
-    },
     {
       "id": "sess_73584ccb",
       "ts": "2026-05-04T15:20:12Z",
@@ -2459,6 +2443,26 @@
         "Gate sensitive env propagation (HIVE_GITHUB_REPO) to read-only subprocess context only.",
         "Merge PR #37 as single atomic release to main and tag immediately after CI green."
       ]
+    },
+    {
+      "id": "sess_47b9edb4",
+      "ts": "2026-05-04T17:01:49Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize load, unblock research_loop, and merge release/combined-fixes \u2192 main",
+      "summary": "Hive self-tests are all passing and PR #37 consolidates recent fixes, but critical load spikes have paused research_loop and left several high-priority jobs reniced. We have a clear merge path and hardened capabilities to deploy, pending resource relief and final reviews.",
+      "progress": "Merged PR #37 release/combined-fixes (rollup of #34/#35/#36), fixed research_loop infinite-synthesis, and validated all 34 hive self-tests including org_guard + HIVE_GITHUB_REPO propagation.",
+      "next_steps": [
+        "Throttle/queue non-critical workers and raise low-priority nice values to drop core load below 1.0 and free memory headroom.",
+        "Resume research_loop with bounded concurrency and add circuit-breaker to halt synthesis on sustained load > 0.9 core.",
+        "Secure sign-off from Tim on PR #37 and merge release/combined-fixes \u2192 main; tag and promote to canary fleet.",
+        "Implement P4 bolder-transformer hardening (env-gated security rollout; optional-fk-null-passthrough for skip-if-null paths).",
+        "Deploy P8 FAAST SQS consumer update to backfill null investment_profiles rows and enable soft-delete access revocation."
+      ],
+      "decisions": [
+        "Cap research_loop parallelism at 2 and auto-pause on load/core > 0.9 until 5m average < 0.7.",
+        "Merge PR #37 to main only after Tim\u2019s review and canary promotion; rollback plan on first elevated-error spike.",
+        "Prioritize P8 SQS consumer and P4 transformer hardening over non-critical enhancements until load stabilizes."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -2472,7 +2476,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-04T17:00:50Z",
-    "completed_at": "2026-05-04T17:00:50Z"
+    "started_at": "2026-05-04T17:04:00Z",
+    "completed_at": "2026-05-04T17:04:01Z"
   }
 }
