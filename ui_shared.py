@@ -188,11 +188,43 @@ SHARED_CSS = r"""
   .metric-val{font-size:20px;font-weight:bold;color:var(--info)}
   .metric-label{font-size:10px;color:var(--muted);margin-top:2px}
 
-  /* flash animation */
-  @keyframes flash{0%{background:rgba(255,255,255,.12)}100%{background:transparent}}
+  /* ── active task bar — always-visible strip below the header ──────────── */
+  #active-task-bar{
+    display:flex;align-items:center;gap:8px;padding:6px 14px;
+    font-size:11px;font-family:'Courier New',monospace;
+    border-bottom:2px solid var(--border);
+    position:sticky;top:0;z-index:45;
+    transition:background .3s,border-color .3s,color .3s;
+    min-height:36px;overflow:hidden;
+  }
+  #active-task-bar.at-working{
+    background:rgba(176,176,176,.05);color:var(--ok);border-bottom-color:var(--ok)}
+  #active-task-bar.at-idle{
+    background:var(--panel);color:var(--muted);border-bottom-color:var(--border)}
+  #active-task-bar.at-stale{
+    background:rgba(156,156,156,.07);color:var(--warn);border-bottom-color:var(--warn);
+    animation:at-blink 1.4s infinite}
+  #active-task-bar.at-hang{
+    background:rgba(240,240,240,.07);color:var(--err);border-bottom-color:var(--err);
+    animation:at-blink .7s infinite}
+  @keyframes at-blink{0%,100%{opacity:1}50%{opacity:.55}}
+  .at-dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0}
+  #active-task-bar.at-working .at-dot{animation:pulse 1s infinite}
+  #active-task-bar.at-hang    .at-dot{animation:at-blink .5s infinite}
+  #active-task-bar.at-stale   .at-dot{animation:at-blink 1s infinite}
+  .at-label{font-weight:bold;font-size:10px;text-transform:uppercase;
+            letter-spacing:.6px;white-space:nowrap;flex-shrink:0}
+  .at-detail{font-size:11px;opacity:.8;white-space:nowrap;overflow:hidden;
+             text-overflow:ellipsis;flex:1;min-width:0}
+  .at-elapsed{font-size:10px;color:var(--muted);white-space:nowrap;flex-shrink:0}
+  .at-src{font-size:9px;color:var(--muted);white-space:nowrap;flex-shrink:0;
+          padding:1px 5px;border:1px solid var(--border);border-radius:8px;margin-left:2px}
+
+  /* ── end active task bar ────────────────────────────────────────────────── */
   .flash{animation:flash .8s ease-out forwards}
 
-  /* task queue */
+  /* flash animation */
+  @keyframes flash{0%{background:rgba(255,255,255,.12)}100%{background:transparent}}
   .q-item{padding:10px 12px;border-bottom:1px solid var(--border);
           display:flex;align-items:flex-start;gap:10px}
   .q-item:last-child{border-bottom:none}
@@ -320,6 +352,7 @@ function renderStatus(s){
   if(!s)return;
   const upd=document.getElementById('status-updated');
   if(upd&&s.last_updated)upd.textContent=s.last_updated.slice(11,19)+' UTC';
+  _renderActiveTask(s);   // active-task bar always first
   _renderHiveHealth(s.hives||{});
   _renderMetrics(s.metrics||{},s.model_champions||{});
   _renderBlockers(s.blockers||[]);
@@ -333,6 +366,154 @@ function renderStatus(s){
   const vc=document.getElementById('arena-vision-champ');
   if(tc)tc.textContent=mc.text||'—';
   if(vc)vc.textContent=mc.vision||'—';
+}
+
+// ── hang detector: fully client-side, never trusts the backend ────────────────
+// Maintains a rolling buffer of every log line with its arrival timestamp.
+// Runs independently of active_task SSE — can override bar to HANG even when
+// the backend claims to be healthy.
+const _hangDetector = {
+  buf: [],            // [{text, ts}, ...] rolling 200-entry buffer
+  MAX_BUF: 200,
+
+  // Thresholds
+  SILENCE_MS:       180000,  // 3 min no new logs → SILENT
+  REPEAT_COUNT:     5,       // same line ≥5 times in 60 s → LOOP
+  REPEAT_WINDOW_MS: 60000,
+  ERR_COUNT:        3,       // known error pattern ≥3 times in 30 s → ERROR LOOP
+  ERR_WINDOW_MS:    30000,
+
+  // Patterns that historically indicate a stuck loop.
+  // Each entry is [regex, human-readable label].
+  STUCK: [
+    [/\b400\b/,                          '400 error loop'],
+    [/does not support thinking/i,       'thinking-mode incompatibility loop'],
+    [/connection (refused|timed? ?out)/i,'connection refused/timeout loop'],
+    [/ssh.*error|error.*ssh/i,           'SSH error loop'],
+    [/git.*timeout|timeout.*git/i,       'git timeout loop'],
+    [/retrying\.{0,3}$/i,               'retry loop'],
+    [/waiting for/i,                     'waiting-for loop'],
+    [/out of memory|oom killed/i,        'OOM loop'],
+    [/permanent.*error|error.*permanent/i,'permanent-error loop'],
+    [/\[Errno\s+\d+\]/,                 'OS error loop'],
+  ],
+
+  feed(rawText, ts) {
+    const text = rawText.replace(/\x1b\[[0-9;]*m/g,'').replace(/\s+/g,' ').trim();
+    if(!text) return;
+    this.buf.push({text, ts});
+    if(this.buf.length > this.MAX_BUF) this.buf.shift();
+  },
+
+  detect() {
+    const now = Date.now();
+    if(!this.buf.length) return null;
+
+    // 1. Silence — no logs arriving at all
+    const sinceLastMs = now - this.buf[this.buf.length-1].ts;
+    if(sinceLastMs > this.SILENCE_MS){
+      const secs = Math.round(sinceLastMs/1000);
+      return {type:'silence', label:'SILENT', detail:`no log activity for ${secs}s — process may be hung`};
+    }
+
+    // 2. Exact-line repetition (first 120 chars = key)
+    const window60 = this.buf.filter(e => now - e.ts < this.REPEAT_WINDOW_MS);
+    const freq = {};
+    for(const e of window60){
+      const k = e.text.slice(0,120);
+      freq[k] = (freq[k]||0) + 1;
+    }
+    let worst = null;
+    for(const [line, count] of Object.entries(freq)){
+      if(count >= this.REPEAT_COUNT && (!worst || count > worst.count))
+        worst = {line, count};
+    }
+    if(worst)
+      return {type:'loop',
+              label:`LOOP \xd7${worst.count}`,
+              detail:`"${worst.line.slice(0,90)}" repeated ${worst.count}\xd7 in 60s`};
+
+    // 3. Known stuck-pattern repetition in last 30 s
+    const window30 = this.buf.filter(e => now - e.ts < this.ERR_WINDOW_MS);
+    for(const [pat, patLabel] of this.STUCK){
+      const hits = window30.filter(e => pat.test(e.text));
+      if(hits.length >= this.ERR_COUNT)
+        return {type:'error_loop',
+                label:`ERROR LOOP \xd7${hits.length}`,
+                detail:`${patLabel}: "${hits[hits.length-1].text.slice(0,80)}"`};
+    }
+
+    return null;  // no hang
+  },
+};
+
+// elapsed helpers
+let _atTimer = null;
+function _atElapsedStr(ms){
+  const s=Math.round(ms/1000);
+  return s<60? s+'s' : Math.floor(s/60)+'m'+(s%60)+'s';
+}
+function _atStartTimer(startMs){
+  if(_atTimer) clearInterval(_atTimer);
+  _atTimer = setInterval(()=>{
+    const el=document.getElementById('at-elapsed');
+    if(!el){clearInterval(_atTimer);return;}
+    el.textContent = _atElapsedStr(Date.now()-startMs);
+  },1000);
+}
+
+function _renderActiveTask(s){
+  const bar = document.getElementById('active-task-bar');
+  if(!bar) return;
+
+  // ── Layer 1: client-side hang detection (overrides everything) ──────────
+  const hang = _hangDetector.detect();
+  if(hang){
+    bar.className='active-task-bar at-hang';
+    bar.innerHTML=
+      '<span class="at-dot"></span>'+
+      '<span class="at-label">'+esc(hang.label)+'</span>'+
+      '<span class="at-detail">'+esc(hang.detail)+'</span>'+
+      '<span class="at-src">frontend-detect</span>';
+    return;
+  }
+
+  // ── Layer 2: backend active_task signal ─────────────────────────────────
+  const at = s && s.active_task;
+
+  if(!at || !at.task){
+    // Idle — show last completed task if available
+    bar.className='active-task-bar at-idle';
+    const lastLabel = at&&at.completed_at
+      ? ` · last: ${esc(at.task||'—')} (${_atElapsedStr(Date.now()-new Date(at.completed_at).getTime())} ago)`
+      : '';
+    bar.innerHTML='<span class="at-dot"></span><span class="at-label">IDLE</span>'+
+      '<span class="at-detail">'+lastLabel+'</span>';
+    return;
+  }
+
+  // Backend says working — check staleness independently
+  const startedMs = at.started_at ? new Date(at.started_at).getTime() : 0;
+  const ageMs = Date.now() - startedMs;
+  if(ageMs > 180000){
+    // Backend claims active but started >3 min ago with no log-level confirmation
+    bar.className='active-task-bar at-stale';
+    bar.innerHTML=
+      '<span class="at-dot"></span>'+
+      '<span class="at-label">STALE ('+Math.round(ageMs/1000)+'s)</span>'+
+      '<span class="at-detail">'+esc(at.task)+'</span>'+
+      '<span class="at-src">backend-stale</span>';
+    return;
+  }
+
+  // Fresh, working
+  bar.className='active-task-bar at-working';
+  bar.innerHTML=
+    '<span class="at-dot"></span>'+
+    '<span class="at-label">WORKING</span>'+
+    '<span class="at-detail">'+esc((at.agent||'orchestrator')+' · '+at.task)+'</span>'+
+    '<span class="at-elapsed" id="at-elapsed">0s</span>';
+  _atStartTimer(startedMs);
 }
 
 // ── Unified hive feed — blockers + next steps + recent achievements ─────────
@@ -900,6 +1081,8 @@ function addLogLine(box,session,text,ts){
   box.appendChild(d);
   while(box.children.length>300)box.removeChild(box.firstChild);
   box.scrollTop=box.scrollHeight;
+  // Feed every line into the hang detector (independent of backend)
+  _hangDetector.feed(text, Date.now());
 }
 
 let lastEventTime=Date.now();
@@ -922,6 +1105,10 @@ logEs.onmessage=function(e){
 };
 logEs.onerror=function(){dot.classList.add('dead');statusBar.textContent='SSE disconnected \u2014 retrying...';};
 logEs.onopen=function(){dot.classList.remove('dead');statusBar.textContent='';};
+
+// Re-evaluate the hang detector every 5 s even without a status SSE event
+// This ensures the bar turns red if logs go silent or loop — independent of backend.
+setInterval(()=>_renderActiveTask(null), 5000);
 
 // ── live status stream ────────────────────────────────────────────────────────
 const statusDot=document.getElementById('status-dot');

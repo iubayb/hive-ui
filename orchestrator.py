@@ -142,6 +142,24 @@ def _ts():
     return f"[{_now_hms()} UTC]"
 
 
+# ── active task context manager ───────────────────────────────────────────────
+import contextlib
+
+@contextlib.contextmanager
+def _doing(task: str):
+    """
+    Context manager: sets active_task at entry, clears at exit (even on error).
+    Usage:
+        with _doing("triage: checking sessions"):
+            ...
+    """
+    hive_status.set_active_task("orchestrator", task)
+    try:
+        yield
+    finally:
+        hive_status.clear_active_task()
+
+
 def _log(msg: str):
     print(f"{_ts()} [orchestrator] {msg}", flush=True)
 
@@ -1288,53 +1306,59 @@ def main():
 
         # ── triage ────────────────────────────────────────────────────────────
         if now - last_triage >= TRIAGE_INTERVAL:
-            try:
-                triage()
-                _watch_research_loop_errors()
-                _prune_stale_status_entries()
-            except Exception as e:
-                _log(f"triage error (non-fatal): {e}")
+            with _doing("triage: checking sessions + service health"):
+                try:
+                    triage()
+                    _watch_research_loop_errors()
+                    _prune_stale_status_entries()
+                except Exception as e:
+                    _log(f"triage error (non-fatal): {e}")
             last_triage = now
 
         # ── compaction ────────────────────────────────────────────────────────
         if now - last_compaction >= COMPACTION_INTERVAL:
-            try:
-                compaction()
-            except Exception as e:
-                _log(f"compaction error (non-fatal): {e}")
+            with _doing("compaction: LLM summarising hive state"):
+                try:
+                    compaction()
+                except Exception as e:
+                    _log(f"compaction error (non-fatal): {e}")
             last_compaction = now
 
         # ── self-test ─────────────────────────────────────────────────────────
         if now - last_self_test >= SELF_TEST_INTERVAL:
-            try:
-                self_test()
-            except Exception as e:
-                _log(f"self-test error (non-fatal): {e}")
-            last_self_test = now
+            with _doing("self-test: running test_system.sh + auto-fix"):
+                try:
+                    self_test()
+                except Exception as e:
+                    _log(f"self-test error (non-fatal): {e}")
 
-            # Issue→test pipeline: scan recent blockers for novel patterns
-            try:
-                s = hive_status.load()
-                for b in s.get("blockers", [])[-20:]:
-                    if b.get("status") == "open":
-                        _issue_to_test(b.get("description", ""))
-            except Exception as e:
-                _log(f"issue→test error (non-fatal): {e}")
+                # Issue→test pipeline: scan recent blockers for novel patterns
+                try:
+                    hive_status.set_active_task("orchestrator", "issue→test: scanning blockers for new test patterns")
+                    s = hive_status.load()
+                    for b in s.get("blockers", [])[-20:]:
+                        if b.get("status") == "open":
+                            _issue_to_test(b.get("description", ""))
+                except Exception as e:
+                    _log(f"issue→test error (non-fatal): {e}")
+            last_self_test = now
 
         # ── GitOps: PR status poll + auto-merge ───────────────────────────────
         if now - last_gitops >= GITOPS_INTERVAL:
-            try:
-                _poll_open_prs()
-            except Exception as e:
-                _log(f"gitops poll error (non-fatal): {e}")
+            with _doing("gitops: polling open PRs — auto-merge if CI green"):
+                try:
+                    _poll_open_prs()
+                except Exception as e:
+                    _log(f"gitops poll error (non-fatal): {e}")
             last_gitops = now
 
         # ── develop → main promotion check ────────────────────────────────────
         if now - last_promote >= PROMOTE_INTERVAL:
-            try:
-                _develop_to_main_pr()
-            except Exception as e:
-                _log(f"promote error (non-fatal): {e}")
+            with _doing("gitops: develop→main promotion check + release draft"):
+                try:
+                    _develop_to_main_pr()
+                except Exception as e:
+                    _log(f"promote error (non-fatal): {e}")
             last_promote = now
 
         time.sleep(10)   # base tick — tight loop would waste CPU

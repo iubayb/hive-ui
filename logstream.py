@@ -1084,6 +1084,11 @@ _DASHBOARD_TMPL = r"""<!DOCTYPE html>
   </div>
 </div>
 <div class="status-bar" id="status-bar">Connecting...</div>
+<div id="active-task-bar" class="active-task-bar at-idle">
+  <span class="at-dot"></span>
+  <span class="at-label">IDLE</span>
+  <span class="at-detail">waiting for first status event...</span>
+</div>
 
 <!-- group tabs -->
 <div id="group-tabs">

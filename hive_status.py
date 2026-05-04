@@ -120,6 +120,7 @@ def _empty_status() -> dict:
             "deployed_at":   None,
             "status":        "pending",
         },
+        "active_task": None,   # {agent, task, started_at} — what's running RIGHT NOW
     }
 
 def _now() -> str:
@@ -368,6 +369,38 @@ def resolve_blocker(blocker_id: str, resolution: str = "",
             target=_gh_issue_close, args=(github_issue, comment), daemon=True
         )
         t.start()
+
+
+# ── active task tracking (real-time "what is running right NOW") ──────────────
+
+def set_active_task(agent: str, task: str, updated_by: str = "agent") -> None:
+    """
+    Record what the orchestrator is executing at this instant.
+    Writes to hive-status.json and broadcasts via SSE immediately.
+    Call at the START of every significant work unit.
+    """
+    with _status_lock:
+        s = load()
+        s["active_task"] = {
+            "agent":      agent,
+            "task":       task,
+            "started_at": _now(),
+        }
+        save(s, updated_by)
+
+
+def clear_active_task(updated_by: str = "agent") -> None:
+    """Call at the END (or on error) of every work unit."""
+    with _status_lock:
+        s = load()
+        prev = s.get("active_task") or {}
+        s["active_task"] = {
+            "agent":        prev.get("agent", ""),
+            "task":         prev.get("task", ""),
+            "started_at":   prev.get("started_at", ""),
+            "completed_at": _now(),
+        }
+        save(s, updated_by)
 
 
 def add_capability(source_hive: str, source_agent: str, skill: str,
@@ -639,6 +672,7 @@ def get_broadcast_payload(status: dict = None) -> dict:
         "pending_questions": status.get("pending_questions", []),
         "deployment":        status.get("deployment", {}),
         "orchestrator_sessions": status.get("orchestrator_sessions", [])[-1:],  # last entry only
+        "active_task":       status.get("active_task"),
     }
 
 # ── GitHub sync ───────────────────────────────────────────────────────────────
