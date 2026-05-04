@@ -406,6 +406,19 @@ def clear_active_task(updated_by: str = "agent") -> None:
         save(s, updated_by)
 
 
+def ping_alive(updated_by: str = "orchestrator") -> None:
+    """
+    Lightweight heartbeat: touch last_updated + broadcast.
+    Called every 30s so the SSE stream stays fresh and the frontend
+    can distinguish 'healthy between cycles' from 'actually silent'.
+    Does NOT modify any state other than last_updated.
+    """
+    with _status_lock:
+        s = load()
+        s["last_updated"] = _now()
+        save(s, updated_by)
+
+
 def add_capability(source_hive: str, source_agent: str, skill: str,
                    description: str, example: str = "",
                    tags: list = None, applicable_to: str = "all",

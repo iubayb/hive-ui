@@ -50,7 +50,8 @@ SHARED_CSS = r"""
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
   /* layout */
-  #main{padding-bottom:calc(70px + var(--safe-bottom))}
+  #main{padding-bottom:calc(70px + var(--safe-bottom));padding-top:36px}
+  /* 36px = height of the fixed active-task-bar so content isn't hidden under it */
 
   /* group tabs */
   #group-tabs{display:flex;gap:0;overflow-x:auto;background:var(--panel);
@@ -188,37 +189,47 @@ SHARED_CSS = r"""
   .metric-val{font-size:20px;font-weight:bold;color:var(--info)}
   .metric-label{font-size:10px;color:var(--muted);margin-top:2px}
 
-  /* ── active task bar — always-visible strip below the header ──────────── */
+  /* ── active task bar — fixed strip, always on screen regardless of tab/scroll */
   #active-task-bar{
-    display:flex;align-items:center;gap:8px;padding:6px 14px;
+    display:flex;align-items:center;gap:8px;padding:0 14px;
     font-size:11px;font-family:'Courier New',monospace;
     border-bottom:2px solid var(--border);
-    position:sticky;top:0;z-index:45;
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    height:36px;overflow:hidden;
     transition:background .3s,border-color .3s,color .3s;
-    min-height:36px;overflow:hidden;
   }
+  /* push the header down so it sits below the bar */
+  #header{top:36px !important}
+  /* OK = healthy between cycles */
+  #active-task-bar.at-ok{
+    background:rgba(176,176,176,.04);color:var(--ok);border-bottom-color:rgba(176,176,176,.25)}
+  /* WORKING = task running right now */
   #active-task-bar.at-working{
-    background:rgba(176,176,176,.05);color:var(--ok);border-bottom-color:var(--ok)}
-  #active-task-bar.at-idle{
-    background:var(--panel);color:var(--muted);border-bottom-color:var(--border)}
+    background:rgba(176,176,176,.07);color:var(--ok);border-bottom-color:var(--ok)}
+  /* STALE = backend says running >3min */
   #active-task-bar.at-stale{
     background:rgba(156,156,156,.07);color:var(--warn);border-bottom-color:var(--warn);
     animation:at-blink 1.4s infinite}
+  /* HANG/LOOP/SILENT = frontend detected problem */
   #active-task-bar.at-hang{
-    background:rgba(240,240,240,.07);color:var(--err);border-bottom-color:var(--err);
+    background:rgba(240,240,240,.08);color:var(--err);border-bottom-color:var(--err);
     animation:at-blink .7s infinite}
   @keyframes at-blink{0%,100%{opacity:1}50%{opacity:.55}}
-  .at-dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0}
+  .at-dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0}
   #active-task-bar.at-working .at-dot{animation:pulse 1s infinite}
+  #active-task-bar.at-ok      .at-dot{animation:pulse 3s infinite}
   #active-task-bar.at-hang    .at-dot{animation:at-blink .5s infinite}
   #active-task-bar.at-stale   .at-dot{animation:at-blink 1s infinite}
   .at-label{font-weight:bold;font-size:10px;text-transform:uppercase;
             letter-spacing:.6px;white-space:nowrap;flex-shrink:0}
-  .at-detail{font-size:11px;opacity:.8;white-space:nowrap;overflow:hidden;
+  .at-detail{font-size:11px;opacity:.75;white-space:nowrap;overflow:hidden;
              text-overflow:ellipsis;flex:1;min-width:0}
-  .at-elapsed{font-size:10px;color:var(--muted);white-space:nowrap;flex-shrink:0}
+  .at-elapsed{font-size:10px;color:var(--muted);white-space:nowrap;flex-shrink:0;
+              padding-left:6px}
   .at-src{font-size:9px;color:var(--muted);white-space:nowrap;flex-shrink:0;
-          padding:1px 5px;border:1px solid var(--border);border-radius:8px;margin-left:2px}
+          padding:1px 5px;border:1px solid var(--border);border-radius:8px;margin-left:4px}
+  .at-next{font-size:10px;color:var(--muted);white-space:nowrap;flex-shrink:0;
+           padding-left:6px;opacity:.6}
 
   /* ── end active task bar ────────────────────────────────────────────────── */
   .flash{animation:flash .8s ease-out forwards}
@@ -466,11 +477,16 @@ function _atStartTimer(startMs){
   },1000);
 }
 
+// ── active task bar constants ─────────────────────────────────────────────────
+const _AT_TRIAGE_INTERVAL  = 60000;   // must match TRIAGE_INTERVAL in orchestrator.py
+const _AT_HB_INTERVAL      = 120000;  // HEARTBEAT_INTERVAL
+const _AT_STALE_MS         = 180000;  // 3 min without a running task = suspect
+
 function _renderActiveTask(s){
   const bar = document.getElementById('active-task-bar');
   if(!bar) return;
 
-  // ── Layer 1: client-side hang detection (overrides everything) ──────────
+  // ── Layer 1: frontend hang detection — completely independent of backend ──
   const hang = _hangDetector.detect();
   if(hang){
     bar.className='active-task-bar at-hang';
@@ -478,57 +494,84 @@ function _renderActiveTask(s){
       '<span class="at-dot"></span>'+
       '<span class="at-label">'+esc(hang.label)+'</span>'+
       '<span class="at-detail">'+esc(hang.detail)+'</span>'+
-      '<span class="at-src">frontend-detect</span>';
+      '<span class="at-src">frontend</span>';
     return;
   }
 
-  // ── Layer 2: backend active_task signal ─────────────────────────────────
-  // Use passed-in s, OR fall back to last known status from SSE cache
-  const src = s || _lastKnownStatus;
-  const at = src && src.active_task;
+  // ── Layer 2: backend active_task from SSE — use cache if called from tick ──
+  const src = (s && s.active_task !== undefined) ? s : _lastKnownStatus;
+  const at  = src && src.active_task;
 
-  // No data yet
-  if(!at){
-    bar.className='active-task-bar at-idle';
-    bar.innerHTML='<span class="at-dot"></span><span class="at-label">IDLE</span>'+
-      '<span class="at-detail"> waiting for first status event\u2026</span>';
+  // No status data yet (first load before SSE connects)
+  if(!src){
+    bar.className='active-task-bar at-ok';
+    bar.innerHTML='<span class="at-dot"></span>'+
+      '<span class="at-label">OK</span>'+
+      '<span class="at-detail"> connecting\u2026</span>';
     return;
   }
 
-  // Task completed — show IDLE + last task + elapsed since completion
-  if(at.status==='completed' || at.completed_at){
-    const ago = at.completed_at
-      ? _atElapsedStr(Date.now()-new Date(at.completed_at).getTime())
-      : '?';
-    bar.className='active-task-bar at-idle';
+  // ── Task currently running ─────────────────────────────────────────────────
+  if(at && at.status==='running' && !at.completed_at){
+    const startedMs = at.started_at ? new Date(at.started_at).getTime() : Date.now();
+    const ageMs = Date.now() - startedMs;
+    if(ageMs > _AT_STALE_MS){
+      // Backend says running but >3 min — suspect hang
+      bar.className='active-task-bar at-stale';
+      bar.innerHTML=
+        '<span class="at-dot"></span>'+
+        '<span class="at-label">STALE ('+Math.round(ageMs/1000)+'s)</span>'+
+        '<span class="at-detail">'+esc(at.task||'unknown')+'</span>'+
+        '<span class="at-src">backend-stale</span>';
+      return;
+    }
+    // Fresh working task
+    bar.className='active-task-bar at-working';
     bar.innerHTML=
       '<span class="at-dot"></span>'+
-      '<span class="at-label">IDLE</span>'+
-      '<span class="at-detail"> last: '+esc(at.task||'—')+' \xb7 '+ago+' ago</span>';
+      '<span class="at-label">WORKING</span>'+
+      '<span class="at-detail">'+esc((at.agent||'orchestrator')+' \xb7 '+(at.task||''))+'</span>'+
+      '<span class="at-elapsed" id="at-elapsed">0s</span>';
+    _atStartTimer(startedMs);
     return;
   }
 
-  // Task is running — check staleness (backend claims running for >3 min = suspect)
-  const startedMs = at.started_at ? new Date(at.started_at).getTime() : 0;
-  const ageMs = Date.now() - startedMs;
-  if(ageMs > 180000){
-    bar.className='active-task-bar at-stale';
-    bar.innerHTML=
-      '<span class="at-dot"></span>'+
-      '<span class="at-label">STALE ('+Math.round(ageMs/1000)+'s)</span>'+
-      '<span class="at-detail">'+esc(at.task)+'</span>'+
-      '<span class="at-src">backend-stale</span>';
-    return;
-  }
+  // ── Between cycles: completed or null ─────────────────────────────────────
+  // Show OK + last task + next cycle estimate
+  const lastTask      = (at && at.task) ? at.task : '\u2014';
+  const completedMs   = (at && at.completed_at) ? new Date(at.completed_at).getTime() : 0;
+  const sinceMs       = completedMs ? Date.now() - completedMs : null;
+  const sinceStr      = sinceMs !== null ? _atElapsedStr(sinceMs)+' ago' : '';
+  // Estimate next triage from completion time (conservative: use triage interval)
+  const nextMs        = completedMs ? Math.max(0, _AT_TRIAGE_INTERVAL - sinceMs) : null;
+  const nextStr       = nextMs !== null ? 'next ~'+_atElapsedStr(nextMs) : '';
 
-  // Fresh and running — show with live elapsed counter
-  bar.className='active-task-bar at-working';
+  bar.className='active-task-bar at-ok';
   bar.innerHTML=
     '<span class="at-dot"></span>'+
-    '<span class="at-label">WORKING</span>'+
-    '<span class="at-detail">'+esc((at.agent||'orchestrator')+' \xb7 '+at.task)+'</span>'+
-    '<span class="at-elapsed" id="at-elapsed">0s</span>';
-  _atStartTimer(startedMs);
+    '<span class="at-label">OK</span>'+
+    '<span class="at-detail"> last: '+esc(lastTask)+(sinceStr?' \xb7 '+sinceStr:'')+'</span>'+
+    (nextStr?'<span class="at-next">'+esc(nextStr)+'</span>':'');
+  // Update the "X ago" and "next ~Ys" every second
+  _atStartOkTimer(completedMs, lastTask);
+}
+
+let _atOkTimer = null;
+function _atStartOkTimer(completedMs, lastTask){
+  if(_atOkTimer) clearInterval(_atOkTimer);
+  _atOkTimer = setInterval(()=>{
+    const bar = document.getElementById('active-task-bar');
+    if(!bar || !bar.classList.contains('at-ok')){ clearInterval(_atOkTimer); return; }
+    const sinceMs = completedMs ? Date.now()-completedMs : null;
+    const sinceStr= sinceMs!==null ? _atElapsedStr(sinceMs)+' ago' : '';
+    const nextMs  = sinceMs!==null ? Math.max(0,_AT_TRIAGE_INTERVAL-sinceMs) : null;
+    const nextStr = nextMs!==null ? 'next ~'+_atElapsedStr(nextMs) : '';
+    bar.innerHTML=
+      '<span class="at-dot"></span>'+
+      '<span class="at-label">OK</span>'+
+      '<span class="at-detail"> last: '+esc(lastTask)+(sinceStr?' \xb7 '+sinceStr:'')+'</span>'+
+      (nextStr?'<span class="at-next">'+esc(nextStr)+'</span>':'');
+  },1000);
 }
 
 // ── Unified hive feed — blockers + next steps + recent achievements ─────────

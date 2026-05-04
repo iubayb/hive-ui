@@ -68,6 +68,7 @@ TRIAGE_INTERVAL     = 60     # 1 min — check session liveness
 SELF_TEST_INTERVAL  = 300    # 5 min — system invariant self-test
 GITOPS_INTERVAL     = 300    # 5 min — PR status poll + auto-merge
 PROMOTE_INTERVAL    = 3600   # 1 hr  — develop→main promotion check
+PING_INTERVAL       = 30     # 30 s  — keep SSE stream alive between cycles
 
 # ── rate limiting ─────────────────────────────────────────────────────────────
 _MAX_LLM_CALLS_HR = 8        # conservative — shares OpenRouter free quota
@@ -210,6 +211,77 @@ def alert_watchdog(msg: str):
 CRITICAL_SESSIONS = {"hive-dev", "hive-live", "hive-watch"}
 
 _alerted: dict = {}   # session -> last alert epoch (throttle: 10 min between alerts)
+
+
+# ── live UI verification — double-check before claiming anything is done ──────
+
+_UI_PORT = 8888
+
+def _verify_live_ui() -> tuple[bool, str]:
+    """
+    Curl localhost:8888 and verify the running page contains the expected
+    signals that prove recent code changes are live.
+    Returns (ok: bool, detail: str).
+    Never raises.
+    """
+    required_strings = [
+        "_hangDetector",        # frontend hang detector present
+        "active-task-bar",      # active task bar present
+        "_lastKnownStatus",     # SSE cache present
+        "at-ok",                # OK state CSS present
+    ]
+    try:
+        conn = http.client.HTTPConnection("127.0.0.1", _UI_PORT, timeout=5)
+        conn.request("GET", "/")
+        resp = conn.getresponse()
+        html = resp.read().decode("utf-8", errors="replace")
+        conn.close()
+        if resp.status != 200:
+            return False, f"HTTP {resp.status}"
+        missing = [s for s in required_strings if s not in html]
+        if missing:
+            return False, f"missing from live page: {missing}"
+        return True, f"all {len(required_strings)} UI signals present"
+    except Exception as e:
+        return False, f"curl failed: {e}"
+
+
+def _post_triage_verify() -> None:
+    """
+    Run after every triage cycle.  Checks:
+    1. All critical sessions are alive right now (re-verify, not just assumed)
+    2. Watchdog file is fresh (proves main loop ran since last check)
+    3. Live UI page contains expected signals
+    Logs results explicitly — no silent passing.
+    """
+    # 1. Re-verify sessions
+    alive = [s for s in CRITICAL_SESSIONS if session_is_alive(s)]
+    dead  = [s for s in CRITICAL_SESSIONS if s not in alive]
+    _log(f"[verify] sessions alive={len(alive)}/{len(CRITICAL_SESSIONS)}"
+         + (f" DEAD={dead}" if dead else " all ok"))
+
+    # 2. Watchdog freshness
+    try:
+        ts_raw = open("/tmp/orchestrator.watchdog").read().strip()
+        age = time.time() - float(ts_raw)
+        if age > 60:
+            _log(f"[verify] WARNING: watchdog file is {age:.0f}s old — main loop lagging?")
+        else:
+            _log(f"[verify] watchdog age={age:.0f}s ok")
+    except Exception as e:
+        _log(f"[verify] could not read watchdog file: {e}")
+
+    # 3. Live UI
+    ok, detail = _verify_live_ui()
+    if ok:
+        _log(f"[verify] live UI ok — {detail}")
+    else:
+        _log(f"[verify] WARNING: live UI check FAILED — {detail}")
+        hive_status.add_blocker(
+            HIVE_NAME, "orchestrator",
+            f"Live UI verification failed: {detail}",
+            severity="high",
+        )
 
 
 def triage():
@@ -1258,6 +1330,7 @@ def main():
     last_self_test  = 0.0
     last_gitops     = 0.0
     last_promote    = 0.0
+    last_ping       = 0.0
 
     while True:
         now = time.time()
@@ -1318,6 +1391,7 @@ def main():
                     triage()
                     _watch_research_loop_errors()
                     _prune_stale_status_entries()
+                    _post_triage_verify()   # double-check — never assume done
                 except Exception as e:
                     _log(f"triage error (non-fatal): {e}")
             last_triage = now
@@ -1375,6 +1449,14 @@ def main():
                 _wf.write(f"{now:.0f}\n")
         except Exception:
             pass
+
+        # ── alive ping — keeps SSE stream fresh between task cycles ───────────
+        if now - last_ping >= PING_INTERVAL:
+            try:
+                hive_status.ping_alive()
+            except Exception:
+                pass
+            last_ping = now
 
         time.sleep(10)   # base tick — tight loop would waste CPU
 
