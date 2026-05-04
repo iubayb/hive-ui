@@ -48,6 +48,47 @@ _status_lock  = threading.Lock()
 _sse_listeners: list = []          # list of queue.Queue objects
 _sse_lock     = threading.Lock()
 
+# ── GitHub Issues integration (single call site — never scattered) ────────────
+_GITHUB_REPO = os.environ.get("HIVE_GITHUB_REPO", "iubayb/hive-ui")
+
+
+def _gh_issue_create(title: str, body: str, labels: list[str]) -> int | None:
+    """Fire-and-forget: open a GitHub Issue. Returns issue number or None."""
+    try:
+        label_args = []
+        for lb in labels:
+            label_args += ["--label", lb]
+        r = subprocess.run(
+            ["gh", "issue", "create",
+             "--repo", _GITHUB_REPO,
+             "--title", title[:255],
+             "--body", body[:65535]] + label_args,
+            capture_output=True, text=True, timeout=15,
+        )
+        if r.returncode == 0:
+            # Output is the issue URL; parse number from it
+            url = r.stdout.strip()
+            try:
+                return int(url.rstrip("/").split("/")[-1])
+            except (ValueError, IndexError):
+                return None
+    except Exception:
+        pass
+    return None
+
+
+def _gh_issue_close(issue_number: int, comment: str) -> None:
+    """Fire-and-forget: close a GitHub Issue with a closing comment."""
+    try:
+        subprocess.run(
+            ["gh", "issue", "close", str(issue_number),
+             "--repo", _GITHUB_REPO,
+             "--comment", comment[:65535]],
+            capture_output=True, text=True, timeout=15,
+        )
+    except Exception:
+        pass
+
 # ── schema factory ────────────────────────────────────────────────────────────
 
 def _empty_status() -> dict:
@@ -260,26 +301,55 @@ def add_achievement(hive: str, agent: str, description: str,
 def add_blocker(hive: str, agent: str, description: str,
                 severity: str = "medium", updated_by: str = "agent") -> str:
     bid = _uid("b")
+    blocker = {
+        "id":           bid,
+        "ts":           _now(),
+        "hive":         hive,
+        "agent":        agent,
+        "description":  description,
+        "severity":     severity,
+        "status":       "open",
+        "resolved_at":  None,
+        "resolution":   None,
+        "github_issue": None,   # filled in by background thread on success
+    }
     with _status_lock:
         s = load()
-        s["blockers"].insert(0, {
-            "id":          bid,
-            "ts":          _now(),
-            "hive":        hive,
-            "agent":       agent,
-            "description": description,
-            "severity":    severity,
-            "status":      "open",
-            "resolved_at": None,
-            "resolution":  None,
-        })
+        s["blockers"].insert(0, blocker)
         s["blockers"] = s["blockers"][:100]
         save(s, updated_by)
+
+    # Mirror to GitHub Issues asynchronously — never blocks the caller
+    def _open_issue():
+        num = _gh_issue_create(
+            title=f"[{severity.upper()}] {description[:120]}",
+            body=(
+                f"**Hive:** {hive}  \n"
+                f"**Agent:** {agent}  \n"
+                f"**Severity:** {severity}  \n"
+                f"**Description:** {description}\n\n"
+                f"_Auto-created by hive_status.add_blocker · id={bid}_"
+            ),
+            labels=["blocker", severity],
+        )
+        if num:
+            # Patch the issue number back into the saved status
+            with _status_lock:
+                s2 = load()
+                for b in s2["blockers"]:
+                    if b["id"] == bid:
+                        b["github_issue"] = num
+                        break
+                save(s2, "hive_status")
+
+    t = threading.Thread(target=_open_issue, daemon=True)
+    t.start()
     return bid
 
 
 def resolve_blocker(blocker_id: str, resolution: str = "",
                     updated_by: str = "agent"):
+    github_issue = None
     with _status_lock:
         s = load()
         for b in s["blockers"]:
@@ -287,8 +357,17 @@ def resolve_blocker(blocker_id: str, resolution: str = "",
                 b["status"]      = "resolved"
                 b["resolved_at"] = _now()
                 b["resolution"]  = resolution
+                github_issue     = b.get("github_issue")
                 break
         save(s, updated_by)
+
+    # Mirror to GitHub Issues asynchronously
+    if github_issue:
+        comment = f"Resolved: {resolution}" if resolution else "Resolved automatically by hive."
+        t = threading.Thread(
+            target=_gh_issue_close, args=(github_issue, comment), daemon=True
+        )
+        t.start()
 
 
 def add_capability(source_hive: str, source_agent: str, skill: str,

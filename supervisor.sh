@@ -349,21 +349,35 @@ check_github_actions() {
     fi
     last_gh_check=$now
 
-    local CUTOFF FAILED
+    local CUTOFF FAILED_MAIN FAILED_DEV
     CUTOFF=$(date -u -d '2 hours ago' '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || \
              date -u -v-2H '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || echo "")
-    FAILED=$(gh run list --repo iubayb/ps5_bazzite --limit 20 \
+
+    # Watch main and develop on the canonical hive-ui repo
+    FAILED_MAIN=$(gh run list --repo iubayb/hive-ui --limit 20 \
         --json conclusion,name,headBranch,databaseId,createdAt \
         --jq --arg cutoff "$CUTOFF" \
         '[.[] | select(.conclusion=="failure"
-               and .headBranch=="fix/caveats-env-generic"
+               and .headBranch=="main"
                and .createdAt >= $cutoff)] | length' \
         2>/dev/null || echo "0")
 
-    if [ "$FAILED" -gt 0 ]; then
-        log "ALERT [watchdog] $FAILED recent failed GitHub Actions run(s) on fix/caveats-env-generic"
-    else
-        log "INFO [watchdog] GitHub Actions: no recent failures on fix/caveats-env-generic"
+    FAILED_DEV=$(gh run list --repo iubayb/hive-ui --limit 20 \
+        --json conclusion,name,headBranch,databaseId,createdAt \
+        --jq --arg cutoff "$CUTOFF" \
+        '[.[] | select(.conclusion=="failure"
+               and .headBranch=="develop"
+               and .createdAt >= $cutoff)] | length' \
+        2>/dev/null || echo "0")
+
+    if [ "$FAILED_MAIN" -gt 0 ]; then
+        log "ALERT [watchdog] $FAILED_MAIN recent failed GitHub Actions run(s) on main (iubayb/hive-ui)"
+    fi
+    if [ "$FAILED_DEV" -gt 0 ]; then
+        log "ALERT [watchdog] $FAILED_DEV recent failed GitHub Actions run(s) on develop (iubayb/hive-ui)"
+    fi
+    if [ "$FAILED_MAIN" -eq 0 ] && [ "$FAILED_DEV" -eq 0 ]; then
+        log "INFO [watchdog] GitHub Actions: no recent failures on main or develop (iubayb/hive-ui)"
     fi
 }
 

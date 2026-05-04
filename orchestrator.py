@@ -66,6 +66,8 @@ HEARTBEAT_INTERVAL  = 120    # 2 min — print a visible line
 COMPACTION_INTERVAL = 900    # 15 min — LLM compaction call
 TRIAGE_INTERVAL     = 60     # 1 min — check session liveness
 SELF_TEST_INTERVAL  = 300    # 5 min — system invariant self-test
+GITOPS_INTERVAL     = 300    # 5 min — PR status poll + auto-merge
+PROMOTE_INTERVAL    = 3600   # 1 hr  — develop→main promotion check
 
 # ── rate limiting ─────────────────────────────────────────────────────────────
 _MAX_LLM_CALLS_HR = 8        # conservative — shares OpenRouter free quota
@@ -295,21 +297,32 @@ def triage():
 # (e.g. model doesn't support thinking, incompatible payload) and auto-restarts
 # it.  Checks at most once per triage interval.
 
-_RLOOP_400_RESTART_COOLDOWN = 600   # don't restart more than once per 10 min
+_RLOOP_400_RESTART_COOLDOWN = 600   # minimum seconds between repeated alerts
+MAX_SYNTH_RETRIES = 8               # mirrors research_loop.py — for log messages only
 _rloop_last_restart: dict = {}       # session_name → timestamp of last restart
 _rloop_400_counts: dict = {}         # session_name → consecutive 400 count seen
 
 def _watch_research_loop_errors() -> None:
     """Scan research_loop tmux sessions for 400-loop patterns.
-    If a session shows ≥20 consecutive '400 Bad Request' lines in its pane
-    output and the error is NOT an OOM (which has its own self-heal), kill
-    and restart it via the supervisor so the fixed code is used."""
+
+    ALERT-ONLY — never sends signals or restarts processes.
+    The circuit breaker inside research_loop.py is the authoritative
+    recovery mechanism; this function only adds visibility (log + blocker).
+
+    Two consecutive triage calls must both observe the threshold before a
+    blocker is raised, preventing false positives from a single pane-buffer
+    snapshot that still contains historical error lines.
+    """
     import re as _re
-    _400_pat   = _re.compile(r"400 Bad Request")
-    _oom_pat   = _re.compile(r"(input too large|out of memory|kv cache|cuda error|context length)")
+    _400_pat  = _re.compile(r"400 Bad Request")
+    # Broader OOM filter — all patterns that have their own self-heal in chat()
+    _skip_pat = _re.compile(
+        r"(input too large|out of memory|kv cache|cuda error|context length"
+        r"|failed to allocate|llama_kv_cache|ggml_|no space left"
+        r"|prompt eval requires|too many tokens|does not support thinking)"
+    )
     now = time.time()
 
-    # Find all tmux sessions running research_loop.py
     try:
         sessions_out = subprocess.check_output(
             ["tmux", "ls", "-F", "#{session_name}"], text=True, timeout=5
@@ -318,14 +331,13 @@ def _watch_research_loop_errors() -> None:
         return
 
     for sess in sessions_out:
-        # Only watch sessions that look like research-loop consumers
         if sess not in ("ps5-hive", "wegia-hive"):
             continue
 
-        # Capture last 60 lines of the pane
+        # Capture last 80 lines of the pane
         try:
             pane = subprocess.check_output(
-                ["tmux", "capture-pane", "-t", sess, "-p", "-S", "-60"],
+                ["tmux", "capture-pane", "-t", sess, "-p", "-S", "-80"],
                 text=True, timeout=5
             )
         except Exception:
@@ -333,50 +345,43 @@ def _watch_research_loop_errors() -> None:
 
         lines = pane.splitlines()
         count_400 = sum(1 for ln in lines if _400_pat.search(ln))
-        has_oom   = any(_oom_pat.search(ln) for ln in lines)
+        has_skip  = any(_skip_pat.search(ln) for ln in lines)
 
-        if count_400 < 20 or has_oom:
-            # Not a 400-loop, or it's an OOM (handled by ctx-halving self-heal)
+        # Threshold: 40/80 lines must be 400 errors, and none from the skip
+        # list (those have their own self-heal paths).
+        if count_400 < 40 or has_skip:
             _rloop_400_counts[sess] = 0
             continue
 
+        # Require two consecutive observations before raising any alert
+        prev_count = _rloop_400_counts.get(sess, 0)
         _rloop_400_counts[sess] = count_400
-        last_restart = _rloop_last_restart.get(sess, 0)
-        if now - last_restart < _RLOOP_400_RESTART_COOLDOWN:
-            continue   # already restarted recently — give it time
+        if prev_count < 40:
+            # First observation — wait for next triage cycle to confirm
+            _log(
+                f"[watchdog] {sess}: {count_400}/80 pane lines are '400 Bad Request' "
+                f"— observing; will alert next cycle if still failing"
+            )
+            continue
+
+        # Two consecutive observations above threshold → raise a blocker (alert only)
+        # Check we haven't already raised one recently
+        last_alerted = _rloop_last_restart.get(sess, 0)
+        if now - last_alerted < _RLOOP_400_RESTART_COOLDOWN:
+            continue
 
         _log(
-            f"[watchdog] {sess}: {count_400} '400 Bad Request' lines in last 60 pane lines "
-            f"— non-OOM permanent error; restarting session via supervisor"
+            f"[watchdog] {sess}: confirmed 400-loop ({count_400}/80 lines, "
+            f"2 consecutive observations) — raising blocker (no auto-action; "
+            f"circuit breaker inside research_loop.py handles recovery)"
         )
-        # Raise a blocker so the history is visible in the hive UI
-        bid = hive_status.add_blocker(
+        hive_status.add_blocker(
             sess, "orchestrator",
-            f"research_loop 400-loop detected ({count_400} errors/60 lines) — auto-restarting",
+            f"research_loop sustained 400-loop on {sess} ({count_400}/80 pane lines) "
+            f"— circuit breaker will switch models after {MAX_SYNTH_RETRIES} attempts",
             severity="high",
         )
-        # Kill existing process in the session and let supervisor recreate it
-        try:
-            subprocess.run(
-                ["tmux", "send-keys", "-t", sess, "C-c", ""],
-                timeout=3
-            )
-            import time as _time; _time.sleep(1)
-            subprocess.run(
-                ["tmux", "send-keys", "-t", sess, "", "Enter"],
-                timeout=3
-            )
-        except Exception as exc:
-            _log(f"[watchdog] {sess}: restart signal failed: {exc}")
-
-        _rloop_last_restart[sess] = now
-        # Resolve the blocker after restart attempt
-        hive_status.resolve_blocker(bid, "sent C-c + restart to research_loop session")
-        add_capability(
-            skill="auto_restart_400_loop",
-            description="Auto-detects and restarts research_loop sessions stuck in 400-error loops",
-            example=f"Restarted {sess} after {count_400} consecutive 400 Bad Request errors",
-        )
+        _rloop_last_restart[sess] = now  # reuse field as "last alerted" timestamp
 
 
 # ── stale blocker / next-step pruner ─────────────────────────────────────────
@@ -569,26 +574,25 @@ def self_test():
                 fixed_this_run.append(tid)
                 _self_test_auto_fixed_total += 1
                 _log(f"[self-test] {tid} auto-fixed and verified ✓")
-                hive_status.add_achievement(
-                    HIVE_NAME, "orchestrator",
-                    f"Auto-fixed system invariant {tid}",
-                    evidence=f"test_system.sh {tid} now passes after auto-fix",
+                # Resolve any open blocker for this test
+                s = hive_status.load()
+                resolve_bid = next(
+                    (b["id"] for b in s.get("blockers", [])
+                     if b.get("status") == "open"
+                     and b.get("agent") == "orchestrator"
+                     and tid in b.get("description", "")),
+                    None,
                 )
-                # Register capability once per test ID
-                hive_status.add_capability(
-                    HIVE_NAME, "orchestrator",
+                _record_improvement(
                     skill=f"auto_fix_{tid}",
                     description=f"Automatically detects and repairs {tid} system invariant failures",
                     example=f"Applied fix for {tid}: {_AUTO_FIX_REGISTRY.get(tid,'')[:60]}",
                     tags=["self-healing", "system-invariant", "auto-fix"],
+                    achievement=f"Auto-fixed system invariant {tid}",
+                    evidence=f"test_system.sh {tid} now passes after auto-fix",
+                    resolve_blocker_id=resolve_bid,
+                    resolve_msg=f"self-test: {tid} auto-fixed",
                 )
-                # Resolve any open blocker for this test
-                s = hive_status.load()
-                for b in s.get("blockers", []):
-                    if (b.get("status") == "open"
-                            and b.get("agent") == "orchestrator"
-                            and tid in b.get("description", "")):
-                        hive_status.resolve_blocker(b["id"], f"self-test: {tid} auto-fixed")
             else:
                 _log(f"[self-test] {tid} fix ran but test still failing")
                 if tid in new_failures:
@@ -713,12 +717,28 @@ echo "SYSTEM_TEST_RESULT: pass=$pass fail=$fail total=$((pass+fail))"
             os.chmod(dest, 0o755)
             _log(f"[issue→test] generated test: {dest}")
 
-            # Auto-commit to git
-            _git_commit_test(dest, name, blocker_description)
+            # Auto-commit + open PR via unified gitops path
+            commit_msg = (
+                f"auto: add learned test test_{name}.sh\n\n"
+                f"Generated by orchestrator issue→test pipeline.\n"
+                f"Source incident: {blocker_description[:120]}\n"
+                f"Generated: {_now_iso()}"
+            )
+            _git_branch_pr(
+                filepath=dest,
+                slug=name,
+                commit_msg=commit_msg,
+                pr_title=f"auto: add learned test for '{name}'",
+                pr_body=(
+                    f"## Auto-generated test\n\n"
+                    f"Source incident: {blocker_description[:200]}\n\n"
+                    f"Test file: `tests/learned/test_{name}.sh`\n\n"
+                    f"_Generated automatically by orchestrator issue→test pipeline._"
+                ),
+            )
             _issue_test_committed.add(name)
 
-            hive_status.add_capability(
-                HIVE_NAME, "orchestrator",
+            _record_improvement(
                 skill=f"auto_test_{name}",
                 description=f"Auto-generated test for '{name}' from incident: {blocker_description[:60]}",
                 example=f"tests/learned/test_{name}.sh",
@@ -728,37 +748,290 @@ echo "SYSTEM_TEST_RESULT: pass=$pass fail=$fail total=$((pass+fail))"
             _log(f"[issue→test] failed to write test for {name}: {e}")
 
 
-def _git_commit_test(filepath: str, name: str, source_desc: str) -> None:
-    """Commit a newly generated test file to git."""
+# ── git / gh helpers (single source of truth for all git operations) ──────────
+_GIT_ENV = {
+    **os.environ,
+    "GIT_AUTHOR_NAME":    "orchestrator",
+    "GIT_AUTHOR_EMAIL":   "orchestrator@hive.local",
+    "GIT_COMMITTER_NAME": "orchestrator",
+    "GIT_COMMITTER_EMAIL":"orchestrator@hive.local",
+}
+
+_GITHUB_REPO = "iubayb/hive-ui"
+
+
+def _git(args: list, check: bool = False, timeout: int = 15) -> subprocess.CompletedProcess:
+    """Run a git command in SCRIPT_DIR with the canonical git env."""
+    return subprocess.run(
+        ["git"] + args,
+        cwd=SCRIPT_DIR, capture_output=True, text=True,
+        env=_GIT_ENV, timeout=timeout, check=check,
+    )
+
+
+def _gh(args: list, timeout: int = 20) -> subprocess.CompletedProcess:
+    """Run a gh CLI command in SCRIPT_DIR. Never raises — callers check returncode."""
+    return subprocess.run(
+        ["gh"] + args,
+        cwd=SCRIPT_DIR, capture_output=True, text=True, timeout=timeout,
+    )
+
+
+def _git_in_repo() -> bool:
+    """Return True if SCRIPT_DIR is inside a git repository."""
+    return _git(["rev-parse", "--git-dir"]).returncode == 0
+
+
+def _current_branch() -> str:
+    r = _git(["rev-parse", "--abbrev-ref", "HEAD"])
+    return r.stdout.strip() if r.returncode == 0 else "unknown"
+
+
+def _git_branch_pr(
+    filepath: str,
+    slug: str,
+    commit_msg: str,
+    pr_title: str,
+    pr_body: str,
+    base: str = "develop",
+    prefix: str = "feat/auto-",
+) -> str | None:
+    """
+    Full GitOps path for one auto-generated artifact:
+      1. checkout (or create) branch  <prefix><slug>
+      2. git add <filepath>
+      3. git commit
+      4. git push origin <branch>
+      5. gh pr create --base <base>  (skips if PR already open)
+    Returns the PR URL on success, None on any failure.
+    Single source of truth — no other function does git operations.
+    """
+    if not _git_in_repo():
+        _log("[gitops] not a git repo — skipping branch/PR creation")
+        return None
+
+    branch = f"{prefix}{slug}"
     try:
-        # Verify we're in a git repo
-        subprocess.run(
-            ["git", "rev-parse", "--git-dir"],
-            cwd=SCRIPT_DIR, capture_output=True, check=True, timeout=5,
-        )
-        subprocess.run(
-            ["git", "add", filepath],
-            cwd=SCRIPT_DIR, capture_output=True, check=True, timeout=5,
-        )
-        msg = (
-            f"auto: add learned test test_{name}.sh\n\n"
-            f"Generated by orchestrator issue→test pipeline.\n"
-            f"Source incident: {source_desc[:120]}\n"
-            f"Generated: {_now_iso()}"
-        )
-        subprocess.run(
-            ["git", "commit", "-m", msg],
-            cwd=SCRIPT_DIR, capture_output=True, timeout=15,
-            env={**os.environ, "GIT_AUTHOR_NAME": "orchestrator",
-                 "GIT_AUTHOR_EMAIL": "orchestrator@hive.local",
-                 "GIT_COMMITTER_NAME": "orchestrator",
-                 "GIT_COMMITTER_EMAIL": "orchestrator@hive.local"},
-        )
-        _log(f"[issue→test] committed {os.path.basename(filepath)} to git")
-    except subprocess.CalledProcessError:
-        pass   # not a git repo or staging failed — test still written to disk
+        # Create or switch to the auto branch
+        existing = _git(["branch", "--list", branch]).stdout.strip()
+        if existing:
+            _git(["checkout", branch], check=True)
+        else:
+            _git(["checkout", "-b", branch], check=True)
+
+        _git(["add", filepath], check=True)
+
+        # Commit (ignore "nothing to commit")
+        r = _git(["commit", "-m", commit_msg])
+        if r.returncode not in (0, 1):   # 1 = nothing to commit
+            _log(f"[gitops] commit failed for {slug}: {r.stderr.strip()}")
+            _git(["checkout", "develop"])
+            return None
+
+        # Push
+        push_r = _git(["push", "-u", "origin", branch], timeout=30)
+        if push_r.returncode != 0:
+            _log(f"[gitops] push failed for {branch}: {push_r.stderr.strip()[:120]}")
+            _git(["checkout", "develop"])
+            return None
+
+        # Create PR (idempotent — gh skips if already open)
+        pr_r = _gh([
+            "pr", "create",
+            "--repo", _GITHUB_REPO,
+            "--base", base,
+            "--head", branch,
+            "--title", pr_title,
+            "--body", pr_body,
+        ])
+        _git(["checkout", "develop"])
+        if pr_r.returncode == 0:
+            url = pr_r.stdout.strip()
+            _log(f"[gitops] PR created: {url}")
+            return url
+        # "already exists" is not an error
+        if "already exists" in pr_r.stderr:
+            _log(f"[gitops] PR for {branch} already open — skipping")
+            return None
+        _log(f"[gitops] gh pr create failed: {pr_r.stderr.strip()[:120]}")
+        return None
+
     except Exception as e:
-        _log(f"[issue→test] git commit failed (non-fatal): {e}")
+        _log(f"[gitops] _git_branch_pr error (non-fatal): {e}")
+        try:
+            _git(["checkout", "develop"])
+        except Exception:
+            pass
+        return None
+
+
+def _record_improvement(
+    skill: str,
+    description: str,
+    example: str = "",
+    tags: list | None = None,
+    achievement: str | None = None,
+    evidence: str = "",
+    resolve_blocker_id: str | None = None,
+    resolve_msg: str = "",
+) -> None:
+    """
+    Single call that atomically:
+      • registers a capability (deduped by skill slug)
+      • optionally records an achievement
+      • optionally resolves an open blocker
+    DRY mandate: no caller should call add_capability directly — use this instead.
+    """
+    hive_status.add_capability(
+        HIVE_NAME, "orchestrator",
+        skill=skill,
+        description=description,
+        example=example,
+        tags=tags or [],
+    )
+    if achievement:
+        hive_status.add_achievement(
+            HIVE_NAME, "orchestrator",
+            achievement,
+            evidence=evidence or description,
+        )
+    if resolve_blocker_id:
+        hive_status.resolve_blocker(resolve_blocker_id, resolve_msg or description)
+
+
+# ── GitOps triage: poll open PRs and auto-merge when CI is green ──────────────
+GITOPS_INTERVAL = 300    # 5 min — check PR statuses
+
+
+def _poll_open_prs() -> None:
+    """
+    Fetch all open PRs on iubayb/hive-ui with base=develop.
+    Auto-merge any whose CI checks have all passed.
+    Logs a blocker for any that are failing.
+    Idempotent — safe to call every GITOPS_INTERVAL.
+    """
+    if not _gh(["auth", "status"]).returncode == 0:
+        return   # gh not authenticated — skip silently
+
+    r = _gh([
+        "pr", "list",
+        "--repo", _GITHUB_REPO,
+        "--base", "develop",
+        "--state", "open",
+        "--json", "number,title,headRefName,statusCheckRollup",
+        "--limit", "20",
+    ])
+    if r.returncode != 0:
+        return
+
+    try:
+        prs = json.loads(r.stdout or "[]")
+    except json.JSONDecodeError:
+        return
+
+    for pr in prs:
+        num    = pr.get("number")
+        title  = pr.get("title", "")
+        branch = pr.get("headRefName", "")
+        checks = pr.get("statusCheckRollup") or []
+
+        if not (branch.startswith("feat/auto-") or branch.startswith("fix/auto-")):
+            continue   # only auto-branches get auto-merged
+
+        if not checks:
+            continue   # CI not yet run
+
+        states = {c.get("conclusion") or c.get("status", "PENDING") for c in checks}
+
+        if states <= {"SUCCESS", "SKIPPED", "NEUTRAL"}:
+            # All checks green — auto-merge
+            merge_r = _gh([
+                "pr", "merge", str(num),
+                "--repo", _GITHUB_REPO,
+                "--squash", "--auto",
+                "--delete-branch",
+            ])
+            if merge_r.returncode == 0:
+                _log(f"[gitops] auto-merged PR #{num} ({title})")
+                _record_improvement(
+                    skill=f"gitops_merge_pr_{num}",
+                    description=f"Auto-merged PR #{num}: {title}",
+                    tags=["gitops", "auto-merge", "ci-green"],
+                    achievement=f"CI green → auto-merged PR #{num}: {title}",
+                    evidence=f"Branch {branch} merged to develop",
+                )
+            else:
+                _log(f"[gitops] auto-merge failed for PR #{num}: {merge_r.stderr.strip()[:80]}")
+
+        elif "FAILURE" in states or "ERROR" in states:
+            _log(f"[gitops] PR #{num} ({branch}) has CI failures")
+            # Add blocker only if not already open for this PR
+            s = hive_status.load()
+            already = any(
+                b.get("status") == "open" and f"PR #{num}" in b.get("description", "")
+                for b in s.get("blockers", [])
+            )
+            if not already:
+                hive_status.add_blocker(
+                    HIVE_NAME, "orchestrator",
+                    f"CI failure on PR #{num} ({branch}): {title}",
+                    severity="high",
+                )
+
+
+def _develop_to_main_pr() -> None:
+    """
+    Once a week (or when ≥5 auto-PRs have been merged to develop since last
+    promote), open a develop → main PR and tag a GitHub Release.
+    Idempotent — skips if a promote PR is already open.
+    """
+    # Check for existing open develop→main PR
+    r = _gh([
+        "pr", "list",
+        "--repo", _GITHUB_REPO,
+        "--base", "main",
+        "--head", "develop",
+        "--state", "open",
+        "--json", "number",
+    ])
+    try:
+        existing = json.loads(r.stdout or "[]")
+    except json.JSONDecodeError:
+        return
+    if existing:
+        return   # already open
+
+    # Count merged auto-PRs since last main update
+    log_r = _git(["log", "origin/main..origin/develop", "--oneline"])
+    commits = [l for l in (log_r.stdout or "").splitlines() if l.strip()]
+    if len(commits) < 5:
+        return   # not enough accumulated yet
+
+    tag = f"v{datetime.now(timezone.utc).strftime('%Y.%m.%d')}"
+    pr_r = _gh([
+        "pr", "create",
+        "--repo", _GITHUB_REPO,
+        "--base", "main",
+        "--head", "develop",
+        "--title", f"chore: promote develop → main ({tag})",
+        "--body", (
+            f"## Auto-promotion\n\n"
+            f"Accumulated {len(commits)} commit(s) on `develop` since last `main` update.\n\n"
+            f"Merging to trigger Vercel production deploy and create release `{tag}`.\n\n"
+            f"_Generated automatically by orchestrator._"
+        ),
+    ])
+    if pr_r.returncode == 0:
+        _log(f"[gitops] opened develop→main PR: {pr_r.stdout.strip()}")
+        # Create a GitHub Release draft (best-effort)
+        _gh([
+            "release", "create", tag,
+            "--repo", _GITHUB_REPO,
+            "--title", f"Hive UI {tag}",
+            "--generate-notes",
+            "--draft",
+            "--target", "develop",
+        ])
 
 
 # ── compaction ────────────────────────────────────────────────────────────────
@@ -965,6 +1238,8 @@ def main():
     last_compaction = 0.0
     last_triage     = 0.0
     last_self_test  = 0.0
+    last_gitops     = 0.0
+    last_promote    = 0.0
 
     while True:
         now = time.time()
@@ -1045,6 +1320,22 @@ def main():
                         _issue_to_test(b.get("description", ""))
             except Exception as e:
                 _log(f"issue→test error (non-fatal): {e}")
+
+        # ── GitOps: PR status poll + auto-merge ───────────────────────────────
+        if now - last_gitops >= GITOPS_INTERVAL:
+            try:
+                _poll_open_prs()
+            except Exception as e:
+                _log(f"gitops poll error (non-fatal): {e}")
+            last_gitops = now
+
+        # ── develop → main promotion check ────────────────────────────────────
+        if now - last_promote >= PROMOTE_INTERVAL:
+            try:
+                _develop_to_main_pr()
+            except Exception as e:
+                _log(f"promote error (non-fatal): {e}")
+            last_promote = now
 
         time.sleep(10)   # base tick — tight loop would waste CPU
 
