@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-04T16:45:51Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-04T16:46:56Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.55,
-      "last_seen": "2026-05-04T16:44:30Z",
+      "last_seen": "2026-05-04T16:46:36Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -2230,7 +2230,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 143
+    "openrouter_calls_today": 144
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -2239,26 +2239,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_4da86d97",
-      "ts": "2026-05-04T14:51:03Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by breaking the critical ps5-hive infinite failure loop and clearing high-priority self-test env issues.",
-      "summary": "The hive is running at 88% health across eight active sessions, but a critical infinite failure loop in ps5-hive (4846 consecutive failures) and repeated HIVE_GITHUB_REPO validation failures are blocking progress. Recent capabilities (failure-loop-breaker, cli-path-repair, ollama-model-inspector) and the new text champion model are available to accelerate recovery.",
-      "progress": "Identified the critical ps5-hive infinite failure loop and repeated TS34 self-test failures as top priorities and confirmed readiness of learned repair/inspection capabilities.",
-      "next_steps": [
-        "Run failure-loop-breaker in ps5-hive to interrupt the infinite failure cycle and reset worker state.",
-        "Correct HIVE_GITHUB_REPO or TS34 validation logic across affected self-tests and ensure env consistency.",
-        "Execute lightweight health audits on all eight active sessions (build_monitor, hive-dev, hive-live, hive-watch, opencode, orchestrator, ps5-hive, supervisor).",
-        "Apply cli-path-repair to normalize PATH/symlink inconsistencies discovered during audits.",
-        "Use ollama-model-inspector to validate inclusionai/ling-2.6-1t:free model integrity and warm-start if clean."
-      ],
-      "decisions": [
-        "Prioritize breaking the ps5-hive infinite failure loop before other non-critical work.",
-        "Defer non-urgent feature work until TS34 self-tests pass and hive health reaches >=95%.",
-        "Validate model and path repairs in a staging-like session (hive-dev/opencode) before promoting to hive-live/ps5-hive."
-      ]
-    },
     {
       "id": "sess_4371a49e",
       "ts": "2026-05-04T15:06:09Z",
@@ -2441,6 +2421,26 @@
         "Cap research_loop and synthesis workers to memory budgets and enable graceful backpressure under load/core > 0.9.",
         "Mandate non-empty HIVE_GITHUB_REPO for all runtime contexts; fail fast and surface to logs if missing."
       ]
+    },
+    {
+      "id": "sess_83299db3",
+      "ts": "2026-05-04T16:46:26Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive under high load, close remaining TS34 regressions, and land PR #37 to main.",
+      "summary": "Hive self-tests are now 34/34 passing and HIVE_GITHUB_REPO propagation is fixed, but high load and disk pressure are still causing pauses and retries. PR #37 is open and ready to merge pending final review and CI confidence.",
+      "progress": "Fixed TS34 env propagation and research_loop infinite-synthesis loop; opened PR #37 merging fixes and updated champion to inclusionai/ling-2.6-1t:free.",
+      "next_steps": [
+        "Renice/prioritize research_loop and tune JVM/TS workers to lower core load and memory pressure.",
+        "Add disk-pressure mitigation (log rotation, tmp cleanup) and raise alert threshold to 20%.",
+        "Run targeted CI on PR #37, approve, and merge release/combined-fixes into main.",
+        "Retire duplicate TS34 failures and verify HIVE_GITHUB_REPO is read-only in subprocesses.",
+        "Schedule P4 future-hardening and P8 SQS consumer update in next sprint."
+      ],
+      "decisions": [
+        "Adopt inclusionai/ling-2.6-1t:free as primary model for balance of speed and capability.",
+        "Gate sensitive env propagation (HIVE_GITHUB_REPO) to read-only subprocess context only.",
+        "Merge PR #37 as single atomic release to main and tag immediately after CI green."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -2452,9 +2452,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
-    "status": "completed",
-    "started_at": "2026-05-04T16:45:30Z",
-    "completed_at": "2026-05-04T16:45:31Z"
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "status": "running",
+    "started_at": "2026-05-04T16:46:56Z",
+    "completed_at": null
   }
 }
