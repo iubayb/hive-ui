@@ -542,6 +542,12 @@ run_self_test() {
     local script="/home/ayoub/hive-ui/tests/test_system.sh"
     [[ -f "$script" ]] || { log "SELF-TEST: test_system.sh not found — skipping"; return; }
     log "SELF-TEST: running system invariants..."
+    # Ensure env vars required by tests are available in the subprocess
+    local hive_env="/home/ayoub/hive-ui/.env"
+    if [[ -f "$hive_env" ]]; then
+        set -a; source "$hive_env"; set +a
+    fi
+    export HIVE_GITHUB_REPO="${HIVE_GITHUB_REPO:-iubayb/hive-ui}"
     local result
     result=$(timeout 60 bash "$script" 2>&1 || true)
     local failed_count
