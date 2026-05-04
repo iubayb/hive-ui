@@ -5,6 +5,15 @@ import { useHiveStore, type ChatMessage } from "@/store/useHiveStore";
 
 function uid() { return Math.random().toString(36).slice(2); }
 
+interface Attachment {
+  id: string;
+  filename: string;
+  type?: string;
+  is_image?: boolean;
+  /** true while the backend upload is still in-flight */
+  pending?: boolean;
+}
+
 export function AIAssistant() {
   const {
     chatMessages, addChatMessage,
@@ -12,18 +21,78 @@ export function AIAssistant() {
     hiveStatus,
   } = useHiveStore();
   const [input, setInput] = useState("");
+  const [attachments, setAttachments] = useState<Attachment[]>([]);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatMessages, isAssistantThinking]);
 
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []);
+    if (!files.length) return;
+    // Reset so the same file can be re-selected
+    e.target.value = "";
+
+    for (const file of files) {
+      const localId = uid();
+      // Optimistically add a pending chip
+      setAttachments((prev) => [
+        ...prev,
+        { id: localId, filename: file.name, pending: true },
+      ]);
+
+      try {
+        const fd = new FormData();
+        fd.append("file", file);
+        const res = await fetch("/api/upload", { method: "POST", body: fd });
+        if (res.ok) {
+          const data = await res.json();
+          // Replace pending chip with backend-confirmed attachment
+          setAttachments((prev) =>
+            prev.map((a) =>
+              a.id === localId
+                ? {
+                    id: data.id ?? localId,
+                    filename: data.filename ?? file.name,
+                    type: data.type,
+                    is_image: data.is_image,
+                    pending: false,
+                  }
+                : a
+            )
+          );
+        } else {
+          // Backend unavailable — keep chip with local id so it's still visible
+          setAttachments((prev) =>
+            prev.map((a) =>
+              a.id === localId ? { ...a, pending: false } : a
+            )
+          );
+        }
+      } catch {
+        setAttachments((prev) =>
+          prev.map((a) =>
+            a.id === localId ? { ...a, pending: false } : a
+          )
+        );
+      }
+    }
+  }
+
+  function removeAttachment(id: string) {
+    setAttachments((prev) => prev.filter((a) => a.id !== id));
+  }
+
   async function send() {
     const text = input.trim();
-    if (!text || isAssistantThinking) return;
+    if ((!text && attachments.length === 0) || isAssistantThinking) return;
     const userMsg: ChatMessage = { id: uid(), role: "user", content: text };
     addChatMessage(userMsg);
     setInput("");
+    const sentAttachments = [...attachments];
+    setAttachments([]);
     setAssistantThinking(true);
 
     const assistantId = uid();
@@ -39,10 +108,15 @@ export function AIAssistant() {
         role: m.role, content: m.content,
       }));
 
+      const payload: Record<string, unknown> = { messages: history, system };
+      if (sentAttachments.length > 0) {
+        payload.attachment_ids = sentAttachments.map((a) => a.id);
+      }
+
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: history, system }),
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
@@ -127,7 +201,61 @@ export function AIAssistant() {
         className="px-4 pb-4 pt-2 border-t"
         style={{ borderColor: "var(--color-border)" }}
       >
+        {/* Attachment chips */}
+        {attachments.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mb-2">
+            {attachments.map((a) => (
+              <span
+                key={a.id}
+                className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs"
+                style={{
+                  background: "var(--color-glass)",
+                  border: "1px solid var(--color-border)",
+                  color: "var(--color-text-secondary)",
+                  opacity: a.pending ? 0.6 : 1,
+                }}
+              >
+                {a.pending ? "⏳" : "📄"} {a.filename}
+                <button
+                  onClick={() => removeAttachment(a.id)}
+                  className="ml-0.5 hover:opacity-70 transition-opacity"
+                  aria-label={`Remove ${a.filename}`}
+                  style={{ lineHeight: 1 }}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+
         <div className="flex gap-2">
+          {/* Hidden file input */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            className="hidden"
+            onChange={handleFileChange}
+          />
+
+          {/* Attach button */}
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isAssistantThinking}
+            className="px-3 rounded-xl text-sm transition-all"
+            title="Attach file"
+            style={{
+              background: "var(--color-glass)",
+              color: "var(--color-text-muted)",
+              border: "1px solid var(--color-border)",
+              minHeight: "44px",
+              minWidth: "44px",
+            }}
+          >
+            📎
+          </button>
+
           <input
             type="text"
             value={input}
@@ -145,11 +273,11 @@ export function AIAssistant() {
           />
           <button
             onClick={send}
-            disabled={isAssistantThinking || !input.trim()}
+            disabled={isAssistantThinking || (!input.trim() && attachments.length === 0)}
             className="px-3 rounded-xl text-sm font-medium transition-all"
             style={{
-              background: input.trim() ? "var(--color-brand)" : "var(--color-glass)",
-              color: input.trim() ? "#000" : "var(--color-text-muted)",
+              background: (input.trim() || attachments.length > 0) ? "var(--color-brand)" : "var(--color-glass)",
+              color: (input.trim() || attachments.length > 0) ? "#000" : "var(--color-text-muted)",
               border: "1px solid var(--color-border)",
               minHeight: "44px",
               minWidth: "44px",
