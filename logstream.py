@@ -1075,58 +1075,13 @@ _DASHBOARD_TMPL = r"""<!DOCTYPE html>
 </style>
 </head>
 <body>
-<!-- header -->
-<div id="header">
-  <h1><span class="dot" id="dot"></span>Hive Monitor</h1>
-  <div id="header-btns">
-    <button id="menu-btn" class="hdr-btn" onclick="openSettings()">⚙ Config</button>
-  </div>
-</div>
-<div class="status-bar" id="status-bar">Connecting...</div>
 <div id="active-task-bar" class="active-task-bar at-ok">
   <span class="at-dot"></span>
   <span class="at-label">OK</span>
   <span class="at-detail"> connecting&hellip;</span>
 </div>
 
-<!-- group tabs -->
-<div id="group-tabs">
-  <div class="gtab active" data-group="__all__" onclick="switchGroup('__all__',this)">All</div>
-</div>
-
 <div id="main">
-
-<!-- onboarding (hidden — auto-skipped on load) -->
-<div id="onboarding" style="display:none">
-  <h2>Welcome to Hive UI — quick setup</h2>
-  <div class="ob-q">
-    <label>1. What is the mission for this session?</label>
-    <textarea id="ob-goal" rows="3" placeholder="e.g. Audit WeGIA PHP app for OWASP Top 10 vulnerabilities"></textarea>
-  </div>
-  <div class="ob-q">
-    <label>2. Define hive groups (optional)</label>
-    <textarea id="ob-groups" rows="2" placeholder='{"Research": ["ps5-hive","hive-watch"], "Build": ["build_monitor"]}'></textarea>
-    <div style="font-size:10px;color:var(--muted);margin-top:3px">
-      JSON map of group name → session list. Leave blank for no grouping.
-    </div>
-  </div>
-  <div class="ob-q">
-    <label>3. Where should tasks be tracked?</label>
-    <input id="ob-dest" type="text" placeholder="owner/repo or leave blank">
-  </div>
-  <div class="ob-q">
-    <label>4. Which model?</label>
-    <div class="model-row">
-      <input id="ob-model" type="text" placeholder="model name">
-    </div>
-    <div class="favorites" id="ob-favorites"></div>
-  </div>
-  <div class="ob-q">
-    <label>5. Standing instructions</label>
-    <textarea id="ob-instructions" rows="2" placeholder="Always cite line numbers. Keep answers concise."></textarea>
-  </div>
-  <button id="ob-submit" onclick="submitOnboarding()">Begin →</button>
-</div>
 
 <!-- STATUS PANEL — unified feed: health + blockers + next steps + achievements + capabilities -->
 <details class="section" id="status-panel">
@@ -1176,19 +1131,18 @@ _DASHBOARD_TMPL = r"""<!DOCTYPE html>
 <!-- task queue -->
 <details class="section" open id="queue-section">
   <summary>
-    <span>Task Queue</span>
-    <span class="count" id="queue-count">0 tasks</span>
-    <button id="clear-done-btn" onclick="clearDoneItems(event)" title="Remove all done/merged/closed items">clear done</button>
+    <span>Attention</span>
+    <span class="count" id="queue-count">&#8212;</span>
   </summary>
-    <div id="queue-list">
-    <div id="queue-empty">No tasks yet. Submit a prompt below.</div>
+  <div id="attn-tabs"></div>
+  <div id="queue-list">
+    <div id="queue-empty">Waiting for first compaction&#8230;</div>
   </div>
 </details>
 
 </div><!-- /main -->
 
-<!-- sticky input bar -->
-<div id="input-bar">
+<!-- sticky input bar --><div id="input-bar">
   <div id="attach-chips"></div>
   <div id="input-row">
     <button id="attach-btn" onclick="triggerAttach()" title="Attach file">📎</button>
@@ -1198,74 +1152,6 @@ _DASHBOARD_TMPL = r"""<!DOCTYPE html>
     <button id="send-btn" onclick="sendPrompt()">▶</button>
   </div>
   <input id="file-input" type="file" multiple accept="*/*" onchange="handleFiles(event)">
-</div>
-
-<!-- settings modal -->
-<div id="settings-modal">
-  <div id="settings-inner">
-    <h2>Configuration <button id="close-settings" onclick="closeSettings()">✕</button></h2>
-    <div class="setting-row">
-      <label>Session goal</label>
-      <textarea id="s-goal" rows="2"></textarea>
-    </div>
-    <div class="setting-row">
-      <label>Hive groups (JSON)</label>
-      <textarea id="s-groups" rows="2" placeholder='{"Research":["ps5-hive"]}'></textarea>
-    </div>
-    <div class="setting-row">
-      <label>Task destination (owner/repo or blank)</label>
-      <input id="s-dest" type="text">
-    </div>
-    <div class="setting-row">
-      <label>Model</label>
-      <input id="s-model" type="text">
-      <div id="s-favorites" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px"></div>
-    </div>
-    <div class="setting-row">
-      <label>Standing instructions</label>
-      <textarea id="s-instructions" rows="3"></textarea>
-    </div>
-    <button id="save-settings" onclick="saveSettings()">Save</button>
-
-    <!-- question handling -->
-    <div class="arena-section" id="q-handle-panel">
-      <h3>Question Handling</h3>
-      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-        <label style="color:var(--muted);font-size:11px;flex:1;min-width:160px">
-          AI decides if unanswered after
-        </label>
-        <input id="s-ai-timeout" type="number" min="1" max="1440"
-               style="width:56px;background:var(--input-bg);border:1px solid var(--border);
-                      color:var(--text);padding:6px 8px;border-radius:4px;font-size:12px">
-        <span style="color:var(--muted);font-size:11px">min</span>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;min-height:44px">
-          <input type="checkbox" id="s-ai-auto" style="width:16px;height:16px;cursor:pointer">
-          <span style="color:var(--text);font-size:12px">Enabled</span>
-        </label>
-      </div>
-      <div id="s-ai-status" style="font-size:10px;color:var(--muted);margin-top:6px"></div>
-    </div>
-
-    <!-- arena panel -->
-    <div class="arena-section" id="arena-panel">
-      <h3>⚡ Model Arena</h3>
-      <div class="champ-row">
-        <span class="champ-label">Text champion</span>
-        <span class="champ-val" id="arena-text-champ">—</span>
-      </div>
-      <div class="champ-row">
-        <span class="champ-label">Vision champion</span>
-        <span class="champ-val" id="arena-vision-champ">—</span>
-      </div>
-      <div class="champ-row">
-        <span class="champ-label">Last run</span>
-        <span class="champ-val" id="arena-last-run">—</span>
-      </div>
-      <button id="run-arena-btn" onclick="runArena()">Run Arena Benchmark</button>
-      <div id="arena-status-msg"></div>
-      <div id="arena-leaderboard" style="margin-top:10px"></div>
-    </div>
-  </div>
 </div>
 
 <script>
@@ -1566,6 +1452,26 @@ class Handler(BaseHTTPRequestHandler):
             threading.Thread(target=poll_pr_statuses, daemon=True).start()
             self._send_json({"ok": True})
 
+        elif p == "/api/queue":
+            try:
+                body = json.loads(self._read_body())
+                task = body.get("task", "").strip()
+                if not task:
+                    self._send_json({"error": "task field required"}, 400)
+                    return
+                entry = {
+                    "id": str(uuid.uuid4())[:8],
+                    "task": task,
+                    "added": time.time(),
+                    "source": body.get("source", "api"),
+                }
+                with queue_lock:
+                    task_queue.append(entry)
+                _save_queue()
+                self._send_json({"ok": True, "id": entry["id"]})
+            except Exception as e:
+                self._send_json({"error": str(e)}, 400)
+
         elif p == "/api/groups":
             try:
                 body = json.loads(self._read_body())
@@ -1789,6 +1695,7 @@ class Handler(BaseHTTPRequestHandler):
         task_dest      = body.get("task_dest", "").strip()
         instructions   = body.get("instructions", "").strip()
         is_priority    = bool(body.get("priority", False))
+        browser_ctx    = body.get("browser_ctx")  # {tz, lang, now} — present on first prompt only
 
         if not prompt:
             self._send_json({"error": "empty prompt"}, 400)
@@ -1796,6 +1703,15 @@ class Handler(BaseHTTPRequestHandler):
 
         with chat_lock:
             history = list(chat_history)
+
+        # Inject browser context as system hint on the very first message
+        if browser_ctx and not history:
+            ctx_line = (
+                f"User context: timezone={browser_ctx.get('tz','?')}, "
+                f"locale={browser_ctx.get('lang','?')}, "
+                f"local_time={browser_ctx.get('now','?')}"
+            )
+            instructions = (ctx_line + "\n" + instructions).strip() if instructions else ctx_line
 
         messages = _build_messages(prompt, attachment_ids, history, instructions)
         api_key  = OPENROUTER_KEY

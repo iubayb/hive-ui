@@ -17,6 +17,7 @@ set -euo pipefail
 
 HIVE_DIR="/home/ayoub/hive-ui"
 HIVE_USER="ayoub"
+SCRIPT_DIR="$HIVE_DIR"
 
 pass=0
 fail=0
@@ -282,6 +283,136 @@ if [[ "$pct" -lt 90 ]]; then
     _pass "$id" "$desc (${pct}% used)"
 else
     _fail "$id" "$desc" "disk ${pct}% >= 90%" "$fix"
+fi
+
+# ── TS22: org_guard.py exists ────────────────────────────────────────────────
+id=TS22
+desc="org_guard.py exists"
+fix="touch $SCRIPT_DIR/org_guard.py"
+if test -f "$SCRIPT_DIR/org_guard.py"; then
+    _pass "$id" "$desc"
+else
+    _fail "$id" "$desc" "file $SCRIPT_DIR/org_guard.py missing" "$fix"
+fi
+
+# ── TS23: org_guard.py contains hardcoded literal "hatcher" ──────────────────
+id=TS23
+desc='org_guard.py contains hardcoded literal "hatcher"'
+fix=""
+if grep -q '"hatcher' "$SCRIPT_DIR/org_guard.py"; then
+    _pass "$id" "$desc"
+else
+    _fail "$id" "$desc" "literal \"hatcher\" not found in org_guard.py" "$fix"
+fi
+
+# ── TS24: org_guard.py contains hardcoded literal "bolder" ───────────────────
+id=TS24
+desc='org_guard.py contains hardcoded literal "bolder"'
+fix=""
+if grep -q '"bolder' "$SCRIPT_DIR/org_guard.py"; then
+    _pass "$id" "$desc"
+else
+    _fail "$id" "$desc" "literal \"bolder\" not found in org_guard.py" "$fix"
+fi
+
+# ── TS25: orchestrator.py imports org_guard ───────────────────────────────────
+id=TS25
+desc="orchestrator.py imports org_guard"
+fix=""
+if grep -q 'import org_guard' "$SCRIPT_DIR/orchestrator.py"; then
+    _pass "$id" "$desc"
+else
+    _fail "$id" "$desc" "import org_guard not found in orchestrator.py" "$fix"
+fi
+
+# ── TS26: hive_status.py imports org_guard ────────────────────────────────────
+id=TS26
+desc="hive_status.py imports org_guard"
+fix=""
+if grep -q 'import org_guard' "$SCRIPT_DIR/hive_status.py"; then
+    _pass "$id" "$desc"
+else
+    _fail "$id" "$desc" "import org_guard not found in hive_status.py" "$fix"
+fi
+
+# ── TS27: assert_hive_repo called in _git_branch_pr ──────────────────────────
+id=TS27
+desc="assert_hive_repo called in _git_branch_pr"
+fix=""
+if grep -A 5 '^def _git_branch_pr' "$SCRIPT_DIR/orchestrator.py" | grep -q 'assert_hive_repo'; then
+    _pass "$id" "$desc"
+else
+    _fail "$id" "$desc" "assert_hive_repo not found in first 5 lines of _git_branch_pr" "$fix"
+fi
+
+# ── TS28: assert_hive_repo called in _poll_open_prs ──────────────────────────
+id=TS28
+desc="assert_hive_repo called in _poll_open_prs"
+fix=""
+if grep -A 5 '^def _poll_open_prs' "$SCRIPT_DIR/orchestrator.py" | grep -q 'assert_hive_repo'; then
+    _pass "$id" "$desc"
+else
+    _fail "$id" "$desc" "assert_hive_repo not found in first 5 lines of _poll_open_prs" "$fix"
+fi
+
+# ── TS29: assert_hive_repo called in _develop_to_main_pr ─────────────────────
+id=TS29
+desc="assert_hive_repo called in _develop_to_main_pr"
+fix=""
+if grep -A 5 '^def _develop_to_main_pr' "$SCRIPT_DIR/orchestrator.py" | grep -q 'assert_hive_repo'; then
+    _pass "$id" "$desc"
+else
+    _fail "$id" "$desc" "assert_hive_repo not found in first 5 lines of _develop_to_main_pr" "$fix"
+fi
+
+# ── TS30: assert_hive_repo called in push_to_github ──────────────────────────
+id=TS30
+desc="assert_hive_repo called in push_to_github"
+fix=""
+if grep -A 5 '^def push_to_github' "$SCRIPT_DIR/hive_status.py" | grep -q 'assert_hive_repo'; then
+    _pass "$id" "$desc"
+else
+    _fail "$id" "$desc" "assert_hive_repo not found in first 5 lines of push_to_github" "$fix"
+fi
+
+# ── TS31: assert_hive_repo called in _gh_issue_create ────────────────────────
+id=TS31
+desc="assert_hive_repo called in _gh_issue_create"
+fix=""
+if grep -A 5 '^def _gh_issue_create' "$SCRIPT_DIR/hive_status.py" | grep -q 'assert_hive_repo'; then
+    _pass "$id" "$desc"
+else
+    _fail "$id" "$desc" "assert_hive_repo not found in first 5 lines of _gh_issue_create" "$fix"
+fi
+
+# ── TS32: assert_hive_repo called in _gh_issue_close ─────────────────────────
+id=TS32
+desc="assert_hive_repo called in _gh_issue_close"
+fix=""
+if grep -A 5 '^def _gh_issue_close' "$SCRIPT_DIR/hive_status.py" | grep -q 'assert_hive_repo'; then
+    _pass "$id" "$desc"
+else
+    _fail "$id" "$desc" "assert_hive_repo not found in first 5 lines of _gh_issue_close" "$fix"
+fi
+
+# ── TS33: _delegate_to_opencode contains _ORG_CONSTRAINT ─────────────────────
+id=TS33
+desc="_delegate_to_opencode contains _ORG_CONSTRAINT"
+fix=""
+if grep -A 10 '^def _delegate_to_opencode' "$SCRIPT_DIR/orchestrator.py" | grep -q '_ORG_CONSTRAINT'; then
+    _pass "$id" "$desc"
+else
+    _fail "$id" "$desc" "_ORG_CONSTRAINT not found in first 10 lines of _delegate_to_opencode" "$fix"
+fi
+
+# ── TS34: HIVE_GITHUB_REPO env var is set ────────────────────────────────────
+id=TS34
+desc="HIVE_GITHUB_REPO env var is set"
+fix="export HIVE_GITHUB_REPO=iubayb/hive-ui"
+if [ -n "${HIVE_GITHUB_REPO:-}" ]; then
+    _pass "$id" "$desc"
+else
+    _fail "$id" "$desc" "HIVE_GITHUB_REPO is not set" "$fix"
 fi
 
 # ── Summary ───────────────────────────────────────────────────────────────

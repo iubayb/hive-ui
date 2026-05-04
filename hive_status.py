@@ -42,6 +42,7 @@ CLI:
 """
 
 import json, os, subprocess, threading, time, uuid
+import org_guard  # org isolation — must stay imported
 
 STATUS_FILE   = "/tmp/hive-status.json"
 _status_lock  = threading.Lock()
@@ -54,6 +55,7 @@ _GITHUB_REPO = os.environ.get("HIVE_GITHUB_REPO", "iubayb/hive-ui")
 
 def _gh_issue_create(title: str, body: str, labels: list[str]) -> int | None:
     """Fire-and-forget: open a GitHub Issue. Returns issue number or None."""
+    org_guard.assert_hive_repo(_GITHUB_REPO, "_gh_issue_create")
     try:
         label_args = []
         for lb in labels:
@@ -79,6 +81,7 @@ def _gh_issue_create(title: str, body: str, labels: list[str]) -> int | None:
 
 def _gh_issue_close(issue_number: int, comment: str) -> None:
     """Fire-and-forget: close a GitHub Issue with a closing comment."""
+    org_guard.assert_hive_repo(_GITHUB_REPO, "_gh_issue_close")
     try:
         subprocess.run(
             ["gh", "issue", "close", str(issue_number),
@@ -703,6 +706,7 @@ def _gh(*args, input_data=None):
 
 def push_to_github(repo: str):
     """Push current local status JSON + README to GitHub repo."""
+    org_guard.assert_hive_repo(repo, "push_to_github")
     try:
         with _status_lock:
             s = load()

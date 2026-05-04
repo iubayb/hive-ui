@@ -30,47 +30,11 @@ SHARED_CSS = r"""
             font-family:'Courier New',monospace;font-size:13px;line-height:1.5;
             overflow-x:hidden}
 
-  /* header */
-  #header{padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--border);
-          display:flex;align-items:center;justify-content:space-between;
-          position:sticky;top:0;z-index:50}
-  #header h1{font-size:15px;color:var(--info);letter-spacing:.5px;display:flex;align-items:center;gap:8px}
-  #header-btns{display:flex;gap:6px}
-  .hdr-btn{background:none;border:1px solid var(--border);color:var(--muted);
-           padding:4px 10px;border-radius:4px;font-size:12px;cursor:pointer;
-           min-height:44px;min-width:44px}
-  .hdr-btn:active{background:var(--border)}
-
-  /* status bar + live dot */
-  .status-bar{padding:3px 14px;font-size:11px;color:var(--muted);background:var(--panel);
-              border-bottom:1px solid var(--border)}
-  .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);
-       display:inline-block;animation:pulse 2s infinite}
-  .dot.dead{background:var(--err);animation:none}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
   /* layout */
   #main{padding-bottom:calc(70px + var(--safe-bottom));padding-top:36px}
   /* 36px = height of the fixed active-task-bar so content isn't hidden under it */
-
-  /* group tabs */
-  #group-tabs{display:flex;gap:0;overflow-x:auto;background:var(--panel);
-              border-bottom:1px solid var(--border);padding:0 8px;scrollbar-width:none}
-  #group-tabs::-webkit-scrollbar{display:none}
-  .gtab{padding:8px 14px;cursor:pointer;font-size:12px;color:var(--muted);
-        border-bottom:2px solid transparent;white-space:nowrap;min-height:44px;
-        display:flex;align-items:center;-webkit-tap-highlight-color:transparent}
-  .gtab.active{color:var(--info);border-bottom-color:var(--info)}
-  .gtab:active{background:var(--border)}
-
-  /* collapsible sections */
-  .section{margin:8px;border:1px solid var(--border);border-radius:6px;overflow:hidden}
-  .section summary{padding:9px 12px;background:var(--panel);font-weight:bold;cursor:pointer;
-    display:flex;justify-content:space-between;align-items:center;
-    user-select:none;list-style:none;-webkit-tap-highlight-color:transparent;min-height:44px}
-  .section summary::-webkit-details-marker{display:none}
-  .section summary:active{background:var(--border)}
-  .count{font-size:11px;color:var(--muted);font-weight:normal}
 
   /* log boxes */
   .log-box{height:260px;overflow-y:auto;padding:4px 0;background:var(--bg)}
@@ -82,29 +46,6 @@ SHARED_CSS = r"""
   .logline.err{color:var(--err);border-color:var(--err)}
   .logline.warn{color:var(--warn);border-color:var(--warn)}
   .logline.ok{color:var(--ok);border-color:var(--ok)}
-
-  /* onboarding */
-  #onboarding{margin:8px;padding:16px;background:var(--panel);
-              border:1px solid var(--info);border-radius:8px}
-  #onboarding h2{color:var(--info);font-size:14px;margin-bottom:12px}
-  .ob-q{margin-bottom:14px}
-  .ob-q label{display:block;color:var(--muted);font-size:11px;margin-bottom:4px;
-              text-transform:uppercase;letter-spacing:.5px}
-  .ob-q textarea,.ob-q input{width:100%;background:var(--input-bg);
-    border:1px solid var(--border);color:var(--text);padding:8px 10px;
-    border-radius:4px;font-family:inherit;font-size:13px;resize:vertical}
-  .ob-q textarea:focus,.ob-q input:focus{outline:none;border-color:var(--info)}
-  .ob-q .model-row{display:flex;gap:6px}
-  .ob-q .model-row input{flex:1}
-  .ob-q .favorites{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px}
-  .fav-chip{padding:3px 8px;border-radius:12px;font-size:11px;cursor:pointer;
-            background:var(--bg);border:1px solid var(--border);color:var(--muted);
-            -webkit-tap-highlight-color:transparent}
-  .fav-chip.active{border-color:var(--info);color:var(--info)}
-  #ob-submit{width:100%;padding:11px;background:var(--info);color:#000;
-             border:none;border-radius:4px;font-weight:bold;font-size:14px;
-             cursor:pointer;margin-top:6px;min-height:44px}
-  #ob-submit:active{opacity:.8}
 
   /* status panel */
   #status-panel{margin:8px;border:1px solid var(--border);border-radius:6px;overflow:hidden}
@@ -198,8 +139,6 @@ SHARED_CSS = r"""
     height:36px;overflow:hidden;
     transition:background .3s,border-color .3s,color .3s;
   }
-  /* push the header down so it sits below the bar */
-  #header{top:36px !important}
   /* OK = healthy between cycles */
   #active-task-bar.at-ok{
     background:rgba(176,176,176,.04);color:var(--ok);border-bottom-color:rgba(176,176,176,.25)}
@@ -273,6 +212,58 @@ SHARED_CSS = r"""
   /* empty states */
   .empty-state{padding:16px;text-align:center;color:var(--muted);font-size:12px}
 
+  /* attention queue */
+  .aq-goal{padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px;
+           color:var(--info);line-height:1.4}
+  .aq-done{padding:7px 12px;border-bottom:1px solid var(--border);font-size:11px;
+           color:var(--ok);line-height:1.4}
+  .aq-head{padding:5px 12px;font-size:10px;color:var(--muted);text-transform:uppercase;
+           letter-spacing:.5px;border-bottom:1px solid var(--border);background:var(--bg)}
+  .aq-step{padding:7px 12px;border-bottom:1px solid var(--border);font-size:12px;
+           display:flex;gap:8px;align-items:flex-start;line-height:1.4}
+  .aq-bullet{color:var(--muted);flex-shrink:0;margin-top:1px}
+  .aq-step-text{flex:1;word-break:break-word}
+  .aq-decision{padding:6px 12px;border-bottom:1px solid var(--border);font-size:11px;
+               color:var(--muted);display:flex;gap:6px;line-height:1.4}
+  .aq-decision-bullet{flex-shrink:0}
+  .aq-foot{padding:5px 12px;font-size:10px;color:var(--muted);border-top:1px solid var(--border)}
+
+  /* chat context card */
+  #chat-ctx-card{margin:4px 0 8px 0;border:1px solid var(--border);border-radius:6px;
+                 background:var(--panel);font-size:11px;overflow:hidden}
+  .ctx-head{padding:5px 10px;font-size:10px;color:var(--muted);text-transform:uppercase;
+            letter-spacing:.5px;border-bottom:1px solid var(--border);background:var(--bg)}
+  .ctx-row{padding:5px 10px;color:var(--text);display:flex;gap:8px;
+           border-bottom:1px solid var(--border);line-height:1.5}
+  .ctx-row:last-child{border-bottom:none}
+  .ctx-key{color:var(--muted);min-width:52px;flex-shrink:0;font-size:10px;
+           text-transform:uppercase;letter-spacing:.3px;padding-top:1px}
+  .ctx-val{flex:1;word-break:break-word}
+
+  /* attention tabs */
+  #attn-tabs{display:flex;overflow-x:auto;scrollbar-width:none;
+             border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0}
+  #attn-tabs::-webkit-scrollbar{display:none}
+  .atab{padding:7px 14px;cursor:pointer;font-size:11px;color:var(--muted);
+        border-bottom:2px solid transparent;white-space:nowrap;min-height:36px;
+        display:flex;align-items:center;gap:5px;
+        -webkit-tap-highlight-color:transparent;flex-shrink:0;user-select:none}
+  .atab.active{color:var(--info);border-bottom-color:var(--info)}
+  .atab:active{background:var(--border)}
+  .atab-dot{width:5px;height:5px;border-radius:50%;background:var(--ok);flex-shrink:0}
+  .atab-dot.dead{background:var(--err)}
+
+  /* per-session attention view */
+  .sess-head{padding:8px 12px;font-size:12px;color:var(--info);
+             border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+  .sess-alive{font-size:10px;color:var(--ok)}
+  .sess-dead{font-size:10px;color:var(--err)}
+  .sess-ago{font-size:10px;color:var(--muted)}
+  .sess-log{padding:3px 12px;font-size:11px;line-height:1.5;color:var(--muted);
+            border-bottom:1px solid var(--border);word-break:break-all;display:flex;gap:6px}
+  .sess-log:last-child{border-bottom:none}
+  .sess-log .ts{flex-shrink:0}
+
   @media(max-width:480px){
     body{font-size:12px}
     .log-box{height:200px}
@@ -315,42 +306,6 @@ LOCAL_CSS = r"""
   #priority-btn:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
   #priority-btn:active:not(:disabled){opacity:.8}
   #file-input{display:none}
-
-  /* settings modal */
-  #settings-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);
-    z-index:100;overflow-y:auto;padding:16px}
-  #settings-modal.open{display:block}
-  #settings-inner{background:var(--panel);border-radius:8px;padding:16px;max-width:600px;margin:0 auto}
-  #settings-inner h2{color:var(--info);font-size:14px;margin-bottom:14px;
-                     display:flex;justify-content:space-between;align-items:center}
-  #close-settings{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer}
-  .setting-row{margin-bottom:14px}
-  .setting-row label{display:block;color:var(--muted);font-size:11px;
-                     margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
-  .setting-row input,.setting-row textarea{width:100%;background:var(--input-bg);
-    border:1px solid var(--border);color:var(--text);padding:8px 10px;
-    border-radius:4px;font-family:inherit;font-size:13px}
-  .setting-row input:focus,.setting-row textarea:focus{outline:none;border-color:var(--info)}
-  #save-settings{width:100%;padding:11px;background:var(--ok);color:#000;
-    border:none;border-radius:4px;font-weight:bold;font-size:13px;
-    cursor:pointer;min-height:44px;margin-top:6px}
-  #save-settings:active{opacity:.8}
-
-  /* arena panel inside settings */
-  .arena-section{margin-top:18px;padding-top:14px;border-top:1px solid var(--border)}
-  .arena-section h3{color:var(--purple);font-size:12px;margin-bottom:10px;
-                    text-transform:uppercase;letter-spacing:.5px}
-  .champ-row{display:flex;justify-content:space-between;align-items:center;
-             padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
-  .champ-row:last-of-type{border-bottom:none}
-  .champ-label{color:var(--muted);font-size:11px}
-  .champ-val{color:var(--info);font-size:11px;max-width:60%;text-align:right;word-break:break-all}
-  #run-arena-btn{width:100%;padding:9px;background:var(--purple);color:#000;
-                 border:none;border-radius:4px;font-weight:bold;font-size:12px;
-                 cursor:pointer;min-height:44px;margin-top:10px}
-  #run-arena-btn:active{opacity:.8}
-  #run-arena-btn:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
-  #arena-status-msg{font-size:11px;color:var(--muted);margin-top:6px;text-align:center}
 """
 
 # ── shared render JS ──────────────────────────────────────────────────────────
@@ -384,6 +339,7 @@ function renderStatus(s){
   _renderCaps(s.capabilities||{});
   _renderQuestions(s.pending_questions||[]);
   _renderHiveFeed(s);
+  _renderChatCtx();
   const mc=s.model_champions||{};
   const tc=document.getElementById('arena-text-champ');
   const vc=document.getElementById('arena-vision-champ');
@@ -887,6 +843,175 @@ function submitQAnswers(){
     fetch('/api/status').then(r=>r.json()).then(renderStatus).catch(()=>{});
   }).catch(()=>{});
 }
+
+// ── browser context collector ─────────────────────────────────────────────────
+function _collectBrowserCtx(){
+  const tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC';
+  const lang=navigator.language||'en';
+  const now=new Date();
+  const now_local=now.toLocaleString(lang,{timeZone:tz,hour12:false,
+    weekday:'short',year:'numeric',month:'short',day:'numeric',
+    hour:'2-digit',minute:'2-digit'});
+  const screen_info=screen.width+'\xd7'+screen.height;
+  const ua=navigator.userAgent;
+  let ua_short='browser';
+  if(/Edg\//.test(ua))ua_short='Edge';
+  else if(/Chrome\//.test(ua))ua_short='Chrome';
+  else if(/Firefox\//.test(ua))ua_short='Firefox';
+  else if(/Safari\//.test(ua)&&!/Chrome/.test(ua))ua_short='Safari';
+  const conn=navigator.connection?(navigator.connection.effectiveType||navigator.connection.type||null):null;
+  return {tz,lang,now_local,screen:screen_info,ua_short,connection:conn};
+}
+
+// ── chat context card ─────────────────────────────────────────────────────────
+// Visible only when chat-thread has no user/AI bubbles.
+// Shows hive brain state (if SSE has fired) and client browser context.
+// Neither section is ever sent to the server unless the user submits a prompt.
+function _renderChatCtx(){
+  const thread=document.getElementById('chat-thread');
+  if(!thread)return;
+  // Hide (remove) the card as soon as any bubble appears
+  if(thread.querySelector('.bubble')){
+    const card=document.getElementById('chat-ctx-card');
+    if(card)card.remove();
+    return;
+  }
+  let card=document.getElementById('chat-ctx-card');
+  if(!card){
+    card=document.createElement('div');
+    card.id='chat-ctx-card';
+    const emptyEl=document.getElementById('chat-empty');
+    if(emptyEl)thread.insertBefore(card,emptyEl);
+    else thread.insertBefore(card,thread.firstChild);
+  }
+  const bc=_collectBrowserCtx();
+  let html='';
+  // HIVE section — populated only after first SSE event
+  const s=_lastKnownStatus;
+  if(s){
+    const sessions=s.orchestrator_sessions||[];
+    const sess=sessions.length?sessions[sessions.length-1]:null;
+    const hive=Object.values(s.hives||{})[0]||{};
+    const nBlockers=(s.blockers||[]).filter(b=>b.status==='open').length;
+    const nPending=(s.next_steps||[]).filter(ns=>ns.status==='pending').length;
+    const updMs=s.last_updated?Date.now()-new Date(s.last_updated).getTime():null;
+    const updAgo=updMs!==null?_atElapsedStr(updMs)+' ago':'';
+    html+='<div class="ctx-head">Hive</div>';
+    if(sess&&sess.goal)
+      html+='<div class="ctx-row"><span class="ctx-key">goal</span><span class="ctx-val">'+esc(sess.goal)+'</span></div>';
+    html+='<div class="ctx-row"><span class="ctx-key">health</span><span class="ctx-val">'
+      +esc(Math.round((hive.health_score||0)*100)+'%')
+      +' \xb7 '+esc((hive.sessions||[]).length+' sessions')
+      +' \xb7 '+esc(nBlockers+' blocker'+(nBlockers!==1?'s':''))
+      +' \xb7 '+esc(nPending+' pending')
+      +'</span></div>';
+    const at=s.active_task;
+    if(at&&at.task&&at.status==='running')
+      html+='<div class="ctx-row"><span class="ctx-key">active</span><span class="ctx-val">'+esc(at.task)+'</span></div>';
+    if(updAgo)
+      html+='<div class="ctx-row"><span class="ctx-key">updated</span><span class="ctx-val">'+esc(updAgo)+'</span></div>';
+  }
+  // YOU section — always visible, purely client-side
+  html+='<div class="ctx-head">You</div>';
+  html+='<div class="ctx-row"><span class="ctx-key">time</span><span class="ctx-val">'+esc(bc.now_local)+'</span></div>';
+  html+='<div class="ctx-row"><span class="ctx-key">tz</span><span class="ctx-val">'+esc(bc.tz)+'</span></div>';
+  html+='<div class="ctx-row"><span class="ctx-key">locale</span><span class="ctx-val">'+esc(bc.lang)+'</span></div>';
+  html+='<div class="ctx-row"><span class="ctx-key">screen</span><span class="ctx-val">'+esc(bc.screen)+' \xb7 '+esc(bc.ua_short)+'</span></div>';
+  if(bc.connection)
+    html+='<div class="ctx-row"><span class="ctx-key">net</span><span class="ctx-val">'+esc(bc.connection)+'</span></div>';
+  card.innerHTML=html;
+}
+
+// ── attention queue (compaction-driven) ───────────────────────────────────────
+// Reads orchestrator_sessions[-1] from the SSE status payload.
+// Renders: goal · done · open blockers · next steps · key decisions.
+function _renderAttentionQueue(s){
+  const list=document.getElementById('queue-list');
+  const emptyEl=document.getElementById('queue-empty');
+  const cnt=document.getElementById('queue-count');
+  if(!list)return;
+  const sessions=s.orchestrator_sessions||[];
+  const sess=sessions.length?sessions[sessions.length-1]:null;
+  const blockers=(s.blockers||[]).filter(b=>b.status==='open');
+  if(!sess){
+    list.innerHTML='';
+    if(emptyEl)emptyEl.style.display='block';
+    if(cnt)cnt.textContent='\u2014';
+    return;
+  }
+  if(emptyEl)emptyEl.style.display='none';
+  list.innerHTML='';
+  let totalItems=0;
+  // Goal
+  if(sess.goal){
+    const d=document.createElement('div');
+    d.className='aq-goal';
+    d.innerHTML='<span style="font-size:10px;color:var(--muted);text-transform:uppercase;'
+      +'letter-spacing:.5px;margin-right:6px">goal</span>'+esc(sess.goal);
+    list.appendChild(d);
+  }
+  // Progress / Done
+  if(sess.progress){
+    const d=document.createElement('div');
+    d.className='aq-done';
+    d.innerHTML='<span style="font-size:10px;text-transform:uppercase;'
+      +'letter-spacing:.5px;margin-right:6px">done</span>'+esc(sess.progress);
+    list.appendChild(d);
+  }
+  // Open blockers (live from hive-status)
+  if(blockers.length){
+    const head=document.createElement('div');
+    head.className='aq-head'; head.textContent='Blockers';
+    list.appendChild(head);
+    blockers.forEach(b=>{
+      const d=document.createElement('div');
+      d.className='blocker-item'; d.id='blocker-'+b.id;
+      d.innerHTML=
+        '<span class="sev-badge '+esc(b.severity||'medium')+'">'+esc(b.severity||'?')+'</span>'+
+        '<div class="blocker-desc">'+esc(b.description)+
+          '<div class="blocker-meta">'+esc(b.hive||'')+' \xb7 '+esc((b.ts||'').slice(11,19))+'</div>'+
+        '</div>'+
+        '<button class="resolve-btn" onclick="resolveBlocker(\''+esc(b.id)+'\',this)">Resolve</button>';
+      list.appendChild(d);
+      totalItems++;
+    });
+  }
+  // Next steps (LLM action strings from compaction)
+  const steps=sess.next_steps||[];
+  if(steps.length){
+    const head=document.createElement('div');
+    head.className='aq-head'; head.textContent='Needs attention';
+    list.appendChild(head);
+    steps.forEach(text=>{
+      const d=document.createElement('div');
+      d.className='aq-step';
+      d.innerHTML='<span class="aq-bullet">\u25cb</span><span class="aq-step-text">'+esc(text)+'</span>';
+      list.appendChild(d);
+      totalItems++;
+    });
+  }
+  // Key decisions
+  const decisions=sess.decisions||[];
+  if(decisions.length){
+    const head=document.createElement('div');
+    head.className='aq-head'; head.textContent='Decisions';
+    list.appendChild(head);
+    decisions.forEach(text=>{
+      const d=document.createElement('div');
+      d.className='aq-decision';
+      d.innerHTML='<span class="aq-decision-bullet">\u25b8</span><span>'+esc(text)+'</span>';
+      list.appendChild(d);
+    });
+  }
+  // Footer: last compaction timestamp
+  if(sess.ts){
+    const foot=document.createElement('div');
+    foot.className='aq-foot';
+    foot.textContent='Last compaction: '+sess.ts.slice(11,19)+' UTC';
+    list.appendChild(foot);
+  }
+  if(cnt)cnt.textContent=totalItems+(totalItems===1?' item':' items');
+}
 """
 
 # ── local status JS ───────────────────────────────────────────────────────────
@@ -932,148 +1057,14 @@ function hiveFetch(url, opts={}){
   };
 })();
 
-// ── config ────────────────────────────────────────────────────────────────────
-const CONFIG_KEY = 'hive_config_v2';
-const DEFAULT_FAVORITES = [
-  'inclusionai/ling-2.6-1t:free',
-  'openai/gpt-oss-120b:free',
-  'nvidia/nemotron-3-super-120b-a12b:free',
-  'google/gemma-4-31b-it:free',
-  'nousresearch/hermes-3-llama-3.1-405b:free',
-  'qwen/qwen3-coder:free',
-  'meta-llama/llama-3.3-70b-instruct:free',
-];
-function loadConfig(){try{return JSON.parse(localStorage.getItem(CONFIG_KEY))||{};}catch{return {};}}
-function saveConfig(c){localStorage.setItem(CONFIG_KEY,JSON.stringify(c));}
-let cfg = loadConfig();
-
 window.addEventListener('DOMContentLoaded', () => {
-  // Always skip onboarding — use stored config or sensible defaults
-  const ob = document.getElementById('onboarding');
-  if (ob) ob.style.display = 'none';
-  // Ensure queue + chat are open
-  const qs = document.getElementById('queue-section');
-  const cs = document.getElementById('chat-section');
-  if (qs) qs.open = true;
-  if (cs) cs.open = true;
-  // Restore persisted model default
-  if (!cfg.model) cfg.model = DEFAULT_FAVORITES[0];
-  renderFavorites('ob-favorites', cfg.model);
-  renderFavorites('s-favorites',  cfg.model);
-  populateSettings();
-  fetchQueue();
-  restoreChat();
-  // Sessions are shown in the combined log with badges — no individual panels needed
-  fetch('/api/groups').then(r=>r.json()).then(g=>renderGroupTabs(g)).catch(()=>{});
-  startStatusStream();
-  fetchArenaStatus();
-  // Auto-focus input after a short delay
-  setTimeout(()=>{const p=document.getElementById('prompt-input');if(p)p.focus();},300);
-});
-
-function renderFavorites(cid, sel){
-  const favs=cfg.favorites||DEFAULT_FAVORITES;
-  const c=document.getElementById(cid); if(!c)return; c.innerHTML='';
-  favs.forEach(f=>{
-    const ch=document.createElement('span');
-    ch.className='fav-chip'+(f===sel?' active':'');
-    ch.textContent=f.split('/').pop(); ch.title=f;
-    ch.onclick=()=>{
-      const iid=cid==='ob-favorites'?'ob-model':'s-model';
-      document.getElementById(iid).value=f;
-      c.querySelectorAll('.fav-chip').forEach(x=>x.classList.remove('active'));
-      ch.classList.add('active');
-    };
-    c.appendChild(ch);
-  });
-}
-
-function submitOnboarding(){
-  const goal=document.getElementById('ob-goal').value.trim();
-  if(!goal){document.getElementById('ob-goal').focus();return;}
-  let groups={};
-  try{groups=JSON.parse(document.getElementById('ob-groups').value||'{}');}catch{}
-  cfg={
-    goal, groups,
-    task_dest:    document.getElementById('ob-dest').value.trim(),
-    model:        document.getElementById('ob-model').value.trim()||DEFAULT_FAVORITES[0],
-    instructions: document.getElementById('ob-instructions').value.trim(),
-    favorites:    cfg.favorites||DEFAULT_FAVORITES,
-  };
-  saveConfig(cfg);
-  if(Object.keys(groups).length){
-    fetch('/api/groups',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({groups})}).catch(()=>{});
-    renderGroupTabs(groups);
-  }
-  document.getElementById('onboarding').style.display='none';
   document.getElementById('queue-section').open=true;
   document.getElementById('chat-section').open=true;
-}
-
-function populateSettings(){
-  document.getElementById('s-goal').value=cfg.goal||'';
-  document.getElementById('s-dest').value=cfg.task_dest||'';
-  document.getElementById('s-model').value=cfg.model||DEFAULT_FAVORITES[0];
-  document.getElementById('s-instructions').value=cfg.instructions||'';
-  document.getElementById('s-groups').value=cfg.groups?JSON.stringify(cfg.groups,null,2):'';
-  renderFavorites('s-favorites',cfg.model||DEFAULT_FAVORITES[0]);
-  const enabled=cfg.ai_auto_answer||false;
-  const timeout=cfg.ai_auto_answer_timeout_min||30;
-  document.getElementById('s-ai-auto').checked=enabled;
-  document.getElementById('s-ai-timeout').value=timeout;
-  document.getElementById('s-ai-timeout').disabled=!enabled;
-  document.getElementById('s-ai-status').textContent=
-    enabled?'AI will answer unanswered questions after '+timeout+' min of UI inactivity.'
-           :'AI auto-answer is off — questions wait for human response.';
-}
-function openSettings(){document.getElementById('settings-modal').classList.add('open');populateSettings();}
-function closeSettings(){document.getElementById('settings-modal').classList.remove('open');}
-function saveSettings(){
-  cfg.goal=document.getElementById('s-goal').value.trim();
-  cfg.task_dest=document.getElementById('s-dest').value.trim();
-  cfg.model=document.getElementById('s-model').value.trim()||DEFAULT_FAVORITES[0];
-  cfg.instructions=document.getElementById('s-instructions').value.trim();
-  try{cfg.groups=JSON.parse(document.getElementById('s-groups').value||'{}');}catch{cfg.groups={};}
-  cfg.ai_auto_answer=document.getElementById('s-ai-auto').checked;
-  cfg.ai_auto_answer_timeout_min=parseInt(document.getElementById('s-ai-timeout').value)||30;
-  saveConfig(cfg);
-  fetch('/api/config',{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      ai_auto_answer:cfg.ai_auto_answer,
-      ai_auto_answer_timeout_min:cfg.ai_auto_answer_timeout_min,
-    })}).catch(()=>{});
-  if(Object.keys(cfg.groups||{}).length){
-    fetch('/api/groups',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({groups:cfg.groups})}).catch(()=>{});
-    renderGroupTabs(cfg.groups);
-  }
-  closeSettings();
-}
-document.addEventListener('DOMContentLoaded',()=>{
-  const tog=document.getElementById('s-ai-auto');
-  if(tog)tog.addEventListener('change',()=>{
-    document.getElementById('s-ai-timeout').disabled=!tog.checked;
-  });
+  _renderChatCtx();
+  restoreChat();
+  startStatusStream();
+  setTimeout(()=>{const p=document.getElementById('prompt-input');if(p)p.focus();},300);
 });
-
-// ── group tabs ────────────────────────────────────────────────────────────────
-let _activeGroup='__all__';
-function renderGroupTabs(groups){
-  const bar=document.getElementById('group-tabs');
-  bar.querySelectorAll('.gtab:not([data-group="__all__"])').forEach(e=>e.remove());
-  Object.keys(groups||{}).forEach(name=>{
-    const t=document.createElement('div');
-    t.className='gtab'; t.dataset.group=name; t.textContent=name;
-    t.onclick=()=>switchGroup(name,t);
-    bar.appendChild(t);
-  });
-}
-function switchGroup(name, el){
-  _activeGroup=name;
-  document.querySelectorAll('.gtab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-}
 
 // ── log stream ────────────────────────────────────────────────────────────────
 const PALETTE=[
@@ -1150,26 +1141,26 @@ function addLogLine(box,session,text,ts){
   _hangDetector.feed(text, Date.now());
 }
 
-let lastEventTime=Date.now();
-const dot=document.getElementById('dot');
-const statusBar=document.getElementById('status-bar');
-function updateStatus(){
-  const ago=Math.round((Date.now()-lastEventTime)/1000);
-  statusBar.textContent=ago<5?'Live \u2014 updating every 2s':'Last update '+ago+'s ago';
-  dot.classList.toggle('dead',ago>10);
-}
-setInterval(updateStatus,1000);
+// ── combined log buffer (capped 400) — used by per-session attention tabs ─────
+let _combinedBuf = [];
 
 const logEs=new EventSource('/stream');
 logEs.onmessage=function(e){
-  lastEventTime=Date.now();
   const data=JSON.parse(e.data);
   const cb=document.getElementById('combined');
-  (data.combined||[]).forEach(entry=>addLogLine(cb,entry.session,entry.line,entry.ts));
+  const entries=data.combined||[];
+  entries.forEach(entry=>{
+    addLogLine(cb,entry.session,entry.line,entry.ts);
+    _combinedBuf.push(entry);
+  });
+  if(_combinedBuf.length>400)_combinedBuf=_combinedBuf.slice(-400);
   if(cb)document.getElementById('combined-count').textContent=cb.children.length+' lines';
+  // refresh active per-session tab live
+  if(_activeAttnTab&&_activeAttnTab!=='all'&&_lastKnownStatus)
+    _renderSessionAttn(_lastKnownStatus,_activeAttnTab);
 };
-logEs.onerror=function(){dot.classList.add('dead');statusBar.textContent='SSE disconnected \u2014 retrying...';};
-logEs.onopen=function(){dot.classList.remove('dead');statusBar.textContent='';};
+logEs.onerror=function(){};
+logEs.onopen=function(){};
 
 // Re-evaluate the hang detector every 5 s even without a status SSE event.
 // Uses _lastKnownStatus (cached from last SSE) so it has real data, not null.
@@ -1184,7 +1175,15 @@ function startStatusStream(){
   _statusStreamActive=true;
   const es=new EventSource('/status/stream');
   es.onopen=()=>statusDot.className='status-dot live';
-  es.onmessage=e=>{try{renderStatus(JSON.parse(e.data));}catch{}};
+  es.onmessage=e=>{
+    try{
+      const d=JSON.parse(e.data);
+      renderStatus(d);
+      _buildAttnTabs(d);
+      if(_activeAttnTab==='all') _renderAttentionQueue(d);
+      else _renderSessionAttn(d,_activeAttnTab);
+    }catch{}
+  };
   es.onerror=()=>{
     statusDot.className='status-dot dead';
     es.close();
@@ -1193,56 +1192,104 @@ function startStatusStream(){
   };
 }
 
-// ── arena ─────────────────────────────────────────────────────────────────────
-function fetchArenaStatus(){
-  fetch('/api/arena/status').then(r=>r.json()).then(s=>{
-    const tc=document.getElementById('arena-text-champ');
-    const vc=document.getElementById('arena-vision-champ');
-    const lr=document.getElementById('arena-last-run');
-    if(tc)tc.textContent=s.text_champion||'—';
-    if(vc)vc.textContent=s.vision_champion||'—';
-    const t=(s.last_run||{}).text||(s.last_run||{}).vision||{};
-    if(lr)lr.textContent=t.run_at?t.run_at.slice(0,16):'—';
-  }).catch(()=>{});
+// ── attention tabs ────────────────────────────────────────────────────────────
+let _activeAttnTab = 'all';
+let _lastTabSessions = '';   // serialised session list — skip rebuild if unchanged
+
+function switchAttnTab(name){
+  _activeAttnTab=name;
+  document.querySelectorAll('.atab').forEach(t=>{
+    t.classList.toggle('active',t.dataset.tab===name);
+  });
+  if(!_lastKnownStatus)return;
+  if(name==='all') _renderAttentionQueue(_lastKnownStatus);
+  else _renderSessionAttn(_lastKnownStatus,name);
 }
-let _arenaRunning=false;
-function runArena(){
-  if(_arenaRunning)return;
-  _arenaRunning=true;
-  const btn=document.getElementById('run-arena-btn');
-  const msg=document.getElementById('arena-status-msg');
-  btn.disabled=true; btn.textContent='Running\u2026';
-  msg.textContent='Fetching free models and running benchmark...';
-  fetch('/api/arena/run',{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({arena_type:'text'})})
-  .then(r=>r.json())
-  .then(d=>{
-    msg.textContent=d.message||'Arena started';
-    setTimeout(()=>{
-      _arenaRunning=false; btn.disabled=false; btn.textContent='Run Arena Benchmark';
-      fetchArenaStatus(); fetchArenaResults();
-    },5000);
-  })
-  .catch(()=>{
-    _arenaRunning=false; btn.disabled=false; btn.textContent='Run Arena Benchmark';
-    msg.textContent='Error starting arena';
+
+function _buildAttnTabs(s){
+  const bar=document.getElementById('attn-tabs'); if(!bar)return;
+  const sessions=[];
+  Object.values(s.hives||{}).forEach(h=>{
+    (h.sessions||[]).forEach(n=>{if(!sessions.includes(n))sessions.push(n);});
+  });
+  const key=sessions.slice().sort().join(',');
+  if(key===_lastTabSessions)return;   // no change — skip DOM rebuild
+  _lastTabSessions=key;
+  bar.innerHTML='';
+  // All tab
+  const allTab=document.createElement('div');
+  allTab.className='atab'+(_activeAttnTab==='all'?' active':'');
+  allTab.dataset.tab='all'; allTab.textContent='All';
+  allTab.onclick=()=>switchAttnTab('all');
+  bar.appendChild(allTab);
+  // Per-session tabs
+  sessions.forEach(name=>{
+    const t=document.createElement('div');
+    t.className='atab'+(_activeAttnTab===name?' active':'');
+    t.dataset.tab=name;
+    const dot=document.createElement('span');
+    dot.className='atab-dot';   // all sessions are alive if they appear in hives
+    t.appendChild(dot);
+    t.appendChild(document.createTextNode(name));
+    t.onclick=()=>switchAttnTab(name);
+    bar.appendChild(t);
   });
 }
-function fetchArenaResults(){
-  fetch('/api/arena/results').then(r=>r.json()).then(results=>{
-    const board=document.getElementById('arena-leaderboard'); if(!board)return;
-    const textRes=(results.text||{}).results||[];
-    if(!textRes.length){board.innerHTML='';return;}
-    let html='<div style="font-size:11px;color:var(--muted);margin-bottom:6px">Text Arena Leaderboard</div>';
-    textRes.forEach((r,i)=>{
-      const pct=r.max?Math.round(r.total/r.max*100):0;
-      html+='<div style="display:flex;justify-content:space-between;font-size:11px;padding:3px 0;border-bottom:1px solid var(--border)">'+
-        '<span>'+(i+1)+'. '+esc(r.model.split('/').pop())+'</span>'+
-        '<span style="color:'+(pct>=70?'var(--ok)':pct>=40?'var(--warn)':'var(--err)')+'">'+r.total+'/'+r.max+'</span>'+
-        '</div>';
+
+function _renderSessionAttn(s,name){
+  const list=document.getElementById('queue-list');
+  const emptyEl=document.getElementById('queue-empty');
+  if(!list)return;
+  if(emptyEl)emptyEl.style.display='none';
+  list.innerHTML='';
+  // Header: session alive?
+  const hive=Object.values(s.hives||{})[0]||{};
+  const alive=(hive.sessions||[]).includes(name);
+  const sessLogs=_combinedBuf.filter(e=>e.session===name);
+  const lastLog=sessLogs.length?sessLogs[sessLogs.length-1]:null;
+  const head=document.createElement('div');
+  head.className='sess-head';
+  head.innerHTML=
+    '<span style="font-weight:bold">'+esc(name)+'</span>'+
+    '<span class="'+(alive?'sess-alive':'sess-dead')+'">'+(alive?'running':'not in sessions')+'</span>'+
+    (lastLog?'<span class="sess-ago">last log '+esc(lastLog.ts)+'</span>':'');
+  list.appendChild(head);
+  // Blockers for this session
+  const blockers=(s.blockers||[]).filter(b=>
+    b.status==='open'&&(b.agent===name||(b.description||'').toLowerCase().includes(name.toLowerCase()))
+  );
+  if(blockers.length){
+    const bh=document.createElement('div');
+    bh.className='aq-head'; bh.textContent='Blockers';
+    list.appendChild(bh);
+    blockers.forEach(b=>{
+      const d=document.createElement('div');
+      d.className='blocker-item'; d.id='blocker-'+b.id;
+      d.innerHTML=
+        '<span class="sev-badge '+esc(b.severity||'medium')+'">'+esc(b.severity||'?')+'</span>'+
+        '<div class="blocker-desc">'+esc(b.description)+
+          '<div class="blocker-meta">'+esc((b.ts||'').slice(11,19))+'</div></div>'+
+        '<button class="resolve-btn" onclick="resolveBlocker(\''+esc(b.id)+'\',this)">Resolve</button>';
+      list.appendChild(d);
     });
-    board.innerHTML=html;
-  }).catch(()=>{});
+  }
+  // Recent log lines
+  const recent=sessLogs.slice(-8);
+  if(recent.length){
+    const lh=document.createElement('div');
+    lh.className='aq-head'; lh.textContent='Recent activity';
+    list.appendChild(lh);
+    recent.forEach(entry=>{
+      const d=document.createElement('div');
+      d.className='sess-log '+lineClass(entry.line);
+      d.innerHTML='<span class="ts">'+esc(entry.ts)+'</span><span>'+ansiToHtml(entry.line)+'</span>';
+      list.appendChild(d);
+    });
+  } else {
+    const nol=document.createElement('div');
+    nol.className='empty-state'; nol.textContent='No recent log lines';
+    list.appendChild(nol);
+  }
 }
 
 // ── file attachments ──────────────────────────────────────────────────────────
@@ -1275,11 +1322,13 @@ function removeChip(idx){pendingAttachments.splice(idx,1);renderChips();}
 function autoGrow(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
 function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendPrompt();}}
 async function restoreChat(){
+  _renderChatCtx();   // show browser/hive context immediately before fetch resolves
   try{
     const r=await fetch('/api/chat'); if(!r.ok)return;
     const msgs=await r.json(); if(!msgs.length)return;
     const thread=document.getElementById('chat-thread');
     document.getElementById('chat-empty').style.display='none';
+    const card=document.getElementById('chat-ctx-card'); if(card)card.remove();
     msgs.forEach(m=>{
       const role=m.role==='user'?'user':'ai';
       const d=document.createElement('div'); d.className='bubble '+role;
@@ -1292,12 +1341,14 @@ async function restoreChat(){
 function addBubble(role,text){
   const thread=document.getElementById('chat-thread');
   document.getElementById('chat-empty').style.display='none';
+  const card=document.getElementById('chat-ctx-card'); if(card)card.remove();
   const d=document.createElement('div'); d.className='bubble '+role;
   d.innerHTML='<div class="role-label">'+(role==='user'?'You':'Hive')+'</div><div class="bubble-text">'+esc(text)+'</div>';
   thread.appendChild(d); thread.scrollTop=thread.scrollHeight;
   return d.querySelector('.bubble-text');
 }
 let _sending=false;
+let _browserCtxSent=false;
 async function sendPrompt(priority=false){
   if(_sending)return;
   const input=document.getElementById('prompt-input');
@@ -1316,8 +1367,11 @@ async function sendPrompt(priority=false){
   thread.appendChild(aiBubble); thread.scrollTop=thread.scrollHeight;
   const textNode=aiBubble.querySelector('.bubble-text');
   try{
-    const body=JSON.stringify({prompt,attachment_ids:attachIds,priority:priority,
-      model:cfg.model||DEFAULT_FAVORITES[0],task_dest:cfg.task_dest||'',instructions:cfg.instructions||''});
+    const _bc=!_browserCtxSent?_collectBrowserCtx():null;
+    _browserCtxSent=true;
+    const bodyObj={prompt,attachment_ids:attachIds,priority};
+    if(_bc)bodyObj.browser_ctx={tz:_bc.tz,lang:_bc.lang,now:_bc.now_local};
+    const body=JSON.stringify(bodyObj);
     const resp=await fetch('/api/prompt',{method:'POST',headers:{'Content-Type':'application/json'},body});
     if(!resp.ok){textNode.textContent='Error: HTTP '+resp.status;return;}
     const reader=resp.body.getReader(); const decoder=new TextDecoder();
@@ -1332,7 +1386,6 @@ async function sendPrompt(priority=false){
         try{
           const obj=JSON.parse(raw);
           if(obj.delta){fullText+=obj.delta;textNode.textContent=fullText;thread.scrollTop=thread.scrollHeight;}
-          else if(obj.queue_item)addQueueItem(obj.queue_item);
           else if(obj.error)textNode.textContent='Error: '+obj.error;
         }catch{}
       }
@@ -1350,91 +1403,7 @@ async function clearChat(evt){
   await fetch('/api/chat',{method:'DELETE'}).catch(()=>{});
   const thread=document.getElementById('chat-thread');
   thread.innerHTML='<div class="chat-empty" id="chat-empty">Start a conversation below.</div>';
+  _browserCtxSent=false;   // allow fresh context injection on next first message
+  _renderChatCtx();
 }
-
-// ── task queue ────────────────────────────────────────────────────────────────
-const STATUS_ICON ={queued:'\uD83D\uDFE1',pr_open:'\uD83D\uDD35',merged:'\u2705',closed:'\u2B1C',local:'\uD83D\uDCDD'};
-const STATUS_LABEL={queued:'queued',pr_open:'pr open',merged:'merged',closed:'closed',local:'done'};
-const TERMINAL_STATUSES=new Set(['local','merged','closed']);
-function addQueueItem(item){
-  const list=document.getElementById('queue-list');
-  document.getElementById('queue-empty').style.display='none';
-  const existing=document.getElementById('qi-'+item.id); if(existing)existing.remove();
-  const d=document.createElement('div'); d.className='q-item'; d.id='qi-'+item.id;
-  const icon=STATUS_ICON[item.status]||'\u2753';
-  const label=STATUS_LABEL[item.status]||item.status;
-  const prLink=item.pr_url?'<a href="'+esc(item.pr_url)+'" target="_blank">PR#'+item.pr_number+' \u2197</a>':'';
-  d.innerHTML=
-    '<div class="q-status">'+icon+'</div>'+
-    '<div class="q-body">'+
-      '<div class="q-summary">'+esc(item.summary)+'</div>'+
-      '<div class="q-meta">'+
-        '<span>'+(item.created_at?item.created_at.slice(11,16):'')+'</span>'+
-        '<span>'+esc(item.model||'')+'</span>'+
-        '<span class="q-item-status" data-id="'+item.id+'">'+label+'</span>'+
-        prLink+
-      '</div>'+
-    '</div>'+
-    '<button class="q-del" title="Remove" onclick="deleteQueueItem(\''+item.id+'\',this)">\u2715</button>';
-  list.insertBefore(d,list.firstChild);
-  updateQueueCount();
-}
-function updateQueueCount(){
-  const n=document.querySelectorAll('.q-item').length;
-  document.getElementById('queue-count').textContent=n+' task'+(n===1?'':'s');
-}
-async function deleteQueueItem(id,btn){
-  if(btn)btn.disabled=true;
-  try{
-    await fetch('/api/queue/'+id,{method:'DELETE'});
-    const el=document.getElementById('qi-'+id);
-    if(el)el.remove();
-    updateQueueCount();
-    const items=document.querySelectorAll('.q-item');
-    if(!items.length){const e=document.getElementById('queue-empty');if(e)e.style.display='block';}
-  }catch{if(btn)btn.disabled=false;}
-}
-async function clearDoneItems(evt){
-  if(evt)evt.stopPropagation();
-  try{
-    await fetch('/api/queue',{method:'DELETE'});
-    document.querySelectorAll('.q-item').forEach(el=>{
-      const sp=el.querySelector('.q-item-status');
-      if(sp&&TERMINAL_STATUSES.has(sp.dataset.id||'')){ el.remove(); return; }
-      // check label text too
-      if(sp&&['done','merged','closed'].includes(sp.textContent.trim()))el.remove();
-    });
-    updateQueueCount();
-    if(!document.querySelectorAll('.q-item').length){
-      const e=document.getElementById('queue-empty');if(e)e.style.display='block';
-    }
-  }catch{}
-}
-async function fetchQueue(){
-  try{
-    const r=await fetch('/api/queue');
-    const items=await r.json();
-    items.forEach(addQueueItem);
-    if(!items.length){
-      const e=document.getElementById('queue-empty');
-      if(e)e.style.display='block';
-    }
-  }catch{}
-}
-setInterval(async()=>{
-  try{
-    await fetch('/api/queue/poll',{method:'POST'});
-    const r=await fetch('/api/queue');const items=await r.json();
-    items.forEach(item=>{
-      const el=document.getElementById('qi-'+item.id); if(!el)return;
-      el.querySelector('.q-status').textContent=STATUS_ICON[item.status]||'\u2753';
-      const sp=el.querySelector('.q-item-status');
-      if(sp)sp.textContent=STATUS_LABEL[item.status]||item.status;
-    });
-    updateQueueCount();
-    // show/hide empty state based on rendered items
-    const qEmpty=document.getElementById('queue-empty');
-    if(qEmpty)qEmpty.style.display=document.querySelectorAll('.q-item').length?'none':'block';
-  }catch{}
-},90000);
 """

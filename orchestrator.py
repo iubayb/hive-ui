@@ -33,6 +33,7 @@ from urllib.parse import urlparse
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, SCRIPT_DIR)
 import hive_status  # noqa: E402
+import org_guard  # org isolation — must stay imported
 
 # ── env / API key ─────────────────────────────────────────────────────────────
 def _load_env() -> dict:
@@ -55,6 +56,10 @@ def _load_env() -> dict:
     return env
 
 _hive_env = _load_env()
+# Propagate env-file values into os.environ so sub-processes and tests see them
+for _k in ("OPENROUTER_API_KEY", "OPENROUTER_MODEL", "HIVE_GITHUB_REPO"):
+    if _k not in os.environ and _k in _hive_env:
+        os.environ[_k] = _hive_env[_k]
 OPENROUTER_KEY   = os.environ.get("OPENROUTER_API_KEY") or _hive_env.get("OPENROUTER_API_KEY", "")
 OPENROUTER_MODEL = (os.environ.get("OPENROUTER_MODEL")
                     or _hive_env.get("OPENROUTER_MODEL", "inclusionai/ling-2.6-1t:free"))
@@ -847,7 +852,10 @@ _GIT_ENV = {
     "GIT_COMMITTER_EMAIL":"orchestrator@hive.local",
 }
 
-_GITHUB_REPO = "iubayb/hive-ui"
+_GITHUB_REPO = os.environ.get("HIVE_GITHUB_REPO", "iubayb/hive-ui")
+if not os.environ.get("HIVE_GITHUB_REPO"):
+    _log("[org-guard] WARNING: HIVE_GITHUB_REPO not set — "
+         "defaulting to 'iubayb/hive-ui'. Set explicitly to enforce org isolation.")
 
 
 def _git(args: list, check: bool = False, timeout: int = 15) -> subprocess.CompletedProcess:
@@ -878,14 +886,10 @@ def _current_branch() -> str:
 
 
 def _git_branch_pr(
-    filepath: str,
-    slug: str,
-    commit_msg: str,
-    pr_title: str,
-    pr_body: str,
-    base: str = "develop",
-    prefix: str = "feat/auto-",
+    filepath: str, slug: str, commit_msg: str, pr_title: str, pr_body: str,
+    base: str = "develop", prefix: str = "feat/auto-",
 ) -> str | None:
+    org_guard.assert_hive_repo(_GITHUB_REPO, "_git_branch_pr")
     """
     Full GitOps path for one auto-generated artifact:
       1. checkout (or create) branch  <prefix><slug>
@@ -994,6 +998,7 @@ GITOPS_INTERVAL = 300    # 5 min — check PR statuses
 
 
 def _poll_open_prs() -> None:
+    org_guard.assert_hive_repo(_GITHUB_REPO, "_poll_open_prs")
     """
     Fetch all open PRs on iubayb/hive-ui with base=develop.
     Auto-merge any whose CI checks have all passed.
@@ -1070,6 +1075,7 @@ def _poll_open_prs() -> None:
 
 
 def _develop_to_main_pr() -> None:
+    org_guard.assert_hive_repo(_GITHUB_REPO, "_develop_to_main_pr")
     """
     Once a week (or when ≥5 auto-PRs have been merged to develop since last
     promote), open a develop → main PR and tag a GitHub Release.
@@ -1122,6 +1128,61 @@ def _develop_to_main_pr() -> None:
             "--draft",
             "--target", "develop",
         ])
+
+
+# ── OpenCode delegation ───────────────────────────────────────────────────────
+# Org isolation constraint is ALWAYS prepended — every task, no exceptions.
+_ORG_CONSTRAINT = """\
+ABSOLUTE CONSTRAINT — ORG ISOLATION (hardcoded, non-negotiable):
+Hive must NEVER write to hatcher/* or bolder/* GitHub repos.
+Those are live production codebases. Enforced by org_guard.py.
+  - DO NOT modify org_guard.py
+  - DO NOT remove any org_guard.assert_hive_repo() call site
+  - DO NOT change _GITHUB_REPO to point to hatcher/* or bolder/*
+  - Any GitHub integration work MUST preserve ALL assert_hive_repo() call sites
+---
+
+"""
+
+
+def _is_code_task(description: str) -> bool:
+    """
+    Return True if a next_step description requires code changes (-> OpenCode),
+    False if it is an ops/infra task (-> hive-doctor).
+    Conservative: only route to OpenCode when clearly a code task.
+    """
+    desc = description.lower()
+    code_signals = (
+        "fix ", "add ", "implement ", "refactor ", "update ", "patch ",
+        "write test", "add test", "create function", "change line",
+        "def ", "class ", "import ", ".py", "function", "method",
+        "bug ", "error in ", "syntax", "assertion", "unit test",
+    )
+    ops_signals = (
+        "restart", "service", "systemd", "supervisor", "tmux",
+        "disk ", "cpu ", "memory", "port ", "nginx", "dns",
+        "deploy", "monitor", "alert", "cron",
+    )
+    has_code = any(s in desc for s in code_signals)
+    has_ops  = any(s in desc for s in ops_signals)
+    return has_code and not has_ops
+
+
+def _delegate_to_opencode(task: str) -> None:
+    """
+    Send a code task to the OpenCode agent via tmux.
+    The org isolation constraint is ALWAYS prepended — unconditionally.
+    Never call this with a repo path — OpenCode works in /home/ayoub/hive-ui.
+    """
+    full_prompt = _ORG_CONSTRAINT + task
+    try:
+        subprocess.run(
+            ["tmux", "send-keys", "-t", "opencode", full_prompt, "Enter"],
+            capture_output=True, text=True, timeout=10,
+        )
+        _log(f"[opencode] delegated task: {task[:80]}")
+    except Exception as e:
+        _log(f"[opencode] delegation failed: {e}")
 
 
 # ── compaction ────────────────────────────────────────────────────────────────
@@ -1404,6 +1465,18 @@ def main():
                 except Exception as e:
                     _log(f"compaction error (non-fatal): {e}")
             last_compaction = now
+
+            # Route code next_steps to OpenCode
+            try:
+                s = hive_status.load()
+                for step in s.get("next_steps", [])[-5:]:
+                    desc = step.get("description", "") if isinstance(step, dict) else str(step)
+                    assigned = step.get("assigned_to", "") if isinstance(step, dict) else ""
+                    if _is_code_task(desc) and assigned not in ("opencode",):
+                        _delegate_to_opencode(desc)
+                        break  # one task at a time — OpenCode is single-threaded
+            except Exception as e:
+                _log(f"[opencode] routing error (non-fatal): {e}")
 
         # ── self-test ─────────────────────────────────────────────────────────
         if now - last_self_test >= SELF_TEST_INTERVAL:
