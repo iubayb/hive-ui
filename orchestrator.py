@@ -290,7 +290,141 @@ def triage():
                     hive_status.resolve_blocker(b["id"], "avahi watchdog: desktop.local resolving normally")
 
 
-# ── self-test ─────────────────────────────────────────────────────────────────
+# ── research-loop error watchdog ──────────────────────────────────────────────
+# Detects when a research_loop.py session is stuck in a 400-error loop
+# (e.g. model doesn't support thinking, incompatible payload) and auto-restarts
+# it.  Checks at most once per triage interval.
+
+_RLOOP_400_RESTART_COOLDOWN = 600   # don't restart more than once per 10 min
+_rloop_last_restart: dict = {}       # session_name → timestamp of last restart
+_rloop_400_counts: dict = {}         # session_name → consecutive 400 count seen
+
+def _watch_research_loop_errors() -> None:
+    """Scan research_loop tmux sessions for 400-loop patterns.
+    If a session shows ≥20 consecutive '400 Bad Request' lines in its pane
+    output and the error is NOT an OOM (which has its own self-heal), kill
+    and restart it via the supervisor so the fixed code is used."""
+    import re as _re
+    _400_pat   = _re.compile(r"400 Bad Request")
+    _oom_pat   = _re.compile(r"(input too large|out of memory|kv cache|cuda error|context length)")
+    now = time.time()
+
+    # Find all tmux sessions running research_loop.py
+    try:
+        sessions_out = subprocess.check_output(
+            ["tmux", "ls", "-F", "#{session_name}"], text=True, timeout=5
+        ).splitlines()
+    except Exception:
+        return
+
+    for sess in sessions_out:
+        # Only watch sessions that look like research-loop consumers
+        if sess not in ("ps5-hive", "wegia-hive"):
+            continue
+
+        # Capture last 60 lines of the pane
+        try:
+            pane = subprocess.check_output(
+                ["tmux", "capture-pane", "-t", sess, "-p", "-S", "-60"],
+                text=True, timeout=5
+            )
+        except Exception:
+            continue
+
+        lines = pane.splitlines()
+        count_400 = sum(1 for ln in lines if _400_pat.search(ln))
+        has_oom   = any(_oom_pat.search(ln) for ln in lines)
+
+        if count_400 < 20 or has_oom:
+            # Not a 400-loop, or it's an OOM (handled by ctx-halving self-heal)
+            _rloop_400_counts[sess] = 0
+            continue
+
+        _rloop_400_counts[sess] = count_400
+        last_restart = _rloop_last_restart.get(sess, 0)
+        if now - last_restart < _RLOOP_400_RESTART_COOLDOWN:
+            continue   # already restarted recently — give it time
+
+        _log(
+            f"[watchdog] {sess}: {count_400} '400 Bad Request' lines in last 60 pane lines "
+            f"— non-OOM permanent error; restarting session via supervisor"
+        )
+        # Raise a blocker so the history is visible in the hive UI
+        bid = hive_status.add_blocker(
+            sess, "orchestrator",
+            f"research_loop 400-loop detected ({count_400} errors/60 lines) — auto-restarting",
+            severity="high",
+        )
+        # Kill existing process in the session and let supervisor recreate it
+        try:
+            subprocess.run(
+                ["tmux", "send-keys", "-t", sess, "C-c", ""],
+                timeout=3
+            )
+            import time as _time; _time.sleep(1)
+            subprocess.run(
+                ["tmux", "send-keys", "-t", sess, "", "Enter"],
+                timeout=3
+            )
+        except Exception as exc:
+            _log(f"[watchdog] {sess}: restart signal failed: {exc}")
+
+        _rloop_last_restart[sess] = now
+        # Resolve the blocker after restart attempt
+        hive_status.resolve_blocker(bid, "sent C-c + restart to research_loop session")
+        add_capability(
+            skill="auto_restart_400_loop",
+            description="Auto-detects and restarts research_loop sessions stuck in 400-error loops",
+            example=f"Restarted {sess} after {count_400} consecutive 400 Bad Request errors",
+        )
+
+
+# ── stale blocker / next-step pruner ─────────────────────────────────────────
+# The orchestrator sometimes raises blockers or next-steps for conditions that
+# were fixed but never explicitly resolved (e.g. sessions that now exist).
+# This runs every triage cycle and cleans up anything stale.
+
+def _prune_stale_status_entries() -> None:
+    """Resolve open blockers and cancel pending next-steps that no longer apply."""
+    s = hive_status.load()
+    sessions = set(tmux_sessions())
+    now_sessions_alive = {sess for sess in sessions if session_is_alive(sess)}
+
+    # Patterns that become stale once the session is alive
+    _SESSION_PATTERNS = ["hive-watch", "hive-live", "hive-dev", "build_monitor",
+                         "orchestrator", "ps5-hive", "opencode"]
+
+    for b in s.get("blockers", []):
+        if b.get("status") != "open":
+            continue
+        desc = b.get("description", "")
+        # Resolve "missing session" / "dead session" blockers if session is now alive
+        for sess in _SESSION_PATTERNS:
+            if sess in desc and sess in now_sessions_alive:
+                hive_status.resolve_blocker(b["id"], f"auto-pruned: {sess} is now alive")
+                _log(f"pruned stale blocker {b['id']}: {desc[:80]}")
+                break
+        # Resolve "long backoff" blocker if session is now stable (has a child process)
+        if "long backoff" in desc or "restart(s)" in desc:
+            for sess in _SESSION_PATTERNS:
+                if sess in desc and sess in now_sessions_alive:
+                    hive_status.resolve_blocker(b["id"], f"auto-pruned: {sess} recovered from backoff")
+                    break
+
+    # Cancel pending next-steps for sessions that already exist
+    for ns in s.get("next_steps", []):
+        if ns.get("status") != "pending":
+            continue
+        desc = ns.get("description", "")
+        for sess in _SESSION_PATTERNS:
+            if ("Create missing" in desc or "Restart dead" in desc) and sess in desc:
+                if sess in now_sessions_alive:
+                    hive_status.update_next_step(ns["id"], "cancelled")
+                    _log(f"pruned stale next-step {ns['id']}: {desc[:80]}")
+                    break
+
+
+
 # Maps test IDs → shell fix commands (run as the ayoub user).
 # Sudo commands use -S to read password from stdin.
 _AUTO_FIX_REGISTRY: dict = {
@@ -881,6 +1015,8 @@ def main():
         if now - last_triage >= TRIAGE_INTERVAL:
             try:
                 triage()
+                _watch_research_loop_errors()
+                _prune_stale_status_entries()
             except Exception as e:
                 _log(f"triage error (non-fatal): {e}")
             last_triage = now
