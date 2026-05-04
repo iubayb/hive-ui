@@ -78,10 +78,16 @@ PING_INTERVAL       = 30     # 30 s  — keep SSE stream alive between cycles
 # ── rate limiting ─────────────────────────────────────────────────────────────
 _MAX_LLM_CALLS_HR = 8        # conservative — shares OpenRouter free quota
 _llm_call_times   = []
+_llm_retry_after: float = 0.0   # epoch time before which LLM calls are suppressed (429 backoff)
 
 
 def _llm_budget_ok() -> bool:
+    global _llm_retry_after
     now = time.time()
+    if now < _llm_retry_after:
+        remaining = int(_llm_retry_after - now)
+        _log(f"[llm] rate-limit backoff active — {remaining}s remaining")
+        return False
     _llm_call_times[:] = [t for t in _llm_call_times if now - t < 3600]
     return len(_llm_call_times) < _MAX_LLM_CALLS_HR
 
@@ -121,6 +127,11 @@ def call_llm(messages: list, max_tokens: int = 512, timeout: int = 60):
         raw  = resp.read().decode("utf-8", errors="replace")
         conn.close()
         if resp.status != 200:
+            if resp.status == 429:
+                global _llm_retry_after
+                _llm_retry_after = time.time() + 60   # 60-second backoff
+                _log("[llm] rate-limited (429) — backing off 60s")
+                return "", "rate_limited"
             return "", f"HTTP {resp.status}"
         data = json.loads(raw)
         # Handle reasoning models (delta.reasoning before delta.content)
@@ -768,6 +779,16 @@ if [[ "$avail" -gt 512000 ]]; then _pass "$id" "$desc (${avail}kB)"
 else _fail "$id" "$desc" "only ${avail}kB available" "$fix"; fi
 """,
     ),
+    r"hive_github_repo.*not set|github.*repo.*missing|env.*not set": (
+        "env_github_repo",
+        """# Auto-generated: HIVE_GITHUB_REPO env var check
+id=TSauto_env_github_repo
+desc="HIVE_GITHUB_REPO is set in environment"
+fix="grep -q HIVE_GITHUB_REPO /home/ayoub/hive-ui/.env || echo 'HIVE_GITHUB_REPO=iubayb/hive-ui' >> /home/ayoub/hive-ui/.env"
+if [[ -n "${HIVE_GITHUB_REPO:-}" ]]; then _pass "$id" "$desc"
+else _fail "$id" "$desc" "HIVE_GITHUB_REPO not in environment" "$fix"; fi
+""",
+    ),
 }
 
 _issue_test_committed: set = set()   # patterns already turned into tests
@@ -1247,7 +1268,10 @@ Knowledge findings: {s.get("knowledge", {}).get("findings_count", len(s.get("kno
         timeout=30,
     )
 
-    if err:
+    if err == "rate_limited":
+        _log("[llm] skipping cycle — rate-limit backoff active")
+        # do not treat as permanent failure
+    elif err:
         _log(f"compaction LLM error: {err}")
         # Deduplicate: only add a new blocker if no open compaction-failure blocker exists
         _es = hive_status.load()
@@ -1490,7 +1514,7 @@ def main():
                 try:
                     hive_status.set_active_task("orchestrator", "issue→test: scanning blockers for new test patterns")
                     s = hive_status.load()
-                    for b in s.get("blockers", [])[-20:]:
+                    for b in s.get("blockers", [])[:20]:
                         if b.get("status") == "open":
                             _issue_to_test(b.get("description", ""))
                 except Exception as e:
