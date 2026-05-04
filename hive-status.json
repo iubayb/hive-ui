@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-04T16:57:48Z",
+  "last_updated": "2026-05-04T17:00:50Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.8,
-      "last_seen": "2026-05-04T16:56:45Z",
+      "health_score": 0.75,
+      "last_seen": "2026-05-04T17:00:50Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -93,6 +93,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_2be3ffc1",
+      "ts": "2026-05-04T16:59:23Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "HIGH load/core=0.86 mem=33.0GB disk=14% \u2014 jobs reniced",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "0ad3ee546073790aeb636fc5651173a4"
+    },
     {
       "id": "b_efe6b7d6",
       "ts": "2026-05-04T16:51:00Z",
@@ -1271,17 +1284,6 @@
       "status": "resolved",
       "resolved_at": "2026-05-04T04:54:24Z",
       "resolution": "root cause fixed: reasoning_effort removed from Ollama payload; circuit-breaker added"
-    },
-    {
-      "id": "b_11450425",
-      "ts": "2026-05-04T03:01:57Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "self-test: TS19 failing \u2014 no auto-fix available or fix failed",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-04T03:04:06Z",
-      "resolution": "supervisor self-test: all invariants passing"
     }
   ],
   "next_steps": [
@@ -2470,7 +2472,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-04T16:57:48Z",
-    "completed_at": "2026-05-04T16:57:48Z"
+    "started_at": "2026-05-04T17:00:50Z",
+    "completed_at": "2026-05-04T17:00:50Z"
   }
 }
