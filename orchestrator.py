@@ -58,7 +58,7 @@ def _load_env() -> dict:
 _hive_env = _load_env()
 # Propagate env-file values into os.environ so sub-processes and tests see them
 for _k in ("OPENROUTER_API_KEY", "OPENROUTER_MODEL", "HIVE_GITHUB_REPO"):
-    if _k not in os.environ and _k in _hive_env:
+    if not os.environ.get(_k) and _k in _hive_env:
         os.environ[_k] = _hive_env[_k]
 OPENROUTER_KEY   = os.environ.get("OPENROUTER_API_KEY") or _hive_env.get("OPENROUTER_API_KEY", "")
 OPENROUTER_MODEL = (os.environ.get("OPENROUTER_MODEL")
@@ -568,6 +568,7 @@ _AUTO_FIX_REGISTRY: dict = {
     "TS19": "",   # handled per-session in the script itself
     "TS20": "pgrep -f research_loop.py | head -5 | xargs -r kill -STOP",
     "TS21": "find /tmp -mtime +1 -delete 2>/dev/null; journalctl --vacuum-size=500M 2>/dev/null; true",
+    "TS34": "bash -c 'grep -q HIVE_GITHUB_REPO ~/.config/research-hive/env || echo HIVE_GITHUB_REPO=iubayb/hive-ui >> ~/.config/research-hive/env'",
 }
 
 # Track last self-test result to avoid flooding blockers
@@ -584,6 +585,7 @@ def _run_self_test_script() -> tuple[bool, list[str], list[str]]:
         r = subprocess.run(
             ["bash", script],
             capture_output=True, text=True, timeout=60,
+            env={**os.environ, **_load_env()},
         )
         lines = r.stdout.splitlines() + r.stderr.splitlines()
         fail_ids = [
