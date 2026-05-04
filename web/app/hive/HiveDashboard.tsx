@@ -61,14 +61,17 @@ export function HiveDashboard({ initialStatus }: { initialStatus: HiveStatus | n
         </div>
       )}
 
-      {status.active_task && (
+      {status.active_task && typeof status.active_task === "object" && (
         <div className="glass-card px-4 py-3">
           <span className="section-title block mb-1">Active Task</span>
           <p
             className="text-xs font-mono"
             style={{ color: "var(--color-text-secondary)" }}
           >
-            {status.active_task}
+            {(status.active_task as { agent?: string; task?: string }).agent && (
+              <span className="opacity-60 mr-1">[{(status.active_task as { agent?: string }).agent}]</span>
+            )}
+            {(status.active_task as { task?: string }).task ?? JSON.stringify(status.active_task)}
           </p>
         </div>
       )}
