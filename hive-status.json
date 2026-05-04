@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-04T16:33:42Z",
+  "last_updated": "2026-05-04T16:45:51Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.55,
-      "last_seen": "2026-05-04T16:32:20Z",
+      "last_seen": "2026-05-04T16:44:30Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -26,6 +26,14 @@
     }
   },
   "achievements": [
+    {
+      "id": "a_35c85b18",
+      "ts": "2026-05-04T16:38:44Z",
+      "hive": "default",
+      "agent": "ui-builder",
+      "description": "Next.js UI deployed on port 3001",
+      "evidence": "http://localhost:3001/hive - live SSE, logs page, connection badge, loading skeletons"
+    },
     {
       "id": "a_e5a43d15",
       "ts": "2026-05-04T16:18:07Z",
@@ -2446,7 +2454,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-04T16:33:21Z",
-    "completed_at": "2026-05-04T16:33:22Z"
+    "started_at": "2026-05-04T16:45:30Z",
+    "completed_at": "2026-05-04T16:45:31Z"
   }
 }
