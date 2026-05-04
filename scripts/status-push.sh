@@ -19,12 +19,13 @@ push_file() {
 import sys, json, base64, subprocess, os, tempfile
 local_path, remote_path, msg, repo, branch = sys.argv[1:]
 
-# Get current SHA
+# Get current SHA (returns "null" or empty when file does not yet exist)
 r = subprocess.run(
     ["gh", "api", f"repos/{repo}/contents/{remote_path}?ref={branch}", "--jq", ".sha"],
     capture_output=True, text=True
 )
-sha = r.stdout.strip()
+raw_sha = r.stdout.strip()
+sha = raw_sha if (raw_sha and raw_sha != "null") else ""
 
 # Build payload and write to temp file (avoids ARG_MAX / Argument list too long)
 payload = {
