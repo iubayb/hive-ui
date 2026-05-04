@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-04T17:17:57Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-04T17:21:01Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.6,
-      "last_seen": "2026-05-04T17:17:16Z",
+      "health_score": 0.9,
+      "last_seen": "2026-05-04T17:21:01Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -21,7 +21,7 @@
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
-      "errors_last_hour": 1,
+      "errors_last_hour": 10,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -93,6 +93,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_324bc5ef",
+      "ts": "2026-05-04T17:20:04Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "HIGH load/core=0.89 mem=32.1GB disk=14% \u2014 jobs reniced",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "58d5ce98c80c6229a329d4c455c2d402"
+    },
     {
       "id": "b_e722d195",
       "ts": "2026-05-04T17:05:40Z",
@@ -1275,17 +1288,6 @@
       "hive": "default",
       "agent": "hive-doctor",
       "description": "[ps5-hive] Worker 'qwen3.6-abliterated-q3km' receiving 400 Bad Request from Ollama API, likely due to model name mismatch or unsupported quantization format",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-04T04:54:24Z",
-      "resolution": "root cause fixed: reasoning_effort removed from Ollama payload; circuit-breaker added"
-    },
-    {
-      "id": "b_097dea70",
-      "ts": "2026-05-04T04:02:45Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Worker 'qwen3.6-abliterated-q3km' receiving 400 Bad Request from Ollama API, likely due to model name mismatch or incompatible payload format for the abliterated model variant",
       "severity": "high",
       "status": "resolved",
       "resolved_at": "2026-05-04T04:54:24Z",
@@ -2473,9 +2475,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-04T17:17:27Z",
-    "completed_at": "2026-05-04T17:17:47Z"
+    "started_at": "2026-05-04T17:20:18Z",
+    "completed_at": "2026-05-04T17:20:19Z"
   }
 }
