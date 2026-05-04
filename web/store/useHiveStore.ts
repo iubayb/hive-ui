@@ -88,7 +88,7 @@ export const useHiveStore = create<AppState>((set) => ({
   chatMessages: [],
   isAssistantThinking: false,
   isConnected: false,
-  setHiveStatus: (s) => set({ hiveStatus: s }),
+  setHiveStatus: (s) => set({ hiveStatus: s, isConnected: true }),
   appendLog: (e) => set((st) => ({ logs: [...st.logs.slice(-500), e] })),
   addChatMessage: (m) => set((st) => ({ chatMessages: [...st.chatMessages, m] })),
   setAssistantThinking: (v) => set({ isAssistantThinking: v }),
