@@ -1,39 +1,60 @@
 #!/usr/bin/env bash
-# status-push.sh — runs on Oracle ARM server every 60s via cron / systemd timer
-# Pushes /tmp/hive-status.json + /home/ayoub/research/wegia-audit.md to status/ branch
-
+# status-push.sh — push hive-status.json (and optional report) to status/ branch
+# Uses GitHub Contents API via a temp JSON payload file to avoid ARG_MAX limits
+# Safe to call from any working directory; never touches git working tree
 set -euo pipefail
 
-REPO_DIR="${REPO_DIR:-/home/ayoub/hive-ui}"
 STATUS_FILE="${STATUS_FILE:-/tmp/hive-status.json}"
 REPORT_FILE="${REPORT_FILE:-/home/ayoub/research/wegia-audit.md}"
+REPO="iubayb/hive-ui"
 BRANCH="status"
 
-cd "$REPO_DIR"
+push_file() {
+  local local_path="$1"
+  local remote_path="$2"
+  local msg="$3"
+  [ -f "$local_path" ] || { echo "[status-push] skip $remote_path (not found)"; return 0; }
 
-# Ensure we're on the status branch
-git fetch origin "$BRANCH" --quiet 2>/dev/null || true
-git checkout "$BRANCH" 2>/dev/null || git checkout -b "$BRANCH" origin/"$BRANCH"
+  python3 - "$local_path" "$remote_path" "$msg" "$REPO" "$BRANCH" << 'PYEOF'
+import sys, json, base64, subprocess, os, tempfile
+local_path, remote_path, msg, repo, branch = sys.argv[1:]
 
-# Copy latest files
-[ -f "$STATUS_FILE" ] && cp "$STATUS_FILE" hive-status.json
-[ -f "$REPORT_FILE" ] && { mkdir -p research; cp "$REPORT_FILE" research/latest.md; }
+# Get current SHA
+r = subprocess.run(
+    ["gh", "api", f"repos/{repo}/contents/{remote_path}?ref={branch}", "--jq", ".sha"],
+    capture_output=True, text=True
+)
+sha = r.stdout.strip()
 
-# Only commit if something changed
-if git diff --quiet && git diff --cached --quiet; then
-  echo "[status-push] no changes — skipping"
-  git checkout develop 2>/dev/null || true
-  exit 0
-fi
+# Build payload and write to temp file (avoids ARG_MAX / Argument list too long)
+payload = {
+    "message": msg,
+    "content": base64.b64encode(open(local_path, "rb").read()).decode(),
+    "branch": branch,
+}
+if sha:
+    payload["sha"] = sha
 
-git add hive-status.json logs.jsonl research/ 2>/dev/null || git add hive-status.json
+with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as f:
+    json.dump(payload, f)
+    tmp = f.name
 
-GIT_AUTHOR_NAME=status-push \
-GIT_AUTHOR_EMAIL=status@hive.local \
-GIT_COMMITTER_NAME=status-push \
-GIT_COMMITTER_EMAIL=status@hive.local \
-git commit -m "chore: status sync $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+try:
+    r2 = subprocess.run(
+        ["gh", "api", f"repos/{repo}/contents/{remote_path}",
+         "--method", "PUT", "--input", tmp],
+        capture_output=True, text=True
+    )
+    if r2.returncode != 0:
+        print(f"[status-push] ERROR {remote_path}: {r2.stderr[:200]}", file=sys.stderr)
+        sys.exit(1)
+    print(f"[status-push] pushed {remote_path}")
+finally:
+    os.unlink(tmp)
+PYEOF
+}
 
-git push origin "$BRANCH"
-echo "[status-push] pushed to $BRANCH OK"
-git checkout develop 2>/dev/null || true
+TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+push_file "$STATUS_FILE" "hive-status.json" "chore: status sync $TS"
+push_file "$REPORT_FILE" "research/latest.md" "chore: report sync $TS"
+echo "[status-push] done at $TS"
