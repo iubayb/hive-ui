@@ -4746,3 +4746,25 @@ Analyzed 6 PHP files for OWASP Top 10 vulnerabilities. Found one high-risk SQL i
 - investigate: `controle/control.php` — Determine if this centralized controller has CSRF protection mechanisms and how it validates permissions for state-changing operations
 - investigate: `matPat/adicionar_categoria.php` SQL query on line 29 — Review how `$_SESSION['id_pessoa']` is populated and whether it can be manipulated by user input or session fixation
 - investigate: `contribuicao/service/MercadoPagoBoletoService.php` error handling — Review full error handling implementation to ensure API responses don't leak sensitive information when displayed to users
+
+
+---
+## Task #592: Analyze informacao_saude_pet.php, pre_cadastro_atendido.php (+2 more)
+*model: `qwen/qwen3-coder-480b-a35b-07-25:free` · 2026-05-06T03:01:58.693624+00:00*
+
+## Summary
+Analyzed 4 PHP files for OWASP Top 10 vulnerabilities. Found one medium-risk XSS vulnerability in `geral/modulos_visiveis.php` and one potential IDOR vulnerability in `contribuicao/controller/RegraPagamentoController.php`. Most files properly sanitize user input, but CSRF protection is missing in several form handlers.
+
+## Findings
+- `geral/modulos_visiveis.php:121` — XSS — Direct output of `$msg` variable without HTML encoding in error message display. PoC: Set session variable `$msg` to `alert(1)` and it will execute in the browser.
+- `contribuicao/controller/RegraPagamentoController.php:156` — IDOR — The `editarPorId` method directly uses `$_POST['id']` to identify which record to edit without verifying ownership or authorization. PoC: Submit POST request with arbitrary `id` parameter to edit any record.
+- `contribuicao/controller/RegraPagamentoController.php:123` — IDOR — The `excluirPorId` method allows deletion of any record by ID without authorization checks. PoC: Submit POST request with arbitrary `regra-pagamento-id` parameter to delete any record.
+
+## Open questions
+- What authorization mechanisms are in place for other CRUD operations in the contribuicao module?
+- Are there any additional access controls that should be applied to the modulos_visiveis functionality?
+
+## Follow-up
+- investigate: `contribuicao/controller/RegraPagamentoController.php` — Missing CSRF tokens in form submissions
+- investigate: `geral/modulos_visiveis.php` — Session variable extraction without validation
+- investigate: `contribuicao/controller/RegraPagamentoController.php` — Input validation for `meio-pagamento` parameter
