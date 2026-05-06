@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T15:14:43Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-06T15:15:34Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -731,7 +731,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 64
+    "openrouter_calls_today": 65
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -740,26 +740,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_ae8e5c75",
-      "ts": "2026-05-06T13:08:39Z",
-      "updated_by": "orchestrator",
-      "goal": "Solidify hive-ui production readiness by hardening metrics, auth, and stream reliability for all active sessions.",
-      "summary": "The hive is running at full health with the new Ling model and a live Next.js UI on port 3001. Recent wins include GitHub auth, SSE streaming, and 24 knowledge findings with zero blockers. We now need concrete code improvements to lock down observability and resilience.",
-      "progress": "Added /api/metrics and GitHub auth to the Next.js UI on port 3001 with SSE streaming.",
-      "next_steps": [
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
-        "Add /api/metrics endpoint to logstream.py returning JSON of session stats (sessions, throughput, errors).",
-        "Implement auth middleware in pages/api/stream.ts to validate session tokens before SSE upgrade.",
-        "Add max-lag threshold and auto-reconnect to useSSE() in lib/hooks/useSSE.ts when stream stalls >5s."
-      ],
-      "decisions": [
-        "Standardize on inclusionai/ling-2.6-1t:free for all non-experimental session workloads.",
-        "Keep port 3001 dedicated to hive-ui Next.js production traffic; enforce via port-bind-check.",
-        "Route all session metrics through logstream.py /api/metrics as the single source of truth."
-      ]
-    },
     {
       "id": "sess_8abbbe70",
       "ts": "2026-05-06T13:11:52Z",
@@ -939,6 +919,26 @@
         "Define SLO defaults: CPU>85% or mem>90% or queueDepth>200 triggers backpressure; consecutive 5xx>3 triggers circuit open for 30s.",
         "Gate metrics endpoint behind GitHub auth in pages/api/metrics.ts and return only sanitized, non-PII session aggregates."
       ]
+    },
+    {
+      "id": "sess_9344c985",
+      "ts": "2026-05-06T15:15:12Z",
+      "updated_by": "orchestrator",
+      "goal": "Upgrade hive-ui resilience and observability by hardening call_llm, adding /api/metrics, and closing P1/P2 code gaps.",
+      "summary": "The hive is healthy with 9 active sessions and the new ling-2.6-1t model online. The Next.js UI is live on port 3001 with GitHub auth and SSE, but retry/backpressure and metrics are still pending. We will immediately harden orchestrator and add observable endpoints while defining SLOs and tests.",
+      "progress": "Deployed ling-2.6-1t:free and brought up the full Next.js UI (12 routes, GitHub auth, SSE stream).",
+      "next_steps": [
+        "Add exponential backoff with jitter and HTTP 429/503 handling to call_llm() in orchestrator.py.",
+        "Create /api/metrics endpoint in pages/api/metrics.ts returning JSON of session stats (active counts, durations, errors).",
+        "Implement sendStream() retry logic with exponential backoff and jitter in lib/sse.ts.",
+        "Write unit tests for org_guard.py covering all forbidden path patterns and permission bypasses.",
+        "Define per-session SLOs and backpressure rules in config/slos.ts (CPU/mem thresholds, queue limits) and integrate into supervisor checks."
+      ],
+      "decisions": [
+        "Use exponential backoff (base 1s, cap 30s) with full jitter for all external call retries.",
+        "Expose /api/metrics as the single source of session observability for hive-watch and build_monitor.",
+        "Enforce org_guard as the mandatory gate for all filesystem operations in orchestrator and supervisor."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -950,9 +950,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: develop\u2192main promotion check + release draft",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T15:14:41Z",
-    "completed_at": "2026-05-06T15:14:43Z"
+    "started_at": "2026-05-06T15:15:22Z",
+    "completed_at": "2026-05-06T15:15:24Z"
   }
 }
