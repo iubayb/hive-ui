@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T11:42:01Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T11:42:54Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
@@ -43,9 +43,9 @@
       "agent": "orchestrator",
       "description": "self-test: TS20 failing \u2014 no auto-fix available or fix failed",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T11:42:53Z",
+      "resolution": "self-test: all invariants passing",
       "github_issue": null,
       "_hash": "7121d5a13d871954e02556197912da0b"
     },
@@ -744,9 +744,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-06T11:41:40Z",
-    "completed_at": "2026-05-06T11:41:41Z"
+    "started_at": "2026-05-06T11:42:53Z",
+    "completed_at": "2026-05-06T11:42:54Z"
   }
 }
