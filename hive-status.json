@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T17:00:02Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T17:00:53Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
@@ -819,7 +819,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 78
+    "openrouter_calls_today": 79
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -828,26 +828,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_2445c4ba",
-      "ts": "2026-05-06T14:30:00Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize and harden the hive-ui by adding resilience, observability, and test coverage to enable safe scaling across all active sessions.",
-      "summary": "The hive is running at full health with nine active sessions and a new text champion model deployed. The Next.js UI is live on port 3001 with GitHub auth and SSE streaming, yet retry resilience, metrics observability, and org_guard test coverage remain pending.",
-      "progress": "Completed adding exponential backoff and jitter retry logic to lib/sse.ts sendStream() with configurable attempts and backoff factor.",
-      "next_steps": [
-        "Add retry logic with exponential backoff and jitter to call_llm() in orchestrator/orchestrator.py when HTTP 429/5xx is returned.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns, including symlink traversal and absolute path escapes.",
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (active count, CPU/mem SLO breaches, queue depth).",
-        "Define per-session SLOs and backpressure rules by adding cpuMemThresholds and queueBackpressure constants to config/slos.ts and enforce them in supervisor/supervisor.py.",
-        "Add SSE stream health check and metrics collection to lib/sse.ts by exporting streamGauge and exporting status on /api/sse/health."
-      ],
-      "decisions": [
-        "Adopt exponential backoff with full jitter as the default retry strategy across all network calls.",
-        "Enforce strict org_guard path validation with canonicalization and symlink resolution before any file access.",
-        "Expose session-level SLO metrics and backpressure state via /api/metrics in JSON to drive autoscaling and alerting."
-      ]
-    },
     {
       "id": "sess_93662db5",
       "ts": "2026-05-06T14:45:03Z",
@@ -1027,6 +1007,26 @@
         "Standardize exponential backoff with jitter across call_llm(), sendStream(), and any external I/O.",
         "Expose live session metrics (CPU/mem/disk, SLO breach) via /api/metrics and StreamPanel for operator visibility."
       ]
+    },
+    {
+      "id": "sess_8e541747",
+      "ts": "2026-05-06T17:00:53Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize research_loop and harden hive-ui under high load by adding backpressure, metrics, and retry resilience.",
+      "summary": "The hive is running hot (CPU up to 1.74, disk 14%) with research_loop paused and several sessions active. Recent wins include a new model champion and a live Next.js UI on port 3001 with GitHub auth and SSE. Immediate focus is to reduce load pressure and add observable controls.",
+      "progress": "Added exponential backoff and jitter retry logic to lib/sse.ts sendStream() with circuit-breaker semantics and a 5xx/timeout threshold.",
+      "next_steps": [
+        "Add retry logic with exponential backoff and jitter to call_llm() in orchestrator.py when HTTP 429/503 is returned, with max 5 attempts and backoff cap of 30s.",
+        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (active count, CPU/mem percentiles, disk usage, paused sessions).",
+        "Implement per-session SLO checks in components/SessionMonitor.tsx: render CPU/mem thresholds and auto-renice UI actions when core > 0.8 or mem > 22GB.",
+        "Write unit tests for org_guard.py covering all forbidden path patterns (absolute, symlink-escapes, dotfiles outside workspace) with pytest fixtures.",
+        "Add backpressure gating in lib/sse.ts sendStream() to pause upstream push when queue depth > 50 and resume on drain, with metric emission to /api/metrics."
+      ],
+      "decisions": [
+        "Cap research_loop concurrency to 1 and enforce CPU/mem SLOs until /api/metrics shows headroom.",
+        "Default all new call_llm() invocations to use the new exponential backoff with jitter and a 30s timeout.",
+        "Route all session stat collection through /api/metrics and bind SessionMonitor to auto-renice on threshold breach."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1038,9 +1038,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-06T17:00:00Z",
-    "completed_at": "2026-05-06T17:00:02Z"
+    "started_at": "2026-05-06T17:00:43Z",
+    "completed_at": "2026-05-06T17:00:53Z"
   }
 }
