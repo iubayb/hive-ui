@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T02:35:38Z",
+  "last_updated": "2026-05-06T02:37:46Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.6,
-      "last_seen": "2026-05-06T02:35:38Z",
+      "last_seen": "2026-05-06T02:37:45Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -287,7 +287,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 4
+    "openrouter_calls_today": 5
   },
   "model_champions": {
     "text": null,
@@ -345,6 +345,26 @@
         "Apply manual fixes for TS14/TS17/TS18 based on captured logs rather than waiting for auto-fix.",
         "Gate further feature work until full self-test compliance is achieved (no high-severity failures)."
       ]
+    },
+    {
+      "id": "sess_34a78c9d",
+      "ts": "2026-05-06T02:36:24Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full tmux session coverage and pass critical self-tests (TS14, TS17, TS18, TS19) to eliminate high-priority blockers.",
+      "summary": "The hive is running at ~60% health with 8 active sessions, but four high-priority self-test failures (TS14, TS17, TS18, TS19) and a missing supervisor session prevent full operation. No recent achievements were recorded, and auto-fixes are unavailable for these failures, requiring targeted investigation and manual remediation.",
+      "progress": "Captured the current state, confirmed missing supervisor session, and identified the specific failing self-tests to address.",
+      "next_steps": [
+        "Create and start the missing supervisor tmux session (e.g., tmux new-session -d -s supervisor <command>) and verify it appears in session list.",
+        "Run targeted self-test TS14 with verbose logging to capture the failing condition and inspect logs for root cause.",
+        "Run targeted self-test TS17 with verbose logging to capture the failing condition and inspect logs for root cause.",
+        "Run targeted self-tests TS18 and TS19 sequentially with verbose logging, collect outputs, and compare against expected state.",
+        "Apply fixes for each failing test (adjust config, restart dependencies, or patch scripts) and re-run until all four tests pass."
+      ],
+      "decisions": [
+        "Prioritize supervisor session creation first to restore expected orchestration topology before tackling test failures.",
+        "Use targeted, verbose self-test runs to collect precise failure artifacts instead of broad re-runs to speed diagnosis.",
+        "Address TS14/TS17 first (likely foundational), then TS18/TS19, and only mark resolved when each test passes on two consecutive runs."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -358,7 +378,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T02:35:38Z",
-    "completed_at": "2026-05-06T02:35:38Z"
+    "started_at": "2026-05-06T02:37:45Z",
+    "completed_at": "2026-05-06T02:37:46Z"
   }
 }
