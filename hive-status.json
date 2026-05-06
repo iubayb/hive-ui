@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T11:37:43Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-06T11:38:56Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-06T11:36:52Z",
+      "health_score": 0.9,
+      "last_seen": "2026-05-06T11:38:56Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -36,6 +36,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_39cbe2a0",
+      "ts": "2026-05-06T11:38:13Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "self-test: TS20 failing \u2014 no auto-fix available or fix failed",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "7121d5a13d871954e02556197912da0b"
+    },
     {
       "id": "b_a1cb4756",
       "ts": "2026-05-06T11:37:10Z",
@@ -737,9 +750,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "self-test: running test_system.sh + auto-fix",
-    "status": "running",
-    "started_at": "2026-05-06T11:37:43Z",
-    "completed_at": null
+    "task": "heartbeat \u00b7 sessions=9 health=90% blockers=2",
+    "status": "completed",
+    "started_at": "2026-05-06T11:38:56Z",
+    "completed_at": "2026-05-06T11:38:56Z"
   }
 }
