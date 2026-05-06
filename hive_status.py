@@ -41,7 +41,7 @@ CLI:
   python3 hive_status.py --compact    → print build_context_block() output
 """
 
-import json, os, subprocess, threading, time, uuid
+import fcntl, hashlib, json, os, subprocess, threading, time, uuid
 import org_guard  # org isolation — must stay imported
 
 STATUS_FILE   = "/tmp/hive-status.json"
@@ -137,22 +137,41 @@ def _uid(prefix: str) -> str:
 def load() -> dict:
     try:
         with open(STATUS_FILE) as f:
-            data = json.load(f)
+            fcntl.flock(f, fcntl.LOCK_SH)
+            try:
+                data = json.load(f)
+            finally:
+                fcntl.flock(f, fcntl.LOCK_UN)
         # Migrate missing keys
         empty = _empty_status()
         for k, v in empty.items():
             if k not in data:
                 data[k] = v
         return data
-    except Exception:
+    except FileNotFoundError:
+        return _empty_status()
+    except Exception as e:
+        import sys
+        print(f"[hive_status] WARNING: load() failed ({e}) — returning empty state", file=sys.stderr, flush=True)
         return _empty_status()
 
 def save(status: dict, updated_by: str = "system"):
     status["last_updated"] = _now()
     status["updated_by"]   = updated_by
+    # Keep only the 20 most recent resolved blockers; all open ones are always kept.
+    if "blockers" in status:
+        open_b = [b for b in status["blockers"] if b.get("status") != "resolved"]
+        resolved_b = [b for b in status["blockers"] if b.get("status") == "resolved"]
+        status["blockers"] = open_b + resolved_b[-20:]
     try:
-        with open(STATUS_FILE, "w") as f:
-            json.dump(status, f, indent=2)
+        tmp = STATUS_FILE + ".tmp"
+        with open(tmp, "w") as f:
+            fcntl.flock(f, fcntl.LOCK_EX)
+            try:
+                json.dump(status, f, indent=2)
+            finally:
+                fcntl.flock(f, fcntl.LOCK_UN)
+        os.replace(tmp, STATUS_FILE)
     except Exception:
         pass
     _write_readme(status)
@@ -304,6 +323,7 @@ def add_achievement(hive: str, agent: str, description: str,
 
 def add_blocker(hive: str, agent: str, description: str,
                 severity: str = "medium", updated_by: str = "agent") -> str:
+    dup_hash = hashlib.md5(f"{hive}:{agent}:{description}".encode()).hexdigest()
     bid = _uid("b")
     blocker = {
         "id":           bid,
@@ -316,9 +336,14 @@ def add_blocker(hive: str, agent: str, description: str,
         "resolved_at":  None,
         "resolution":   None,
         "github_issue": None,   # filled in by background thread on success
+        "_hash":        dup_hash,
     }
     with _status_lock:
         s = load()
+        # Deduplication: skip if identical open blocker already exists
+        for b in s["blockers"]:
+            if b.get("status") == "open" and b.get("_hash") == dup_hash:
+                return b["id"]
         s["blockers"].insert(0, blocker)
         s["blockers"] = s["blockers"][:100]
         save(s, updated_by)
@@ -477,12 +502,15 @@ def add_next_step(description: str, assigned_to: str = "hive-doctor",
 
 
 def update_next_step(step_id: str, status: str,
+                     assigned_to: str = None,
                      updated_by: str = "agent"):
     with _status_lock:
         s = load()
         for ns in s["next_steps"]:
             if ns["id"] == step_id:
                 ns["status"] = status
+                if assigned_to is not None:
+                    ns["assigned_to"] = assigned_to
                 break
         save(s, updated_by)
 
@@ -522,11 +550,15 @@ def update_hive_health(hive_name: str, sessions: list = None,
                        status: str = "unknown", health_score: float = 1.0,
                        current_goal: str = "", active_model: str = "",
                        errors_last_hour: int = 0,
-                       tasks_completed_today: int = 0,
+                       tasks_completed_today: int = -1,
                        silent_minutes: int = 0,
                        updated_by: str = "hive-doctor"):
     with _status_lock:
         s = load()
+        existing = s.get("hives", {}).get(hive_name, {})
+        # -1 sentinel means "preserve existing value, don't reset"
+        if tasks_completed_today < 0:
+            tasks_completed_today = existing.get("tasks_completed_today", 0)
         s["hives"][hive_name] = {
             "status":               status,
             "health_score":         round(health_score, 3),

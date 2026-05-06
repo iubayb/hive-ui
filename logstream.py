@@ -694,7 +694,9 @@ def _doctor_check_sessions():
                                       l, re.I))
         status = "running"
         if silent_s > SILENCE_THRESHOLD:
-            status = "stalled"
+            # Session is alive but quiet — "idle" not "stalled"
+            # (stalled reserved for active sessions producing errors)
+            status = "idle"
         elif error_count >= 3:
             status = "error"
         elif not buf:
@@ -738,7 +740,9 @@ def _run_doctor():
 
     # Update hive health in status JSON
     all_sessions = [s["session"] for s in session_health]
-    healthy      = len([s for s in session_health if s["status"] == "running"])
+    # idle = alive but quiet — counts as healthy; only "error" counts against score
+    healthy      = len([s for s in session_health if s["status"] in ("running", "idle")])
+    errored      = len([s for s in session_health if s["status"] == "error"])
     total        = len(session_health) or 1
     score        = healthy / total
 
