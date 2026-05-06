@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T17:34:49Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T17:35:59Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-06T17:34:29Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-06T17:35:55Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_500d02f3",
+      "ts": "2026-05-06T17:35:59Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded budget allows runaway retries causing 4874 failures and 30-minute worker timeouts; no rate-limit or max_tasks guardrail present.",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "f1c413e6548698489703a3dda45d048e"
+    },
     {
       "id": "b_7b6ae5ef",
       "ts": "2026-05-06T15:51:36Z",
@@ -466,7 +479,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t ps5-hive",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T17:25:44Z"
+        "last_updated": "2026-05-06T17:35:59Z"
       },
       {
         "id": "cap_27efd1db",
@@ -519,6 +532,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_94ef07bc",
+        "ts": "2026-05-06T17:35:59Z",
+        "hive": "default",
+        "summary": "Missing budget and retry guardrails triggered uncontrolled failure cascade; inject limits and restart session.",
+        "source": "doctor"
+      },
       {
         "id": "f_0a331755",
         "ts": "2026-05-06T17:25:44Z",
@@ -833,7 +853,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 83
+    "openrouter_calls_today": 84
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1052,9 +1072,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=3",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-06T17:34:29Z",
-    "completed_at": "2026-05-06T17:34:29Z"
+    "started_at": "2026-05-06T17:35:40Z",
+    "completed_at": "2026-05-06T17:35:41Z"
   }
 }
