@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T03:18:48Z",
+  "last_updated": "2026-05-06T03:24:56Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.6,
-      "last_seen": "2026-05-06T03:18:17Z",
+      "last_seen": "2026-05-06T03:24:25Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -18,13 +18,39 @@
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
-      "errors_last_hour": 11,
+      "errors_last_hour": 10,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_53d0e849",
+      "ts": "2026-05-06T03:21:55Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] HTTP 500 cascade with 4853 failures; telemetry/retry storm saturating session and consuming budget",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T03:22:24Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "0279ee439083ee540bdf61c75b18012c"
+    },
+    {
+      "id": "b_d76e760b",
+      "ts": "2026-05-06T03:21:52Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] HTTP 500 cascade with 4853 task failures and sustained retry storm; telemetry and rapid retries amplifying load.",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T03:22:24Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "fafa7012ca13288b7f6b5312ef489383"
+    },
     {
       "id": "b_632e7a45",
       "ts": "2026-05-06T02:51:51Z",
@@ -274,7 +300,8 @@
         "description": "Detects HTTP 500 cascades and injects circuit-breaker delays plus telemetry suppression to prevent retry storms.",
         "example": "export HF_HUB_DISABLE_TELEMETRY=1 && sleep $((RANDOM % 10 + 5)) && kill -HUP $(pgrep -nf 'curl|wget|python.*run') 2>/dev/null",
         "tags": [],
-        "applicable_to": "all"
+        "applicable_to": "all",
+        "last_updated": "2026-05-06T03:21:55Z"
       },
       {
         "id": "cap_458f96af",
@@ -292,6 +319,20 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_8667ead9",
+        "ts": "2026-05-06T03:21:55Z",
+        "hive": "default",
+        "summary": "HTTP 500 cascade and retry storm in ps5-hive throttled and telemetry suppressed to halt failure amplification.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_36bd3d81",
+        "ts": "2026-05-06T03:21:52Z",
+        "hive": "default",
+        "summary": "HTTP 500 cascade driving massive task failure; circuit-breaker and telemetry suppression applied to halt retry storm.",
+        "source": "doctor"
+      },
       {
         "id": "f_35363068",
         "ts": "2026-05-06T02:51:51Z",
@@ -346,7 +387,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 9
+    "openrouter_calls_today": 12
   },
   "model_champions": {
     "text": null,
@@ -464,6 +505,26 @@
         "Apply http500-circuit-breaker to TS14 and ollama-auto-recover to TS17 where patterns match, otherwise capture diagnostics first.",
         "Accept non-critical test failures only after explicit isolation and logging; otherwise enforce fix-before-close."
       ]
+    },
+    {
+      "id": "sess_a5687078",
+      "ts": "2026-05-06T03:21:53Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full self-test compliance by repairing missing supervisor session and addressing TS14/TS17/TS18 failures.",
+      "summary": "The hive is running on default at 86% health with 8 active sessions, but self-tests are failing (TS14/TS17/TS18/TS19) and the supervisor tmux session is absent. No auto-fix is available for the failing tests, requiring targeted investigation and explicit session creation. Recent progress is limited and we must prioritize manual remediation to close blockers.",
+      "progress": "Identified missing supervisor tmux session and scheduled targeted self-test captures for TS14 and TS17 to obtain failure details before applying fixes.",
+      "next_steps": [
+        "Create and start the missing supervisor tmux session (e.g., tmux new-session -d -s supervisor) and verify it appears in session list.",
+        "Run targeted self-test for TS14 to capture stderr/logs and determine failing condition, then apply a concrete fix.",
+        "Run targeted self-test for TS17 to capture stderr/logs and determine failing condition, then apply a concrete fix.",
+        "Run targeted self-test for TS18 to capture stderr/logs and determine failing condition, then apply a concrete fix.",
+        "Re-run full self-test suite to confirm TS19 and all others pass; if TS19 persists, verify session enumeration logic and update expectations."
+      ],
+      "decisions": [
+        "Explicitly create the supervisor tmux session now rather than relying on auto-provisioning.",
+        "Capture per-test failure artifacts (stderr/logs) before attempting fixes to avoid blind retries.",
+        "Prioritize TS14/TS17/TS18 remediation to reduce high-severity blockers before retesting TS19."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -477,7 +538,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T03:18:17Z",
-    "completed_at": "2026-05-06T03:18:18Z"
+    "started_at": "2026-05-06T03:24:25Z",
+    "completed_at": "2026-05-06T03:24:26Z"
   }
 }
