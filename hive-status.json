@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T11:23:35Z",
+  "last_updated": "2026-05-06T11:24:36Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.778,
-      "last_seen": "2026-05-06T11:23:19Z",
+      "health_score": 0.9,
+      "last_seen": "2026-05-06T11:24:26Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -37,15 +37,41 @@
   ],
   "blockers": [
     {
+      "id": "b_dd721d9e",
+      "ts": "2026-05-06T11:24:07Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-live] PORT=8888 bind conflict or reuse failure causing repeated spawn failures; researcher-tracker idle state is informational.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "61279b681665c2f267bc1958445dffc6"
+    },
+    {
+      "id": "b_7df5a3b0",
+      "ts": "2026-05-06T11:24:07Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-dev] PORT=8889 bind conflict or reuse failure causing repeated spawn failures; researcher-tracker idle state is informational.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "49d1cc3188b2eac670d3fb4e7d447c35"
+    },
+    {
       "id": "b_0e9411b2",
       "ts": "2026-05-06T11:23:30Z",
       "hive": "default",
       "agent": "hive-doctor",
       "description": "[hive-live] PORT 8888 bind failure or process conflict preventing logstream.py from starting",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T11:24:06Z",
+      "resolution": "auto-pruned: hive-live is now alive",
       "github_issue": null,
       "_hash": "6e6ce896514ff1ddedd4650ec5e39401"
     },
@@ -56,9 +82,9 @@
       "agent": "hive-doctor",
       "description": "[hive-dev] PORT 8889 bind failure or process conflict preventing logstream.py from starting",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T11:24:06Z",
+      "resolution": "auto-pruned: hive-dev is now alive",
       "github_issue": null,
       "_hash": "d39e56c35b3a322f6fa3569835c832e7"
     },
@@ -633,16 +659,23 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "port-conflict-resolution",
-        "description": "Detects and force-clears port collisions before respawning dependent tmux windows.",
-        "example": "ss -tlnp | grep PORT && lsof -ti:PORT | xargs -r kill -9; sleep 1; tmux respawn-window -t SESSION",
+        "description": "Detects and force-clears port collisions then verifies bind before respawning dependent tmux windows.",
+        "example": "ss -tlnp | grep PORT && lsof -ti:PORT | xargs -r kill -9; sleep 1; python3 -c \"import socket; s=socket.socket(); s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1); s.bind(('', PORT)); print('bind ok'); s.close()\" && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T11:23:30Z"
+        "last_updated": "2026-05-06T11:24:07Z"
       }
     ]
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_aeb36c4d",
+        "ts": "2026-05-06T11:24:07Z",
+        "hive": "default",
+        "summary": "Port conflicts on 8888/8889 are preventing logstream.py from binding; clear collisions and verify binds before respawning windows.",
+        "source": "doctor"
+      },
       {
         "id": "f_346d2a0e",
         "ts": "2026-05-06T11:23:30Z",
@@ -758,7 +791,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 31
+    "openrouter_calls_today": 32
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -977,9 +1010,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=90% blockers=2",
     "status": "completed",
-    "started_at": "2026-05-06T11:23:03Z",
-    "completed_at": "2026-05-06T11:23:05Z"
+    "started_at": "2026-05-06T11:24:26Z",
+    "completed_at": "2026-05-06T11:24:26Z"
   }
 }
