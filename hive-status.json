@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T12:40:48Z",
+  "last_updated": "2026-05-06T12:41:56Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 1.0,
-      "last_seen": "2026-05-06T12:39:14Z",
+      "last_seen": "2026-05-06T12:41:18Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -639,7 +639,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 40
+    "openrouter_calls_today": 41
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -648,26 +648,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_a61d7ffc",
-      "ts": "2026-05-06T10:10:48Z",
-      "updated_by": "orchestrator",
-      "goal": "Establish per-session observability, SLOs, and controlled rollout for all active sessions to deliver stable, instrumented production delivery.",
-      "summary": "All nine sessions are running under a healthy default hive with no blockers, and the Next.js UI is live on port 3001. We now need to instrument each session, codify SLOs and backpressure rules, and enforce a canary rollout policy for nextjs-prod. Recent instrumentation wins and port-conflict resolution strengthen our ability to operate safely at scale.",
-      "progress": "Completed full Next.js UI rollout on port 3001 (12 routes, GitHub auth, SSE) and validated port-bind-check and port-conflict-resolution capabilities.",
-      "next_steps": [
-        "Instrument build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, supervisor with metrics, traces, and logs (prometheus counters/gauges + structured logs).",
-        "Define per-session SLOs (latency/error budgets) and backpressure rules (CPU/mem thresholds, queue limits, circuit-breaker triggers).",
-        "Create controlled rollout policy for nextjs-prod with canary weights, health gates, automated rollback, and traffic shadowing.",
-        "Stand up a central alerting/playbook hub (severity tiers, runbooks, on-call rota) wired to session SLO violations.",
-        "Run a chaos/latency injection test on one canary path and verify observability and rollback automation."
-      ],
-      "decisions": [
-        "Require all sessions to emit RED metrics and trace context headers before production traffic increase.",
-        "Set default CPU/mem thresholds (CPU 70%, mem 75%) with per-session overrides and automatic backpressure via rate-limit/handling degradation.",
-        "Gate nextjs-prod production promotion behind two successful canary windows (99.5% success rate over 30m each) and zero critical alerts."
-      ]
-    },
     {
       "id": "sess_3958ef09",
       "ts": "2026-05-06T10:25:48Z",
@@ -841,6 +821,26 @@
         "Gate nextjs-prod production traffic behind a canary rollout with explicit rollback metrics.",
         "Prioritize eliminating the 95% stall by applying configs/defaults before expanding scope."
       ]
+    },
+    {
+      "id": "sess_3b868bbb",
+      "ts": "2026-05-06T12:41:34Z",
+      "updated_by": "orchestrator",
+      "goal": "Establish per-session SLOs, instrumentation, and controlled rollout for nextjs-prood to restore hive throughput.",
+      "summary": "The hive is currently stalled at 100% hive load across nine active sessions with no open blockers. Next.js is live on port 3001 with 12 routes, GitHub auth, and SSE streaming, but backpressure and rollout controls are missing. We need rapid instrumentation, SLOs, and a canary policy to unblock sustained throughput.",
+      "progress": "Completed full Next.js UI deployment on port 3001 (12 routes, GitHub auth, SSE stream) and cataloged learned capabilities (config-default-apply, port-bind-check, port-conflict-resolution).",
+      "next_steps": [
+        "Instrument each active session (build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, supervisor) with heartbeat, latency, and error-rate metrics.",
+        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depth limits, circuit-breaker triggers).",
+        "Create a controlled rollout policy for nextjs-prod with canary weights, health gates, and automated rollback.",
+        "Apply config-default-apply to harmonize defaults and resolve port conflicts across sessions.",
+        "Establish supervisor-driven backpressure enforcement and alerting tied to SLO breaches."
+      ],
+      "decisions": [
+        "Adopt per-session SLOs and backpressure enforcement as the default for all active sessions.",
+        "Route nextjs-prod traffic through a canary-first rollout with automated rollback on SLO violation.",
+        "Require instrumentation and health checks before admitting new sessions or scaling existing ones."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -854,7 +854,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T12:40:37Z",
-    "completed_at": "2026-05-06T12:40:38Z"
+    "started_at": "2026-05-06T12:41:44Z",
+    "completed_at": "2026-05-06T12:41:46Z"
   }
 }
