@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T11:22:33Z",
+  "last_updated": "2026-05-06T11:23:35Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-06T11:22:22Z",
+      "health_score": 0.778,
+      "last_seen": "2026-05-06T11:23:19Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -36,6 +36,32 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_0e9411b2",
+      "ts": "2026-05-06T11:23:30Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-live] PORT 8888 bind failure or process conflict preventing logstream.py from starting",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "6e6ce896514ff1ddedd4650ec5e39401"
+    },
+    {
+      "id": "b_a5d7624c",
+      "ts": "2026-05-06T11:23:30Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-dev] PORT 8889 bind failure or process conflict preventing logstream.py from starting",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "d39e56c35b3a322f6fa3569835c832e7"
+    },
     {
       "id": "b_14f2b352",
       "ts": "2026-05-06T10:54:02Z",
@@ -599,7 +625,7 @@
         "example": "python3 -c \"import socket; s=socket.socket(); s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1); s.bind(('', PORT)); print('bind ok'); s.close()\"",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T09:23:01Z"
+        "last_updated": "2026-05-06T11:23:30Z"
       },
       {
         "id": "cap_1e534b8b",
@@ -611,12 +637,19 @@
         "example": "ss -tlnp | grep PORT && lsof -ti:PORT | xargs -r kill -9; sleep 1; tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T10:54:02Z"
+        "last_updated": "2026-05-06T11:23:30Z"
       }
     ]
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_346d2a0e",
+        "ts": "2026-05-06T11:23:30Z",
+        "hive": "default",
+        "summary": "Port conflicts on 8888/8889 blocking logstream.py; clear collisions and verify binds before respawning windows.",
+        "source": "doctor"
+      },
       {
         "id": "f_d6762e8d",
         "ts": "2026-05-06T10:54:02Z",
@@ -725,7 +758,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 30
+    "openrouter_calls_today": 31
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -944,9 +977,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T11:22:22Z",
-    "completed_at": "2026-05-06T11:22:23Z"
+    "started_at": "2026-05-06T11:23:03Z",
+    "completed_at": "2026-05-06T11:23:05Z"
   }
 }
