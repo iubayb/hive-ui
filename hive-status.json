@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T08:22:52Z",
+  "last_updated": "2026-05-06T08:23:55Z",
   "updated_by": "agent",
   "hives": {
     "default": {
@@ -34,9 +34,9 @@
       "agent": "hive-doctor",
       "description": "[hive-live] PORT=8888 process respawn loop failing; port conflict or early exit preventing stable service",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T08:23:55Z",
+      "resolution": "auto-pruned: hive-live is now alive",
       "github_issue": null,
       "_hash": "5373b5d1169d57f80a5a26610387e020"
     },
@@ -47,9 +47,9 @@
       "agent": "hive-doctor",
       "description": "[hive-dev] PORT=8889 process respawn loop failing; port likely still bound or process exits immediately after pkill",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T08:23:55Z",
+      "resolution": "auto-pruned: hive-dev is now alive",
       "github_issue": null,
       "_hash": "05239969b0a4edfba5007959542da8fe"
     },
@@ -1526,7 +1526,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T08:22:51Z",
-    "completed_at": "2026-05-06T08:22:52Z"
+    "started_at": "2026-05-06T08:23:54Z",
+    "completed_at": "2026-05-06T08:23:55Z"
   }
 }
