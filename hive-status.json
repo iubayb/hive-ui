@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T08:09:36Z",
+  "last_updated": "2026-05-06T08:10:43Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 1.0,
-      "last_seen": "2026-05-06T08:08:03Z",
+      "last_seen": "2026-05-06T08:10:06Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -1408,7 +1408,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 5
+    "openrouter_calls_today": 6
   },
   "model_champions": {
     "text": null,
@@ -1476,6 +1476,26 @@
         "Enforce cgroup limits and niceness penalties on research_loop jobs to prioritize core hive stability.",
         "Defer new non-essential sessions until resource headroom is confirmed."
       ]
+    },
+    {
+      "id": "sess_66b79161",
+      "ts": "2026-05-06T08:10:22Z",
+      "updated_by": "orchestrator",
+      "goal": "Reclaim resources and stabilize the hive by suspending non-essential sessions, tightening cgroup/niceness policies, and clearing caches to eliminate pending blockers.",
+      "summary": "The hive is running healthily at 100% with eight active sessions and no open blockers. Three pending housekeeping actions remain to reduce contention and free disk/I/O headroom. Recent gains include port-bind-check and port-conflict-resolution capabilities with two knowledge findings logged.",
+      "progress": "Identified non-essential sessions (e.g., ps5-hive, opencode) and enumerated concrete resource-control and cleanup actions to execute.",
+      "next_steps": [
+        "Gracefully suspend or kill ps5-hive and opencode sessions to free memory and CPU.",
+        "Apply stricter cgroup CPU/memory limits and lower niceness for research_loop jobs via systemd or cgroupfs.",
+        "Clear package and build caches (apt, npm, pip, /tmp) and rotate/compress logs to reclaim disk and reduce I/O.",
+        "Verify critical session stability (build_monitor, hive-dev, hive-live, hive-watch, orchestrator, supervisor) post-changes.",
+        "Record new resource policies and update runbooks; confirm port-bind-check and port-conflict-resolution playbooks reflect latest learnings."
+      ],
+      "decisions": [
+        "Prioritize P1\u2013P3 in order: suspend non-essentials first, then enforce cgroup/niceness, then clear caches.",
+        "Retain core sessions (build_monitor, hive-dev, hive-live, hive-watch, orchestrator, supervisor) untouched during suspension.",
+        "Apply resource tightening only to research_loop jobs; leave production workloads at current limits to avoid regressions."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1489,7 +1509,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T08:09:25Z",
-    "completed_at": "2026-05-06T08:09:26Z"
+    "started_at": "2026-05-06T08:10:32Z",
+    "completed_at": "2026-05-06T08:10:33Z"
   }
 }
