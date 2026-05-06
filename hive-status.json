@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T03:24:56Z",
+  "last_updated": "2026-05-06T03:31:59Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.6,
-      "last_seen": "2026-05-06T03:24:25Z",
+      "health_score": 0.65,
+      "last_seen": "2026-05-06T03:30:29Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -162,9 +162,9 @@
       "agent": "orchestrator",
       "description": "self-test: TS14 failing \u2014 no auto-fix available or fix failed",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T03:26:33Z",
+      "resolution": "TS14 manually fixed: ollama restarted and verified active",
       "github_issue": null,
       "_hash": "b4c2ed2d4f13f2fecf6ce6f41e3eac7c"
     },
@@ -275,7 +275,7 @@
       "priority": 2,
       "description": "Run targeted self-test for TS14 to capture failing condition and apply a manual fix based on observed error.",
       "assigned_to": "default",
-      "status": "pending",
+      "status": "done",
       "source": "orchestrator",
       "ts": "2026-05-06T02:06:12Z"
     },
@@ -538,7 +538,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T03:24:25Z",
-    "completed_at": "2026-05-06T03:24:26Z"
+    "started_at": "2026-05-06T03:31:29Z",
+    "completed_at": "2026-05-06T03:31:29Z"
   }
 }
