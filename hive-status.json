@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T09:21:56Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-06T09:23:01Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-06T09:20:33Z",
+      "health_score": 0.778,
+      "last_seen": "2026-05-06T09:22:56Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -36,6 +36,58 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_780cf766",
+      "ts": "2026-05-06T09:23:01Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-live] PORT 8888 bind failure causing repeated respawn loops; researcher-tracker idle with no configuration",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "6adf4c2fc0985300c35f9644ce7cda47"
+    },
+    {
+      "id": "b_211619ca",
+      "ts": "2026-05-06T09:23:01Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-dev] PORT 8889 bind failure causing repeated respawn loops; researcher-tracker idle with no configuration",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "9a5d9ff976ecc392f243a5c15b6ee9bc"
+    },
+    {
+      "id": "b_0073023a",
+      "ts": "2026-05-06T09:22:56Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-live] Port 8888 collision or bind failure causing repeated respawn attempts; researcher-tracker idle with no active researchers.",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T09:22:57Z",
+      "resolution": "auto-pruned: hive-live is now alive",
+      "github_issue": null,
+      "_hash": "d9370e9f411c0dc6dd9f583b8633ebc6"
+    },
+    {
+      "id": "b_278d613f",
+      "ts": "2026-05-06T09:22:56Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-dev] Port 8889 collision or bind failure causing repeated respawn attempts; researcher-tracker idle with no active researchers.",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T09:22:57Z",
+      "resolution": "auto-pruned: hive-dev is now alive",
+      "github_issue": null,
+      "_hash": "3997da5375e0f586d07c66da2435e414"
+    },
     {
       "id": "b_5caafe26",
       "ts": "2026-05-06T08:52:56Z",
@@ -413,11 +465,11 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "port-bind-check",
-        "description": "Quick pre-flight bind test to verify port availability before launching services.",
+        "description": "Pre-flight socket bind test to verify port availability before launching services.",
         "example": "python3 -c \"import socket; s=socket.socket(); s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1); s.bind(('', PORT)); print('bind ok'); s.close()\"",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T08:22:51Z"
+        "last_updated": "2026-05-06T09:23:01Z"
       },
       {
         "id": "cap_1e534b8b",
@@ -425,16 +477,30 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "port-conflict-resolution",
-        "description": "Detects and force-clears port collisions before respawning dependent tmux windows",
+        "description": "Detects and force-clears port collisions before respawning dependent tmux windows.",
         "example": "ss -tlnp | grep PORT && lsof -ti:PORT | xargs -r kill -9; sleep 1; tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T08:52:56Z"
+        "last_updated": "2026-05-06T09:22:56Z"
       }
     ]
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_c53cda1e",
+        "ts": "2026-05-06T09:23:01Z",
+        "hive": "default",
+        "summary": "Port collisions on 8888/8889 are triggering respawn storms in both sessions; clearing bindings and pre-flight testing restores normal operation.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_2e9b93f1",
+        "ts": "2026-05-06T09:22:56Z",
+        "hive": "default",
+        "summary": "Port conflicts on 8888/8889 are triggering endless respawn loops in both sessions.",
+        "source": "doctor"
+      },
       {
         "id": "f_793137a7",
         "ts": "2026-05-06T08:52:56Z",
@@ -487,7 +553,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 14
+    "openrouter_calls_today": 16
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -668,7 +734,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T09:21:55Z",
-    "completed_at": "2026-05-06T09:21:56Z"
+    "started_at": "2026-05-06T09:22:56Z",
+    "completed_at": "2026-05-06T09:22:57Z"
   }
 }
