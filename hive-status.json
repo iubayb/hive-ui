@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T16:45:00Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T16:45:59Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
@@ -812,7 +812,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 76
+    "openrouter_calls_today": 77
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -821,26 +821,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_93268dbd",
-      "ts": "2026-05-06T14:15:00Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize and harden hive-ui with resilient LLM calls, metrics exposure, and guarded session boundaries.",
-      "summary": "The hive is running at full health with nine active sessions and a new text model champion deployed. The Next.js UI is live on port 3001 with GitHub auth and SSE streams, but retry/backpressure and metrics endpoints are still pending. We will close P1 items and add targeted tests to prevent regressions.",
-      "progress": "Completed P1-ready scaffolding by surfacing session states and integrating the new ling-2.6-1t model into the orchestrator; now adding retry/backoff and metrics exposure.",
-      "next_steps": [
-        "Add exponential backoff with jitter retry logic to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (active count, uptime, model, SSE errors).",
-        "Write unit tests for org_guard.py covering all forbidden path patterns (../../, /etc, /proc, /root).",
-        "Add exponential backoff and jitter retry to lib/sse.ts sendStream() on network errors and 5xx responses.",
-        "Add per-session SLO assertions to supervisor.ts: CPU/mem thresholds and queue backpressure rejections when thresholds exceeded."
-      ],
-      "decisions": [
-        "Adopt exponential backoff with full jitter (cap 30s) for all external LLM calls to bound retry storms.",
-        "Expose /api/metrics as the single source of session truth for autoscaling and alerting decisions.",
-        "Enforce org_guard deny-first policy with explicit forbidden path tests to prevent directory traversal."
-      ]
-    },
     {
       "id": "sess_2445c4ba",
       "ts": "2026-05-06T14:30:00Z",
@@ -1020,6 +1000,26 @@
         "Adopt exponential backoff with full jitter (base 200ms, cap 30s) for all call_llm() and SSE sendStream() retries to smooth load spikes.",
         "Expose /api/metrics as the single source of truth for load decisions in UI and orchestrator; deprecate ad-hoc polling in favor of server-sent metrics events."
       ]
+    },
+    {
+      "id": "sess_39860fe7",
+      "ts": "2026-05-06T16:45:59Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize research_loop under high load and harden hive-ui observability and resilience within the Next.js codebase.",
+      "summary": "Sessions are running under high core/mem pressure causing research_loop pauses; the Next.js UI is live but lacks metrics and resilient real-time paths. Immediate fixes are required to shed load and prevent cascading stalls while providing live telemetry.",
+      "progress": "Added retry logic with exponential backoff to call_llm() in orchestrator and wired /api/metrics endpoint in the Next.js API route; baseline observability and backpressure are now in place.",
+      "next_steps": [
+        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() on network errors and 5xx responses.",
+        "Extend pages/api/metrics.ts to include per-session CPU/mem/disk and SLO breach flags returned as JSON.",
+        "Update components/StreamPanel.tsx to display live session health gauges and color-coded SLO status.",
+        "Write unit tests for org_guard.py covering all forbidden path patterns and permission escalation vectors.",
+        "Add per-session backpressure throttle to store/sessionSlice.ts when CPU>0.85 or mem>90% and expose via /api/control/throttle."
+      ],
+      "decisions": [
+        "Enforce immediate backpressure on sessions breaching CPU>0.85 or mem>90% and surface SLO status in UI.",
+        "Standardize exponential backoff with jitter across call_llm(), sendStream(), and any external I/O.",
+        "Expose live session metrics (CPU/mem/disk, SLO breach) via /api/metrics and StreamPanel for operator visibility."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1031,9 +1031,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=3",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-06T16:45:00Z",
-    "completed_at": "2026-05-06T16:45:00Z"
+    "started_at": "2026-05-06T16:45:42Z",
+    "completed_at": "2026-05-06T16:45:59Z"
   }
 }
