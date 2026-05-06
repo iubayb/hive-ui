@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T13:13:55Z",
+  "last_updated": "2026-05-06T13:14:44Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 1.0,
-      "last_seen": "2026-05-06T13:12:32Z",
+      "last_seen": "2026-05-06T13:14:33Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -319,7 +319,7 @@
       "id": "ns_cfaf8fb1",
       "priority": 1,
       "description": "Instrument each active session (build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, supervisor) with standardized health/metrics endpoints and log correlation IDs.",
-      "assigned_to": "default",
+      "assigned_to": "opencode",
       "status": "in_progress",
       "source": "orchestrator",
       "ts": "2026-05-06T08:55:35Z"
@@ -329,7 +329,7 @@
       "priority": 1,
       "description": "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
       "assigned_to": "default",
-      "status": "in_progress",
+      "status": "pending",
       "source": "orchestrator",
       "ts": "2026-05-06T13:08:39Z"
     },
@@ -338,7 +338,7 @@
       "priority": 1,
       "description": "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
       "assigned_to": "default",
-      "status": "in_progress",
+      "status": "pending",
       "source": "orchestrator",
       "ts": "2026-05-06T13:11:52Z"
     },
@@ -356,7 +356,7 @@
       "priority": 2,
       "description": "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
       "assigned_to": "default",
-      "status": "in_progress",
+      "status": "pending",
       "source": "orchestrator",
       "ts": "2026-05-06T08:55:35Z"
     },
@@ -365,7 +365,7 @@
       "priority": 2,
       "description": "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
       "assigned_to": "default",
-      "status": "in_progress",
+      "status": "pending",
       "source": "orchestrator",
       "ts": "2026-05-06T13:08:39Z"
     },
@@ -374,7 +374,7 @@
       "priority": 2,
       "description": "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay.",
       "assigned_to": "default",
-      "status": "in_progress",
+      "status": "pending",
       "source": "orchestrator",
       "ts": "2026-05-06T13:11:52Z"
     },
@@ -392,7 +392,7 @@
       "priority": 3,
       "description": "Create a controlled rollout policy for nextjs-prod including canary weights, automated smoke checks, and instant rollback triggers on error-rate or latency breaches.",
       "assigned_to": "default",
-      "status": "in_progress",
+      "status": "pending",
       "source": "orchestrator",
       "ts": "2026-05-06T08:55:35Z"
     },
@@ -401,7 +401,7 @@
       "priority": 3,
       "description": "Add /api/metrics endpoint to logstream.py returning JSON of session stats (sessions, throughput, errors).",
       "assigned_to": "default",
-      "status": "in_progress",
+      "status": "pending",
       "source": "orchestrator",
       "ts": "2026-05-06T13:08:39Z"
     },
@@ -652,7 +652,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 48
+    "openrouter_calls_today": 49
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -661,26 +661,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_42f2ccdd",
-      "ts": "2026-05-06T11:26:03Z",
-      "updated_by": "orchestrator",
-      "goal": "Establish resilient per-session SLOs, instrumentation, and a controlled canary rollout for nextjs-prod while sustaining hive health.",
-      "summary": "The hive is running healthily (h=90%) with nine active sessions and no blockers. Next.js UI is live on port 3001 with 12 routes, GitHub auth, and SSE streams, and we have closed port-bind and conflict-resolution learnings. We now need to instrument sessions, define per-session SLOs/backpressure, and codify a canary rollout for nextjs-prod.",
-      "progress": "Recently brought full Next.js UI live on port 3001, added GitHub auth and SSE streaming, and resolved port-bind and conflict-resolution patterns.",
-      "next_steps": [
-        "Instrument each active session (build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, supervisor) with metrics and health probes.",
-        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue limits, circuit-breaker triggers).",
-        "Create a controlled rollout policy for nextjs-prod with canary weight, success gates, and automated rollback hooks.",
-        "Add alerting and runbook links tied to new SLO violations for on-call readiness.",
-        "Run a tabletop canary rehearsal against nextjs-prod staging to validate gates and rollback."
-      ],
-      "decisions": [
-        "Adopt per-session SLOs with explicit error budgets and backpressure cutoffs as the default operating model.",
-        "Gate production traffic for nextjs-prod behind a progressive canary (5/25/50/100%) with p95 latency and error-rate success gates.",
-        "Instrument all active sessions using the same minimal metrics set (uptime, rps, p95 latency, error rate, CPU/mem) to reduce cognitive load."
-      ]
-    },
     {
       "id": "sess_558d17e7",
       "ts": "2026-05-06T11:41:00Z",
@@ -854,6 +834,26 @@
         "Enforce GitHub OAuth as mandatory auth provider for hive-ui routes and reject unauthenticated requests at middleware.",
         "Route all session metrics through /api/metrics with 10s in-memory retention window to avoid store bloat and ensure low-latency visibility."
       ]
+    },
+    {
+      "id": "sess_976f6e0b",
+      "ts": "2026-05-06T13:14:40Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize and harden hive-ui by adding resilience, observability, and guardrails for session workloads.",
+      "summary": "The hive is fully operational with 9 active sessions and the Next.js UI live on port 3001. No blockers exist, but resilience and observability gaps remain. We must add retry/backoff, guarded execution, and metrics endpoints so sessions operate safely under load.",
+      "progress": "Integrated inclusionai/ling-2.6-1t:free as the active model and deployed the Next.js UI with 12 routes, GitHub auth, and SSE streaming.",
+      "next_steps": [
+        "Add retry logic with exponential backoff and jitter to call_llm() in orchestrator/orchestrator.py on HTTP 429/5xx and socket errors.",
+        "Implement /api/metrics endpoint in pages/api/metrics.ts returning JSON of session stats (uptime, request rates, error counts, model usage).",
+        "Write unit tests for org_guard.py covering all forbidden path patterns (home dirs, /etc, /proc) and symlink traversal cases.",
+        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() on network errors and non-2xx status codes.",
+        "Define per-session SLOs and backpressure rules in lib/sessions.ts with CPU/mem thresholds and queue depth limits; emit warnings via metrics."
+      ],
+      "decisions": [
+        "Adopt exponential backoff with full jitter and max-retries=5 for all LLM and SSE network calls.",
+        "Expose a single /api/metrics endpoint returning JSON; do not persist to disk inside the UI process.",
+        "Enforce org_guard.py path restrictions by default and log violations as metric events."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -865,9 +865,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: develop\u2192main promotion check + release draft",
     "status": "completed",
-    "started_at": "2026-05-06T13:13:53Z",
-    "completed_at": "2026-05-06T13:13:55Z"
+    "started_at": "2026-05-06T13:14:42Z",
+    "completed_at": "2026-05-06T13:14:44Z"
   }
 }
