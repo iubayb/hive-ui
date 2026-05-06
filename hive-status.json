@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T12:22:52Z",
+  "last_updated": "2026-05-06T12:23:55Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
-      "health_score": 1.0,
-      "last_seen": "2026-05-06T12:22:22Z",
+      "health_score": 0.667,
+      "last_seen": "2026-05-06T12:23:38Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
-      "errors_last_hour": 20,
+      "errors_last_hour": 19,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -36,6 +36,45 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_c55021d7",
+      "ts": "2026-05-06T12:23:44Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] worker qwen3.6-abliterated-q3km timing out after 1800s with high failure rate (4874 failed vs 60 done)",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T12:23:44Z",
+      "resolution": "Auto-applied: tmux send-keys -t ps5-hive 'cat ~/.hive/config | grep -q timeout || echo \"task_timeout=3600\" >> ~/.hive/config && tmux respawn-window -t ps5-hive' Enter",
+      "github_issue": null,
+      "_hash": "d318ee712354629b8be204f879d4f1a3"
+    },
+    {
+      "id": "b_22fac898",
+      "ts": "2026-05-06T12:23:44Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-live] researcher-tracker has empty researcher list causing idle loops and error state",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "5454b2be5b8f43e5b3a94c57c02e22f7"
+    },
+    {
+      "id": "b_3ccc4905",
+      "ts": "2026-05-06T12:23:44Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-dev] researcher-tracker has empty researcher list causing idle loops and error state",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "08169374a6dd2fc6ef22eeeef5d55072"
+    },
     {
       "id": "b_029e8346",
       "ts": "2026-05-06T07:25:59Z",
@@ -384,6 +423,13 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_8198ec8a",
+        "ts": "2026-05-06T12:23:44Z",
+        "hive": "default",
+        "summary": "Three sessions failing: two from empty researcher config, one from worker timeout with extreme failure ratio.",
+        "source": "doctor"
+      },
+      {
         "id": "f_6b11117a",
         "ts": "2026-05-06T11:54:13Z",
         "hive": "default",
@@ -513,6 +559,14 @@
     "patterns": [],
     "solutions": [
       {
+        "id": "sol_7d319ef9",
+        "ts": "2026-05-06T12:23:44Z",
+        "problem": "worker qwen3.6-abliterated-q3km timing out after 1800s with high failure rate (4874 failed vs 60 done)",
+        "solution": "tmux send-keys -t ps5-hive 'cat ~/.hive/config | grep -q timeout || echo \"task_timeout=3600\" >> ~/.hive/config && tmux respawn-window -t ps5-hive' Enter",
+        "hive": "default",
+        "verified": true
+      },
+      {
         "id": "sol_d7d99994",
         "ts": "2026-05-06T11:53:38Z",
         "problem": "Task queue drained with high failure ratio (4874 failed vs 60 done); synthesis triggered despite no files analyzed \u2014 likely stale state or upstream source exhaustion.",
@@ -528,7 +582,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 37
+    "openrouter_calls_today": 38
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -741,9 +795,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=100% blockers=0",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-06T12:22:22Z",
-    "completed_at": "2026-05-06T12:22:22Z"
+    "started_at": "2026-05-06T12:23:54Z",
+    "completed_at": "2026-05-06T12:23:55Z"
   }
 }
