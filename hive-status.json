@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T13:54:57Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-06T13:55:55Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.889,
-      "last_seen": "2026-05-06T13:54:57Z",
+      "health_score": 0.95,
+      "last_seen": "2026-05-06T13:55:54Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -418,6 +418,17 @@
   "capabilities": {
     "learned": [
       {
+        "id": "cap_27efd1db",
+        "ts": "2026-05-06T13:55:07Z",
+        "source_hive": "default",
+        "source_agent": "hive-doctor",
+        "skill": "port-conflict-resolution-and-respawn",
+        "description": "Detects and force-clears port collisions then verifies bind before respawning dependent tmux windows.",
+        "example": "ss -tlnp | grep PORT && lsof -ti:PORT | xargs -r kill -9; sleep 1; python3 -c \"import socket; s=socket.socket(); s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1); s.bind(('', PORT)); print('bind ok'); s.close()\" && tmux respawn-window -t SESSION",
+        "tags": [],
+        "applicable_to": "all"
+      },
+      {
         "id": "cap_8a07808f",
         "ts": "2026-05-06T12:24:19Z",
         "source_hive": "default",
@@ -457,6 +468,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_a03d1039",
+        "ts": "2026-05-06T13:55:07Z",
+        "hive": "default",
+        "summary": "Missing config timeout and port/service contention causing cascading task failures\u2014resolved via config injection, port clearing, and window respawn.",
+        "source": "doctor"
+      },
       {
         "id": "f_7b9d0be8",
         "ts": "2026-05-06T13:34:59Z",
@@ -666,7 +684,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 53
+    "openrouter_calls_today": 54
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -887,7 +905,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T13:54:51Z",
-    "completed_at": "2026-05-06T13:54:52Z"
+    "started_at": "2026-05-06T13:55:54Z",
+    "completed_at": "2026-05-06T13:55:55Z"
   }
 }
