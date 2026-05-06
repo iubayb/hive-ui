@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T10:54:42Z",
+  "last_updated": "2026-05-06T10:55:54Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.778,
-      "last_seen": "2026-05-06T10:53:30Z",
+      "health_score": 1.0,
+      "last_seen": "2026-05-06T10:55:34Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -43,9 +43,9 @@
       "agent": "hive-doctor",
       "description": "[hive-live] PORT=8888 bind failure or process collision causing repeated spawn errors; researcher-tracker idle due to missing config.",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T10:55:03Z",
+      "resolution": "auto-pruned: hive-live is now alive",
       "github_issue": null,
       "_hash": "355ab5c39ae3d6d4108ba1c0ba74a59a"
     },
@@ -56,9 +56,9 @@
       "agent": "hive-doctor",
       "description": "[hive-dev] PORT=8889 bind failure or process collision causing repeated spawn errors; researcher-tracker idle due to missing config.",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T10:55:03Z",
+      "resolution": "auto-pruned: hive-dev is now alive",
       "github_issue": null,
       "_hash": "9f0ac735bd3eabf8685a1074b6ef6121"
     },
@@ -944,9 +944,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: develop\u2192main promotion check + release draft",
-    "status": "completed",
-    "started_at": "2026-05-06T10:54:40Z",
-    "completed_at": "2026-05-06T10:54:42Z"
+    "task": "compaction: LLM summarising hive state",
+    "status": "running",
+    "started_at": "2026-05-06T10:55:54Z",
+    "completed_at": null
   }
 }
