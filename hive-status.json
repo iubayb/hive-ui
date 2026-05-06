@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T18:36:33Z",
+  "last_updated": "2026-05-06T18:37:38Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_2877400d",
-      "ts": "2026-05-06T18:36:06Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Unbounded max_tasks/max_hours with 4874 failures and 1800s worker timeouts causing retry storm and silent errors; no guardrails to halt runaway consumption.",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "c2a75e74de7173573f0b1ef498ea2a94"
-    },
     {
       "id": "b_000a4ffa",
       "ts": "2026-05-06T18:06:01Z",
@@ -1106,9 +1093,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=80% blockers=5",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-06T18:36:23Z",
-    "completed_at": "2026-05-06T18:36:23Z"
+    "started_at": "2026-05-06T18:37:04Z",
+    "completed_at": "2026-05-06T18:37:08Z"
   }
 }
