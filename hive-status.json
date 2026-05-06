@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T07:39:52Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T07:40:56Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 1.0,
-      "last_seen": "2026-05-06T07:38:51Z",
+      "last_seen": "2026-05-06T07:40:56Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -1370,7 +1370,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 1
+    "openrouter_calls_today": 2
   },
   "model_champions": {
     "text": null,
@@ -1398,6 +1398,26 @@
         "Cap per-session memory and CPU shares to prevent single-session saturation.",
         "Defer non-urgent tasks and background indexing until load/core < 1.5 and mem < 75%."
       ]
+    },
+    {
+      "id": "sess_acec49a9",
+      "ts": "2026-05-06T07:40:25Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive resources and reclaim capacity by suspending non-critical sessions and tightening job limits.",
+      "summary": "The hive is running at full health with eight active sessions and no open blockers. Memory and I/O pressure are implied by the pending cgroup and cache-clearing actions, and model allocation is pinned to inclusionai/ling-2.6-1t:free. Immediate focus is on graceful suspension of low-priority sessions and enforcing stricter resource controls.",
+      "progress": "Identified non-essential sessions (e.g., ps5-hive, opencode) and defined P1\u2013P3 remediation steps to kill/suspend sessions, tighten cgroup/niceness for research_loop jobs, and clear caches/temp files.",
+      "next_steps": [
+        "Gracefully suspend or kill ps5-hive and opencode sessions and verify they release handles and ports.",
+        "Apply stricter cgroup CPU/memory limits and lower niceness for research_loop jobs via systemd or direct cgroup rules.",
+        "Clear package/cache and temporary files (apt/yum/pip/npm caches, /tmp) to reclaim disk space and reduce I/O.",
+        "Verify hive health and tail logs after changes to confirm stability and no regressions.",
+        "Update runbook with new resource limits and session-suspension checklist."
+      ],
+      "decisions": [
+        "Prioritize P1 (session suspension) to free memory/CPU before applying cgroup limits (P2).",
+        "Use graceful SIGTERM then SIGKILL for non-critical sessions to minimize disruption.",
+        "Defer new compute-intensive tasks until cache clear (P3) and cgroup limits (P2) are in place."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1409,9 +1429,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=8 health=100% blockers=0",
     "status": "completed",
-    "started_at": "2026-05-06T07:39:21Z",
-    "completed_at": "2026-05-06T07:39:22Z"
+    "started_at": "2026-05-06T07:40:56Z",
+    "completed_at": "2026-05-06T07:40:56Z"
   }
 }
