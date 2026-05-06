@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T10:10:01Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T10:10:50Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
@@ -593,7 +593,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 21
+    "openrouter_calls_today": 22
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -602,26 +602,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_acec49a9",
-      "ts": "2026-05-06T07:40:25Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize hive resources and reclaim capacity by suspending non-critical sessions and tightening job limits.",
-      "summary": "The hive is running at full health with eight active sessions and no open blockers. Memory and I/O pressure are implied by the pending cgroup and cache-clearing actions, and model allocation is pinned to inclusionai/ling-2.6-1t:free. Immediate focus is on graceful suspension of low-priority sessions and enforcing stricter resource controls.",
-      "progress": "Identified non-essential sessions (e.g., ps5-hive, opencode) and defined P1\u2013P3 remediation steps to kill/suspend sessions, tighten cgroup/niceness for research_loop jobs, and clear caches/temp files.",
-      "next_steps": [
-        "Gracefully suspend or kill ps5-hive and opencode sessions and verify they release handles and ports.",
-        "Apply stricter cgroup CPU/memory limits and lower niceness for research_loop jobs via systemd or direct cgroup rules.",
-        "Clear package/cache and temporary files (apt/yum/pip/npm caches, /tmp) to reclaim disk space and reduce I/O.",
-        "Verify hive health and tail logs after changes to confirm stability and no regressions.",
-        "Update runbook with new resource limits and session-suspension checklist."
-      ],
-      "decisions": [
-        "Prioritize P1 (session suspension) to free memory/CPU before applying cgroup limits (P2).",
-        "Use graceful SIGTERM then SIGKILL for non-critical sessions to minimize disruption.",
-        "Defer new compute-intensive tasks until cache clear (P3) and cgroup limits (P2) are in place."
-      ]
-    },
     {
       "id": "sess_7e5d58fd",
       "ts": "2026-05-06T07:55:33Z",
@@ -801,6 +781,26 @@
         "Use a 5% initial canary weight and graduated promotion only after consecutive SLO and health checks pass.",
         "Prioritize instrumentation and SLOs before expanding session count or load to avoid regressions."
       ]
+    },
+    {
+      "id": "sess_a61d7ffc",
+      "ts": "2026-05-06T10:10:48Z",
+      "updated_by": "orchestrator",
+      "goal": "Establish per-session observability, SLOs, and controlled rollout for all active sessions to deliver stable, instrumented production delivery.",
+      "summary": "All nine sessions are running under a healthy default hive with no blockers, and the Next.js UI is live on port 3001. We now need to instrument each session, codify SLOs and backpressure rules, and enforce a canary rollout policy for nextjs-prod. Recent instrumentation wins and port-conflict resolution strengthen our ability to operate safely at scale.",
+      "progress": "Completed full Next.js UI rollout on port 3001 (12 routes, GitHub auth, SSE) and validated port-bind-check and port-conflict-resolution capabilities.",
+      "next_steps": [
+        "Instrument build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, supervisor with metrics, traces, and logs (prometheus counters/gauges + structured logs).",
+        "Define per-session SLOs (latency/error budgets) and backpressure rules (CPU/mem thresholds, queue limits, circuit-breaker triggers).",
+        "Create controlled rollout policy for nextjs-prod with canary weights, health gates, automated rollback, and traffic shadowing.",
+        "Stand up a central alerting/playbook hub (severity tiers, runbooks, on-call rota) wired to session SLO violations.",
+        "Run a chaos/latency injection test on one canary path and verify observability and rollback automation."
+      ],
+      "decisions": [
+        "Require all sessions to emit RED metrics and trace context headers before production traffic increase.",
+        "Set default CPU/mem thresholds (CPU 70%, mem 75%) with per-session overrides and automatic backpressure via rate-limit/handling degradation.",
+        "Gate nextjs-prod production promotion behind two successful canary windows (99.5% success rate over 30m each) and zero critical alerts."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -812,9 +812,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=100% blockers=0",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-06T10:10:01Z",
-    "completed_at": "2026-05-06T10:10:01Z"
+    "started_at": "2026-05-06T10:10:48Z",
+    "completed_at": "2026-05-06T10:10:50Z"
   }
 }
