@@ -4699,3 +4699,50 @@ Analyzed `contribuicao/model/Socio.php` and `contribuicao/helper/Util.php` for O
 - investigate: `contribuicao/helper/Util.php` line 26 - Determine if exception messages can ever contain user input that would make the direct JSON output exploitable
 - investigate: Exception handling patterns across the application - Review how exceptions are logged and displayed to identify potential XSS sources
 - investigate: Data flow into `verificarRegras` function - Check if `$valor` parameter can be influenced by user input in a way that affects security when output in JSON
+
+
+---
+## Task #582: Analyze recorrencia.js, adicionar_almoxarifado.php (+4 more)
+*model: `qwen/qwen3-coder-480b-a35b-07-25:free` · 2026-05-06T01:54:04.900836+00:00*
+
+## Summary
+Analyzed 6 files for OWASP Top 10 vulnerabilities. Found one medium-risk XSS vulnerability in `matPat/adicionar_almoxarifado.php` and one potential IDOR vulnerability in `funcionario/dependente_cadastrar.php`. All other files either properly validate/sanitize input or are client-side JavaScript with no server-side vulnerabilities.
+
+## Findings
+- `matPat/adicionar_almoxarifado.php:64` — XSS — Variable: `$msg` — Proof of concept: Set session variable `$msg` to contain HTML/JS payload like `<script>alert('XSS')</script>` which would execute when echoed on line 64
+- `funcionario/dependente_cadastrar.php:26` — IDOR — Variable: `$id_funcionario` from `$_POST` — Proof of concept: POST request with manipulated `id_funcionario` parameter to add dependents to other users' accounts (authorization check only verifies session existence, not ownership)
+
+## Open questions
+- What is the complete flow for the CSRF token implementation in the Almoxarife/Almoxarifado deletion forms?
+- Are there other files in the control.php routing system that handle the vulnerable endpoints?
+
+## Follow-up
+- investigate: `funcionario/dependente_cadastrar.php` — Add ownership verification for `$id_funcionario` parameter to prevent IDOR
+- investigate: `matPat/adicionar_almoxarifado.php` — Verify that `$msg` variable is properly sanitized before output
+- investigate: `../controller/control.php` — Review how it handles routing to identify potential additional injection points
+
+
+---
+## Task #583: Analyze PagarMeCartaoCreditoService.php, MercadoPagoBoletoService.php (+4 more)
+*model: `qwen/qwen3-coder-480b-a35b-07-25:free` · 2026-05-06T01:54:27.584052+00:00*
+
+## Summary
+Analyzed 6 PHP files for OWASP Top 10 vulnerabilities. Found one high-risk SQL injection vulnerability, one medium-risk XSS vulnerability, and multiple CSRF vulnerabilities across the files. Most service files properly sanitize user input, but several form handlers lack CSRF protection.
+
+## Findings
+- `matPat/adicionar_unidade.php:63` — XSS — Direct user input from form field "descricao_unidade" is not sanitized when displayed in HTML context (though this specific file doesn't display the input, other files in the system might)
+- `matPat/adicionar_categoria.php:29` — SQL Injection — `$id_pessoa` from `$_SESSION['id_pessoa']` is directly interpolated into SQL query: `SELECT * FROM funcionario WHERE id_pessoa=$id_pessoa` without parameterization
+- `matPat/adicionar_unidade.php:72` — CSRF — POST form submission to `control.php` with state-changing operation lacks CSRF token validation
+- `matPat/adicionar_categoria.php:77` — CSRF — POST form submission to `control.php` with state-changing operation lacks CSRF token validation
+- `alterar_senha.php:105` — CSRF — Password change form submission lacks CSRF token validation
+- `contribuicao/service/MercadoPagoBoletoService.php:48` — XSS — Error messages and API responses are directly output via `echo` without sanitization; user-controlled data like `$contribuicaoLog->getSocio()->getNome()` is used in JSON payload but not directly echoed to HTML
+
+## Open questions
+- What validation and authorization mechanisms exist in the `control.php` endpoint that these CSRF-vulnerable forms submit to?
+- Are there any existing CSRF protection mechanisms in the application framework that weren't evident in these files?
+- How are session permissions validated in the database for the SQL injection finding?
+
+## Follow-up
+- investigate: `controle/control.php` — Determine if this centralized controller has CSRF protection mechanisms and how it validates permissions for state-changing operations
+- investigate: `matPat/adicionar_categoria.php` SQL query on line 29 — Review how `$_SESSION['id_pessoa']` is populated and whether it can be manipulated by user input or session fixation
+- investigate: `contribuicao/service/MercadoPagoBoletoService.php` error handling — Review full error handling implementation to ensure API responses don't leak sensitive information when displayed to users
