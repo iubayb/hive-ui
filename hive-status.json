@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T05:50:59Z",
+  "last_updated": "2026-05-06T05:53:01Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.95,
-      "last_seen": "2026-05-06T05:50:18Z",
+      "health_score": 0.85,
+      "last_seen": "2026-05-06T05:52:20Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -18,13 +18,39 @@
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
-      "errors_last_hour": 12,
+      "errors_last_hour": 13,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_71c8abad",
+      "ts": "2026-05-06T05:52:19Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Ollama endpoint 127.0.0.1:11434 returning HTTP 500 on chat completions; retry storm likely due to repeated client loops without circuit-breaking",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T05:52:20Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "1de9af6a379e00a4b0e25bd741fb726e"
+    },
+    {
+      "id": "b_94c4fd72",
+      "ts": "2026-05-06T05:52:18Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] HTTP 500 retry storm from worker qwen3.6-abliterated-q3km hitting local LLM endpoint; telemetry and rapid retries amplifying load",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T05:52:20Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "28217b76e13194ecb015b8abe12cf91c"
+    },
     {
       "id": "b_550b1b06",
       "ts": "2026-05-06T05:22:14Z",
@@ -115,16 +141,30 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "http500-circuit-breaker",
-        "description": "Injects circuit-breaker delays plus telemetry suppression to prevent HTTP 500 retry storms.",
+        "description": "Injects randomized delays plus telemetry suppression to throttle retry storms and stabilize flaky inference endpoints.",
         "example": "export HF_HUB_DISABLE_TELEMETRY=1 && sleep $((RANDOM % 10 + 5)) && kill -HUP $(pgrep -nf 'curl|wget|python.*run') 2>/dev/null",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T05:22:14Z"
+        "last_updated": "2026-05-06T05:52:19Z"
       }
     ]
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_a6bf3d5c",
+        "ts": "2026-05-06T05:52:19Z",
+        "hive": "default",
+        "summary": "Ollama 500 errors triggering retry storms; apply circuit-breaker delay, suppress telemetry, reset workers, and restart pane to stabilize.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_c71abb37",
+        "ts": "2026-05-06T05:52:18Z",
+        "hive": "default",
+        "summary": "Stopped HTTP 500 retry storm in ps5-hive with circuit-breaker delay, telemetry suppression, and worker restart.",
+        "source": "doctor"
+      },
       {
         "id": "f_6be2a557",
         "ts": "2026-05-06T05:22:14Z",
@@ -156,7 +196,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 6
+    "openrouter_calls_today": 8
   },
   "model_champions": {
     "text": null,
@@ -255,9 +295,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T05:50:29Z",
-    "completed_at": "2026-05-06T05:50:49Z"
+    "started_at": "2026-05-06T05:52:20Z",
+    "completed_at": "2026-05-06T05:52:21Z"
   }
 }
