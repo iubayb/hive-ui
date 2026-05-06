@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T17:25:52Z",
+  "last_updated": "2026-05-06T17:26:54Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.889,
-      "last_seen": "2026-05-06T17:25:39Z",
+      "health_score": 0.85,
+      "last_seen": "2026-05-06T17:26:14Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_73b1c086",
-      "ts": "2026-05-06T17:25:44Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Unbounded max_tasks and max_hours allowed runaway task execution (4874 failures), and 30-minute worker timeouts are causing silent stalls with retry storms.",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "e123633a43e7cbb71bef4ab0d2bf7adc"
-    },
     {
       "id": "b_7b6ae5ef",
       "ts": "2026-05-06T15:51:36Z",
@@ -1065,9 +1052,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=3",
     "status": "completed",
-    "started_at": "2026-05-06T17:25:30Z",
-    "completed_at": "2026-05-06T17:25:32Z"
+    "started_at": "2026-05-06T17:26:14Z",
+    "completed_at": "2026-05-06T17:26:14Z"
   }
 }
