@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T12:45:01Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T12:45:58Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 1.0,
-      "last_seen": "2026-05-06T12:43:27Z",
+      "last_seen": "2026-05-06T12:45:32Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -26,6 +26,14 @@
     }
   },
   "achievements": [
+    {
+      "id": "a_64332d1c",
+      "ts": "2026-05-06T12:45:58Z",
+      "hive": "default",
+      "agent": "model-arena",
+      "description": "New text champion: inclusionai/ling-2.6-1t:free",
+      "evidence": "Score: 15/15"
+    },
     {
       "id": "a_930fd042",
       "ts": "2026-05-06T08:41:30Z",
@@ -644,7 +652,7 @@
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
     "vision": null,
-    "updated": "2026-05-06T08:41:30Z"
+    "updated": "2026-05-06T12:45:58Z"
   },
   "pending_questions": [],
   "orchestrator_sessions": [
@@ -854,7 +862,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T12:44:50Z",
-    "completed_at": "2026-05-06T12:44:51Z"
+    "started_at": "2026-05-06T12:45:52Z",
+    "completed_at": "2026-05-06T12:45:53Z"
   }
 }
