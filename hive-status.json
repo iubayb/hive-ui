@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T19:35:36Z",
+  "last_updated": "2026-05-06T19:36:37Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.85,
-      "last_seen": "2026-05-06T19:34:15Z",
+      "last_seen": "2026-05-06T19:36:17Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_91b1a391",
+      "ts": "2026-05-06T19:36:21Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded task/hour limits causing runaway retries (4874 failures) and 30-minute worker timeouts with no guardrails; high risk of resource exhaustion.",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "05507fd4ed60378f83250f4ad8dd5ec5"
+    },
     {
       "id": "b_000a4ffa",
       "ts": "2026-05-06T18:06:01Z",
@@ -479,7 +492,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t ps5-hive",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T19:26:14Z"
+        "last_updated": "2026-05-06T19:36:21Z"
       },
       {
         "id": "cap_27efd1db",
@@ -532,6 +545,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_600ddd12",
+        "ts": "2026-05-06T19:36:21Z",
+        "hive": "default",
+        "summary": "Inject rate-limit and budget guardrails to cap tasks/hours and shrink timeouts, then respawn to stop the runaway failure loop.",
+        "source": "doctor"
+      },
       {
         "id": "f_bc4e7af0",
         "ts": "2026-05-06T19:26:14Z",
@@ -895,7 +915,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 98
+    "openrouter_calls_today": 99
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1114,9 +1134,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=4",
     "status": "completed",
-    "started_at": "2026-05-06T19:35:05Z",
-    "completed_at": "2026-05-06T19:35:06Z"
+    "started_at": "2026-05-06T19:36:17Z",
+    "completed_at": "2026-05-06T19:36:17Z"
   }
 }
