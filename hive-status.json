@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T05:20:45Z",
+  "last_updated": "2026-05-06T05:22:46Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.95,
-      "last_seen": "2026-05-06T05:19:41Z",
+      "health_score": 0.857,
+      "last_seen": "2026-05-06T05:22:09Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -18,13 +18,39 @@
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
-      "errors_last_hour": 0,
+      "errors_last_hour": 12,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_550b1b06",
+      "ts": "2026-05-06T05:22:14Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] HTTP 500 retry storm causing 4865 consecutive failures with 8.1s backoff; telemetry/retry loops saturating the worker and preventing recovery.",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T05:22:46Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "e20cb7e207897e85f84a273e33036fa5"
+    },
+    {
+      "id": "b_00a6125a",
+      "ts": "2026-05-06T05:22:14Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] HTTP 500 retry storm with 4865 consecutive failures; no circuit-breaker or telemetry suppression, causing sustained error bursts and resource churn.",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T05:22:46Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "a6ffce188c37287edecb2e9ba3cbcca3"
+    },
     {
       "id": "b_28e0d445",
       "ts": "2026-05-06T04:53:52Z",
@@ -89,15 +115,30 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "http500-circuit-breaker",
-        "description": "Injects circuit-breaker delays plus telemetry suppression to prevent HTTP 500 retry storms",
+        "description": "Injects circuit-breaker delays plus telemetry suppression to prevent HTTP 500 retry storms.",
         "example": "export HF_HUB_DISABLE_TELEMETRY=1 && sleep $((RANDOM % 10 + 5)) && kill -HUP $(pgrep -nf 'curl|wget|python.*run') 2>/dev/null",
         "tags": [],
-        "applicable_to": "all"
+        "applicable_to": "all",
+        "last_updated": "2026-05-06T05:22:14Z"
       }
     ]
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_6be2a557",
+        "ts": "2026-05-06T05:22:14Z",
+        "hive": "default",
+        "summary": "HTTP 500 retry storm is saturating ps5-hive; suppress telemetry and inject circuit-breaker delay to break the failure loop.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_53ab10ca",
+        "ts": "2026-05-06T05:22:14Z",
+        "hive": "default",
+        "summary": "HTTP 500 retry storm saturating the monitored session; circuit-breaker delay and telemetry suppression applied to halt the failure cascade.",
+        "source": "doctor"
+      },
       {
         "id": "f_986f7abd",
         "ts": "2026-05-06T04:52:09Z",
@@ -115,7 +156,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 2
+    "openrouter_calls_today": 4
   },
   "model_champions": {
     "text": null,
@@ -176,7 +217,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T05:20:45Z",
-    "completed_at": "2026-05-06T05:20:45Z"
+    "started_at": "2026-05-06T05:22:46Z",
+    "completed_at": "2026-05-06T05:22:46Z"
   }
 }
