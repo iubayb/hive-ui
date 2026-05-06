@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T14:24:56Z",
+  "last_updated": "2026-05-06T14:25:57Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-06T14:24:45Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-06T14:25:07Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -423,10 +423,11 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "config-guardrail-inject",
-        "description": "Injects missing rate-limit and budget guardrails (timeouts, max_tasks, max_hours) to prevent runaway retry storms and force controlled shutdowns",
+        "description": "Injects missing rate-limit and budget guardrails (max_tasks, max_hours, timeouts) to prevent runaway retry storms and force controlled shutdowns",
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
-        "applicable_to": "all"
+        "applicable_to": "all",
+        "last_updated": "2026-05-06T14:25:12Z"
       },
       {
         "id": "cap_27efd1db",
@@ -479,6 +480,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_b20488bb",
+        "ts": "2026-05-06T14:25:12Z",
+        "hive": "default",
+        "summary": "Unbounded budget and missing rate limits triggered a catastrophic failure cascade requiring immediate guardrail injection and session respawn to halt the storm.",
+        "source": "doctor"
+      },
       {
         "id": "f_43f3c44a",
         "ts": "2026-05-06T14:05:05Z",
@@ -702,7 +710,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 57
+    "openrouter_calls_today": 58
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -923,7 +931,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T14:24:45Z",
-    "completed_at": "2026-05-06T14:24:46Z"
+    "started_at": "2026-05-06T14:25:46Z",
+    "completed_at": "2026-05-06T14:25:47Z"
   }
 }
