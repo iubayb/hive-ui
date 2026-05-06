@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T17:13:54Z",
+  "last_updated": "2026-05-06T17:14:57Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -1045,9 +1045,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=3",
+    "task": "gitops: develop\u2192main promotion check + release draft",
     "status": "completed",
-    "started_at": "2026-05-06T17:13:44Z",
-    "completed_at": "2026-05-06T17:13:44Z"
+    "started_at": "2026-05-06T17:14:55Z",
+    "completed_at": "2026-05-06T17:14:57Z"
   }
 }
