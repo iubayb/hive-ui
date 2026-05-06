@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T15:04:55Z",
+  "last_updated": "2026-05-06T15:05:56Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-06T15:03:52Z",
+      "health_score": 0.95,
+      "last_seen": "2026-05-06T15:05:55Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -427,7 +427,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T14:55:17Z"
+        "last_updated": "2026-05-06T15:05:28Z"
       },
       {
         "id": "cap_27efd1db",
@@ -480,6 +480,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_865fa816",
+        "ts": "2026-05-06T15:05:28Z",
+        "hive": "default",
+        "summary": "Unbounded budget and missing guardrails triggered 4874 task failures in ~11.5h; injecting max_tasks/max_hours/timeouts and respawning to enforce controlled shutdown.",
+        "source": "doctor"
+      },
       {
         "id": "f_8e0ac0ec",
         "ts": "2026-05-06T14:55:17Z",
@@ -724,7 +731,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 63
+    "openrouter_calls_today": 64
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -945,7 +952,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T15:04:54Z",
-    "completed_at": "2026-05-06T15:04:55Z"
+    "started_at": "2026-05-06T15:05:55Z",
+    "completed_at": "2026-05-06T15:05:56Z"
   }
 }
