@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T11:55:57Z",
+  "last_updated": "2026-05-06T11:56:34Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -632,7 +632,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 35
+    "openrouter_calls_today": 36
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -641,26 +641,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_7ca4ef00",
-      "ts": "2026-05-06T09:25:38Z",
-      "updated_by": "orchestrator",
-      "goal": "Establish resilient per-session SLOs and a controlled rollout policy so all nine active sessions run safely under backpressure while Next.js canary deploys without disruption.",
-      "summary": "The hive is healthy with nine active sessions and full Next.js UI live on port 3001. Instrumentation, per-session SLOs/backpressure rules, and a controlled rollout policy for nextjs-prod remain pending. Recent port-bind and conflict-resolution capabilities reduce deployment risk.",
-      "progress": "Deployed the full Next.js UI (12 routes, GitHub auth, SSE) on port 3001 and verified port-bind-check/port-conflict-resolution capabilities.",
-      "next_steps": [
-        "Instrument build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, and supervisor with metrics exporters and log hooks.",
-        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue limits, circuit-breaker triggers) and enforce via supervisor policies.",
-        "Create and test a controlled rollout policy for nextjs-prod with canary weights, health gates, and automated rollback.",
-        "Run a staged canary for nextjs-prod (5% traffic), validate SLOs and backpressure behavior, then widen incrementally.",
-        "Capture runbooks for port conflicts and resource saturation; update supervisor playbooks and alerting."
-      ],
-      "decisions": [
-        "Adopt per-session SLOs with hard CPU/mem caps and backpressure-driven shedding for noncritical sessions.",
-        "Gate nextjs-prod rollouts behind canary health checks and automated rollback on SLO breach.",
-        "Instrument every session before any further traffic or config changes to ensure observability."
-      ]
-    },
     {
       "id": "sess_2b1c32a4",
       "ts": "2026-05-06T09:40:40Z",
@@ -834,6 +814,26 @@
         "Create a controlled rollout policy for nextjs-prod including canary weights, automated smoke checks, and instant rollback triggers on error-rate or latency breaches."
       ],
       "decisions": []
+    },
+    {
+      "id": "sess_183317b0",
+      "ts": "2026-05-06T11:56:14Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the default hive by resolving CPU overload and instrumenting active sessions with SLOs and rollout controls.",
+      "summary": "The default hive is stalled at 95% health with a high-priority self-test failure (CPU load/core ratio 2.38, well above the 2.0 threshold). Recent achievements include a fully live Next.js UI on port 3001, but the cluster remains overloaded. We will instrument sessions, define SLOs/backpressure, and apply a controlled rollout to relieve pressure and restore stability.",
+      "progress": "Verified load/core imbalance and completed Next.js UI deployment on port 3001 with GitHub auth and SSE streams.",
+      "next_steps": [
+        "Instrument each active session (build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, supervisor) with metrics exporters and health probes.",
+        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue limits, circuit-breaker triggers).",
+        "Create and apply a controlled rollout policy for nextjs-prod with canary weights and automated rollback on SLO breach.",
+        "Throttle or reschedule noncritical workloads (ps5-hive, opencode) until CPU load/core falls below 1.8.",
+        "Run targeted scaling/affinity tuning and rerun self-test to confirm CPU load/core < 2.0."
+      ],
+      "decisions": [
+        "Prioritize SLO/instrumentation work over feature development until CPU load/core < 2.0.",
+        "Gate nextjs-prod production traffic behind canary rollout with automated rollback.",
+        "Impose temporary CPU caps on nonessential sessions to protect default hive stability."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -845,9 +845,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=95% blockers=1",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-06T11:55:27Z",
-    "completed_at": "2026-05-06T11:55:27Z"
+    "started_at": "2026-05-06T11:56:08Z",
+    "completed_at": "2026-05-06T11:56:14Z"
   }
 }
