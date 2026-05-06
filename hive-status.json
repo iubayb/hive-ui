@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T10:25:02Z",
+  "last_updated": "2026-05-06T10:26:00Z",
   "updated_by": "agent",
   "hives": {
     "default": {
@@ -659,7 +659,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 24
+    "openrouter_calls_today": 25
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -668,26 +668,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_7e5d58fd",
-      "ts": "2026-05-06T07:55:33Z",
-      "updated_by": "orchestrator",
-      "goal": "Reclaim resources and stabilize the hive by suspending non-essential sessions and tightening job controls.",
-      "summary": "The hive is running at full health with eight active sessions and no open blockers. Resource pressure is emerging from non-critical workloads and unbounded research_loop jobs, risking stability. Immediate action is required to cull or suspend low-priority sessions and enforce cgroup/niceness limits.",
-      "progress": "Identified non-essential sessions (e.g., ps5-hive, opencode) and prepared resource-control measures to reduce I/O and CPU contention.",
-      "next_steps": [
-        "Gracefully suspend or kill ps5-hive and opencode sessions to free CPU/memory.",
-        "Apply cgroup CPU/memory limits and lower niceness for research_loop jobs to protect core services.",
-        "Clear caches and temporary files to reclaim disk space and reduce I/O pressure.",
-        "Validate port-bind-check and port-conflict-resolution capabilities remain functional after changes.",
-        "Monitor hive health for 5 minutes and iterate limits if load remains high."
-      ],
-      "decisions": [
-        "Suspend ps5-hive and opencode immediately to reduce non-critical footprint.",
-        "Enforce cgroup limits and niceness penalties on research_loop jobs to prioritize core hive stability.",
-        "Defer new non-essential sessions until resource headroom is confirmed."
-      ]
-    },
     {
       "id": "sess_66b79161",
       "ts": "2026-05-06T08:10:22Z",
@@ -867,6 +847,26 @@
         "Set default CPU/mem thresholds (CPU 70%, mem 75%) with per-session overrides and automatic backpressure via rate-limit/handling degradation.",
         "Gate nextjs-prod production promotion behind two successful canary windows (99.5% success rate over 30m each) and zero critical alerts."
       ]
+    },
+    {
+      "id": "sess_3958ef09",
+      "ts": "2026-05-06T10:25:48Z",
+      "updated_by": "orchestrator",
+      "goal": "Establish resilient session-level controls and a safe rollout pipeline for nextjs-prod while sustaining live services.",
+      "summary": "Nine active sessions are running healthy (default hive at 100%), Next.js UI is live on port 3001 with 12 routes and GitHub auth/SSE, and there are zero open blockers. We now need to instrument sessions, define SLOs/backpressure, and formalize a canary rollout policy for nextjs-prod.",
+      "progress": "Completed full Next.js production UI deployment on port 3001 with GitHub auth, 12 routes, and live SSE streams.",
+      "next_steps": [
+        "Instrument per-session metrics and tracing for build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, and opencode",
+        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue limits, circuit breakers)",
+        "Create and merge a controlled rollout policy + canary weights for nextjs-prod with automated health gates",
+        "Automate port-bind-check and port-conflict-resolution as pre-start validations across all sessions",
+        "Promote learned capabilities into session bootstrap templates and run a 24-hour burn-in for hive-live and hive-dev"
+      ],
+      "decisions": [
+        "Default to per-session resource caps and backpressure to protect hive-wide stability",
+        "Require canary + automated health gates for any production-facing session changes",
+        "Standardize instrumentation and port-conflict checks as non-negotiable preconditions"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -878,9 +878,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
-    "status": "running",
-    "started_at": "2026-05-06T10:25:02Z",
-    "completed_at": null
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "status": "completed",
+    "started_at": "2026-05-06T10:25:58Z",
+    "completed_at": "2026-05-06T10:26:00Z"
   }
 }
