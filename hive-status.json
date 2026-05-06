@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T04:07:51Z",
+  "last_updated": "2026-05-06T04:09:48Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.7,
-      "last_seen": "2026-05-06T04:06:11Z",
+      "last_seen": "2026-05-06T04:08:11Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -427,7 +427,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 17
+    "openrouter_calls_today": 18
   },
   "model_champions": {
     "text": null,
@@ -436,16 +436,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_92e8423d",
-      "ts": "2026-05-06T01:51:06Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: [Errno -3] Temporary failure in name resolution",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_cd3fbf80",
       "ts": "2026-05-06T02:06:12Z",
@@ -625,6 +615,26 @@
         "Address TS13/TS17/TS18/TS19 in order of likely dependency (TS13 \u2192 TS17 \u2192 TS18/TS19) to minimize rework.",
         "Apply targeted fixes and short rollback/retry loops instead of broad reconfiguration to preserve hive stability."
       ]
+    },
+    {
+      "id": "sess_c27ff837",
+      "ts": "2026-05-06T04:09:07Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore hive self-test compliance by creating the missing supervisor tmux session and remediating TS18/TS13/TS5 failures.",
+      "summary": "The hive is running but self-tests are failing due to a missing supervisor session and three additional test failures (TS18, TS13, TS5). No recent achievements have been logged and six blockers remain open. Health is acceptable (h=70%) but compliance and resilience are degraded.",
+      "progress": "No progress has been made; the missing supervisor session is still absent and the listed test failures persist.",
+      "next_steps": [
+        "Create and start the missing supervisor tmux session (e.g., tmux new-session -d -s supervisor) and verify it appears in session list.",
+        "Diagnose TS18 failure by reproducing its conditions, capture logs, and apply targeted remediation.",
+        "Diagnose TS13 failure by reproducing its conditions, capture logs, and apply targeted remediation.",
+        "Diagnose TS5 failure by reproducing its conditions, capture logs, and confirm whether additional fixes beyond the prior auto-fix are required.",
+        "Rerun the full self-test suite and confirm all expected tmux sessions exist with no remaining high-severity failures."
+      ],
+      "decisions": [
+        "Prioritize restoring the supervisor session first to re-establish orchestration primitives before tackling test-specific fixes.",
+        "Tackle TS18, TS13, and TS5 in order of dependency impact after supervisor is running, using manual reproduction + log capture.",
+        "Accept no new feature work until self-test compliance (TS*) is green and the supervisor session is stable."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -636,9 +646,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-06T04:07:11Z",
-    "completed_at": "2026-05-06T04:07:11Z"
+    "started_at": "2026-05-06T04:09:18Z",
+    "completed_at": "2026-05-06T04:09:38Z"
   }
 }
