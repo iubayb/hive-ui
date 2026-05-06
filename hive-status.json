@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T11:52:59Z",
+  "last_updated": "2026-05-06T11:54:01Z",
   "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 0.95,
-      "last_seen": "2026-05-06T11:51:17Z",
+      "status": "stalled",
+      "health_score": 0.667,
+      "last_seen": "2026-05-06T11:53:30Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
-      "errors_last_hour": 17,
+      "errors_last_hour": 20,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -36,6 +36,45 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_162c0246",
+      "ts": "2026-05-06T11:53:36Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Task queue drained with high failure ratio (4874 failed vs 60 done); synthesis triggered despite no files analyzed \u2014 likely stale state or upstream source exhaustion.",
+      "severity": "critical",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T11:53:38Z",
+      "resolution": "Auto-applied: tmux send-keys -t ps5-hive 'tmux respawn-window -t ps5-hive' Enter && sleep 2 && tmux capture-pane -t ps5-hive -p | tail -5",
+      "github_issue": null,
+      "_hash": "6457882b3c53875c301a09762f9745e1"
+    },
+    {
+      "id": "b_31ebaf40",
+      "ts": "2026-05-06T11:53:36Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-live] researcher-tracker idle with no researchers configured \u2014 upstream config/sync missing or misloaded.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "d43f3cd21d1eddc8507499d03b218700"
+    },
+    {
+      "id": "b_275fd90c",
+      "ts": "2026-05-06T11:53:36Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-dev] Port 8889 bind failure or silent crash on logstream.py restart; stale process may be holding socket.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "fdb49ec740baa65a8c5942ba5d0f5473"
+    },
     {
       "id": "b_39cbe2a0",
       "ts": "2026-05-06T11:38:13Z",
@@ -410,6 +449,13 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_bd61eeaa",
+        "ts": "2026-05-06T11:53:38Z",
+        "hive": "default",
+        "summary": "Port collision on hive-dev, config starvation in hive-live, and queue exhaustion with skewed success ratio in ps5-hive require respawns plus bind/config hygiene.",
+        "source": "doctor"
+      },
+      {
         "id": "f_aeb36c4d",
         "ts": "2026-05-06T11:24:07Z",
         "hive": "default",
@@ -523,7 +569,16 @@
       }
     ],
     "patterns": [],
-    "solutions": []
+    "solutions": [
+      {
+        "id": "sol_d7d99994",
+        "ts": "2026-05-06T11:53:38Z",
+        "problem": "Task queue drained with high failure ratio (4874 failed vs 60 done); synthesis triggered despite no files analyzed \u2014 likely stale state or upstream source exhaustion.",
+        "solution": "tmux send-keys -t ps5-hive 'tmux respawn-window -t ps5-hive' Enter && sleep 2 && tmux capture-pane -t ps5-hive -p | tail -5",
+        "hive": "default",
+        "verified": true
+      }
+    ]
   },
   "metrics": {
     "tasks_completed_total": 0,
@@ -531,7 +586,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 33
+    "openrouter_calls_today": 34
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -745,8 +800,8 @@
   "active_task": {
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
-    "status": "completed",
-    "started_at": "2026-05-06T11:52:58Z",
-    "completed_at": "2026-05-06T11:52:59Z"
+    "status": "running",
+    "started_at": "2026-05-06T11:54:01Z",
+    "completed_at": null
   }
 }
