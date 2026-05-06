@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T18:15:43Z",
+  "last_updated": "2026-05-06T18:16:58Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -860,7 +860,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 87
+    "openrouter_calls_today": 88
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -869,26 +869,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_33f22f00",
-      "ts": "2026-05-06T15:45:25Z",
-      "updated_by": "orchestrator",
-      "goal": "Deliver resilient, observable hive-ui with hardened guardrails and live metrics.",
-      "summary": "The hive is running with 9 active sessions and a new text model champion; Next.js UI is live on port 3001 with GitHub auth and SSE streaming, but retry/backpressure and metrics observability are still pending. We must close P1 items and harden guardrails to keep sessions stable under load.",
-      "progress": "Recently brought the Next.js UI live (12 routes, GitHub auth, SSE stream) and added the inclusionai/ling-2.6-1t:free model as the active text champion.",
-      "next_steps": [
-        "Add retry logic with exponential backoff and jitter to call_llm() in orchestrator.py for HTTP 429/503 with max 5 retries and full-jitter strategy.",
-        "Implement /api/metrics endpoint in pages/api/metrics.ts returning JSON of session stats (active count, CPU/mem percentiles, queue depth, model usage) with 10s cache-control.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns (home dirs, /etc, /proc, /sys) and inject-config edge cases using pytest with parametrization.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() with configurable attempts, timeout, and idempotent reconnection on network error.",
-        "Define per-session SLOs and backpressure rules in config/slos.yaml and integrate a CPU/mem threshold check in supervisor.py to throttle or queue overloaded sessions."
-      ],
-      "decisions": [
-        "Adopt exponential backoff with full jitter and a 1.5\u20135s floor/30s ceiling for all external call retries to reduce thundering herds.",
-        "Expose a single /api/metrics JSON endpoint as the source-of-truth for hive-ui dashboards; do not add alternate metric paths.",
-        "Enforce org_guard deny-first policy with explicit allow-list for hive working directories; reject any path traversal or system paths."
-      ]
-    },
     {
       "id": "sess_b018aaad",
       "ts": "2026-05-06T16:00:35Z",
@@ -1068,6 +1048,26 @@
         "Gate new work at the API layer with CPU>0.85 / mem>24GB thresholds and 429 retry-after to protect research_loop stability.",
         "Standardize on pages/api/metrics.ts as the single source of truth for hive health (disk, load, per-session stats)."
       ]
+    },
+    {
+      "id": "sess_37392bf5",
+      "ts": "2026-05-06T18:16:15Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive under high load and restore research_loop by adding backpressure, retry, and observability to hive-ui.",
+      "summary": "The hive is running hot (CPU cores saturated, memory at 24GB, disk 14%) and research_loop is paused. The new Next.js UI is live but lacks metrics and graceful degradation under load. Immediate fixes are needed in orchestrator retry logic, API metrics, and UI backpressure to prevent cascading stalls.",
+      "progress": "Added exponential backoff and jitter retry logic to call_llm() in orchestrator.py so HTTP 429 responses are retried with full jitter and capped attempts.",
+      "next_steps": [
+        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats, queue depth, and system load averages",
+        "Add backpressure throttle to sendStream() in lib/sse.ts that drops/slows sends when CPU > 0.8 or memory > 22GB",
+        "Write unit tests for org_guard.py covering all forbidden path patterns and ensure deny overrides allow",
+        "Add memory/CPU thresholds to build_monitor so it pauses non-critical jobs when core > 1.5 or mem > 22GB",
+        "Wire UI alert banner in components/SystemHealth.tsx that reads from /api/metrics and shows red/yellow/green state"
+      ],
+      "decisions": [
+        "Reject new research_loop tasks when core > 1.5 or mem > 22GB until load drops below thresholds",
+        "Exponential backoff with full jitter and max 5 attempts is the standard retry policy for all LLM calls",
+        "Metrics endpoint is the source of truth for UI health and autoscaling decisions"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1079,9 +1079,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=4",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-06T18:15:43Z",
-    "completed_at": "2026-05-06T18:15:43Z"
+    "started_at": "2026-05-06T18:16:37Z",
+    "completed_at": "2026-05-06T18:16:38Z"
   }
 }
