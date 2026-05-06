@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T05:23:47Z",
+  "last_updated": "2026-05-06T05:24:52Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -156,7 +156,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 4
+    "openrouter_calls_today": 5
   },
   "model_champions": {
     "text": null,
@@ -204,6 +204,26 @@
         "Use predefined layout to ensure consistency with existing sessions.",
         "Gate further deployments on TS19 pass and full session list validation."
       ]
+    },
+    {
+      "id": "sess_52904560",
+      "ts": "2026-05-06T05:24:32Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive integrity by launching the missing supervisor tmux session and clearing blocker TS19.",
+      "summary": "The hive is running healthily (h=95%) but is missing the supervisor tmux session, causing self-test TS19 to fail. Eight sessions are expected and seven are present; the supervisor must be launched with its predefined layout. Once started, validation and a re-run of TS19 should confirm full recovery.",
+      "progress": "None since last snapshot; the supervisor session remains absent and TS19 is still failing.",
+      "next_steps": [
+        "Launch the supervisor tmux session with its predefined layout (windows/panes) and ensure it is properly named.",
+        "Validate all 8 expected tmux sessions (build_monitor, hive-dev, hive-live, hive-watch, opencode, orchestrator, ps5-hive, supervisor) are present and responsive.",
+        "Run self-test TS19 to confirm pass and clear the high-priority blocker.",
+        "Attach hive-watch/monitoring to the new supervisor session to verify liveness and log output.",
+        "Persist the supervisor session configuration and update runbooks to prevent recurrence."
+      ],
+      "decisions": [
+        "Start supervisor immediately to restore the expected session topology.",
+        "Gate further deployments on TS19 passing to ensure session integrity.",
+        "Record supervisor session startup command/layout in runbooks for reproducibility."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -217,7 +237,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T05:23:46Z",
-    "completed_at": "2026-05-06T05:23:47Z"
+    "started_at": "2026-05-06T05:24:52Z",
+    "completed_at": "2026-05-06T05:24:52Z"
   }
 }
