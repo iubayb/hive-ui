@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T03:04:33Z",
+  "last_updated": "2026-05-06T03:10:44Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.6,
-      "last_seen": "2026-05-06T03:04:03Z",
+      "last_seen": "2026-05-06T03:10:14Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -346,7 +346,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 8
+    "openrouter_calls_today": 9
   },
   "model_champions": {
     "text": null,
@@ -444,6 +444,26 @@
         "Capture reproducible failure data for TS14/TS17/TS18 before attempting fixes to avoid flaky corrections.",
         "Disallow merges/promotions until self-test TS14/TS17/TS18/TS19 pass and supervisor session is present."
       ]
+    },
+    {
+      "id": "sess_573b02eb",
+      "ts": "2026-05-06T03:06:51Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full self-test pass by creating the missing supervisor tmux session and resolving targeted TS failures (TS14, TS17, TS18, TS19).",
+      "summary": "The hive is running with 7 active sessions but missing the supervisor session, causing 8 high-priority self-test failures. Recent learnings include http500-circuit-breaker and ollama-auto-recover capabilities. No achievements logged in this cycle; health on default node is at h=60%.",
+      "progress": "Cataloged 5 knowledge findings and confirmed the missing supervisor session and 4 failing test targets (TS14, TS17, TS18, TS19) as primary blockers.",
+      "next_steps": [
+        "Create and start the missing supervisor tmux session (tmux new-session -d -s supervisor) and verify it appears in session list.",
+        "Run targeted self-test for TS14 to capture failing condition, apply the http500-circuit-breaker capability if applicable, and record outcome.",
+        "Run targeted self-test for TS17 to capture failing condition, apply ollama-auto-recover if relevant, and record outcome.",
+        "Run targeted self-tests for TS18 and TS19, capture failing conditions, and apply targeted fixes or isolate non-critical failures.",
+        "Re-run full self-test suite to confirm resolution and close remaining high-priority blockers."
+      ],
+      "decisions": [
+        "Prioritize supervisor session creation immediately to restore expected tmux topology.",
+        "Apply http500-circuit-breaker to TS14 and ollama-auto-recover to TS17 where patterns match, otherwise capture diagnostics first.",
+        "Accept non-critical test failures only after explicit isolation and logging; otherwise enforce fix-before-close."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -457,7 +477,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T03:04:03Z",
-    "completed_at": "2026-05-06T03:04:03Z"
+    "started_at": "2026-05-06T03:10:14Z",
+    "completed_at": "2026-05-06T03:10:14Z"
   }
 }
