@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T05:54:02Z",
+  "last_updated": "2026-05-06T05:57:37Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-06T05:52:20Z",
+      "health_score": 0.95,
+      "last_seen": "2026-05-06T05:56:25Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -196,7 +196,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 8
+    "openrouter_calls_today": 9
   },
   "model_champions": {
     "text": null,
@@ -284,6 +284,26 @@
         "Use predefined layout for supervisor to ensure consistency with existing session conventions.",
         "Gate P3 (self-test TS19) on successful completion of P1 and P2 to avoid flaky results."
       ]
+    },
+    {
+      "id": "sess_09960fc6",
+      "ts": "2026-05-06T05:54:44Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive session integrity by launching the missing supervisor tmux session and passing self-test TS19.",
+      "summary": "The hive is healthy (default running at 95%) but one high-priority blocker remains: the supervisor tmux session is missing, causing self-test TS19 to fail. Eight sessions are expected; seven are present. Recent work added the http500-circuit-breaker capability and five knowledge findings, but no session-level achievements yet.",
+      "progress": "Identified the missing supervisor session and mapped the expected session list to restore integrity.",
+      "next_steps": [
+        "Launch the supervisor tmux session with its predefined layout and attach it to the hive namespace.",
+        "Validate that all 8 expected tmux sessions (build_monitor, hive-dev, hive-live, hive-watch, opencode, orchestrator, ps5-hive, supervisor) are present and responsive.",
+        "Run self-test TS19 and confirm it passes, then clear the high-priority blocker.",
+        "Persist the supervisor session configuration so it auto-launches on hive restart.",
+        "Capture a short health snapshot and log session states for audit."
+      ],
+      "decisions": [
+        "Prioritize supervisor session launch before any non-critical feature work to unblock TS19.",
+        "Use predefined layouts and naming to maintain consistency with existing hive sessions.",
+        "Gate further deployments on TS19 pass to ensure baseline integrity."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -297,7 +317,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T05:53:21Z",
-    "completed_at": "2026-05-06T05:53:22Z"
+    "started_at": "2026-05-06T05:57:36Z",
+    "completed_at": "2026-05-06T05:57:37Z"
   }
 }
