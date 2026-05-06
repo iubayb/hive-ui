@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T16:04:32Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T16:05:54Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.8,
-      "last_seen": "2026-05-06T16:03:51Z",
+      "health_score": 0.75,
+      "last_seen": "2026-05-06T16:05:54Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
-      "errors_last_hour": 11,
+      "errors_last_hour": 8,
       "tasks_completed_today": 3,
       "silent_minutes": 0
     }
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_af422927",
+      "ts": "2026-05-06T16:05:46Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded budget + no rate limits \u2192 runaway retry storm (4874 failed) and 30m worker timeouts; stale state likely.",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "8357dc68f0cfd132d7f3d8450fa8a180"
+    },
     {
       "id": "b_9d99638f",
       "ts": "2026-05-06T15:51:36Z",
@@ -479,7 +492,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t ps5-hive",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T15:35:40Z"
+        "last_updated": "2026-05-06T16:05:46Z"
       },
       {
         "id": "cap_27efd1db",
@@ -532,6 +545,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_5b4f458f",
+        "ts": "2026-05-06T16:05:46Z",
+        "hive": "default",
+        "summary": "Critical runaway retry storm caused by unbounded budget and missing rate-limit guardrails; inject limits and respawn session.",
+        "source": "doctor"
+      },
       {
         "id": "f_3712570c",
         "ts": "2026-05-06T15:55:29Z",
@@ -804,7 +824,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 71
+    "openrouter_calls_today": 72
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1023,9 +1043,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=75% blockers=5",
     "status": "completed",
-    "started_at": "2026-05-06T16:04:31Z",
-    "completed_at": "2026-05-06T16:04:32Z"
+    "started_at": "2026-05-06T16:05:54Z",
+    "completed_at": "2026-05-06T16:05:54Z"
   }
 }
