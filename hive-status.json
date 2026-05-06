@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T10:39:33Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T10:40:57Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
@@ -659,7 +659,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 25
+    "openrouter_calls_today": 26
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -668,26 +668,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_66b79161",
-      "ts": "2026-05-06T08:10:22Z",
-      "updated_by": "orchestrator",
-      "goal": "Reclaim resources and stabilize the hive by suspending non-essential sessions, tightening cgroup/niceness policies, and clearing caches to eliminate pending blockers.",
-      "summary": "The hive is running healthily at 100% with eight active sessions and no open blockers. Three pending housekeeping actions remain to reduce contention and free disk/I/O headroom. Recent gains include port-bind-check and port-conflict-resolution capabilities with two knowledge findings logged.",
-      "progress": "Identified non-essential sessions (e.g., ps5-hive, opencode) and enumerated concrete resource-control and cleanup actions to execute.",
-      "next_steps": [
-        "Gracefully suspend or kill ps5-hive and opencode sessions to free memory and CPU.",
-        "Apply stricter cgroup CPU/memory limits and lower niceness for research_loop jobs via systemd or cgroupfs.",
-        "Clear package and build caches (apt, npm, pip, /tmp) and rotate/compress logs to reclaim disk and reduce I/O.",
-        "Verify critical session stability (build_monitor, hive-dev, hive-live, hive-watch, orchestrator, supervisor) post-changes.",
-        "Record new resource policies and update runbooks; confirm port-bind-check and port-conflict-resolution playbooks reflect latest learnings."
-      ],
-      "decisions": [
-        "Prioritize P1\u2013P3 in order: suspend non-essentials first, then enforce cgroup/niceness, then clear caches.",
-        "Retain core sessions (build_monitor, hive-dev, hive-live, hive-watch, orchestrator, supervisor) untouched during suspension.",
-        "Apply resource tightening only to research_loop jobs; leave production workloads at current limits to avoid regressions."
-      ]
-    },
     {
       "id": "sess_9623f662",
       "ts": "2026-05-06T08:25:42Z",
@@ -867,6 +847,26 @@
         "Require canary + automated health gates for any production-facing session changes",
         "Standardize instrumentation and port-conflict checks as non-negotiable preconditions"
       ]
+    },
+    {
+      "id": "sess_bf4a9ec7",
+      "ts": "2026-05-06T10:40:57Z",
+      "updated_by": "orchestrator",
+      "goal": "Establish per-session observability, SLOs, and a controlled rollout policy to harden stability across all active sessions.",
+      "summary": "All nine active sessions are running with default hive health at 100%. There are zero open blockers, and the Next.js UI is fully live on port 3001 with 12 routes, GitHub auth, and SSE streams. Instrumentation, SLOs, and rollout policy remain the critical path to production-grade resilience.",
+      "progress": "Recently delivered a fully functional Next.js UI (12 routes, GitHub auth, SSE) on port 3001 and resolved port-bind and port-conflict issues.",
+      "next_steps": [
+        "Deploy lightweight telemetry (logs, metrics, traces) into each active session (build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, supervisor) with health endpoints.",
+        "Define and codify per-session SLOs and backpressure rules (CPU/memory thresholds, queue limits, graceful degradation).",
+        "Author a controlled rollout policy for nextjs-prod including canary weights, automated rollback triggers, and approval gates.",
+        "Integrate rollout policy with CI/CD to automate promotion/rollback and emit release events to observability.",
+        "Run a staged canary rehearsal for nextjs-prod (5% traffic) and validate SLOs, then document the runbook."
+      ],
+      "decisions": [
+        "Adopt per-session SLOs and backpressure as the default governance model for all active sessions.",
+        "Require canary-plus-rollback automation for every promotion to nextjs-prod until SLOs prove stable.",
+        "Instrument first, then tune thresholds: ship telemetry to all sessions before tightening enforcement."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -878,9 +878,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-06T10:39:32Z",
-    "completed_at": "2026-05-06T10:39:33Z"
+    "started_at": "2026-05-06T10:40:44Z",
+    "completed_at": "2026-05-06T10:40:57Z"
   }
 }
