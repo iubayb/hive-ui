@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T12:55:21Z",
+  "last_updated": "2026-05-06T12:56:56Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.667,
-      "last_seen": "2026-05-06T12:54:47Z",
+      "status": "running",
+      "health_score": 1.0,
+      "last_seen": "2026-05-06T12:56:24Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -21,7 +21,7 @@
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
       "errors_last_hour": 10,
-      "tasks_completed_today": 0,
+      "tasks_completed_today": 3,
       "silent_minutes": 0
     }
   },
@@ -44,45 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_44abd2c4",
-      "ts": "2026-05-06T12:54:53Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Task timeout too short for long-running worker calls (1800s exceeded); config task_timeout likely missing or insufficient.",
-      "severity": "medium",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T12:55:11Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "329d6bc07003c41faf4ba45e1ddebdd3"
-    },
-    {
-      "id": "b_542f36e0",
-      "ts": "2026-05-06T12:54:53Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[hive-live] Port 8888 likely blocked or occupied, preventing logstream.py from binding and causing repeated errors.",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T12:55:11Z",
-      "resolution": "auto-pruned: hive-live is now alive",
-      "github_issue": null,
-      "_hash": "58c60ea3efa5ac4ce8c04ec8b043a35e"
-    },
-    {
-      "id": "b_aed31879",
-      "ts": "2026-05-06T12:54:53Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[hive-dev] Port 8889 likely blocked or occupied, preventing logstream.py from binding and causing repeated errors.",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T12:55:11Z",
-      "resolution": "auto-pruned: hive-dev is now alive",
-      "github_issue": null,
-      "_hash": "f47084e63433ae84ca04b6e9c6ffcd9f"
-    },
     {
       "id": "b_029e8346",
       "ts": "2026-05-06T07:25:59Z",
@@ -630,7 +591,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 43
+    "openrouter_calls_today": 44
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -639,26 +600,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_3958ef09",
-      "ts": "2026-05-06T10:25:48Z",
-      "updated_by": "orchestrator",
-      "goal": "Establish resilient session-level controls and a safe rollout pipeline for nextjs-prod while sustaining live services.",
-      "summary": "Nine active sessions are running healthy (default hive at 100%), Next.js UI is live on port 3001 with 12 routes and GitHub auth/SSE, and there are zero open blockers. We now need to instrument sessions, define SLOs/backpressure, and formalize a canary rollout policy for nextjs-prod.",
-      "progress": "Completed full Next.js production UI deployment on port 3001 with GitHub auth, 12 routes, and live SSE streams.",
-      "next_steps": [
-        "Instrument per-session metrics and tracing for build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, and opencode",
-        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue limits, circuit breakers)",
-        "Create and merge a controlled rollout policy + canary weights for nextjs-prod with automated health gates",
-        "Automate port-bind-check and port-conflict-resolution as pre-start validations across all sessions",
-        "Promote learned capabilities into session bootstrap templates and run a 24-hour burn-in for hive-live and hive-dev"
-      ],
-      "decisions": [
-        "Default to per-session resource caps and backpressure to protect hive-wide stability",
-        "Require canary + automated health gates for any production-facing session changes",
-        "Standardize instrumentation and port-conflict checks as non-negotiable preconditions"
-      ]
-    },
     {
       "id": "sess_bf4a9ec7",
       "ts": "2026-05-06T10:40:57Z",
@@ -832,6 +773,26 @@
         "Route nextjs-prod traffic through a canary-first rollout with automated rollback on SLO violation.",
         "Require instrumentation and health checks before admitting new sessions or scaling existing ones."
       ]
+    },
+    {
+      "id": "sess_76c9c52e",
+      "ts": "2026-05-06T12:56:31Z",
+      "updated_by": "orchestrator",
+      "goal": "Establish per-session SLOs, instrumentation, and a controlled rollout policy for stable hive operations and safe Next.js production canary.",
+      "summary": "The hive is healthy and running on inclusionai/ling-2.6-1t:free with 9 active sessions; Next.js is live on port 3001 with full UI and auth. No blockers remain, but per-session visibility and rollout controls are pending.",
+      "progress": "Completed baseline configuration for all active sessions and validated Next.js production readiness with GitHub auth and SSE streaming.",
+      "next_steps": [
+        "Instrument build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, and supervisor with metrics and log exporters (latency, CPU, mem, errors).",
+        "Define per-session SLOs and backpressure rules with CPU/mem thresholds, queue limits, and circuit-breaker policies.",
+        "Create a controlled rollout policy for nextjs-prod with canary weights, health gates, automatic rollback, and traffic shadowing.",
+        "Deploy instrumentation probes and dashboards, then run a short canary on nextjs-prod (5% traffic) and validate SLOs.",
+        "Codify learnings into the hive playbook (config-default-apply, port-bind-check, port-conflict-resolution) and schedule a post-canary review."
+      ],
+      "decisions": [
+        "Adopt per-session SLOs and backpressure thresholds to prevent cascade load and prioritize critical workloads.",
+        "Require canary gates and automatic rollback for nextjs-prod before increasing traffic beyond 5%.",
+        "Instrument all active sessions before any further configuration changes or capacity increases."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -843,9 +804,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: develop\u2192main promotion check + release draft",
     "status": "completed",
-    "started_at": "2026-05-06T12:55:10Z",
-    "completed_at": "2026-05-06T12:55:11Z"
+    "started_at": "2026-05-06T12:56:33Z",
+    "completed_at": "2026-05-06T12:56:36Z"
   }
 }
