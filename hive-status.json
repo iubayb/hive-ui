@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T04:38:37Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T04:39:43Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
@@ -485,7 +485,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 20
+    "openrouter_calls_today": 21
   },
   "model_champions": {
     "text": null,
@@ -494,26 +494,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_e86a1be3",
-      "ts": "2026-05-06T02:21:23Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full self-test compliance by creating the missing supervisor session and fixing TS14/TS17/TS18 failures.",
-      "summary": "Hive is running at 60% health with 8 open blockers, including missing supervisor and multiple self-test failures (TS14/TS17/TS18/TS19) with no auto-fix available. Build and orchestration sessions are active, but critical supervision and test stability gaps remain.",
-      "progress": "Identified the missing supervisor tmux session and prioritized targeted fixes for TS14, TS17, TS18, and TS19 with concrete remediation steps.",
-      "next_steps": [
-        "Create and start the supervisor tmux session: tmux new-session -d -s supervisor with appropriate startup/health-check command.",
-        "Run targeted self-test for TS14, capture logs, and apply manual fix to resolve the failing condition.",
-        "Run targeted self-test for TS17, capture logs, and apply manual fix to resolve the failing condition.",
-        "Run targeted self-test for TS18 (and TS19 if related), capture logs, and apply manual fixes or configuration updates.",
-        "Re-run full self-test suite to confirm compliance and close remaining blockers."
-      ],
-      "decisions": [
-        "Prioritize supervisor session creation to restore supervision/coordination before deeper test fixes.",
-        "Apply manual fixes for TS14/TS17/TS18 based on captured logs rather than waiting for auto-fix.",
-        "Gate further feature work until full self-test compliance is achieved (no high-severity failures)."
-      ]
-    },
     {
       "id": "sess_34a78c9d",
       "ts": "2026-05-06T02:36:24Z",
@@ -693,6 +673,26 @@
         "Use circuit-suppress and http500-circuit-breaker during fixes to prevent ollama-500 cascades.",
         "Accept short, scoped interventions per session to avoid broad disruption; defer noncritical optimizations."
       ]
+    },
+    {
+      "id": "sess_d59a138c",
+      "ts": "2026-05-06T04:39:13Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore hive self-test compliance and stabilize all required tmux sessions by creating the missing supervisor session and addressing remaining TS failures.",
+      "summary": "The hive is running at 70% health with seven active sessions, but six high-priority self-test blockers remain (TS19, TS18, TS13, TS5, and two TS19 assertions) and the supervisor tmux session is missing. Without supervisor, orchestration and automated recovery workflows are degraded, and prior auto-fix attempts were insufficient.",
+      "progress": "Identified the missing supervisor tmux session as the root cause for TS19 and cataloged learned capabilities (ollama-500-circuit-suppress, http500-circuit-breaker, ollama-auto-recover) to guide targeted remediation.",
+      "next_steps": [
+        "Create and start the supervisor tmux session (tmux new-session -d -s supervisor) and verify it appears in the session list.",
+        "Re-run the hive self-test suite and capture specific failure details for TS18, TS13, and TS5 to determine exact assertions.",
+        "For TS5, apply the http500-circuit-breaker and ollama-500-circuit-suppress capabilities to stabilize the endpoint and rerun the test.",
+        "For TS18/TS13, execute ollama-auto-recover and confirm model/service availability, then rerun the affected tests.",
+        "After fixes, run the full self-test suite and confirm all 8 expected tmux sessions exist and all tests pass."
+      ],
+      "decisions": [
+        "Prioritize creation of the supervisor tmux session as the immediate blocking fix for TS19.",
+        "Apply circuit-breaker and suppress capabilities for TS5 before deeper debugging to reduce flaky failures.",
+        "Gate promotion of any session to production until the full self-test suite passes with no high-severity failures."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -704,9 +704,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
-    "status": "completed",
-    "started_at": "2026-05-06T04:38:36Z",
-    "completed_at": "2026-05-06T04:38:37Z"
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "status": "running",
+    "started_at": "2026-05-06T04:39:43Z",
+    "completed_at": null
   }
 }
