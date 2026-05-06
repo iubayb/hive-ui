@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T15:24:49Z",
+  "last_updated": "2026-05-06T15:25:50Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-06T15:24:28Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-06T15:25:17Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -423,11 +423,11 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "config-guardrail-inject",
-        "description": "Injects missing rate-limit and budget guardrails (max_tasks, max_hours, timeouts) to prevent runaway retry storms and force controlled shutdowns.",
+        "description": "Injects missing rate-limit and budget guardrails to prevent runaway retry storms and force controlled shutdowns.",
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T15:05:28Z"
+        "last_updated": "2026-05-06T15:25:23Z"
       },
       {
         "id": "cap_27efd1db",
@@ -480,6 +480,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_4b5fbceb",
+        "ts": "2026-05-06T15:25:23Z",
+        "hive": "default",
+        "summary": "Critical unbounded retry storm due to missing guardrails and stalled workers; inject rate-limits and verify port binds, then respawn.",
+        "source": "doctor"
+      },
       {
         "id": "f_865fa816",
         "ts": "2026-05-06T15:05:28Z",
@@ -731,7 +738,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 65
+    "openrouter_calls_today": 66
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -952,7 +959,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T15:24:38Z",
-    "completed_at": "2026-05-06T15:24:39Z"
+    "started_at": "2026-05-06T15:25:39Z",
+    "completed_at": "2026-05-06T15:25:40Z"
   }
 }
