@@ -1,6 +1,13 @@
 import { ghFetch } from "@/lib/github";
+import { PageHeader } from "@/components/PageHeader";
+import { SubNav } from "@/components/SubNav";
 
 export const revalidate = 120;
+
+const WORKFLOWS_COMMITS_NAV = [
+  { href: "/hive/workflows", label: "Workflows" },
+  { href: "/hive/commits",   label: "Commits"   },
+];
 
 export default async function CommitsPage() {
   let commits: any[] = [];
@@ -10,17 +17,9 @@ export default async function CommitsPage() {
 
   return (
     <div style={{ background: "var(--color-surface)" }}>
-      <header
-        className="sticky top-0 z-40 px-4 py-3 flex items-center gap-2 border-b"
-        style={{
-          background: "rgba(9,9,11,0.95)",
-          borderColor: "var(--color-border)",
-          backdropFilter: "blur(16px)",
-        }}
-      >
-        <span className="text-lg">⊕</span>
-        <span className="font-display font-semibold text-sm">Commits</span>
-      </header>
+      <PageHeader icon="⊕" title="Commits" />
+      <SubNav items={WORKFLOWS_COMMITS_NAV} />
+
       <main className="px-4 py-4 space-y-2 max-w-lg mx-auto">
         {commits.length === 0 ? (
           <div className="glass-card p-8 text-center text-sm" style={{ color: "var(--color-text-muted)" }}>

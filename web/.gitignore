@@ -23,3 +23,7 @@ yarn-error.log*
 .DS_Store
 *.pem
 .vercel
+
+# playwright artifacts
+/tests/report/
+/tests/results/

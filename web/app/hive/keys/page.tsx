@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { PageHeader } from "@/components/PageHeader";
 
 export default function KeysPage() {
   const [keys, setKeys] = useState<string[]>([]);
@@ -42,22 +43,12 @@ export default function KeysPage() {
 
   return (
     <div style={{ background: "var(--color-surface)" }}>
-      <header
-        className="sticky top-0 z-40 px-4 py-3 flex items-center gap-2 border-b"
-        style={{
-          background: "rgba(9,9,11,0.95)",
-          borderColor: "var(--color-border)",
-          backdropFilter: "blur(16px)",
-        }}
-      >
-        <span className="text-lg">⚿</span>
-        <span className="font-display font-semibold text-sm">Key Vault</span>
-      </header>
+      <PageHeader icon="⚿" title="Key Vault" subtitle="AES-256-GCM" />
       <main className="px-4 py-4 space-y-4 max-w-lg mx-auto">
         <div className="glass-card p-4 space-y-3">
           <span className="section-title">Add Key</span>
           <input
-            className="w-full px-3 py-2 rounded-lg text-sm outline-none"
+            className="w-full px-3 py-2 rounded-lg text-sm"
             style={{
               background: "var(--color-glass)",
               border: "1px solid var(--color-border)",
@@ -68,7 +59,7 @@ export default function KeysPage() {
             onChange={(e) => setName(e.target.value)}
           />
           <input
-            className="w-full px-3 py-2 rounded-lg text-sm font-mono outline-none"
+            className="w-full px-3 py-2 rounded-lg text-sm font-mono"
             style={{
               background: "var(--color-glass)",
               border: "1px solid var(--color-border)",

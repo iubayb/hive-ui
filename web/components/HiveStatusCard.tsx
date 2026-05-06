@@ -1,27 +1,19 @@
 import type { HiveStatus, Blocker } from "@/store/useHiveStore";
 
-function HealthBar({ score }: { score: number }) {
-  const pct = Math.round(score * 100);
-  const color =
-    pct >= 80 ? "#00DC82" : pct >= 50 ? "#F59E0B" : "#EF4444";
+function HealthBar({ pct, color }: { pct: number; color: string }) {
   return (
-    <div className="flex items-center gap-2">
+    <div
+      className="w-full rounded-full overflow-hidden mt-1"
+      style={{ height: "3px", background: "rgba(255,255,255,0.06)" }}
+    >
       <div
-        className="flex-1 rounded-full overflow-hidden"
-        style={{ height: "4px", background: "rgba(255,255,255,0.08)" }}
-      >
-        <div
-          style={{
-            width: `${pct}%`,
-            height: "100%",
-            background: color,
-            transition: "width 0.4s ease",
-          }}
-        />
-      </div>
-      <span className="text-xs font-mono" style={{ color }}>
-        {pct}%
-      </span>
+        style={{
+          width: `${pct}%`,
+          height: "100%",
+          background: color,
+          transition: "width 0.5s ease",
+        }}
+      />
     </div>
   );
 }
@@ -29,56 +21,103 @@ function HealthBar({ score }: { score: number }) {
 export function HiveStatusCard({ status }: { status: HiveStatus }) {
   const hive = status.hives?.default;
   if (!hive) return null;
+
+  const pct = Math.round((hive.health_score ?? 0) * 100);
+  const healthColor =
+    pct >= 80 ? "#00DC82" : pct >= 50 ? "#F59E0B" : "#EF4444";
+  const errorsPerHour = hive.errors_last_hour ?? 0;
   const openBlockers = (status.blockers ?? []).filter(
     (b: Blocker) => b.status === "open"
   ).length;
-  const pending = (status.next_steps ?? []).filter(
-    (n) => n.status === "pending"
-  ).length;
+  const callsToday = (status as any).metrics?.openrouter_calls_today ?? 0;
+
+  // Model name: prefer model_champions.text, fall back to active_model on hive
+  const rawModel =
+    (status as any).model_champions?.text ?? hive.active_model ?? "";
+  const modelLabel = rawModel.split("/").pop() ?? rawModel;
 
   return (
-    <div className="glass-card p-4 space-y-3">
-      <div className="flex items-center justify-between">
-        <span className="font-display font-semibold text-sm">
-          Hive Status
-        </span>
-        <span className="brand-badge">{hive.status}</span>
-      </div>
-      <HealthBar score={hive.health_score ?? 0} />
-      <div className="grid grid-cols-2 gap-2 text-xs">
-        <div style={{ color: "var(--color-text-secondary)" }}>
-          <span style={{ color: "var(--color-text-muted)" }}>Sessions </span>
-          <span className="font-mono">{hive.sessions?.length ?? 0}</span>
-        </div>
-        <div style={{ color: "var(--color-text-secondary)" }}>
-          <span style={{ color: "var(--color-text-muted)" }}>Errors/hr </span>
-          <span className="font-mono">{hive.errors_last_hour ?? 0}</span>
-        </div>
+    <div className="space-y-2">
+      {/* 2 × 2 stat tiles */}
+      <div className="grid grid-cols-2 gap-2">
+        {/* Health */}
         <div
-          style={{
-            color:
-              openBlockers > 0 ? "#EF4444" : "var(--color-text-secondary)",
-          }}
+          className={`stat-tile ${pct >= 95 ? "health-glow" : ""}`}
+          style={pct >= 95 ? { borderColor: "rgba(0,220,130,0.3)" } : {}}
         >
-          <span style={{ color: "var(--color-text-muted)" }}>Blockers </span>
-          <span className="font-mono">{openBlockers}</span>
+          <span
+            className="text-2xl font-bold font-display leading-none"
+            style={{ color: healthColor }}
+          >
+            {pct}%
+          </span>
+          <HealthBar pct={pct} color={healthColor} />
+          <span className="section-title mt-1.5 block">Health</span>
         </div>
-        <div style={{ color: "var(--color-text-secondary)" }}>
-          <span style={{ color: "var(--color-text-muted)" }}>Next steps </span>
-          <span className="font-mono">{pending}</span>
+
+        {/* Sessions */}
+        <div className="stat-tile">
+          <span
+            className="text-2xl font-bold font-display leading-none"
+            style={{ color: "var(--color-text-primary)" }}
+          >
+            {hive.sessions?.length ?? 0}
+          </span>
+          <span className="section-title mt-2 block">Sessions</span>
+        </div>
+
+        {/* Errors / hr */}
+        <div className="stat-tile">
+          <span
+            className="text-2xl font-bold font-display leading-none"
+            style={{
+              color: errorsPerHour > 0 ? "#F59E0B" : "var(--color-text-primary)",
+            }}
+          >
+            {errorsPerHour}
+          </span>
+          <span className="section-title mt-2 block">Errors / hr</span>
+        </div>
+
+        {/* Blockers */}
+        <div className="stat-tile">
+          <span
+            className="text-2xl font-bold font-display leading-none"
+            style={{
+              color: openBlockers > 0 ? "#EF4444" : "var(--color-text-primary)",
+            }}
+          >
+            {openBlockers}
+          </span>
+          <span className="section-title mt-2 block">Blockers</span>
         </div>
       </div>
-      {hive.current_goal && (
-        <p className="text-xs truncate" style={{ color: "var(--color-text-muted)" }}>
-          {hive.current_goal}
-        </p>
-      )}
-      <p
-        className="text-xs font-mono truncate"
-        style={{ color: "var(--color-text-muted)" }}
+
+      {/* Model + calls row */}
+      <div
+        className="flex items-center gap-2 px-3 py-2 rounded-xl border"
+        style={{
+          background: "var(--color-glass)",
+          borderColor: "var(--color-border)",
+        }}
       >
-        {hive.active_model?.split("/").pop()}
-      </p>
+        <span className="section-title shrink-0">model</span>
+        <span
+          className="flex-1 text-xs font-mono truncate"
+          style={{ color: "var(--color-brand)" }}
+        >
+          {modelLabel || "—"}
+        </span>
+        {callsToday > 0 && (
+          <span
+            className="shrink-0 text-[10px] font-mono"
+            style={{ color: "var(--color-text-muted)" }}
+          >
+            {callsToday} calls
+          </span>
+        )}
+        <span className="brand-badge shrink-0">{hive.status}</span>
+      </div>
     </div>
   );
 }

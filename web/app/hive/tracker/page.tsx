@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { PageHeader } from "@/components/PageHeader";
 
 interface Researcher {
   handle: string;
@@ -15,8 +16,6 @@ export default function TrackerPage() {
   const [researchers, setResearchers] = useState<Researcher[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // Form state
   const [handle, setHandle] = useState("");
   const [platform, setPlatform] = useState("github");
   const [keywords, setKeywords] = useState("");
@@ -45,10 +44,7 @@ export default function TrackerPage() {
       const payload: Researcher = {
         handle: handle.trim(),
         platform,
-        keywords: keywords
-          .split(",")
-          .map((k) => k.trim())
-          .filter(Boolean),
+        keywords: keywords.split(",").map((k) => k.trim()).filter(Boolean),
       };
       const res = await fetch("/api/tracker", {
         method: "POST",
@@ -82,18 +78,7 @@ export default function TrackerPage() {
 
   return (
     <div style={{ background: "var(--color-surface)" }}>
-      <header
-        className="sticky top-0 z-40 px-4 py-3 flex items-center gap-2 border-b"
-        style={{
-          background: "rgba(9,9,11,0.95)",
-          borderColor: "var(--color-border)",
-          backdropFilter: "blur(16px)",
-        }}
-      >
-        <span className="text-lg">🔬</span>
-        <span className="font-display font-semibold text-sm">Researcher Tracker</span>
-      </header>
-
+      <PageHeader icon="⊛" title="Researcher Tracker" />
       <main className="px-4 py-4 max-w-lg mx-auto space-y-4 pb-20">
         {/* Add researcher form */}
         <div className="glass-card p-4 space-y-3">
@@ -105,7 +90,7 @@ export default function TrackerPage() {
                 value={handle}
                 onChange={(e) => setHandle(e.target.value)}
                 placeholder="Handle / username"
-                className="flex-1 rounded-md px-3 py-2 text-xs font-mono outline-none border"
+                className="flex-1 rounded-md px-3 py-2 text-xs font-mono border"
                 style={{
                   background: "rgba(255,255,255,0.04)",
                   borderColor: "var(--color-border)",
@@ -116,7 +101,7 @@ export default function TrackerPage() {
               <select
                 value={platform}
                 onChange={(e) => setPlatform(e.target.value)}
-                className="rounded-md px-2 py-2 text-xs outline-none border"
+                className="rounded-md px-2 py-2 text-xs border"
                 style={{
                   background: "rgba(255,255,255,0.04)",
                   borderColor: "var(--color-border)",
@@ -135,7 +120,7 @@ export default function TrackerPage() {
               value={keywords}
               onChange={(e) => setKeywords(e.target.value)}
               placeholder="Keywords (comma-separated)"
-              className="w-full rounded-md px-3 py-2 text-xs font-mono outline-none border"
+              className="w-full rounded-md px-3 py-2 text-xs font-mono border"
               style={{
                 background: "rgba(255,255,255,0.04)",
                 borderColor: "var(--color-border)",
@@ -157,58 +142,34 @@ export default function TrackerPage() {
           </form>
         </div>
 
-        {/* Error */}
         {error && (
-          <div
-            className="glass-card p-3 text-xs"
-            style={{ color: "#f87171", borderColor: "rgba(248,113,113,0.2)" }}
-          >
+          <div className="glass-card p-3 text-xs" style={{ color: "#f87171", borderColor: "rgba(248,113,113,0.2)" }}>
             {error}
           </div>
         )}
 
-        {/* Researcher list */}
         <div className="glass-card p-4 space-y-2">
           <span className="section-title">Tracked Researchers</span>
           {loading ? (
-            <p
-              className="text-xs mt-2"
-              style={{ color: "var(--color-text-muted)" }}
-            >
-              Loading…
-            </p>
+            <p className="text-xs mt-2" style={{ color: "var(--color-text-muted)" }}>Loading…</p>
           ) : researchers.length === 0 ? (
-            <p
-              className="text-xs mt-2"
-              style={{ color: "var(--color-text-muted)" }}
-            >
-              No researchers tracked yet.
-            </p>
+            <p className="text-xs mt-2" style={{ color: "var(--color-text-muted)" }}>No researchers tracked yet.</p>
           ) : (
             <ul className="space-y-2 mt-2">
               {researchers.map((r) => (
                 <li
                   key={`${r.platform}:${r.handle}`}
                   className="flex items-start justify-between gap-2 rounded-md px-3 py-2"
-                  style={{
-                    background: "rgba(255,255,255,0.03)",
-                    border: "1px solid var(--color-border)",
-                  }}
+                  style={{ background: "rgba(255,255,255,0.03)", border: "1px solid var(--color-border)" }}
                 >
                   <div className="min-w-0 space-y-0.5">
                     <div className="flex items-center gap-2">
-                      <span
-                        className="text-xs font-mono font-semibold truncate"
-                        style={{ color: "var(--color-text-primary)" }}
-                      >
+                      <span className="text-xs font-mono font-semibold truncate" style={{ color: "var(--color-text-primary)" }}>
                         {r.handle}
                       </span>
                       <span
                         className="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-medium"
-                        style={{
-                          background: "rgba(0,220,130,0.1)",
-                          color: "var(--color-brand)",
-                        }}
+                        style={{ background: "rgba(0,220,130,0.1)", color: "var(--color-brand)" }}
                       >
                         {r.platform}
                       </span>
@@ -219,10 +180,7 @@ export default function TrackerPage() {
                           <span
                             key={k}
                             className="px-1 py-0.5 rounded text-[10px] font-mono"
-                            style={{
-                              background: "rgba(255,255,255,0.05)",
-                              color: "var(--color-text-muted)",
-                            }}
+                            style={{ background: "rgba(255,255,255,0.05)", color: "var(--color-text-muted)" }}
                           >
                             {k}
                           </span>
@@ -230,10 +188,7 @@ export default function TrackerPage() {
                       </div>
                     )}
                     {r.priority_repos && r.priority_repos.length > 0 && (
-                      <p
-                        className="text-[10px] font-mono truncate"
-                        style={{ color: "var(--color-text-muted)" }}
-                      >
+                      <p className="text-[10px] font-mono truncate" style={{ color: "var(--color-text-muted)" }}>
                         repos: {r.priority_repos.join(", ")}
                       </p>
                     )}

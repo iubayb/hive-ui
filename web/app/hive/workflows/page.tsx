@@ -1,13 +1,20 @@
 import { ghFetch } from "@/lib/github";
+import { PageHeader } from "@/components/PageHeader";
+import { SubNav } from "@/components/SubNav";
 
 export const revalidate = 30;
 
+const WORKFLOWS_COMMITS_NAV = [
+  { href: "/hive/workflows", label: "Workflows" },
+  { href: "/hive/commits",   label: "Commits"   },
+];
+
 const STATUS_COLOR: Record<string, string> = {
-  completed: "#00DC82",
+  completed:   "#00DC82",
   in_progress: "#F59E0B",
-  queued: "#6B7280",
-  failure: "#EF4444",
-  success: "#00DC82",
+  queued:      "#6B7280",
+  failure:     "#EF4444",
+  success:     "#00DC82",
 };
 
 export default async function WorkflowsPage() {
@@ -19,17 +26,9 @@ export default async function WorkflowsPage() {
 
   return (
     <div style={{ background: "var(--color-surface)" }}>
-      <header
-        className="sticky top-0 z-40 px-4 py-3 flex items-center gap-2 border-b"
-        style={{
-          background: "rgba(9,9,11,0.95)",
-          borderColor: "var(--color-border)",
-          backdropFilter: "blur(16px)",
-        }}
-      >
-        <span className="text-lg">⚙</span>
-        <span className="font-display font-semibold text-sm">Workflows</span>
-      </header>
+      <PageHeader icon="⊛" title="Workflows" />
+      <SubNav items={WORKFLOWS_COMMITS_NAV} />
+
       <main className="px-4 py-4 space-y-2 max-w-lg mx-auto">
         {runs.length === 0 ? (
           <div className="glass-card p-8 text-center text-sm" style={{ color: "var(--color-text-muted)" }}>
@@ -47,10 +46,7 @@ export default async function WorkflowsPage() {
               <div className="flex items-center gap-2">
                 <span
                   className="w-2 h-2 rounded-full shrink-0"
-                  style={{
-                    background:
-                      STATUS_COLOR[run.conclusion ?? run.status] ?? "#6B7280",
-                  }}
+                  style={{ background: STATUS_COLOR[run.conclusion ?? run.status] ?? "#6B7280" }}
                 />
                 <p className="text-sm flex-1 truncate" style={{ color: "var(--color-text-primary)" }}>
                   {run.name}

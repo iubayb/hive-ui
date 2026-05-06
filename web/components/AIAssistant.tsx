@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useHiveStore, type ChatMessage } from "@/store/useHiveStore";
 
 function uid() { return Math.random().toString(36).slice(2); }
@@ -10,7 +10,6 @@ interface Attachment {
   filename: string;
   type?: string;
   is_image?: boolean;
-  /** true while the backend upload is still in-flight */
   pending?: boolean;
 }
 
@@ -24,65 +23,57 @@ export function AIAssistant() {
   const [attachments, setAttachments] = useState<Attachment[]>([]);
   const bottomRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatMessages, isAssistantThinking]);
 
+  // Auto-grow textarea
+  const growTextarea = useCallback(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
+  }, []);
+
+  useEffect(() => { growTextarea(); }, [input, growTextarea]);
+
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files ?? []);
     if (!files.length) return;
-    // Reset so the same file can be re-selected
     e.target.value = "";
-
     for (const file of files) {
       const localId = uid();
-      // Optimistically add a pending chip
-      setAttachments((prev) => [
-        ...prev,
-        { id: localId, filename: file.name, pending: true },
-      ]);
-
+      setAttachments((prev) => [...prev, { id: localId, filename: file.name, pending: true }]);
       try {
         const fd = new FormData();
         fd.append("file", file);
         const res = await fetch("/api/upload", { method: "POST", body: fd });
         if (res.ok) {
           const data = await res.json();
-          // Replace pending chip with backend-confirmed attachment
           setAttachments((prev) =>
             prev.map((a) =>
               a.id === localId
-                ? {
-                    id: data.id ?? localId,
-                    filename: data.filename ?? file.name,
-                    type: data.type,
-                    is_image: data.is_image,
-                    pending: false,
-                  }
+                ? { id: data.id ?? localId, filename: data.filename ?? file.name, type: data.type, is_image: data.is_image, pending: false }
                 : a
             )
           );
         } else {
-          // Backend unavailable — keep chip with local id so it's still visible
-          setAttachments((prev) =>
-            prev.map((a) =>
-              a.id === localId ? { ...a, pending: false } : a
-            )
-          );
+          setAttachments((prev) => prev.map((a) => a.id === localId ? { ...a, pending: false } : a));
         }
       } catch {
-        setAttachments((prev) =>
-          prev.map((a) =>
-            a.id === localId ? { ...a, pending: false } : a
-          )
-        );
+        setAttachments((prev) => prev.map((a) => a.id === localId ? { ...a, pending: false } : a));
       }
     }
   }
 
   function removeAttachment(id: string) {
     setAttachments((prev) => prev.filter((a) => a.id !== id));
+  }
+
+  function clearChat() {
+    useHiveStore.setState({ chatMessages: [] });
   }
 
   async function send() {
@@ -104,14 +95,9 @@ export function AIAssistant() {
         ? `You are the Hive AI assistant. health=${Math.round((h.health_score ?? 0) * 100)}%, model=${h.active_model?.split("/").pop()}, open_blockers=${(hiveStatus?.blockers ?? []).filter((b) => b.status === "open").length}.`
         : "You are the Hive AI assistant helping monitor an autonomous AI hive.";
 
-      const history = [...chatMessages, userMsg].map((m) => ({
-        role: m.role, content: m.content,
-      }));
-
+      const history = [...chatMessages, userMsg].map((m) => ({ role: m.role, content: m.content }));
       const payload: Record<string, unknown> = { messages: history, system };
-      if (sentAttachments.length > 0) {
-        payload.attachment_ids = sentAttachments.map((a) => a.id);
-      }
+      if (sentAttachments.length > 0) payload.attachment_ids = sentAttachments.map((a) => a.id);
 
       const res = await fetch("/api/chat", {
         method: "POST",
@@ -155,23 +141,20 @@ export function AIAssistant() {
     }
   }
 
+  const canSend = (input.trim() || attachments.length > 0) && !isAssistantThinking;
+
   return (
     <div className="flex flex-col h-full">
+      {/* Message list */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
         {chatMessages.length === 0 && (
-          <div
-            className="text-center py-12"
-            style={{ color: "var(--color-text-muted)" }}
-          >
+          <div className="text-center py-12" style={{ color: "var(--color-text-muted)" }}>
             <p className="text-3xl mb-2">◈</p>
             <p className="text-sm">Ask about hive status, blockers, or tasks.</p>
           </div>
         )}
         {chatMessages.map((m) => (
-          <div
-            key={m.id}
-            className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
-          >
+          <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
             <div
               className="max-w-[85%] px-3 py-2 rounded-xl text-sm"
               style={
@@ -190,17 +173,15 @@ export function AIAssistant() {
                     }
               }
             >
-              {m.content || (isAssistantThinking ? "…" : "")}
+              {m.content || (isAssistantThinking && m.role === "assistant" ? "…" : "")}
             </div>
           </div>
         ))}
         <div ref={bottomRef} />
       </div>
 
-      <div
-        className="px-4 pb-4 pt-2 border-t"
-        style={{ borderColor: "var(--color-border)" }}
-      >
+      {/* Input area */}
+      <div className="px-4 pb-4 pt-2 border-t" style={{ borderColor: "var(--color-border)" }}>
         {/* Attachment chips */}
         {attachments.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-2">
@@ -215,12 +196,11 @@ export function AIAssistant() {
                   opacity: a.pending ? 0.6 : 1,
                 }}
               >
-                {a.pending ? "⏳" : "📄"} {a.filename}
+                {a.pending ? "○" : "◈"} {a.filename}
                 <button
                   onClick={() => removeAttachment(a.id)}
                   className="ml-0.5 hover:opacity-70 transition-opacity"
                   aria-label={`Remove ${a.filename}`}
-                  style={{ lineHeight: 1 }}
                 >
                   ×
                 </button>
@@ -229,22 +209,15 @@ export function AIAssistant() {
           </div>
         )}
 
-        <div className="flex gap-2">
-          {/* Hidden file input */}
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            className="hidden"
-            onChange={handleFileChange}
-          />
+        <div className="flex gap-2 items-end">
+          <input ref={fileInputRef} type="file" multiple className="hidden" onChange={handleFileChange} />
 
-          {/* Attach button */}
+          {/* Attach */}
           <button
             onClick={() => fileInputRef.current?.click()}
             disabled={isAssistantThinking}
-            className="px-3 rounded-xl text-sm transition-all"
             title="Attach file"
+            className="shrink-0 rounded-xl text-sm transition-all flex items-center justify-center"
             style={{
               background: "var(--color-glass)",
               color: "var(--color-text-muted)",
@@ -253,31 +226,62 @@ export function AIAssistant() {
               minWidth: "44px",
             }}
           >
-            📎
+            ⊕
           </button>
 
-          <input
-            type="text"
+          {/* Auto-growing textarea */}
+          <textarea
+            ref={textareaRef}
+            rows={1}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                send();
+              }
+            }}
+            onInput={growTextarea}
             placeholder="Ask the hive…"
             disabled={isAssistantThinking}
-            className="flex-1 px-3 py-2.5 rounded-xl text-sm outline-none"
+            className="flex-1 px-3 py-2.5 rounded-xl text-sm outline-none resize-none"
             style={{
               background: "var(--color-glass)",
               border: "1px solid var(--color-border)",
               color: "var(--color-text-primary)",
               minHeight: "44px",
+              maxHeight: "160px",
+              lineHeight: "1.5",
+              fontFamily: "inherit",
             }}
           />
+
+          {/* Clear (visible when there are messages) */}
+          {chatMessages.length > 0 && !isAssistantThinking && (
+            <button
+              onClick={clearChat}
+              title="Clear chat"
+              className="shrink-0 rounded-xl text-xs transition-all flex items-center justify-center"
+              style={{
+                background: "var(--color-glass)",
+                color: "var(--color-text-muted)",
+                border: "1px solid var(--color-border)",
+                minHeight: "44px",
+                minWidth: "44px",
+              }}
+            >
+              ⊟
+            </button>
+          )}
+
+          {/* Send */}
           <button
             onClick={send}
-            disabled={isAssistantThinking || (!input.trim() && attachments.length === 0)}
-            className="px-3 rounded-xl text-sm font-medium transition-all"
+            disabled={!canSend}
+            className="shrink-0 rounded-xl text-sm font-medium transition-all flex items-center justify-center"
             style={{
-              background: (input.trim() || attachments.length > 0) ? "var(--color-brand)" : "var(--color-glass)",
-              color: (input.trim() || attachments.length > 0) ? "#000" : "var(--color-text-muted)",
+              background: canSend ? "var(--color-brand)" : "var(--color-glass)",
+              color: canSend ? "#000" : "var(--color-text-muted)",
               border: "1px solid var(--color-border)",
               minHeight: "44px",
               minWidth: "44px",

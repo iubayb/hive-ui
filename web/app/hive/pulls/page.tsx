@@ -1,6 +1,13 @@
 import { ghFetch } from "@/lib/github";
+import { PageHeader } from "@/components/PageHeader";
+import { SubNav } from "@/components/SubNav";
 
 export const revalidate = 60;
+
+const ISSUES_PULLS_NAV = [
+  { href: "/hive/issues", label: "Issues" },
+  { href: "/hive/pulls",  label: "PRs"    },
+];
 
 export default async function PullsPage() {
   let pulls: any[] = [];
@@ -10,20 +17,13 @@ export default async function PullsPage() {
 
   return (
     <div style={{ background: "var(--color-surface)" }}>
-      <header
-        className="sticky top-0 z-40 px-4 py-3 flex items-center gap-2 border-b"
-        style={{
-          background: "rgba(9,9,11,0.95)",
-          borderColor: "var(--color-border)",
-          backdropFilter: "blur(16px)",
-        }}
-      >
-        <span className="text-lg">⊗</span>
-        <span className="font-display font-semibold text-sm">Pull Requests</span>
-        <span className="ml-auto text-xs font-mono" style={{ color: "var(--color-text-muted)" }}>
-          {pulls.length} open
-        </span>
-      </header>
+      <PageHeader
+        icon="⊗"
+        title="Pull Requests"
+        subtitle={`${pulls.length} open`}
+      />
+      <SubNav items={ISSUES_PULLS_NAV} />
+
       <main className="px-4 py-4 space-y-2 max-w-lg mx-auto">
         {pulls.length === 0 ? (
           <div className="glass-card p-8 text-center text-sm" style={{ color: "var(--color-text-muted)" }}>
@@ -42,9 +42,9 @@ export default async function PullsPage() {
                 <span className="text-xs font-mono shrink-0 mt-0.5" style={{ color: "var(--color-text-muted)" }}>
                   #{pr.number}
                 </span>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <p className="text-sm" style={{ color: "var(--color-text-primary)" }}>{pr.title}</p>
-                  <p className="text-xs mt-0.5" style={{ color: "var(--color-text-muted)" }}>
+                  <p className="text-xs mt-0.5 font-mono" style={{ color: "var(--color-text-muted)" }}>
                     {pr.head?.ref} → {pr.base?.ref}
                   </p>
                 </div>

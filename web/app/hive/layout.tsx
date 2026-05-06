@@ -1,6 +1,6 @@
 import { BottomNav } from "@/components/BottomNav";
 import { SseProvider } from "@/components/SseProvider";
-import { ConnectionBadge } from "@/components/ConnectionBadge";
+import { ActiveTaskBar } from "@/components/ActiveTaskBar";
 
 export default function HiveLayout({
   children,
@@ -10,8 +10,9 @@ export default function HiveLayout({
   return (
     <>
       <SseProvider />
-      <ConnectionBadge />
-      <div className="min-h-screen pb-16">{children}</div>
+      <ActiveTaskBar />
+      {/* pt-9 clears the 36px fixed ActiveTaskBar; pb-16 clears the fixed BottomNav */}
+      <div className="min-h-screen pt-9 pb-16">{children}</div>
       <BottomNav />
     </>
   );

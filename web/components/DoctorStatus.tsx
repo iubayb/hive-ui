@@ -2,10 +2,23 @@
 
 import { useState, useEffect, useCallback } from "react";
 
+interface Finding {
+  session?: string;
+  problem?: string;
+  fix_command?: string;
+  severity?: string;
+}
+
 interface DoctorData {
   last_run?: string;
   total_runs?: number;
-  last_findings?: string[];
+  runs_total?: number;
+  last_findings?: (string | Finding)[];
+}
+
+function findingText(f: string | Finding): string {
+  if (typeof f === "string") return f;
+  return f.problem ?? f.session ?? JSON.stringify(f);
 }
 
 export function DoctorStatus() {
@@ -72,10 +85,10 @@ export function DoctorStatus() {
             </span>
           </span>
         )}
-        {data.total_runs !== undefined && (
+        {data.total_runs !== undefined || data.runs_total !== undefined && (
           <span>
             Total runs:{" "}
-            <span style={{ color: "var(--color-text-secondary)" }}>{data.total_runs}</span>
+            <span style={{ color: "var(--color-text-secondary)" }}>{data.total_runs ?? data.runs_total}</span>
           </span>
         )}
         {findings.length > 0 && (
@@ -91,7 +104,7 @@ export function DoctorStatus() {
           {findings.map((f, i) => (
             <li key={i} className="flex gap-2 items-start text-xs">
               <span className="shrink-0 mt-0.5" style={{ color: "#F59E0B" }}>⚠</span>
-              <span style={{ color: "var(--color-text-secondary)" }}>{f}</span>
+              <span style={{ color: "var(--color-text-secondary)" }}>{findingText(f)}</span>
             </li>
           ))}
         </ul>
