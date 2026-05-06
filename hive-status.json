@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T03:52:00Z",
+  "last_updated": "2026-05-06T03:56:00Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.857,
-      "last_seen": "2026-05-06T03:51:55Z",
+      "health_score": 0.65,
+      "last_seen": "2026-05-06T03:55:59Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -32,9 +32,9 @@
       "agent": "hive-doctor",
       "description": "[ps5-hive] HTTP 500 cascade from Ollama (11434) under load; 4856 failures indicate retry storm overwhelming the server.",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T03:52:50Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
       "github_issue": null,
       "_hash": "87532bc7a07bbb48ac767e2eab1ca52d"
     },
@@ -45,9 +45,9 @@
       "agent": "hive-doctor",
       "description": "[ps5-hive] Ollama 500 cascade (4856 failures/1 inflight) with telemetry-enabled retries causing retry storms against /v1/chat/completions",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T03:52:50Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
       "github_issue": null,
       "_hash": "bd13d5f59bf2aa93c880b7a3a892f780"
     },
@@ -300,7 +300,7 @@
       "id": "ns_64a8e57a",
       "priority": 2,
       "description": "Run targeted self-test for TS14 to capture failing condition and apply a manual fix based on observed error.",
-      "assigned_to": "default",
+      "assigned_to": "opencode",
       "status": "done",
       "source": "orchestrator",
       "ts": "2026-05-06T02:06:12Z"
@@ -310,7 +310,7 @@
       "priority": 3,
       "description": "Run targeted self-test for TS17 to capture failing condition and apply a manual fix based on observed error.",
       "assigned_to": "default",
-      "status": "pending",
+      "status": "in_progress",
       "source": "orchestrator",
       "ts": "2026-05-06T02:06:12Z"
     }
@@ -427,7 +427,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 16
+    "openrouter_calls_today": 17
   },
   "model_champions": {
     "text": null,
@@ -605,6 +605,26 @@
         "Execute failing self-tests one at a time to isolate root causes and avoid conflated failures.",
         "Record exact failure outputs and apply manual remediation or targeted patches; escalate only if patterns recur."
       ]
+    },
+    {
+      "id": "sess_ade3680c",
+      "ts": "2026-05-06T03:54:06Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full self-test pass by creating the missing supervisor session and fixing TS13/TS17/TS18/TS19 failures.",
+      "summary": "Seven high-priority self-test failures remain (TS13, TS17, TS18, TS19) and the supervisor tmux session is absent, leaving the hive in a degraded state. Hive health is acceptable (h=65%) and active sessions are mostly stable, but missing supervisor and failing tests block full operational confidence.",
+      "progress": "Identified the missing supervisor tmux session and listed targeted self-test recovery actions for TS13, TS17, TS18, and TS19.",
+      "next_steps": [
+        "Create and start the supervisor tmux session (tmux new-session -d -s supervisor) and verify it appears in session list.",
+        "Run targeted self-test for TS13 to capture failing condition, apply fix, and confirm pass.",
+        "Run targeted self-test for TS17 to capture failing condition, apply fix, and confirm pass.",
+        "Run targeted self-test for TS18 and TS19 to capture failing conditions, apply fixes, and confirm pass.",
+        "Re-run full self-test suite and validate all 8 expected tmux sessions exist with no failures."
+      ],
+      "decisions": [
+        "Prioritize restoring the supervisor session first to re-establish process supervision and reduce cascade risk.",
+        "Address TS13/TS17/TS18/TS19 in order of likely dependency (TS13 \u2192 TS17 \u2192 TS18/TS19) to minimize rework.",
+        "Apply targeted fixes and short rollback/retry loops instead of broad reconfiguration to preserve hive stability."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -616,9 +636,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T03:51:55Z",
-    "completed_at": "2026-05-06T03:52:00Z"
+    "started_at": "2026-05-06T03:55:59Z",
+    "completed_at": "2026-05-06T03:56:00Z"
   }
 }
