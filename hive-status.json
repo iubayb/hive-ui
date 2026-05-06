@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T11:54:55Z",
+  "last_updated": "2026-05-06T11:55:57Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
-      "health_score": 0.667,
-      "last_seen": "2026-05-06T11:54:07Z",
+      "health_score": 0.95,
+      "last_seen": "2026-05-06T11:55:27Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -43,9 +43,9 @@
       "agent": "hive-doctor",
       "description": "[ps5-hive] queue drained with 0 files analyzed \u2014 likely upstream producer idle or input path empty",
       "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T11:55:06Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
       "github_issue": null,
       "_hash": "194a51d43799d5184f0fa99dfc8e1833"
     },
@@ -56,9 +56,9 @@
       "agent": "hive-doctor",
       "description": "[hive-live] researcher-tracker idle \u2014 no researchers configured; dependency stall",
       "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T11:55:06Z",
+      "resolution": "auto-pruned: hive-live is now alive",
       "github_issue": null,
       "_hash": "1fc13ef5a49231690aa091f9d4b37d4b"
     },
@@ -69,9 +69,9 @@
       "agent": "hive-doctor",
       "description": "[hive-dev] PORT 8889 bind failure or process conflict preventing logstream.py startup",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T11:55:06Z",
+      "resolution": "auto-pruned: hive-dev is now alive",
       "github_issue": null,
       "_hash": "48f9c189f9337c526a833177787375d0"
     },
@@ -845,9 +845,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: develop\u2192main promotion check + release draft",
+    "task": "heartbeat \u00b7 sessions=9 health=95% blockers=1",
     "status": "completed",
-    "started_at": "2026-05-06T11:54:43Z",
-    "completed_at": "2026-05-06T11:54:45Z"
+    "started_at": "2026-05-06T11:55:27Z",
+    "completed_at": "2026-05-06T11:55:27Z"
   }
 }
