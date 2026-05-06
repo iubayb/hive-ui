@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T13:08:02Z",
+  "last_updated": "2026-05-06T13:08:39Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 1.0,
-      "last_seen": "2026-05-06T13:06:22Z",
+      "last_seen": "2026-05-06T13:08:22Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -325,6 +325,15 @@
       "ts": "2026-05-06T08:55:35Z"
     },
     {
+      "id": "ns_1df8cb10",
+      "priority": 1,
+      "description": "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-06T13:08:39Z"
+    },
+    {
       "id": "ns_5a5a9417",
       "priority": 2,
       "description": "Apply stricter cgroup limits and lower niceness for research_loop jobs to reduce core contention.",
@@ -343,6 +352,15 @@
       "ts": "2026-05-06T08:55:35Z"
     },
     {
+      "id": "ns_bb8f7ad1",
+      "priority": 2,
+      "description": "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-06T13:08:39Z"
+    },
+    {
       "id": "ns_e5581c94",
       "priority": 3,
       "description": "Clear caches and temporary files to reclaim disk space and reduce I/O pressure.",
@@ -356,9 +374,18 @@
       "priority": 3,
       "description": "Create a controlled rollout policy for nextjs-prod including canary weights, automated smoke checks, and instant rollback triggers on error-rate or latency breaches.",
       "assigned_to": "default",
-      "status": "pending",
+      "status": "in_progress",
       "source": "orchestrator",
       "ts": "2026-05-06T08:55:35Z"
+    },
+    {
+      "id": "ns_d903dda3",
+      "priority": 3,
+      "description": "Add /api/metrics endpoint to logstream.py returning JSON of session stats (sessions, throughput, errors).",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-06T13:08:39Z"
     }
   ],
   "capabilities": {
@@ -598,7 +625,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 46
+    "openrouter_calls_today": 47
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -607,26 +634,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_a7451c0a",
-      "ts": "2026-05-06T10:56:02Z",
-      "updated_by": "orchestrator",
-      "goal": "Establish observable, resilient per-session SLOs and a controlled rollout for nextjs-prod while keeping all active sessions healthy.",
-      "summary": "All nine active sessions are running with hive health at 100%. A Next.js UI is live on port 3001 with GitHub auth and SSE streams, but we lack per-session SLOs, backpressure rules, and a controlled rollout policy for nextjs-prod.",
-      "progress": "Instrumented sessions and defined port-binding checks plus conflict-resolution workflows, yielding 14 knowledge findings and zero open blockers.",
-      "next_steps": [
-        "Add per-session SLOs and backpressure rules (CPU/mem thresholds, queue depth, circuit-breaker triggers) for build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, supervisor.",
-        "Deploy lightweight exporters/agents to each active session to emit SLO metrics and health heartbeats with labels for canary grouping.",
-        "Create and merge a controlled rollout policy for nextjs-prod including canary weight progression, automatic rollback triggers, and dark-traffic validation.",
-        "Run a staged canary release for nextjs-prod (10% \u2192 25% \u2192 50% \u2192 100%) while monitoring SLO burn rates and error budgets.",
-        "Lock in port-bind and conflict-resolution runbooks as enforceable preconditions in the CI/CD pipeline."
-      ],
-      "decisions": [
-        "Standardize SLO metrics and labels across all sessions to enable consistent alerting and capacity planning.",
-        "Adopt progressive canary promotion for nextjs-prod with strict error-budget guardrails and instant rollback on SLO breach.",
-        "Require port-bind and conflict-resolution checks as gating preconditions before any session restart or scale operation."
-      ]
-    },
     {
       "id": "sess_c8f3c493",
       "ts": "2026-05-06T11:11:03Z",
@@ -800,6 +807,26 @@
         "Use 5/95 canary traffic split for nextjs-prod with automated rollback on latency P95>1200ms or error rate>1% over a 2-minute window.",
         "Expose /api/session-metrics as the single source of truth for observability and drive auto-scaling and alerting decisions."
       ]
+    },
+    {
+      "id": "sess_ae8e5c75",
+      "ts": "2026-05-06T13:08:39Z",
+      "updated_by": "orchestrator",
+      "goal": "Solidify hive-ui production readiness by hardening metrics, auth, and stream reliability for all active sessions.",
+      "summary": "The hive is running at full health with the new Ling model and a live Next.js UI on port 3001. Recent wins include GitHub auth, SSE streaming, and 24 knowledge findings with zero blockers. We now need concrete code improvements to lock down observability and resilience.",
+      "progress": "Added /api/metrics and GitHub auth to the Next.js UI on port 3001 with SSE streaming.",
+      "next_steps": [
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
+        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
+        "Add /api/metrics endpoint to logstream.py returning JSON of session stats (sessions, throughput, errors).",
+        "Implement auth middleware in pages/api/stream.ts to validate session tokens before SSE upgrade.",
+        "Add max-lag threshold and auto-reconnect to useSSE() in lib/hooks/useSSE.ts when stream stalls >5s."
+      ],
+      "decisions": [
+        "Standardize on inclusionai/ling-2.6-1t:free for all non-experimental session workloads.",
+        "Keep port 3001 dedicated to hive-ui Next.js production traffic; enforce via port-bind-check.",
+        "Route all session metrics through logstream.py /api/metrics as the single source of truth."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -813,7 +840,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T13:07:30Z",
-    "completed_at": "2026-05-06T13:07:32Z"
+    "started_at": "2026-05-06T13:08:32Z",
+    "completed_at": "2026-05-06T13:08:34Z"
   }
 }
