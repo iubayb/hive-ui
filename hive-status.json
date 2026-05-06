@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T13:58:59Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T13:59:52Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
@@ -684,7 +684,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 54
+    "openrouter_calls_today": 55
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -693,26 +693,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_d9d08d69",
-      "ts": "2026-05-06T12:11:14Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the default hive from stalled state and establish per-session SLOs, backpressure rules, and a controlled rollout for nextjs-prod.",
-      "summary": "The default hive is stalled at 100% h with nine active sessions; Next.js is live on port 3001 with 12 routes, GitHub auth, and SSE streams. We have port-bind-check and port-conflict-resolution capabilities and 18 knowledge findings, but no open blockers remain.",
-      "progress": "Completed full Next.js UI launch on port 3001 with GitHub auth and SSE streams, and identified port-binding and conflict-resolution capabilities.",
-      "next_steps": [
-        "Instrument each active session (build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, supervisor) with metrics and health probes.",
-        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue limits, retry budgets) and apply defaults to resolve the stalled hive.",
-        "Create a controlled rollout policy for nextjs-prod including canary weights, health gates, and automated rollback triggers.",
-        "Reduce hive load to <80% h by pausing non-critical sessions or scaling resources, then confirm default hive returns to healthy.",
-        "Document and apply port-conflict-resolution playbook to prevent future stalls and bind failures across sessions."
-      ],
-      "decisions": [
-        "Adopt per-session SLOs with explicit backpressure and hysteresis to prevent default hive stalls.",
-        "Gate nextjs-prod changes behind canary metrics and automated rollback to protect production traffic.",
-        "Enforce instrumentation as a prerequisite for any session to be marked healthy and included in load decisions."
-      ]
-    },
     {
       "id": "sess_86a96546",
       "ts": "2026-05-06T12:26:44Z",
@@ -892,6 +872,26 @@
         "Restrict org_guard to deny any path containing '..', '/etc/', or absolute non-workspace roots and log on violation.",
         "Expose /api/metrics under a lightweight route that serializes session state without blocking the main loop."
       ]
+    },
+    {
+      "id": "sess_a17161eb",
+      "ts": "2026-05-06T13:59:52Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize live hive-ui with resilient LLM calls, metrics exposure, and hardened auth guard while adding backpressure controls.",
+      "summary": "The hive is running at full capacity with nine active sessions and the Next.js UI live on port 3001. Recent wins include the new text champion and full UI with SSE streams, but retry/backpressure and metrics endpoints remain missing. We need concrete code changes to harden orchestrator and guardrails before scale increases.",
+      "progress": "Exposed /api/metrics endpoint stub and wired GitHub auth; implemented exponential backoff and jitter in lib/sse.ts sendStream() with a max-retries cap.",
+      "next_steps": [
+        "Add retry logic with exponential backoff and jitter to call_llm() in orchestrator.py when HTTP 429/5xx is returned, using tenacity or manual backoff with max_retries=5 and base_delay=1.0s.",
+        "Write unit tests for org_guard.py covering all forbidden path patterns (e.g., '../', '/etc/', '/root/', absolute system paths) using pytest fixtures and assert raises.",
+        "Implement per-session SLOs and backpressure rules in supervisor/sessions.py: add cpu_threshold=0.85 and mem_threshold=0.90 checks that throttle new tasks and emit backpressure events.",
+        "Expose /api/metrics endpoint in pages/api/metrics.ts returning JSON of session stats (active sessions, task counts, error rates, latency p95) with proper CORS and 60s cache headers.",
+        "Add circuit-breaker wrapper in lib/sse.ts around sendStream() that trips after N consecutive failures and provides half-open retries with exponential backoff and jitter."
+      ],
+      "decisions": [
+        "Adopt exponential backoff with jitter for all external calls (call_llm, SSE) to minimize thundering herds.",
+        "Enforce org_guard path validation as default deny with explicit allow-list for hive directories.",
+        "Expose /api/metrics as the single source of session telemetry for autoscaling and alerting."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -903,9 +903,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-06T13:58:58Z",
-    "completed_at": "2026-05-06T13:58:59Z"
+    "started_at": "2026-05-06T13:59:39Z",
+    "completed_at": "2026-05-06T13:59:52Z"
   }
 }
