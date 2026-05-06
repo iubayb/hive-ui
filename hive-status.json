@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T08:54:59Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-06T08:55:56Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.8,
-      "last_seen": "2026-05-06T08:53:32Z",
+      "health_score": 1.0,
+      "last_seen": "2026-05-06T08:55:46Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -360,6 +360,15 @@
       "ts": "2026-05-06T07:25:12Z"
     },
     {
+      "id": "ns_cfaf8fb1",
+      "priority": 1,
+      "description": "Instrument each active session (build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, supervisor) with standardized health/metrics endpoints and log correlation IDs.",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-06T08:55:35Z"
+    },
+    {
       "id": "ns_5a5a9417",
       "priority": 2,
       "description": "Apply stricter cgroup limits and lower niceness for research_loop jobs to reduce core contention.",
@@ -369,6 +378,15 @@
       "ts": "2026-05-06T07:25:12Z"
     },
     {
+      "id": "ns_92ae908d",
+      "priority": 2,
+      "description": "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-06T08:55:35Z"
+    },
+    {
       "id": "ns_e5581c94",
       "priority": 3,
       "description": "Clear caches and temporary files to reclaim disk space and reduce I/O pressure.",
@@ -376,6 +394,15 @@
       "status": "done",
       "source": "orchestrator",
       "ts": "2026-05-06T07:25:12Z"
+    },
+    {
+      "id": "ns_91174211",
+      "priority": 3,
+      "description": "Create a controlled rollout policy for nextjs-prod including canary weights, automated smoke checks, and instant rollback triggers on error-rate or latency breaches.",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-06T08:55:35Z"
     }
   ],
   "capabilities": {
@@ -460,7 +487,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 12
+    "openrouter_calls_today": 13
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -588,6 +615,26 @@
         "Enforce cgroup limits and niceness adjustments for all research_loop jobs to prevent noisy-neighbor effects.",
         "Automate cache purge with retention policies and schedule off-peak maintenance to avoid recurrence."
       ]
+    },
+    {
+      "id": "sess_b184d1db",
+      "ts": "2026-05-06T08:55:35Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize and harden the multi-session hive while extending observability and controlled rollout capabilities.",
+      "summary": "The hive is running healthy across nine active sessions with Next.js UI live on port 3001 and no open blockers. Recent learning on port-bind-check and port-conflict-resolution strengthens runtime reliability, and six knowledge findings provide a compact decision record. We will now consolidate observability, tighten session governance, and enable safe rollout patterns.",
+      "progress": "Completed full Next.js UI deployment (12 routes, GitHub auth, SSE) on port 3001 and validated port-bind-check/port-conflict-resolution heuristics across the fleet.",
+      "next_steps": [
+        "Instrument each active session (build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, supervisor) with standardized health/metrics endpoints and log correlation IDs.",
+        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
+        "Create a controlled rollout policy for nextjs-prod including canary weights, automated smoke checks, and instant rollback triggers on error-rate or latency breaches.",
+        "Establish a runbook-driven port-conflict-resolution playbook and enforce pre-bind checks in session startup scripts to prevent runtime collisions.",
+        "Publish a concise release note and decision log (one-pager) summarizing the six knowledge findings, port heuristics, and rollout policy for team onboarding."
+      ],
+      "decisions": [
+        "Adopt port-binding pre-checks and conflict-resolution heuristics as mandatory for all new session launches.",
+        "Route production traffic through hive-live with hysteresis-based scaling tied to per-session SLOs; keep nextjs-prod canary-capable by default.",
+        "Require standardized health/metrics and log correlation in every session to enable cross-session observability and fast RCA."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -599,9 +646,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=100% blockers=0",
     "status": "completed",
-    "started_at": "2026-05-06T08:54:58Z",
-    "completed_at": "2026-05-06T08:54:59Z"
+    "started_at": "2026-05-06T08:55:46Z",
+    "completed_at": "2026-05-06T08:55:46Z"
   }
 }
