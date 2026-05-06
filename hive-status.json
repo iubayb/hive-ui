@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T08:22:00Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T08:22:52Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-06T08:20:28Z",
+      "health_score": 0.778,
+      "last_seen": "2026-05-06T08:22:46Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,13 +20,65 @@
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
-      "errors_last_hour": 19,
+      "errors_last_hour": 18,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_3a7b2bc0",
+      "ts": "2026-05-06T08:22:51Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-live] PORT=8888 process respawn loop failing; port conflict or early exit preventing stable service",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "5373b5d1169d57f80a5a26610387e020"
+    },
+    {
+      "id": "b_eb2efa40",
+      "ts": "2026-05-06T08:22:51Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-dev] PORT=8889 process respawn loop failing; port likely still bound or process exits immediately after pkill",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "05239969b0a4edfba5007959542da8fe"
+    },
+    {
+      "id": "b_59b3aeb3",
+      "ts": "2026-05-06T08:22:47Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-live] PORT 8888 bind conflict or stale state causing logstream.py restart loops; researcher-tracker idle with no researchers configured",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T08:22:52Z",
+      "resolution": "auto-pruned: hive-live is now alive",
+      "github_issue": null,
+      "_hash": "780a69312ca97ea4ff716f1e7105fe88"
+    },
+    {
+      "id": "b_f33a1596",
+      "ts": "2026-05-06T08:22:47Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-dev] PORT 8889 bind conflict or stale state causing logstream.py restart loops; researcher-tracker idle with no researchers configured",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T08:22:52Z",
+      "resolution": "auto-pruned: hive-dev is now alive",
+      "github_issue": null,
+      "_hash": "2c17df767b49288adfcdd9946da15a94"
+    },
     {
       "id": "b_f545c350",
       "ts": "2026-05-06T07:52:46Z",
@@ -1274,58 +1326,6 @@
       "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
       "github_issue": null,
       "_hash": "0845f6bfaa860c41c9dc61b32335952b"
-    },
-    {
-      "id": "b_1cc0ba3b",
-      "ts": "2026-05-06T07:25:10Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=4.40 mem=20.3GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "c699952ffe93358245df6cf1a7650612"
-    },
-    {
-      "id": "b_f55e2b03",
-      "ts": "2026-05-06T07:25:10Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=2.37 mem=22.0GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "e29942357e96138d8790b074f6bdd792"
-    },
-    {
-      "id": "b_dadf1bbe",
-      "ts": "2026-05-06T07:25:10Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=3.10 mem=44.9GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "a38a1e4e3e0e5e7fa34c9be58357014a"
-    },
-    {
-      "id": "b_433e03b9",
-      "ts": "2026-05-06T07:25:08Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=2.62 mem=19.8GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "0707dd5d8c968e7c49a326db55a5511e"
     }
   ],
   "next_steps": [
@@ -1368,7 +1368,8 @@
         "description": "Quick pre-flight bind test to verify port availability before launching services.",
         "example": "python3 -c \"import socket; s=socket.socket(); s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1); s.bind(('', PORT)); print('bind ok'); s.close()\"",
         "tags": [],
-        "applicable_to": "all"
+        "applicable_to": "all",
+        "last_updated": "2026-05-06T08:22:51Z"
       },
       {
         "id": "cap_1e534b8b",
@@ -1377,14 +1378,29 @@
         "source_agent": "hive-doctor",
         "skill": "port-conflict-resolution",
         "description": "Detects and clears port collisions before respawning dependent services.",
-        "example": "ss -tlnp | grep 8889 && lsof -ti:8889 | xargs -r kill -9; sleep 1; tmux respawn-window -t hive-dev",
+        "example": "ss -tlnp | grep PORT && lsof -ti:PORT | xargs -r kill -9; sleep 1; tmux respawn-window -t SESSION",
         "tags": [],
-        "applicable_to": "all"
+        "applicable_to": "all",
+        "last_updated": "2026-05-06T08:22:51Z"
       }
     ]
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_6520c9fa",
+        "ts": "2026-05-06T08:22:51Z",
+        "hive": "default",
+        "summary": "Both sessions stuck in respawn loops due to lingering port bindings; clear ports, confirm availability, then respawn windows.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_1df32a79",
+        "ts": "2026-05-06T08:22:47Z",
+        "hive": "default",
+        "summary": "Both sessions show repeated port conflicts on 8888/8889 causing logstream restart loops; clear collisions and respawn.",
+        "source": "doctor"
+      },
       {
         "id": "f_996c4540",
         "ts": "2026-05-06T07:52:46Z",
@@ -1409,7 +1425,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 6
+    "openrouter_calls_today": 8
   },
   "model_champions": {
     "text": null,
@@ -1510,7 +1526,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T08:21:49Z",
-    "completed_at": "2026-05-06T08:21:50Z"
+    "started_at": "2026-05-06T08:22:51Z",
+    "completed_at": "2026-05-06T08:22:52Z"
   }
 }
