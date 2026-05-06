@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T03:36:01Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T03:36:58Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.65,
-      "last_seen": "2026-05-06T03:34:31Z",
+      "last_seen": "2026-05-06T03:36:31Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -387,7 +387,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 12
+    "openrouter_calls_today": 13
   },
   "model_champions": {
     "text": null,
@@ -525,6 +525,26 @@
         "Capture per-test failure artifacts (stderr/logs) before attempting fixes to avoid blind retries.",
         "Prioritize TS14/TS17/TS18 remediation to reduce high-severity blockers before retesting TS19."
       ]
+    },
+    {
+      "id": "sess_581df53d",
+      "ts": "2026-05-06T03:36:58Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full self-test pass (TS13/TS17/TS18/TS19) and supervisor session to eliminate high-priority blockers.",
+      "summary": "The hive is running at 65% health with seven active sessions, but four high-priority self-test failures and a missing supervisor session remain unresolved. No recent achievements have been recorded, and two targeted remediation steps are pending execution.",
+      "progress": "Verified hive state, confirmed missing supervisor tmux session, and identified specific failing tests (TS13/TS17/TS18/TS19) with no prior fixes applied.",
+      "next_steps": [
+        "Create and start the missing supervisor tmux session (e.g., tmux new-session -d -s supervisor) and verify it is listed and attached.",
+        "Run targeted self-test for TS13 to capture failing condition, capture logs, and attempt auto-fix or isolate root cause.",
+        "Run targeted self-test for TS17 to capture failing condition, capture logs, and attempt auto-fix or isolate root cause.",
+        "Run targeted self-test for TS18 to capture failing condition, capture logs, and attempt auto-fix or isolate root cause.",
+        "Run targeted self-test for TS19 to capture failing condition, capture logs, and attempt auto-fix or isolate root cause."
+      ],
+      "decisions": [
+        "Prioritize supervisor session creation before deeper test fixes to restore orchestration capacity.",
+        "Apply targeted, per-test isolation to avoid broad disruption while capturing reproducible failure artifacts.",
+        "Leverage known capabilities (http500-circuit-breaker, ollama-auto-recover) as part of remediation where applicable."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -536,9 +556,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-06T03:35:31Z",
-    "completed_at": "2026-05-06T03:35:31Z"
+    "started_at": "2026-05-06T03:36:52Z",
+    "completed_at": "2026-05-06T03:36:58Z"
   }
 }
