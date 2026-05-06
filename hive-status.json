@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T10:52:59Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T10:54:02Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-06T10:51:24Z",
+      "health_score": 0.778,
+      "last_seen": "2026-05-06T10:53:30Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -36,6 +36,58 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_14f2b352",
+      "ts": "2026-05-06T10:54:02Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-live] PORT=8888 bind failure or process collision causing repeated spawn errors; researcher-tracker idle due to missing config.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "355ab5c39ae3d6d4108ba1c0ba74a59a"
+    },
+    {
+      "id": "b_efcf78a9",
+      "ts": "2026-05-06T10:54:02Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-dev] PORT=8889 bind failure or process collision causing repeated spawn errors; researcher-tracker idle due to missing config.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "9f0ac735bd3eabf8685a1074b6ef6121"
+    },
+    {
+      "id": "b_fb25a7d5",
+      "ts": "2026-05-06T10:53:19Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-live] Port 8888 collision or bind failure preventing logstream.py startup; researcher-tracker idle (no config).",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T10:54:00Z",
+      "resolution": "auto-pruned: hive-live is now alive",
+      "github_issue": null,
+      "_hash": "c5e3016f688b221d46c6a9d5be1f8642"
+    },
+    {
+      "id": "b_4aadc5a8",
+      "ts": "2026-05-06T10:53:19Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-dev] Port 8889 collision or bind failure preventing logstream.py startup; researcher-tracker idle (no config).",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T10:54:00Z",
+      "resolution": "auto-pruned: hive-dev is now alive",
+      "github_issue": null,
+      "_hash": "e58b91477efe1b6518e785f2d762b9bb"
+    },
     {
       "id": "b_d326b4eb",
       "ts": "2026-05-06T10:23:30Z",
@@ -559,12 +611,26 @@
         "example": "ss -tlnp | grep PORT && lsof -ti:PORT | xargs -r kill -9; sleep 1; tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T10:23:30Z"
+        "last_updated": "2026-05-06T10:54:02Z"
       }
     ]
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_d6762e8d",
+        "ts": "2026-05-06T10:54:02Z",
+        "hive": "default",
+        "summary": "Port collisions on 8888/8889 stall logstream workers; researcher-tracker idle from missing configuration.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_40054532",
+        "ts": "2026-05-06T10:53:19Z",
+        "hive": "default",
+        "summary": "Port collisions on 8888/8889 are blocking logstream.py; clear conflicts and respawn windows to restore service.",
+        "source": "doctor"
+      },
       {
         "id": "f_59d35369",
         "ts": "2026-05-06T10:23:30Z",
@@ -659,7 +725,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 26
+    "openrouter_calls_today": 28
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -880,7 +946,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T10:52:57Z",
-    "completed_at": "2026-05-06T10:52:59Z"
+    "started_at": "2026-05-06T10:53:59Z",
+    "completed_at": "2026-05-06T10:54:00Z"
   }
 }
