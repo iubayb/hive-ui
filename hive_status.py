@@ -502,12 +502,15 @@ def add_next_step(description: str, assigned_to: str = "hive-doctor",
 
 
 def update_next_step(step_id: str, status: str,
+                     assigned_to: str = None,
                      updated_by: str = "agent"):
     with _status_lock:
         s = load()
         for ns in s["next_steps"]:
             if ns["id"] == step_id:
                 ns["status"] = status
+                if assigned_to is not None:
+                    ns["assigned_to"] = assigned_to
                 break
         save(s, updated_by)
 

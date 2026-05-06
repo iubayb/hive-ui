@@ -1518,6 +1518,7 @@ def main():
                     _delegate_to_opencode(desc)
                     if step_id:
                         hive_status.update_next_step(step_id, "in_progress",
+                                                     assigned_to="opencode",
                                                      updated_by="orchestrator")
                         _log(f"[opencode] dispatched → {desc[:70]}")
                 # Early compaction: queue running low → generate fresh tasks now
