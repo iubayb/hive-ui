@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T20:05:36Z",
+  "last_updated": "2026-05-06T20:06:37Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-06T20:05:16Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-06T20:06:21Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_319f4929",
+      "ts": "2026-05-06T20:06:27Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded max_tasks and max_hours allow runaway retries; 4874 failures and 1800s timeouts indicate exhausted workers and no backoff limits.",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "4ea7551a040884863df3a7303d5f9097"
+    },
     {
       "id": "b_000a4ffa",
       "ts": "2026-05-06T18:06:01Z",
@@ -479,7 +492,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t ps5-hive",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T19:56:18Z"
+        "last_updated": "2026-05-06T20:06:27Z"
       },
       {
         "id": "cap_27efd1db",
@@ -532,6 +545,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_0f476263",
+        "ts": "2026-05-06T20:06:27Z",
+        "hive": "default",
+        "summary": "Missing rate-limit and budget guardrails caused unbounded retries, exhausting workers and triggering cascading timeouts.",
+        "source": "doctor"
+      },
       {
         "id": "f_9757aad1",
         "ts": "2026-05-06T19:56:18Z",
@@ -909,7 +929,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 102
+    "openrouter_calls_today": 103
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1128,9 +1148,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=4",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T20:05:16Z",
-    "completed_at": "2026-05-06T20:05:16Z"
+    "started_at": "2026-05-06T20:06:06Z",
+    "completed_at": "2026-05-06T20:06:07Z"
   }
 }
