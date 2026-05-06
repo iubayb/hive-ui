@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T02:05:47Z",
+  "last_updated": "2026-05-06T02:07:53Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.6,
-      "last_seen": "2026-05-06T02:05:17Z",
+      "last_seen": "2026-05-06T02:07:23Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -123,9 +123,9 @@
       "agent": "orchestrator",
       "description": "Compaction LLM failed: [Errno -3] Temporary failure in name resolution",
       "severity": "low",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T02:06:12Z",
+      "resolution": "Compaction succeeded",
       "github_issue": null,
       "_hash": "99bdf422332250304601130c9f8f26df"
     },
@@ -182,7 +182,35 @@
       "_hash": "217dae28725ae72712be5a39a27334a8"
     }
   ],
-  "next_steps": [],
+  "next_steps": [
+    {
+      "id": "ns_ab9dd367",
+      "priority": 1,
+      "description": "Create and start the missing supervisor tmux session (e.g., tmux new-session -d -s supervisor with appropriate command) and verify it registers.",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-06T02:06:12Z"
+    },
+    {
+      "id": "ns_64a8e57a",
+      "priority": 2,
+      "description": "Run targeted self-test for TS14 to capture failing condition and apply a manual fix based on observed error.",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-06T02:06:12Z"
+    },
+    {
+      "id": "ns_508d6fcb",
+      "priority": 3,
+      "description": "Run targeted self-test for TS17 to capture failing condition and apply a manual fix based on observed error.",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-06T02:06:12Z"
+    }
+  ],
   "capabilities": {
     "learned": []
   },
@@ -197,7 +225,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 0
+    "openrouter_calls_today": 1
   },
   "model_champions": {
     "text": null,
@@ -215,6 +243,26 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_cd3fbf80",
+      "ts": "2026-05-06T02:06:12Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full self-test pass by launching missing supervisor session and resolving TS14/TS17/TS18/TS19 failures.",
+      "summary": "Hive is running but 9 high-severity self-test failures remain, including missing supervisor and four TS failures with no auto-fix available. All other sessions appear active and hive health is acceptable. Focus is on manual remediation to close blockers and restore reliability.",
+      "progress": "Identified missing supervisor session as the root cause for TS19 and confirmed no auto-fix is available for TS14/TS17/TS18/TS19.",
+      "next_steps": [
+        "Create and start the missing supervisor tmux session (e.g., tmux new-session -d -s supervisor with appropriate command) and verify it registers.",
+        "Run targeted self-test for TS14 to capture failing condition and apply a manual fix based on observed error.",
+        "Run targeted self-test for TS17 to capture failing condition and apply a manual fix based on observed error.",
+        "Run targeted self-test for TS18 to capture failing condition and apply a manual fix based on observed error.",
+        "Run targeted self-test for TS19 to confirm supervisor fix and close remaining failures."
+      ],
+      "decisions": [
+        "Commit to manual session creation and test-by-test remediation rather than awaiting auto-fix.",
+        "Prioritize supervisor restoration first because TS19 depends on it.",
+        "After each fix, re-run the specific self-test immediately to confirm before proceeding to the next."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -228,7 +276,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T02:05:17Z",
-    "completed_at": "2026-05-06T02:05:17Z"
+    "started_at": "2026-05-06T02:07:23Z",
+    "completed_at": "2026-05-06T02:07:23Z"
   }
 }
