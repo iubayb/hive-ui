@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T06:19:34Z",
+  "last_updated": "2026-05-06T06:22:42Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.95,
-      "last_seen": "2026-05-06T06:19:03Z",
+      "health_score": 0.857,
+      "last_seen": "2026-05-06T06:22:19Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -18,13 +18,39 @@
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
-      "errors_last_hour": 13,
+      "errors_last_hour": 11,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_d3a18337",
+      "ts": "2026-05-06T06:22:24Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Worker qwen3.6-abliterated-q3km hitting repeated HTTP 500 from local inference endpoint; high failure ratio (4870/60) with silent=0s suggests retry storm exhausting resources.",
+      "severity": "critical",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T06:22:41Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "31656bc23769d13b3d4251ec590c3eb6"
+    },
+    {
+      "id": "b_eb6d0fb4",
+      "ts": "2026-05-06T06:22:24Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Recurring 500 errors from local inference endpoint (11434) causing task flood (4870 failed vs 60 done); silent stall suggests hung worker blocking queue.",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T06:22:41Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "ad6a7aa5af1119eb5374c4a20627a449"
+    },
     {
       "id": "b_71c8abad",
       "ts": "2026-05-06T05:52:19Z",
@@ -141,16 +167,30 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "http500-circuit-breaker",
-        "description": "Injects randomized delays plus telemetry suppression to throttle retry storms and stabilize flaky inference endpoints.",
+        "description": "Injects randomized delays plus telemetry suppression and graceful HUP restarts to throttle retry storms and stabilize flaky inference endpoints.",
         "example": "export HF_HUB_DISABLE_TELEMETRY=1 && sleep $((RANDOM % 10 + 5)) && kill -HUP $(pgrep -nf 'curl|wget|python.*run') 2>/dev/null",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T05:52:19Z"
+        "last_updated": "2026-05-06T06:22:24Z"
       }
     ]
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_2f07b70a",
+        "ts": "2026-05-06T06:22:24Z",
+        "hive": "default",
+        "summary": "Critical retry storm on local inference endpoint triggering HTTP 500s; apply circuit-breaker delay and gracefully restart the worker to throttle and recover.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_2a4dd595",
+        "ts": "2026-05-06T06:22:24Z",
+        "hive": "default",
+        "summary": "Flaky local inference server is saturating the queue with 500s; restart worker with jittered backoff and circuit-breaker throttling.",
+        "source": "doctor"
+      },
       {
         "id": "f_a6bf3d5c",
         "ts": "2026-05-06T05:52:19Z",
@@ -196,7 +236,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 10
+    "openrouter_calls_today": 12
   },
   "model_champions": {
     "text": null,
@@ -337,7 +377,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T06:19:33Z",
-    "completed_at": "2026-05-06T06:19:34Z"
+    "started_at": "2026-05-06T06:22:40Z",
+    "completed_at": "2026-05-06T06:22:42Z"
   }
 }
