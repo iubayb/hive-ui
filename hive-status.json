@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T13:05:40Z",
+  "last_updated": "2026-05-06T13:07:00Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.95,
-      "last_seen": "2026-05-06T13:04:37Z",
+      "health_score": 1.0,
+      "last_seen": "2026-05-06T13:06:22Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -320,7 +320,7 @@
       "priority": 1,
       "description": "Instrument each active session (build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, supervisor) with standardized health/metrics endpoints and log correlation IDs.",
       "assigned_to": "default",
-      "status": "pending",
+      "status": "in_progress",
       "source": "orchestrator",
       "ts": "2026-05-06T08:55:35Z"
     },
@@ -598,7 +598,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 45
+    "openrouter_calls_today": 46
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -607,26 +607,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_bf4a9ec7",
-      "ts": "2026-05-06T10:40:57Z",
-      "updated_by": "orchestrator",
-      "goal": "Establish per-session observability, SLOs, and a controlled rollout policy to harden stability across all active sessions.",
-      "summary": "All nine active sessions are running with default hive health at 100%. There are zero open blockers, and the Next.js UI is fully live on port 3001 with 12 routes, GitHub auth, and SSE streams. Instrumentation, SLOs, and rollout policy remain the critical path to production-grade resilience.",
-      "progress": "Recently delivered a fully functional Next.js UI (12 routes, GitHub auth, SSE) on port 3001 and resolved port-bind and port-conflict issues.",
-      "next_steps": [
-        "Deploy lightweight telemetry (logs, metrics, traces) into each active session (build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, supervisor) with health endpoints.",
-        "Define and codify per-session SLOs and backpressure rules (CPU/memory thresholds, queue limits, graceful degradation).",
-        "Author a controlled rollout policy for nextjs-prod including canary weights, automated rollback triggers, and approval gates.",
-        "Integrate rollout policy with CI/CD to automate promotion/rollback and emit release events to observability.",
-        "Run a staged canary rehearsal for nextjs-prod (5% traffic) and validate SLOs, then document the runbook."
-      ],
-      "decisions": [
-        "Adopt per-session SLOs and backpressure as the default governance model for all active sessions.",
-        "Require canary-plus-rollback automation for every promotion to nextjs-prod until SLOs prove stable.",
-        "Instrument first, then tune thresholds: ship telemetry to all sessions before tightening enforcement."
-      ]
-    },
     {
       "id": "sess_a7451c0a",
       "ts": "2026-05-06T10:56:02Z",
@@ -800,6 +780,26 @@
         "Require canary gates and automatic rollback for nextjs-prod before increasing traffic beyond 5%.",
         "Instrument all active sessions before any further configuration changes or capacity increases."
       ]
+    },
+    {
+      "id": "sess_4cc1ddf8",
+      "ts": "2026-05-06T13:06:37Z",
+      "updated_by": "orchestrator",
+      "goal": "Ship per-session SLOs/backpressure rules and a controlled rollout policy with canary for nextjs-prod while stabilizing hive-ui metrics and session health reporting.",
+      "summary": "The hive is running at full health with nine active sessions and the new Ling model live. Recent work brought up the Next.js UI with GitHub auth and SSE streams, and we now need concrete guardrails for resource usage and progressive deployments.",
+      "progress": "Added inclusionai/ling-2.6-1t:free as the active model and brought the Next.js UI live on port 3001 with 12 routes and SSE streaming.",
+      "next_steps": [
+        "Add getSessionSLO() and enforceBackpressure() functions to hive-ui/src/lib/session-guard.js that validate CPU/mem thresholds and return 429 when exceeded.",
+        "Implement createCanaryRoute() and promoteCanaryToProd() in hive-ui/src/routes/rollout.js to shift traffic percentages for nextjs-prod with health checks and instant rollback.",
+        "Add /api/session-metrics endpoint to hive-ui/src/server/metrics.js returning JSON of per-session CPU, memory, latency, and error rates sampled every 5s.",
+        "Wire SSE /stream/health into hive-ui/src/components/SessionHealth.tsx to render real-time session status and backpressure alerts.",
+        "Write unit tests for session-guard.js and rollout.js in hive-ui/src/__tests__/ covering SLO thresholds, canary promotion logic, and rollback triggers."
+      ],
+      "decisions": [
+        "Adopt per-session CPU>85% or mem>90% as hard backpressure triggers returning HTTP 429 until usage drops below 75%/80%.",
+        "Use 5/95 canary traffic split for nextjs-prod with automated rollback on latency P95>1200ms or error rate>1% over a 2-minute window.",
+        "Expose /api/session-metrics as the single source of truth for observability and drive auto-scaling and alerting decisions."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -811,9 +811,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: develop\u2192main promotion check + release draft",
     "status": "completed",
-    "started_at": "2026-05-06T13:05:39Z",
-    "completed_at": "2026-05-06T13:05:40Z"
+    "started_at": "2026-05-06T13:06:38Z",
+    "completed_at": "2026-05-06T13:06:40Z"
   }
 }
