@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T21:35:55Z",
+  "last_updated": "2026-05-06T21:36:58Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-06T21:35:54Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-06T21:36:39Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -533,6 +533,13 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_c111dcf1",
+        "ts": "2026-05-06T21:36:44Z",
+        "hive": "default",
+        "summary": "Critical runaway hive due to unbounded budget and long timeouts; injected guardrails and respawned to enforce sane limits.",
+        "source": "doctor"
+      },
+      {
         "id": "f_ad60a0c7",
         "ts": "2026-05-06T21:26:34Z",
         "hive": "default",
@@ -951,7 +958,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 114
+    "openrouter_calls_today": 115
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1172,7 +1179,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T21:35:54Z",
-    "completed_at": "2026-05-06T21:35:55Z"
+    "started_at": "2026-05-06T21:36:57Z",
+    "completed_at": "2026-05-06T21:36:58Z"
   }
 }
