@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T13:12:53Z",
+  "last_updated": "2026-05-06T13:13:55Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -374,7 +374,7 @@
       "priority": 2,
       "description": "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay.",
       "assigned_to": "default",
-      "status": "pending",
+      "status": "in_progress",
       "source": "orchestrator",
       "ts": "2026-05-06T13:11:52Z"
     },
@@ -867,7 +867,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T13:12:52Z",
-    "completed_at": "2026-05-06T13:12:53Z"
+    "started_at": "2026-05-06T13:13:53Z",
+    "completed_at": "2026-05-06T13:13:55Z"
   }
 }
