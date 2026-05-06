@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T09:23:01Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-06T09:23:59Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
@@ -43,9 +43,9 @@
       "agent": "hive-doctor",
       "description": "[hive-live] PORT 8888 bind failure causing repeated respawn loops; researcher-tracker idle with no configuration",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T09:23:58Z",
+      "resolution": "auto-pruned: hive-live is now alive",
       "github_issue": null,
       "_hash": "6adf4c2fc0985300c35f9644ce7cda47"
     },
@@ -56,9 +56,9 @@
       "agent": "hive-doctor",
       "description": "[hive-dev] PORT 8889 bind failure causing repeated respawn loops; researcher-tracker idle with no configuration",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T09:23:58Z",
+      "resolution": "auto-pruned: hive-dev is now alive",
       "github_issue": null,
       "_hash": "9a5d9ff976ecc392f243a5c15b6ee9bc"
     },
@@ -734,7 +734,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T09:22:56Z",
-    "completed_at": "2026-05-06T09:22:57Z"
+    "started_at": "2026-05-06T09:23:57Z",
+    "completed_at": "2026-05-06T09:23:59Z"
   }
 }
