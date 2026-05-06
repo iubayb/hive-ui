@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T12:45:58Z",
+  "last_updated": "2026-05-06T12:46:54Z",
   "updated_by": "agent",
   "hives": {
     "default": {
@@ -44,84 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_a19a5282",
-      "ts": "2026-05-06T12:24:19Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] worker call timeout after 1800s indicates undersized task_timeout (currently 3600) for long-running qwen3.6-abliterated-q3km workloads.",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T12:25:08Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "cc632c0d1c420360675604abec749313"
-    },
-    {
-      "id": "b_661a21b8",
-      "ts": "2026-05-06T12:24:19Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[hive-live] researcher-tracker idle due to missing researcher configuration \u2014 identical root cause as hive-dev.",
-      "severity": "medium",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T12:25:08Z",
-      "resolution": "auto-pruned: hive-live is now alive",
-      "github_issue": null,
-      "_hash": "28cd2c0c7c5731ef690da7704b7cdebf"
-    },
-    {
-      "id": "b_a06cf93f",
-      "ts": "2026-05-06T12:24:19Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[hive-dev] researcher-tracker idle due to missing researcher configuration \u2014 likely uninitialized config file or empty registry.",
-      "severity": "medium",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T12:25:08Z",
-      "resolution": "auto-pruned: hive-dev is now alive",
-      "github_issue": null,
-      "_hash": "16f5f9de44725bf0b3cc4544a6b88f33"
-    },
-    {
-      "id": "b_c55021d7",
-      "ts": "2026-05-06T12:23:44Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] worker qwen3.6-abliterated-q3km timing out after 1800s with high failure rate (4874 failed vs 60 done)",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T12:23:44Z",
-      "resolution": "Auto-applied: tmux send-keys -t ps5-hive 'cat ~/.hive/config | grep -q timeout || echo \"task_timeout=3600\" >> ~/.hive/config && tmux respawn-window -t ps5-hive' Enter",
-      "github_issue": null,
-      "_hash": "d318ee712354629b8be204f879d4f1a3"
-    },
-    {
-      "id": "b_22fac898",
-      "ts": "2026-05-06T12:23:44Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[hive-live] researcher-tracker has empty researcher list causing idle loops and error state",
-      "severity": "medium",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T12:24:06Z",
-      "resolution": "auto-pruned: hive-live is now alive",
-      "github_issue": null,
-      "_hash": "5454b2be5b8f43e5b3a94c57c02e22f7"
-    },
-    {
-      "id": "b_3ccc4905",
-      "ts": "2026-05-06T12:23:44Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[hive-dev] researcher-tracker has empty researcher list causing idle loops and error state",
-      "severity": "medium",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T12:24:06Z",
-      "resolution": "auto-pruned: hive-dev is now alive",
-      "github_issue": null,
-      "_hash": "08169374a6dd2fc6ef22eeeef5d55072"
-    },
     {
       "id": "b_029e8346",
       "ts": "2026-05-06T07:25:59Z",
@@ -862,7 +784,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T12:45:52Z",
-    "completed_at": "2026-05-06T12:45:53Z"
+    "started_at": "2026-05-06T12:46:53Z",
+    "completed_at": "2026-05-06T12:46:54Z"
   }
 }
