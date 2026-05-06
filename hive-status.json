@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T15:35:02Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-06T15:35:42Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-06T15:34:51Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-06T15:35:28Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_4963c0d0",
+      "ts": "2026-05-06T15:35:40Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Missing budget guardrails (unbounded max_tasks/max_hours) causing runaway failure storm (4874 failed vs 60 done) and silent watchdog resets.",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "04a3af608b9ba3d1b7558e91aa6bf996"
+    },
     {
       "id": "b_029e8346",
       "ts": "2026-05-06T07:25:59Z",
@@ -424,10 +437,10 @@
         "source_agent": "hive-doctor",
         "skill": "config-guardrail-inject",
         "description": "Injects missing rate-limit and budget guardrails to prevent runaway retry storms and force controlled shutdowns.",
-        "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t SESSION",
+        "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t ps5-hive",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T15:25:23Z"
+        "last_updated": "2026-05-06T15:35:40Z"
       },
       {
         "id": "cap_27efd1db",
@@ -480,6 +493,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_002f97c6",
+        "ts": "2026-05-06T15:35:40Z",
+        "hive": "default",
+        "summary": "Unbounded budget settings triggered uncontrolled retry storm and silent resets; injecting rate-limit and budget guardrails and respawning.",
+        "source": "doctor"
+      },
       {
         "id": "f_4b5fbceb",
         "ts": "2026-05-06T15:25:23Z",
@@ -738,7 +758,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 67
+    "openrouter_calls_today": 68
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
