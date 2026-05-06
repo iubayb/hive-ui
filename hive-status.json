@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T22:05:54Z",
+  "last_updated": "2026-05-06T22:06:57Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-06T22:04:42Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-06T22:06:44Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -479,7 +479,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t ps5-hive",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T21:56:39Z"
+        "last_updated": "2026-05-06T22:06:48Z"
       },
       {
         "id": "cap_27efd1db",
@@ -532,6 +532,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_0bfc21ba",
+        "ts": "2026-05-06T22:06:48Z",
+        "hive": "default",
+        "summary": "Missing budget guardrails caused unbounded retries and task pileup; inject limits and respawn.",
+        "source": "doctor"
+      },
       {
         "id": "f_df08ec4a",
         "ts": "2026-05-06T21:56:39Z",
@@ -965,7 +972,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 118
+    "openrouter_calls_today": 119
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1186,7 +1193,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T22:05:53Z",
-    "completed_at": "2026-05-06T22:05:54Z"
+    "started_at": "2026-05-06T22:06:56Z",
+    "completed_at": "2026-05-06T22:06:57Z"
   }
 }
