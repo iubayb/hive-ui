@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T16:55:55Z",
+  "last_updated": "2026-05-06T16:56:56Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_bb97da5e",
-      "ts": "2026-05-06T16:55:39Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] unbounded budget + 1800s worker timeout causing retry storm (4874 failures, 4 errors) with silent hang on attempt 2/4",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "3af74fcff0e0d98a698192761d70437a"
-    },
     {
       "id": "b_7b6ae5ef",
       "ts": "2026-05-06T15:51:36Z",
@@ -1051,9 +1038,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=3",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T16:55:15Z",
-    "completed_at": "2026-05-06T16:55:15Z"
+    "started_at": "2026-05-06T16:56:05Z",
+    "completed_at": "2026-05-06T16:56:06Z"
   }
 }
