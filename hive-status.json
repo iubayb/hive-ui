@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T08:40:53Z",
+  "last_updated": "2026-05-06T08:41:54Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 1.0,
-      "last_seen": "2026-05-06T08:39:05Z",
+      "last_seen": "2026-05-06T08:41:13Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -25,7 +25,16 @@
       "silent_minutes": 0
     }
   },
-  "achievements": [],
+  "achievements": [
+    {
+      "id": "a_930fd042",
+      "ts": "2026-05-06T08:41:30Z",
+      "hive": "default",
+      "agent": "opencode",
+      "description": "Full Next.js UI live on port 3001: 12 routes, GitHub auth, SSE stream, supervisor-managed",
+      "evidence": "curl http://localhost:3001/hive \u2192 200; all routes 200; SSE streaming; nextjs-prod in supervisor.conf"
+    }
+  ],
   "blockers": [
     {
       "id": "b_029e8346",
@@ -294,7 +303,7 @@
       "priority": 1,
       "description": "Kill or gracefully suspend non-essential sessions (e.g., ps5-hive, opencode) to free memory and CPU.",
       "assigned_to": "default",
-      "status": "pending",
+      "status": "done",
       "source": "orchestrator",
       "ts": "2026-05-06T07:25:12Z"
     },
@@ -303,7 +312,7 @@
       "priority": 2,
       "description": "Apply stricter cgroup limits and lower niceness for research_loop jobs to reduce core contention.",
       "assigned_to": "default",
-      "status": "pending",
+      "status": "done",
       "source": "orchestrator",
       "ts": "2026-05-06T07:25:12Z"
     },
@@ -312,7 +321,7 @@
       "priority": 3,
       "description": "Clear caches and temporary files to reclaim disk space and reduce I/O pressure.",
       "assigned_to": "default",
-      "status": "pending",
+      "status": "done",
       "source": "orchestrator",
       "ts": "2026-05-06T07:25:12Z"
     }
@@ -388,9 +397,9 @@
     "openrouter_calls_today": 10
   },
   "model_champions": {
-    "text": null,
+    "text": "inclusionai/ling-2.6-1t:free",
     "vision": null,
-    "updated": null
+    "updated": "2026-05-06T08:41:30Z"
   },
   "pending_questions": [],
   "orchestrator_sessions": [
@@ -524,9 +533,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T08:40:27Z",
-    "completed_at": "2026-05-06T08:40:33Z"
+    "started_at": "2026-05-06T08:41:33Z",
+    "completed_at": "2026-05-06T08:41:34Z"
   }
 }
