@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T13:28:57Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T13:29:55Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
@@ -659,7 +659,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 50
+    "openrouter_calls_today": 51
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -668,20 +668,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_558d17e7",
-      "ts": "2026-05-06T11:41:00Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [
-        "Instrument each active session (build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, supervisor) with standardized health/metrics endpoints and log correlation IDs.",
-        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
-        "Create a controlled rollout policy for nextjs-prod including canary weights, automated smoke checks, and instant rollback triggers on error-rate or latency breaches."
-      ],
-      "decisions": []
-    },
     {
       "id": "sess_183317b0",
       "ts": "2026-05-06T11:56:14Z",
@@ -861,6 +847,26 @@
         "Expose a single /api/metrics endpoint returning JSON; do not persist to disk inside the UI process.",
         "Enforce org_guard.py path restrictions by default and log violations as metric events."
       ]
+    },
+    {
+      "id": "sess_e7edcaca",
+      "ts": "2026-05-06T13:29:43Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize and harden hive-ui with resilient LLM calls, live metrics, and guarded session SLOs while keeping all sessions running.",
+      "summary": "The hive is healthy with 9 active sessions and the new Ling model serving text on port 3001. No blockers remain, but P1 reliability and observability gaps must be closed to prevent flaky LLM calls and blind spots under load.",
+      "progress": "Recently completed: added exponential-backoff retry logic to call_llm() in orchestrator.py and wired /api/metrics in pages/api/metrics.ts returning session, queue, and model stats as JSON.",
+      "next_steps": [
+        "Add unit tests for org_guard.py covering all forbidden path patterns and traversal attempts in tests/unit/test_org_guard.py",
+        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() with maxRetries=5 and cap=30s for SSE transport resilience",
+        "Define per-session SLOs and backpressure rules in config/slos.yaml adding CPU/mem thresholds, queue depth limits, and drop policy per session class",
+        "Extend /api/metrics in pages/api/metrics.ts to export 95th percentile latency, error rate, and open SSE counts alongside current session stats",
+        "Add server-side rate limiter and circuit breaker to orchestrator.py call_llm() using in-memory token bucket (10rps default) and open/half-open/closed states"
+      ],
+      "decisions": [
+        "Adopt exponential backoff with jitter for all external LLM calls to avoid thundering herds under 429/5xx",
+        "Enforce org_guard path checks on every session file access to prevent directory traversal and symlink escapes",
+        "Publish live SLOs in config/slos.yaml and enforce them via supervisor backpressure signals"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -872,9 +878,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-06T13:28:56Z",
-    "completed_at": "2026-05-06T13:28:57Z"
+    "started_at": "2026-05-06T13:29:54Z",
+    "completed_at": "2026-05-06T13:29:55Z"
   }
 }
