@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T06:05:47Z",
+  "last_updated": "2026-05-06T06:11:02Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.95,
-      "last_seen": "2026-05-06T06:04:35Z",
+      "last_seen": "2026-05-06T06:10:49Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -196,7 +196,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 9
+    "openrouter_calls_today": 10
   },
   "model_champions": {
     "text": null,
@@ -304,6 +304,26 @@
         "Use predefined layouts and naming to maintain consistency with existing hive sessions.",
         "Gate further deployments on TS19 pass to ensure baseline integrity."
       ]
+    },
+    {
+      "id": "sess_edd3cc00",
+      "ts": "2026-05-06T06:09:48Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full tmux session coverage and clear the TS19 self-test blocker.",
+      "summary": "The hive is healthy (default node at 95%) but missing the supervisor tmux session, causing self-test TS19 to fail. Eight sessions are expected and seven are present, so immediate remediation is required to achieve full orchestration capability.",
+      "progress": "Identified the missing supervisor session and set P1\u2013P3 priorities to launch, validate, and test.",
+      "next_steps": [
+        "Launch the supervisor tmux session with the predefined layout and attach it to the hive namespace.",
+        "Validate all 8 expected tmux sessions exist (build_monitor, hive-dev, hive-live, hive-watch, opencode, orchestrator, ps5-hive, supervisor).",
+        "Run self-test TS19 to confirm pass and clear the high-priority blocker.",
+        "Persist the supervisor session configuration in hive state to survive restarts.",
+        "Enable http500-circuit-breaker monitoring for the supervisor session and emit health metrics."
+      ],
+      "decisions": [
+        "Prioritize P1 (launch supervisor) before further changes to minimize blast radius.",
+        "Gate promotion of new capabilities until TS19 passes and all 8 sessions are healthy.",
+        "Persist session definitions declaratively to prevent recurrence of missing-session faults."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -315,9 +335,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "triage: checking sessions + service health",
     "status": "running",
-    "started_at": "2026-05-06T06:05:47Z",
+    "started_at": "2026-05-06T06:11:02Z",
     "completed_at": null
   }
 }
