@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T11:59:40Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T12:00:42Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
@@ -36,110 +36,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_ada1bd44",
-      "ts": "2026-05-06T11:54:13Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] queue drained with 0 files analyzed \u2014 likely upstream producer idle or input path empty",
-      "severity": "medium",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T11:55:06Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "194a51d43799d5184f0fa99dfc8e1833"
-    },
-    {
-      "id": "b_ae45861c",
-      "ts": "2026-05-06T11:54:13Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[hive-live] researcher-tracker idle \u2014 no researchers configured; dependency stall",
-      "severity": "medium",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T11:55:06Z",
-      "resolution": "auto-pruned: hive-live is now alive",
-      "github_issue": null,
-      "_hash": "1fc13ef5a49231690aa091f9d4b37d4b"
-    },
-    {
-      "id": "b_8675521e",
-      "ts": "2026-05-06T11:54:13Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[hive-dev] PORT 8889 bind failure or process conflict preventing logstream.py startup",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T11:55:06Z",
-      "resolution": "auto-pruned: hive-dev is now alive",
-      "github_issue": null,
-      "_hash": "48f9c189f9337c526a833177787375d0"
-    },
-    {
-      "id": "b_162c0246",
-      "ts": "2026-05-06T11:53:36Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Task queue drained with high failure ratio (4874 failed vs 60 done); synthesis triggered despite no files analyzed \u2014 likely stale state or upstream source exhaustion.",
-      "severity": "critical",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T11:53:38Z",
-      "resolution": "Auto-applied: tmux send-keys -t ps5-hive 'tmux respawn-window -t ps5-hive' Enter && sleep 2 && tmux capture-pane -t ps5-hive -p | tail -5",
-      "github_issue": null,
-      "_hash": "6457882b3c53875c301a09762f9745e1"
-    },
-    {
-      "id": "b_31ebaf40",
-      "ts": "2026-05-06T11:53:36Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[hive-live] researcher-tracker idle with no researchers configured \u2014 upstream config/sync missing or misloaded.",
-      "severity": "medium",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T11:54:02Z",
-      "resolution": "auto-pruned: hive-live is now alive",
-      "github_issue": null,
-      "_hash": "d43f3cd21d1eddc8507499d03b218700"
-    },
-    {
-      "id": "b_275fd90c",
-      "ts": "2026-05-06T11:53:36Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[hive-dev] Port 8889 bind failure or silent crash on logstream.py restart; stale process may be holding socket.",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T11:54:02Z",
-      "resolution": "auto-pruned: hive-dev is now alive",
-      "github_issue": null,
-      "_hash": "fdb49ec740baa65a8c5942ba5d0f5473"
-    },
-    {
-      "id": "b_39cbe2a0",
-      "ts": "2026-05-06T11:38:13Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "self-test: TS20 failing \u2014 no auto-fix available or fix failed",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T11:42:53Z",
-      "resolution": "self-test: all invariants passing",
-      "github_issue": null,
-      "_hash": "7121d5a13d871954e02556197912da0b"
-    },
-    {
-      "id": "b_a1cb4756",
-      "ts": "2026-05-06T11:37:10Z",
-      "hive": "default",
-      "agent": "supervisor",
-      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=19.07 cores=8 ratio=2.38",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "97f3ae2077b666a5427e27a1c0c5e8a0"
-    },
     {
       "id": "b_029e8346",
       "ts": "2026-05-06T07:25:59Z",
@@ -845,9 +741,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=95% blockers=1",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T11:59:40Z",
-    "completed_at": "2026-05-06T11:59:40Z"
+    "started_at": "2026-05-06T12:00:20Z",
+    "completed_at": "2026-05-06T12:00:21Z"
   }
 }
