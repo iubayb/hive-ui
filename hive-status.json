@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T03:50:43Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T03:52:00Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.65,
-      "last_seen": "2026-05-06T03:50:43Z",
+      "health_score": 0.857,
+      "last_seen": "2026-05-06T03:51:55Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -25,6 +25,32 @@
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_dc87b4cb",
+      "ts": "2026-05-06T03:52:00Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] HTTP 500 cascade from Ollama (11434) under load; 4856 failures indicate retry storm overwhelming the server.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "87532bc7a07bbb48ac767e2eab1ca52d"
+    },
+    {
+      "id": "b_d3fc6642",
+      "ts": "2026-05-06T03:51:59Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Ollama 500 cascade (4856 failures/1 inflight) with telemetry-enabled retries causing retry storms against /v1/chat/completions",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "bd13d5f59bf2aa93c880b7a3a892f780"
+    },
     {
       "id": "b_53d0e849",
       "ts": "2026-05-06T03:21:55Z",
@@ -297,11 +323,11 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "http500-circuit-breaker",
-        "description": "Detects HTTP 500 cascades and injects circuit-breaker delays plus telemetry suppression to prevent retry storms.",
+        "description": "Injects circuit-breaker delays plus telemetry suppression to prevent HTTP 500 retry storms.",
         "example": "export HF_HUB_DISABLE_TELEMETRY=1 && sleep $((RANDOM % 10 + 5)) && kill -HUP $(pgrep -nf 'curl|wget|python.*run') 2>/dev/null",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T03:21:55Z"
+        "last_updated": "2026-05-06T03:51:59Z"
       },
       {
         "id": "cap_458f96af",
@@ -313,12 +339,26 @@
         "example": "pkill -f ollama; sleep 1; ollama serve > /tmp/ollama.log 2>&1 &",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T02:51:51Z"
+        "last_updated": "2026-05-06T03:51:59Z"
       }
     ]
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_2c178330",
+        "ts": "2026-05-06T03:52:00Z",
+        "hive": "default",
+        "summary": "Ollama 500 cascade triggering retry storm; apply circuit-breaker and auto-recover to restore service.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_9123e448",
+        "ts": "2026-05-06T03:51:59Z",
+        "hive": "default",
+        "summary": "High-severity Ollama cascade with retry storm halted via circuit-breaker telemetry suppression and auto-recovery restart.",
+        "source": "doctor"
+      },
       {
         "id": "f_8667ead9",
         "ts": "2026-05-06T03:21:55Z",
@@ -387,7 +427,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 13
+    "openrouter_calls_today": 16
   },
   "model_champions": {
     "text": null,
@@ -545,6 +585,26 @@
         "Apply targeted, per-test isolation to avoid broad disruption while capturing reproducible failure artifacts.",
         "Leverage known capabilities (http500-circuit-breaker, ollama-auto-recover) as part of remediation where applicable."
       ]
+    },
+    {
+      "id": "sess_a0d31fb9",
+      "ts": "2026-05-06T03:52:00Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore hive integrity by creating the missing supervisor tmux session and resolving TS13/TS17/TS18/TS19 self-test failures.",
+      "summary": "The hive is running at 86% health with 7 active sessions, but 5 high-priority self-tests (TS13, TS17, TS18, TS19) are failing and the supervisor tmux session is absent. No recent achievements have been logged, and auto-fixes are unavailable, requiring targeted manual recovery and session creation.",
+      "progress": "Confirmed the missing supervisor session and cataloged failing self-tests (TS13, TS17, TS18, TS19), then queued remediation actions.",
+      "next_steps": [
+        "Create and start the supervisor tmux session (tmux new-session -d -s supervisor) and verify it appears in session list.",
+        "Run targeted self-test TS13 in isolation to capture stdout/stderr and determine the failing condition.",
+        "Run targeted self-test TS17 in isolation to capture stdout/stderr and determine the failing condition.",
+        "Run targeted self-test TS18 in isolation to capture stdout/stderr and determine the failing condition.",
+        "Run targeted self-test TS19 in isolation to capture stdout/stderr and determine the failing condition."
+      ],
+      "decisions": [
+        "Prioritize creating the supervisor session before rerunning dependent self-tests.",
+        "Execute failing self-tests one at a time to isolate root causes and avoid conflated failures.",
+        "Record exact failure outputs and apply manual remediation or targeted patches; escalate only if patterns recur."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -556,9 +616,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-06T03:50:43Z",
-    "completed_at": "2026-05-06T03:50:43Z"
+    "started_at": "2026-05-06T03:51:55Z",
+    "completed_at": "2026-05-06T03:52:00Z"
   }
 }
