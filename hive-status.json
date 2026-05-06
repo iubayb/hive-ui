@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T13:34:59Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-06T13:35:45Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.889,
-      "last_seen": "2026-05-06T13:34:30Z",
+      "health_score": 0.95,
+      "last_seen": "2026-05-06T13:35:02Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_c4ba56ad",
-      "ts": "2026-05-06T13:34:59Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] config timeout missing or not applied + watchdog resetting stalled tasks with high failure rate (4874 failed vs 60 done) indicating executor or resource starvation",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "b5dc9a2f570498cb07ff6ac74901f63a"
-    },
     {
       "id": "b_029e8346",
       "ts": "2026-05-06T07:25:59Z",
@@ -900,7 +887,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T13:34:11Z",
-    "completed_at": "2026-05-06T13:34:12Z"
+    "started_at": "2026-05-06T13:35:14Z",
+    "completed_at": "2026-05-06T13:35:15Z"
   }
 }
