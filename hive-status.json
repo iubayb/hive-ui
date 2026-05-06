@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T23:05:43Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-06T23:06:54Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-06T23:04:30Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-06T23:06:50Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_21b61d8b",
+      "ts": "2026-05-06T23:06:54Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded task budget + 1800s worker timeout causing runaway retries and task pileup (4874 failed, 1 pending, 60 done) with silent hangs.",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "e56bdd540069c808e3da1d2606f915f6"
+    },
     {
       "id": "b_000a4ffa",
       "ts": "2026-05-06T18:06:01Z",
@@ -475,11 +488,11 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "config-guardrail-inject",
-        "description": "Injects missing rate-limit and budget guardrails to prevent runaway retries and enforce controlled shutdowns",
+        "description": "Injects missing rate-limit and budget guardrails to prevent runaway retries and enforce controlled shutdowns.",
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t ps5-hive",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T22:56:52Z"
+        "last_updated": "2026-05-06T23:06:54Z"
       },
       {
         "id": "cap_27efd1db",
@@ -532,6 +545,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_14259be6",
+        "ts": "2026-05-06T23:06:54Z",
+        "hive": "default",
+        "summary": "Unbounded budget and long timeouts created a runaway queue; inject sane limits and respawn.",
+        "source": "doctor"
+      },
       {
         "id": "f_43f80ac0",
         "ts": "2026-05-06T22:56:52Z",
@@ -986,7 +1006,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 125
+    "openrouter_calls_today": 126
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1207,7 +1227,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T23:05:41Z",
-    "completed_at": "2026-05-06T23:05:43Z"
+    "started_at": "2026-05-06T23:06:43Z",
+    "completed_at": "2026-05-06T23:06:44Z"
   }
 }
