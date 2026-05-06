@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T18:55:41Z",
+  "last_updated": "2026-05-06T18:56:42Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-06T18:55:00Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-06T18:56:05Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -533,6 +533,13 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_37fb3254",
+        "ts": "2026-05-06T18:56:10Z",
+        "hive": "default",
+        "summary": "Injected rate-limit and budget guardrails (max_tasks=1000, max_hours=16, task_timeout=600) and respawned the session to halt the retry storm.",
+        "source": "doctor"
+      },
+      {
         "id": "f_85c50bcd",
         "ts": "2026-05-06T18:36:06Z",
         "hive": "default",
@@ -874,7 +881,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 92
+    "openrouter_calls_today": 93
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1095,7 +1102,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T18:55:40Z",
-    "completed_at": "2026-05-06T18:55:41Z"
+    "started_at": "2026-05-06T18:56:41Z",
+    "completed_at": "2026-05-06T18:56:42Z"
   }
 }
