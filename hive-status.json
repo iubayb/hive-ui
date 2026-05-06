@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T12:52:43Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T12:53:50Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 1.0,
-      "last_seen": "2026-05-06T12:51:42Z",
+      "last_seen": "2026-05-06T12:53:45Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,45 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_a8999773",
+      "ts": "2026-05-06T12:53:50Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] worker task timeout (1800s) exceeded; config likely missing or below workload needs; high failure ratio (4874/60).",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "525c3ccc23032f0b8eedb079105ad7c0"
+    },
+    {
+      "id": "b_82da2288",
+      "ts": "2026-05-06T12:53:50Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-live] researcher-tracker has no researchers configured; idle loop producing redundant errors.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "5a696976895f8f95ffb7892709ea5cf8"
+    },
+    {
+      "id": "b_25d9e18c",
+      "ts": "2026-05-06T12:53:50Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-dev] researcher-tracker has no researchers configured; idle loop producing redundant errors.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "fad380165fe2f0e41ad8260c09ab9397"
+    },
     {
       "id": "b_029e8346",
       "ts": "2026-05-06T07:25:59Z",
@@ -372,7 +411,8 @@
         "description": "Safely initializes missing config keys/sections and applies them with window respawn to avoid stale state.",
         "example": "grep -q task_timeout ~/.hive/config || echo \"task_timeout=7200\" >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
-        "applicable_to": "all"
+        "applicable_to": "all",
+        "last_updated": "2026-05-06T12:53:50Z"
       },
       {
         "id": "cap_f8de811f",
@@ -402,6 +442,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_0217a91d",
+        "ts": "2026-05-06T12:53:50Z",
+        "hive": "default",
+        "summary": "Missing researcher list and undersized task_timeout caused idle loops and worker timeouts; config-default-apply applied to stabilize sessions.",
+        "source": "doctor"
+      },
       {
         "id": "f_51c112f5",
         "ts": "2026-05-06T12:24:19Z",
@@ -569,7 +616,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 41
+    "openrouter_calls_today": 42
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -782,9 +829,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=100% blockers=0",
     "status": "completed",
-    "started_at": "2026-05-06T12:52:02Z",
-    "completed_at": "2026-05-06T12:52:03Z"
+    "started_at": "2026-05-06T12:53:45Z",
+    "completed_at": "2026-05-06T12:53:45Z"
   }
 }
