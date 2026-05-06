@@ -39,7 +39,7 @@ Endpoints:
    DELETE /api/tracker/remove    → remove tracked researcher
 """
 import email.message, email.policy, hashlib, http.client, io, json
-import os, queue, re, subprocess, ssl, threading, time, traceback, uuid
+import os, queue, re, shlex, subprocess, ssl, threading, time, traceback, uuid
 from collections import deque
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse, parse_qs
@@ -583,10 +583,14 @@ _BG_MAX_TOKENS    = 512     # hard cap per background call
 _BG_MAX_CALLS_HR  = 20      # max background LLM calls per hour
 _bg_budget_lock   = threading.Lock()
 _bg_calls_this_hr: list = []   # timestamps of recent calls
+_bg_retry_after: float = 0.0   # epoch time before which bg LLM calls are blocked
 
 def _bg_budget_ok() -> bool:
     """Return True if we are within the per-hour budget."""
+    global _bg_retry_after
     now = time.time()
+    if now < _bg_retry_after:
+        return False
     with _bg_budget_lock:
         # Evict calls older than 1 hour
         cutoff = now - 3600
@@ -659,6 +663,17 @@ def _call_bg_llm(messages: list, model: str = None,
         resp = conn.getresponse()
         raw  = resp.read().decode("utf-8", errors="replace")
         conn.close()
+        if resp.status == 429:
+            global _bg_retry_after
+            _bg_retry_after = time.time() + 60
+            _log("[llm-bg] rate-limited (429) — backing off 60s")
+            return "", "rate_limited"
+        if resp.status == 401:
+            _log("[llm] CRITICAL: 401 Unauthorized — API key invalid or expired")
+            return "", "auth_error"
+        if resp.status == 503:
+            _log("[llm] service unavailable (503)")
+            return "", "service_unavailable"
         if resp.status != 200:
             return "", f"HTTP {resp.status}"
         data = json.loads(raw)
@@ -912,7 +927,7 @@ def _safe_apply(cmd: str, blocker_id: str, session: str = "",
         return False
     try:
         result = subprocess.run(
-            cmd_stripped, shell=True, timeout=10,
+            shlex.split(cmd_stripped), shell=False, timeout=10,
             capture_output=True, text=True
         )
         if result.returncode == 0:

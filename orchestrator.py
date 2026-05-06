@@ -58,7 +58,7 @@ def _load_env() -> dict:
 _hive_env = _load_env()
 # Propagate env-file values into os.environ so sub-processes and tests see them
 for _k in ("OPENROUTER_API_KEY", "OPENROUTER_MODEL", "HIVE_GITHUB_REPO"):
-    if _k not in os.environ and _k in _hive_env:
+    if not os.environ.get(_k) and _k in _hive_env:
         os.environ[_k] = _hive_env[_k]
 OPENROUTER_KEY   = os.environ.get("OPENROUTER_API_KEY") or _hive_env.get("OPENROUTER_API_KEY", "")
 OPENROUTER_MODEL = (os.environ.get("OPENROUTER_MODEL")
@@ -120,6 +120,15 @@ def call_llm(messages: list, max_tokens: int = 512, timeout: int = 60):
         resp = conn.getresponse()
         raw  = resp.read().decode("utf-8", errors="replace")
         conn.close()
+        if resp.status == 429:
+            _log("[llm] rate-limited (429) — budget slot preserved for retry")
+            return "", "rate_limited"
+        if resp.status == 401:
+            _log("[llm] CRITICAL: 401 Unauthorized — API key invalid or expired")
+            return "", "auth_error"
+        if resp.status == 503:
+            _log("[llm] service unavailable (503)")
+            return "", "service_unavailable"
         if resp.status != 200:
             return "", f"HTTP {resp.status}"
         data = json.loads(raw)
@@ -559,6 +568,7 @@ _AUTO_FIX_REGISTRY: dict = {
     "TS19": "",   # handled per-session in the script itself
     "TS20": "pgrep -f research_loop.py | head -5 | xargs -r kill -STOP",
     "TS21": "find /tmp -mtime +1 -delete 2>/dev/null; journalctl --vacuum-size=500M 2>/dev/null; true",
+    "TS34": "bash -c 'grep -q HIVE_GITHUB_REPO ~/.config/research-hive/env || echo HIVE_GITHUB_REPO=iubayb/hive-ui >> ~/.config/research-hive/env'",
 }
 
 # Track last self-test result to avoid flooding blockers
@@ -575,6 +585,7 @@ def _run_self_test_script() -> tuple[bool, list[str], list[str]]:
         r = subprocess.run(
             ["bash", script],
             capture_output=True, text=True, timeout=60,
+            env={**os.environ, **_load_env()},
         )
         lines = r.stdout.splitlines() + r.stderr.splitlines()
         fail_ids = [
@@ -768,9 +779,38 @@ if [[ "$avail" -gt 512000 ]]; then _pass "$id" "$desc (${avail}kB)"
 else _fail "$id" "$desc" "only ${avail}kB available" "$fix"; fi
 """,
     ),
+    r"hive_github_repo.*not set|github.*repo.*missing|env.*not set": (
+        "env_github_repo",
+        """# Auto-generated: HIVE_GITHUB_REPO env var check
+id=TSauto_env_github_repo
+desc="HIVE_GITHUB_REPO is set in environment"
+fix="grep -q HIVE_GITHUB_REPO /home/ayoub/hive-ui/.env || echo 'HIVE_GITHUB_REPO=iubayb/hive-ui' >> /home/ayoub/hive-ui/.env"
+if [[ -n "${HIVE_GITHUB_REPO:-}" ]]; then _pass "$id" "$desc"
+else _fail "$id" "$desc" "HIVE_GITHUB_REPO not in environment" "$fix"; fi
+""",
+    ),
 }
 
-_issue_test_committed: set = set()   # patterns already turned into tests
+_COMMITTED_TESTS_FILE = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "tests", "learned", ".committed.json"
+)
+
+def _load_committed_tests() -> set:
+    try:
+        with open(_COMMITTED_TESTS_FILE) as f:
+            return set(json.load(f))
+    except (FileNotFoundError, Exception):
+        return set()
+
+def _save_committed_tests(names: set) -> None:
+    try:
+        os.makedirs(os.path.dirname(_COMMITTED_TESTS_FILE), exist_ok=True)
+        with open(_COMMITTED_TESTS_FILE, "w") as f:
+            json.dump(sorted(names), f)
+    except Exception as e:
+        _log(f"[issue→test] failed to persist committed tests: {e}")
+
+_issue_test_committed: set = _load_committed_tests()   # patterns already turned into tests
 
 
 def _issue_to_test(blocker_description: str) -> None:
@@ -788,6 +828,7 @@ def _issue_to_test(blocker_description: str) -> None:
         dest = os.path.join(learned_dir, f"test_{name}.sh")
         if os.path.isfile(dest):
             _issue_test_committed.add(name)
+            _save_committed_tests(_issue_test_committed)
             continue
 
         # Write the test stub
@@ -832,6 +873,7 @@ echo "SYSTEM_TEST_RESULT: pass=$pass fail=$fail total=$((pass+fail))"
                 ),
             )
             _issue_test_committed.add(name)
+            _save_committed_tests(_issue_test_committed)
 
             _record_improvement(
                 skill=f"auto_test_{name}",
@@ -1490,7 +1532,7 @@ def main():
                 try:
                     hive_status.set_active_task("orchestrator", "issue→test: scanning blockers for new test patterns")
                     s = hive_status.load()
-                    for b in s.get("blockers", [])[-20:]:
+                    for b in s.get("blockers", [])[:20]:
                         if b.get("status") == "open":
                             _issue_to_test(b.get("description", ""))
                 except Exception as e:

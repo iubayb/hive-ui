@@ -4,3 +4,8 @@ __pycache__/
 *.pyo
 test-results/
 .env
+
+# Next.js
+web/.next/
+web/.env.local
+web/.env*.local

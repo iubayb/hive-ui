@@ -41,7 +41,7 @@ CLI:
   python3 hive_status.py --compact    → print build_context_block() output
 """
 
-import json, os, subprocess, threading, time, uuid
+import fcntl, hashlib, json, os, subprocess, threading, time, uuid
 import org_guard  # org isolation — must stay imported
 
 STATUS_FILE   = "/tmp/hive-status.json"
@@ -137,22 +137,37 @@ def _uid(prefix: str) -> str:
 def load() -> dict:
     try:
         with open(STATUS_FILE) as f:
-            data = json.load(f)
+            fcntl.flock(f, fcntl.LOCK_SH)
+            try:
+                data = json.load(f)
+            finally:
+                fcntl.flock(f, fcntl.LOCK_UN)
         # Migrate missing keys
         empty = _empty_status()
         for k, v in empty.items():
             if k not in data:
                 data[k] = v
         return data
-    except Exception:
+    except FileNotFoundError:
+        return _empty_status()
+    except Exception as e:
+        import sys
+        print(f"[hive_status] WARNING: load() failed ({e}) — returning empty state",
+              file=sys.stderr, flush=True)
         return _empty_status()
 
 def save(status: dict, updated_by: str = "system"):
     status["last_updated"] = _now()
     status["updated_by"]   = updated_by
     try:
-        with open(STATUS_FILE, "w") as f:
-            json.dump(status, f, indent=2)
+        tmp = STATUS_FILE + ".tmp"
+        with open(tmp, "w") as f:
+            fcntl.flock(f, fcntl.LOCK_EX)
+            try:
+                json.dump(status, f, indent=2)
+            finally:
+                fcntl.flock(f, fcntl.LOCK_UN)
+        os.replace(tmp, STATUS_FILE)
     except Exception:
         pass
     _write_readme(status)
@@ -304,6 +319,7 @@ def add_achievement(hive: str, agent: str, description: str,
 
 def add_blocker(hive: str, agent: str, description: str,
                 severity: str = "medium", updated_by: str = "agent") -> str:
+    dup_hash = hashlib.md5(f"{hive}:{agent}:{description}".encode()).hexdigest()
     bid = _uid("b")
     blocker = {
         "id":           bid,
@@ -316,9 +332,14 @@ def add_blocker(hive: str, agent: str, description: str,
         "resolved_at":  None,
         "resolution":   None,
         "github_issue": None,   # filled in by background thread on success
+        "_hash":        dup_hash,
     }
     with _status_lock:
         s = load()
+        # Deduplication: skip if an open blocker with identical content already exists
+        for b in s["blockers"]:
+            if b.get("status") == "open" and b.get("_hash") == dup_hash:
+                return b["id"]
         s["blockers"].insert(0, blocker)
         s["blockers"] = s["blockers"][:100]
         save(s, updated_by)
