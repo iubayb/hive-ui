@@ -158,6 +158,11 @@ def load() -> dict:
 def save(status: dict, updated_by: str = "system"):
     status["last_updated"] = _now()
     status["updated_by"]   = updated_by
+    # Keep only the 20 most recent resolved blockers; all open ones are always kept.
+    if "blockers" in status:
+        open_b = [b for b in status["blockers"] if b.get("status") != "resolved"]
+        resolved_b = [b for b in status["blockers"] if b.get("status") == "resolved"]
+        status["blockers"] = open_b + resolved_b[-20:]
     try:
         tmp = STATUS_FILE + ".tmp"
         with open(tmp, "w") as f:

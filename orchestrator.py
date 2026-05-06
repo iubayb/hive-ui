@@ -1494,10 +1494,24 @@ def main():
             try:
                 s = hive_status.load()
                 for step in s.get("next_steps", [])[-5:]:
-                    desc = step.get("description", "") if isinstance(step, dict) else str(step)
-                    assigned = step.get("assigned_to", "") if isinstance(step, dict) else ""
-                    if _is_code_task(desc) and assigned not in ("opencode",):
+                    if not isinstance(step, dict):
+                        continue
+                    desc     = step.get("description", "")
+                    assigned = step.get("assigned_to", "")
+                    status   = step.get("status", "pending")
+                    # Only route steps that are still pending and not already
+                    # handed to opencode — prevents infinite re-delegation loop
+                    if (status == "pending"
+                            and _is_code_task(desc)
+                            and assigned not in ("opencode",)):
                         _delegate_to_opencode(desc)
+                        step_id = step.get("id", "")
+                        if step_id:
+                            hive_status.update_next_step(
+                                step_id, "in_progress",
+                                updated_by="orchestrator",
+                            )
+                            _log(f"[opencode] marked step {step_id} in_progress")
                         break  # one task at a time — OpenCode is single-threaded
             except Exception as e:
                 _log(f"[opencode] routing error (non-fatal): {e}")

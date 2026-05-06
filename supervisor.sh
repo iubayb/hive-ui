@@ -620,6 +620,15 @@ log "INFO startup: bootstrapping missing sessions from $CONF"
 ensure_all_sessions
 log "INFO startup: bootstrap complete"
 
+# ── bootstrap-only mode (used by TS19 auto-fix and external callers) ─────────
+# Exits here instead of entering the infinite supervisor loop.
+# Without this guard, `source supervisor.sh --bootstrap-only` would run
+# the full loop and create zombie supervisor processes.
+if [[ "${1:-}" == "--bootstrap-only" ]]; then
+    log "INFO startup: --bootstrap-only flag set — exiting after bootstrap"
+    return 0 2>/dev/null || exit 0
+fi
+
 while true; do
     load_conf
     had_event=0
