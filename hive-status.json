@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T19:55:44Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T19:56:55Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.85,
-      "last_seen": "2026-05-06T19:54:52Z",
+      "last_seen": "2026-05-06T19:56:55Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -479,7 +479,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t ps5-hive",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T19:36:21Z"
+        "last_updated": "2026-05-06T19:56:18Z"
       },
       {
         "id": "cap_27efd1db",
@@ -532,6 +532,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_9757aad1",
+        "ts": "2026-05-06T19:56:18Z",
+        "hive": "default",
+        "summary": "Critical budget runaway: unbounded limits and excessive retries require guardrail injection and respawn to halt failure cascade.",
+        "source": "doctor"
+      },
       {
         "id": "f_600ddd12",
         "ts": "2026-05-06T19:36:21Z",
@@ -902,7 +909,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 100
+    "openrouter_calls_today": 101
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1121,9 +1128,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=4",
     "status": "completed",
-    "started_at": "2026-05-06T19:55:42Z",
-    "completed_at": "2026-05-06T19:55:44Z"
+    "started_at": "2026-05-06T19:56:55Z",
+    "completed_at": "2026-05-06T19:56:55Z"
   }
 }
