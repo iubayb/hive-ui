@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T16:14:51Z",
+  "last_updated": "2026-05-06T16:15:59Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -798,7 +798,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 72
+    "openrouter_calls_today": 73
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -807,26 +807,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_a3a295ec",
-      "ts": "2026-05-06T13:44:44Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize and harden the hive-ui stack with resilient LLM calls, real-time metrics, and guarded session boundaries.",
-      "summary": "The 9-session hive is running at full health on inclusionai/ling-2.6-1t:free with a live Next.js UI on port 3001. No open blockers remain, but pending P1 items on retry/backoff and metrics endpoints must ship to improve resilience and observability. P2 items on session SLOs and org_guard tests are queued for hardening.",
-      "progress": "Recently deployed the full Next.js UI with GitHub auth and an SSE stream for the supervisor session.",
-      "next_steps": [
-        "Add retry logic with exponential backoff and jitter to call_llm() in orchestrator.py when HTTP 429/5xx is returned.",
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats and runtime health.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and traversal attempts.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() on network errors and 5xx responses.",
-        "Define per-session SLOs and backpressure rules in config/slos.ts exporting CPU/mem thresholds and queue limits."
-      ],
-      "decisions": [
-        "Use exponential backoff with full jitter and max 5 retries for all external LLM and SSE calls.",
-        "Restrict org_guard to deny any path containing '..', '/etc/', or absolute non-workspace roots and log on violation.",
-        "Expose /api/metrics under a lightweight route that serializes session state without blocking the main loop."
-      ]
-    },
     {
       "id": "sess_a17161eb",
       "ts": "2026-05-06T13:59:52Z",
@@ -1006,6 +986,26 @@
         "Standardize on exponential backoff with full jitter for all outbound calls (call_llm, sendStream) capped at 30s.",
         "Require org_guard deny decisions to be logged and surfaced via /api/metrics to audit forbidden access attempts."
       ]
+    },
+    {
+      "id": "sess_4f0f5704",
+      "ts": "2026-05-06T16:15:38Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize overloaded sessions and expose real-time metrics to reduce research_loop pauses and improve backpressure.",
+      "summary": "The hive is running hot (mem=24.1GB, disk=14%) and research_loop pauses are blocking progress, while the Next.js UI is live but lacks observability. P1 items demand immediate retry/backoff code and a metrics endpoint to inform load decisions.",
+      "progress": "Enabled exponential backoff and jitter in lib/sse.ts sendStream() and added a /api/metrics endpoint returning session and resource stats.",
+      "next_steps": [
+        "Add retry logic with exponential backoff and jitter to call_llm() in orchestrator.py returning 503 on HTTP 429/502/503.",
+        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session counts, CPU, memory, and disk pressure.",
+        "Write unit tests for org_guard.py covering all forbidden path patterns in test_org_guard.py.",
+        "Add SLO and backpressure thresholds (CPU>0.85 or mem>90%) in config/slos.json and update supervisor to throttle sessions exceeding limits.",
+        "Add disk-pressure detection in pages/api/metrics.ts to include disk usage percent and emit warning when disk<20%."
+      ],
+      "decisions": [
+        "Enforce exponential backoff + jitter for all LLM calls to avoid thundering herds during high load.",
+        "Expose /api/metrics to drive automated session throttling and pausing decisions.",
+        "Define per-session SLOs in config/slos.json and have supervisor enforce them via renice/pause signals."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1017,9 +1017,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: develop\u2192main promotion check + release draft",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T16:14:48Z",
-    "completed_at": "2026-05-06T16:14:51Z"
+    "started_at": "2026-05-06T16:15:48Z",
+    "completed_at": "2026-05-06T16:15:49Z"
   }
 }
