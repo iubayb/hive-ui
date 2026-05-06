@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T04:52:51Z",
+  "last_updated": "2026-05-06T04:57:43Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.95,
-      "last_seen": "2026-05-06T04:52:51Z",
+      "last_seen": "2026-05-06T04:57:03Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -26,6 +26,19 @@
   "achievements": [],
   "blockers": [
     {
+      "id": "b_28e0d445",
+      "ts": "2026-05-06T04:53:52Z",
+      "hive": "default",
+      "agent": "supervisor",
+      "description": "self-test: FAIL: TS19 all 8 expected tmux sessions exist \u2014 missing: supervisor",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "b4b0a7771598a41a53de12d0241a28f3"
+    },
+    {
       "id": "b_d2dc2171",
       "ts": "2026-05-06T04:52:09Z",
       "hive": "default",
@@ -39,7 +52,35 @@
       "_hash": "1813402968eaeb7d0229be8b29fb0ebe"
     }
   ],
-  "next_steps": [],
+  "next_steps": [
+    {
+      "id": "ns_0e4c51f1",
+      "priority": 1,
+      "description": "Launch the missing supervisor tmux session with predefined layout and attach it to the hive namespace",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-06T04:54:30Z"
+    },
+    {
+      "id": "ns_3a0846c3",
+      "priority": 2,
+      "description": "Validate all 8 expected tmux sessions (build_monitor, hive-dev, hive-live, hive-watch, opencode, orchestrator, ps5-hive, supervisor) are present and responsive",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-06T04:54:30Z"
+    },
+    {
+      "id": "ns_a6e77dee",
+      "priority": 3,
+      "description": "Run self-test TS19 to confirm pass and clear the high-priority blocker",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-06T04:54:30Z"
+    }
+  ],
   "capabilities": {
     "learned": [
       {
@@ -74,7 +115,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 0
+    "openrouter_calls_today": 1
   },
   "model_champions": {
     "text": null,
@@ -82,7 +123,28 @@
     "updated": null
   },
   "pending_questions": [],
-  "orchestrator_sessions": [],
+  "orchestrator_sessions": [
+    {
+      "id": "sess_6d975d04",
+      "ts": "2026-05-06T04:54:30Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full tmux session coverage and ensure supervisor session is running to pass self-test TS19.",
+      "summary": "Hive health is strong (h=95%) with seven active sessions, but the supervisor session is missing causing self-test TS19 to fail. Recent learning of http500-circuit-breaker capability is noted but not yet applied. The immediate priority is session completeness and stability.",
+      "progress": "Identified the missing supervisor session as the blocker for TS19 and confirmed hive health remains high.",
+      "next_steps": [
+        "Launch the missing supervisor tmux session with predefined layout and attach it to the hive namespace",
+        "Validate all 8 expected tmux sessions (build_monitor, hive-dev, hive-live, hive-watch, opencode, orchestrator, ps5-hive, supervisor) are present and responsive",
+        "Run self-test TS19 to confirm pass and clear the high-priority blocker",
+        "Persist supervisor session configuration to hive state to survive restarts",
+        "Optionally apply http500-circuit-breaker pattern to supervisor if relevant endpoints exist"
+      ],
+      "decisions": [
+        "Create supervisor as a managed session to satisfy TS19 completeness rule",
+        "Do not restart existing healthy sessions to avoid unnecessary churn",
+        "Enforce session persistence so supervisor auto-launches on hive start"
+      ]
+    }
+  ],
   "tracked_researchers": [],
   "deployment": {
     "vercel_url": null,
@@ -94,7 +156,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T04:52:51Z",
-    "completed_at": "2026-05-06T04:52:51Z"
+    "started_at": "2026-05-06T04:57:03Z",
+    "completed_at": "2026-05-06T04:57:03Z"
   }
 }
