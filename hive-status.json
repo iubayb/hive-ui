@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T10:55:54Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-06T10:56:44Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -725,7 +725,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 28
+    "openrouter_calls_today": 29
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -734,26 +734,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_9623f662",
-      "ts": "2026-05-06T08:25:42Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by eliminating resource pressure and reclaiming capacity while preserving critical sessions.",
-      "summary": "The hive shows all-default queues running at 100% utilization with zero open blockers, indicating saturation rather than failure. Recent capability gains in port-bind-check and port-conflict-resolution give us safe levers to reconfigure services without downtime. We must immediately reduce load by suspending non-critical sessions and tightening resource governance.",
-      "progress": "Identified non-essential session ps5-hive as the primary candidate for graceful suspension and catalogued learned port-management capabilities to apply safe reconfigurations.",
-      "next_steps": [
-        "Gracefully suspend or kill ps5-hive to free CPU/RAM and lower queue saturation.",
-        "Apply stricter cgroup limits and lower niceness for research_loop jobs to protect interactive work.",
-        "Clear caches and temporary files across nodes to reclaim disk space and reduce I/O pressure.",
-        "Verify port-bind integrity for remaining sessions using port-bind-check to prevent latent conflicts.",
-        "Re-evaluate opencode and nextjs-prod for optional scale-down if saturation persists after step 1."
-      ],
-      "decisions": [
-        "Prioritize suspension of ps5-hive as the lowest-impact, highest-yield action.",
-        "Enforce cgroup caps and niceness adjustments for research_loop before any further compute-intensive work.",
-        "Mandate cache cleanup on all nodes during the next maintenance window to prevent recurrence."
-      ]
-    },
     {
       "id": "sess_c86d2b35",
       "ts": "2026-05-06T08:40:33Z",
@@ -933,6 +913,26 @@
         "Require canary-plus-rollback automation for every promotion to nextjs-prod until SLOs prove stable.",
         "Instrument first, then tune thresholds: ship telemetry to all sessions before tightening enforcement."
       ]
+    },
+    {
+      "id": "sess_a7451c0a",
+      "ts": "2026-05-06T10:56:02Z",
+      "updated_by": "orchestrator",
+      "goal": "Establish observable, resilient per-session SLOs and a controlled rollout for nextjs-prod while keeping all active sessions healthy.",
+      "summary": "All nine active sessions are running with hive health at 100%. A Next.js UI is live on port 3001 with GitHub auth and SSE streams, but we lack per-session SLOs, backpressure rules, and a controlled rollout policy for nextjs-prod.",
+      "progress": "Instrumented sessions and defined port-binding checks plus conflict-resolution workflows, yielding 14 knowledge findings and zero open blockers.",
+      "next_steps": [
+        "Add per-session SLOs and backpressure rules (CPU/mem thresholds, queue depth, circuit-breaker triggers) for build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, supervisor.",
+        "Deploy lightweight exporters/agents to each active session to emit SLO metrics and health heartbeats with labels for canary grouping.",
+        "Create and merge a controlled rollout policy for nextjs-prod including canary weight progression, automatic rollback triggers, and dark-traffic validation.",
+        "Run a staged canary release for nextjs-prod (10% \u2192 25% \u2192 50% \u2192 100%) while monitoring SLO burn rates and error budgets.",
+        "Lock in port-bind and conflict-resolution runbooks as enforceable preconditions in the CI/CD pipeline."
+      ],
+      "decisions": [
+        "Standardize SLO metrics and labels across all sessions to enable consistent alerting and capacity planning.",
+        "Adopt progressive canary promotion for nextjs-prod with strict error-budget guardrails and instant rollback on SLO breach.",
+        "Require port-bind and conflict-resolution checks as gating preconditions before any session restart or scale operation."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -944,9 +944,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-06T10:55:54Z",
-    "completed_at": null
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "status": "completed",
+    "started_at": "2026-05-06T10:56:43Z",
+    "completed_at": "2026-05-06T10:56:44Z"
   }
 }
