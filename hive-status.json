@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T16:54:53Z",
+  "last_updated": "2026-05-06T16:55:55Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-06T16:53:10Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-06T16:55:35Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
-      "errors_last_hour": 8,
+      "errors_last_hour": 7,
       "tasks_completed_today": 3,
       "silent_minutes": 0
     }
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_bb97da5e",
+      "ts": "2026-05-06T16:55:39Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] unbounded budget + 1800s worker timeout causing retry storm (4874 failures, 4 errors) with silent hang on attempt 2/4",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "3af74fcff0e0d98a698192761d70437a"
+    },
     {
       "id": "b_7b6ae5ef",
       "ts": "2026-05-06T15:51:36Z",
@@ -466,7 +479,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t ps5-hive",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T16:35:51Z"
+        "last_updated": "2026-05-06T16:55:39Z"
       },
       {
         "id": "cap_27efd1db",
@@ -519,6 +532,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_151cee64",
+        "ts": "2026-05-06T16:55:39Z",
+        "hive": "default",
+        "summary": "Unbounded budget and excessive worker timeout triggered runaway retries; injected rate-limit/budget guardrails and respawned session.",
+        "source": "doctor"
+      },
       {
         "id": "f_ebaebefc",
         "ts": "2026-05-06T16:35:51Z",
@@ -812,7 +832,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 77
+    "openrouter_calls_today": 78
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1031,9 +1051,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=3",
     "status": "completed",
-    "started_at": "2026-05-06T16:54:51Z",
-    "completed_at": "2026-05-06T16:54:53Z"
+    "started_at": "2026-05-06T16:55:15Z",
+    "completed_at": "2026-05-06T16:55:15Z"
   }
 }
