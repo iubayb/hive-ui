@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T19:30:51Z",
+  "last_updated": "2026-05-06T19:32:00Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -895,7 +895,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 97
+    "openrouter_calls_today": 98
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -904,26 +904,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_8e541747",
-      "ts": "2026-05-06T17:00:53Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize research_loop and harden hive-ui under high load by adding backpressure, metrics, and retry resilience.",
-      "summary": "The hive is running hot (CPU up to 1.74, disk 14%) with research_loop paused and several sessions active. Recent wins include a new model champion and a live Next.js UI on port 3001 with GitHub auth and SSE. Immediate focus is to reduce load pressure and add observable controls.",
-      "progress": "Added exponential backoff and jitter retry logic to lib/sse.ts sendStream() with circuit-breaker semantics and a 5xx/timeout threshold.",
-      "next_steps": [
-        "Add retry logic with exponential backoff and jitter to call_llm() in orchestrator.py when HTTP 429/503 is returned, with max 5 attempts and backoff cap of 30s.",
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (active count, CPU/mem percentiles, disk usage, paused sessions).",
-        "Implement per-session SLO checks in components/SessionMonitor.tsx: render CPU/mem thresholds and auto-renice UI actions when core > 0.8 or mem > 22GB.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns (absolute, symlink-escapes, dotfiles outside workspace) with pytest fixtures.",
-        "Add backpressure gating in lib/sse.ts sendStream() to pause upstream push when queue depth > 50 and resume on drain, with metric emission to /api/metrics."
-      ],
-      "decisions": [
-        "Cap research_loop concurrency to 1 and enforce CPU/mem SLOs until /api/metrics shows headroom.",
-        "Default all new call_llm() invocations to use the new exponential backoff with jitter and a 30s timeout.",
-        "Route all session stat collection through /api/metrics and bind SessionMonitor to auto-renice on threshold breach."
-      ]
-    },
     {
       "id": "sess_a7222dae",
       "ts": "2026-05-06T17:15:57Z",
@@ -1103,6 +1083,26 @@
         "Adopt circuit-breaker in orchestrator.py for LLM calls after repeated 429s to avoid thundering herd",
         "Enforce per-session CPU/mem SLOs and auto-renice/pause in supervisor.py to protect hive responsiveness"
       ]
+    },
+    {
+      "id": "sess_3c92204e",
+      "ts": "2026-05-06T19:31:49Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive under high load and complete hive-ui observability to unblock research_loop",
+      "summary": "The hive is running hot (mem=24.1GB, disk=14%) with research_loop paused and an LLM 429. Next.js UI is live but missing key observability and resilience. Prioritizing immediate backpressure and retry fixes plus metrics to restore flow.",
+      "progress": "Added retry with exponential backoff to call_llm() in orchestrator/orchestrator.py and scaffolded /api/metrics endpoint in pages/api/metrics.ts to emit session and resource stats.",
+      "next_steps": [
+        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() with configurable maxRetries to handle transient network/LLM errors",
+        "Write unit tests for org_guard.py covering all forbidden path patterns including symlinks, parent traversal, and non-canonical paths",
+        "Add per-session SLO and backpressure rules in orchestrator/orchestrator.py: CPU>0.8 or mem>22GB triggers renicing and session pause until thresholds recover",
+        "Implement /api/metrics endpoint in pages/api/metrics.ts returning JSON of active sessions, resource gauges, and SLO breach counters",
+        "Add disk-pressure watchdog in supervisor/supervisor.py: if disk<15% trigger log rotation and temp cleanup and pause non-critical jobs"
+      ],
+      "decisions": [
+        "Use exponential backoff starting at 500ms with jitter and cap of 30s for all LLM and SSE retries",
+        "Set SLO thresholds to CPU>0.8, mem>22GB, disk<15% to trigger automatic renicing/pause and alerting",
+        "Route /api/metrics behind a lightweight cache (1s TTL) and expose no sensitive session tokens"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1116,7 +1116,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T19:30:50Z",
-    "completed_at": "2026-05-06T19:30:51Z"
+    "started_at": "2026-05-06T19:31:59Z",
+    "completed_at": "2026-05-06T19:32:00Z"
   }
 }
