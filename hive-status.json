@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T15:55:40Z",
+  "last_updated": "2026-05-06T15:56:41Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -44,32 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_7430e5d1",
-      "ts": "2026-05-06T15:55:29Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Worker timing out after 1800s with unbounded max_tasks/max_hours and high failure rate (4874 failed vs 60 done) indicating runaway retry storm and missing guardrails.",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "b47656db1557663cf0c10eaddc872147"
-    },
-    {
-      "id": "b_5bbd1c6c",
-      "ts": "2026-05-06T15:55:29Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[orchestrator] Status flagged as error despite healthy verification logs (alive 3/3, watchdog ok, UI signals present) \u2014 likely a stale error latch or threshold trigger mismatch.",
-      "severity": "low",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "73824e63921aad58778c11214ec5805d"
-    },
     {
       "id": "b_30cb4fcc",
       "ts": "2026-05-06T15:53:56Z",
@@ -1062,9 +1036,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=70% blockers=7",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T15:55:30Z",
-    "completed_at": "2026-05-06T15:55:30Z"
+    "started_at": "2026-05-06T15:56:10Z",
+    "completed_at": "2026-05-06T15:56:11Z"
   }
 }
