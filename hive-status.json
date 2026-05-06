@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T21:56:44Z",
+  "last_updated": "2026-05-06T21:57:46Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_b816aa1c",
-      "ts": "2026-05-06T21:56:39Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Unbounded task/hour limits causing runaway worker retries and massive failure accumulation (4874 failed vs 60 done) with 30-minute worker timeouts; session is stuck and silent.",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "83d77fbc568ea9ad697776d7902160b4"
-    },
     {
       "id": "b_000a4ffa",
       "ts": "2026-05-06T18:06:01Z",
@@ -1197,9 +1184,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T21:56:33Z",
-    "completed_at": "2026-05-06T21:56:34Z"
+    "started_at": "2026-05-06T21:57:34Z",
+    "completed_at": "2026-05-06T21:57:36Z"
   }
 }
