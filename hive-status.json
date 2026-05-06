@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T05:35:00Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-06T05:40:00Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.95,
-      "last_seen": "2026-05-06T05:33:59Z",
+      "last_seen": "2026-05-06T05:38:02Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -156,7 +156,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 5
+    "openrouter_calls_today": 6
   },
   "model_champions": {
     "text": null,
@@ -224,6 +224,26 @@
         "Gate further deployments on TS19 passing to ensure session integrity.",
         "Record supervisor session startup command/layout in runbooks for reproducibility."
       ]
+    },
+    {
+      "id": "sess_5c060df6",
+      "ts": "2026-05-06T05:39:40Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive session integrity and pass self-test TS19 by launching the missing supervisor tmux session and validating all 8 expected sessions.",
+      "summary": "The hive is healthy (default: running h=95%) but one high-priority blocker remains: self-test TS19 fails because the supervisor tmux session is missing. There are 7 active sessions and 3 pending next steps to resolve the gap and confirm stability.",
+      "progress": "No recent achievements; baseline established with 3 knowledge findings and the learned capability http500-circuit-breaker documented.",
+      "next_steps": [
+        "Launch the missing supervisor tmux session with the predefined layout and attach it to the hive namespace.",
+        "Validate all 8 expected tmux sessions (build_monitor, hive-dev, hive-live, hive-watch, opencode, orchestrator, ps5-hive, supervisor) exist and are responsive.",
+        "Run self-test TS19 to confirm pass and clear the high-priority blocker.",
+        "Record session metadata and update the hive state snapshot.",
+        "Verify http500-circuit-breaker behavior under nominal load across active sessions."
+      ],
+      "decisions": [
+        "Prioritize P1 (launch supervisor) to resolve the missing session before broader validation.",
+        "Use predefined layout for supervisor to ensure consistency with existing session conventions.",
+        "Gate P3 (self-test TS19) on successful completion of P1 and P2 to avoid flaky results."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -235,9 +255,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-06T05:35:00Z",
-    "completed_at": "2026-05-06T05:35:00Z"
+    "started_at": "2026-05-06T05:39:33Z",
+    "completed_at": "2026-05-06T05:39:40Z"
   }
 }
