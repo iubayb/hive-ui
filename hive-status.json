@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T13:10:42Z",
+  "last_updated": "2026-05-06T13:11:52Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -334,6 +334,15 @@
       "ts": "2026-05-06T13:08:39Z"
     },
     {
+      "id": "ns_97131581",
+      "priority": 1,
+      "description": "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-06T13:11:52Z"
+    },
+    {
       "id": "ns_5a5a9417",
       "priority": 2,
       "description": "Apply stricter cgroup limits and lower niceness for research_loop jobs to reduce core contention.",
@@ -361,6 +370,15 @@
       "ts": "2026-05-06T13:08:39Z"
     },
     {
+      "id": "ns_5b950330",
+      "priority": 2,
+      "description": "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay.",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-06T13:11:52Z"
+    },
+    {
       "id": "ns_e5581c94",
       "priority": 3,
       "description": "Clear caches and temporary files to reclaim disk space and reduce I/O pressure.",
@@ -383,9 +401,18 @@
       "priority": 3,
       "description": "Add /api/metrics endpoint to logstream.py returning JSON of session stats (sessions, throughput, errors).",
       "assigned_to": "default",
-      "status": "pending",
+      "status": "in_progress",
       "source": "orchestrator",
       "ts": "2026-05-06T13:08:39Z"
+    },
+    {
+      "id": "ns_ac2ab911",
+      "priority": 3,
+      "description": "Add auth middleware to middleware.ts that validates session cookie against NEXTAUTH_SECRET and injects user.role into request.locals before route handlers.",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-06T13:11:52Z"
     }
   ],
   "capabilities": {
@@ -625,7 +652,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 47
+    "openrouter_calls_today": 48
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -634,26 +661,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_c8f3c493",
-      "ts": "2026-05-06T11:11:03Z",
-      "updated_by": "orchestrator",
-      "goal": "Establish robust observability, SLOs, and safe rollout controls across all active sessions to sustain stability while enabling controlled feature delivery.",
-      "summary": "All nine sessions are healthy with the hive running at full capacity. Recent achievement brought the Next.js UI live on port 3001 with auth and streaming, and we now have port-bind and conflict-resolution capabilities. We have no open blockers and three prioritized next steps focused on instrumentation, per-session SLOs, and a controlled rollout policy.",
-      "progress": "Completed Next.js production deployment with GitHub auth and SSE streaming on port 3001 across 12 routes, and validated port-bind and conflict-resolution capabilities.",
-      "next_steps": [
-        "Instrument each active session (build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, supervisor) with metrics, traces, and health endpoints.",
-        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths, error budgets) and publish runbooks.",
-        "Create and test a controlled rollout policy for nextjs-prod with canary weights, automated rollback triggers, and approval gates.",
-        "Establish a hive-wide dashboard and alerting baseline feeding from session instrumentation.",
-        "Run a rehearsal rollback and canary promotion drill for nextjs-prod to validate policy and runbooks."
-      ],
-      "decisions": [
-        "Adopt per-session SLOs with error budgets and backpressure thresholds as the primary stability contract.",
-        "Require canary + approval gates for all production-facing changes (nextjs-prod first, then others).",
-        "Instrument all sessions before expanding traffic or enabling additional features."
-      ]
-    },
     {
       "id": "sess_42f2ccdd",
       "ts": "2026-05-06T11:26:03Z",
@@ -827,6 +834,26 @@
         "Keep port 3001 dedicated to hive-ui Next.js production traffic; enforce via port-bind-check.",
         "Route all session metrics through logstream.py /api/metrics as the single source of truth."
       ]
+    },
+    {
+      "id": "sess_8abbbe70",
+      "ts": "2026-05-06T13:11:52Z",
+      "updated_by": "orchestrator",
+      "goal": "Solidify hive-ui production readiness by adding resilient metrics, auth guardrails, and real-time stream stability for all active sessions.",
+      "summary": "The hive is running at full health with nine active sessions and the new Ling model serving inferences. The Next.js UI is live on port 3001 with GitHub auth and SSE streaming, but lacks server-side resilience and observable metrics for session health.",
+      "progress": "Wired inclusionai/ling-2.6-1t:free as the active text model and exposed the full 12-route Next.js UI with GitHub auth and SSE on port 3001.",
+      "next_steps": [
+        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
+        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay.",
+        "Add auth middleware to middleware.ts that validates session cookie against NEXTAUTH_SECRET and injects user.role into request.locals before route handlers.",
+        "Add unit tests for lib/sse.ts covering all retry conditions (200, 429, 503, network error) using mocked fetch and timers in tests/sse.test.ts.",
+        "Add build-time env validation to scripts/validateEnv.ts that asserts required keys (NEXTAUTH_SECRET, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, LING_MODEL) and exits non-zero on missing/invalid values."
+      ],
+      "decisions": [
+        "Lock default model to inclusionai/ling-2.6-1t:free for text generation across all sessions unless explicitly overridden via session metadata.",
+        "Enforce GitHub OAuth as mandatory auth provider for hive-ui routes and reject unauthenticated requests at middleware.",
+        "Route all session metrics through /api/metrics with 10s in-memory retention window to avoid store bloat and ensure low-latency visibility."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -840,7 +867,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T13:10:41Z",
-    "completed_at": "2026-05-06T13:10:42Z"
+    "started_at": "2026-05-06T13:11:43Z",
+    "completed_at": "2026-05-06T13:11:45Z"
   }
 }
