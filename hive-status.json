@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T08:39:46Z",
+  "last_updated": "2026-05-06T08:40:53Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -385,7 +385,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 9
+    "openrouter_calls_today": 10
   },
   "model_champions": {
     "text": null,
@@ -493,6 +493,26 @@
         "Enforce cgroup caps and niceness adjustments for research_loop before any further compute-intensive work.",
         "Mandate cache cleanup on all nodes during the next maintenance window to prevent recurrence."
       ]
+    },
+    {
+      "id": "sess_c86d2b35",
+      "ts": "2026-05-06T08:40:33Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive resources and reclaim capacity by suspending non-essential sessions, tightening job limits, and clearing caches.",
+      "summary": "The hive is running at full health with nine active sessions and no open blockers. Resource pressure is emerging from non-essential workloads and I/O, risking contention on the single-node host. Immediate compaction and stricter controls will restore headroom and reliability.",
+      "progress": "Identified non-essential sessions (e.g., ps5-hive, opencode) and documented cgroup/niceness adjustments plus cache-clearing actions to reclaim disk and I/O.",
+      "next_steps": [
+        "Gracefully suspend or kill ps5-hive and opencode sessions and confirm resource release.",
+        "Apply stricter cgroup CPU/memory limits and lower niceness for research_loop jobs via systemd or docker/runtime flags.",
+        "Clear package and build caches (apt, npm, pip, temp dirs) and verify freed disk space and reduced I/O.",
+        "Monitor default hive health and host metrics for 10 minutes to confirm stabilization.",
+        "Update session inventory and health thresholds, then document new baselines."
+      ],
+      "decisions": [
+        "Prioritize P1 (session suspension) before P2 and P3 to immediately reclaim capacity.",
+        "Enforce cgroup limits and niceness adjustments for all research_loop jobs to prevent noisy-neighbor effects.",
+        "Automate cache purge with retention policies and schedule off-peak maintenance to avoid recurrence."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -504,9 +524,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-06T08:39:25Z",
-    "completed_at": "2026-05-06T08:39:26Z"
+    "started_at": "2026-05-06T08:40:27Z",
+    "completed_at": "2026-05-06T08:40:33Z"
   }
 }
