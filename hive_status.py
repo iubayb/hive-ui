@@ -547,11 +547,15 @@ def update_hive_health(hive_name: str, sessions: list = None,
                        status: str = "unknown", health_score: float = 1.0,
                        current_goal: str = "", active_model: str = "",
                        errors_last_hour: int = 0,
-                       tasks_completed_today: int = 0,
+                       tasks_completed_today: int = -1,
                        silent_minutes: int = 0,
                        updated_by: str = "hive-doctor"):
     with _status_lock:
         s = load()
+        existing = s.get("hives", {}).get(hive_name, {})
+        # -1 sentinel means "preserve existing value, don't reset"
+        if tasks_completed_today < 0:
+            tasks_completed_today = existing.get("tasks_completed_today", 0)
         s["hives"][hive_name] = {
             "status":               status,
             "health_score":         round(health_score, 3),

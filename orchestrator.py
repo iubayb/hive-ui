@@ -1448,15 +1448,28 @@ def main():
                 f"| blockers={open_b} | next_steps={pending} "
                 f"| model={OPENROUTER_MODEL.split('/')[-1]}"
             )
+            # Compute status from live_health — never preserve stale doctor "stalled"
+            live_status = (
+                "running" if live_health >= 0.7
+                else ("error" if live_health < 0.4 else "stalled")
+            )
+            # Count tasks completed today from done next_steps
+            today = _now_iso()[:10]  # "YYYY-MM-DD"
+            tasks_today = sum(
+                1 for n in s.get("next_steps", [])
+                if n.get("status") == "done"
+                and n.get("ts", "")[:10] == today
+            )
             # Sync active model, sessions, and live health into hive-status
             hive_status.update_hive_health(
                 hive_name   = HIVE_NAME,
                 sessions    = sessions_alive,
-                status      = h.get("status", "running"),
+                status      = live_status,
                 health_score= live_health,
                 current_goal= h.get("current_goal", ""),
                 active_model= OPENROUTER_MODEL,
                 errors_last_hour = h.get("errors_last_hour", 0),
+                tasks_completed_today = tasks_today,
                 silent_minutes   = 0,
                 updated_by  = "orchestrator",
             )
