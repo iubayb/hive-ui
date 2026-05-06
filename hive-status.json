@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T09:40:02Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-06T09:41:00Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 1.0,
-      "last_seen": "2026-05-06T09:39:00Z",
+      "last_seen": "2026-05-06T09:41:00Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -553,7 +553,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 17
+    "openrouter_calls_today": 18
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -741,6 +741,26 @@
         "Gate nextjs-prod rollouts behind canary health checks and automated rollback on SLO breach.",
         "Instrument every session before any further traffic or config changes to ensure observability."
       ]
+    },
+    {
+      "id": "sess_2b1c32a4",
+      "ts": "2026-05-06T09:40:40Z",
+      "updated_by": "orchestrator",
+      "goal": "Establish per-session observability, SLOs/backpressure, and a controlled rollout policy to harden the hive while keeping Next.js production stable.",
+      "summary": "Nine active sessions are running with default hive health at 100%. No blockers exist, and recent achievements include a full Next.js UI live on port 3001 with GitHub auth and SSE streams. We now need to instrument sessions, codify SLOs/backpressure, and define a canary rollout for nextjs-prod.",
+      "progress": "Completed port-bind-check and port-conflict-resolution capabilities and verified the Next.js production UI (12 routes, GitHub auth, SSE) on port 3001.",
+      "next_steps": [
+        "Instrument each active session (build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, supervisor) with metrics, logs, and health endpoints.",
+        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue limits, circuit-breaker triggers).",
+        "Create a controlled rollout policy for nextjs-prod including canary weights, automated rollback criteria, and monitoring gates.",
+        "Add automated alerting and dashboards tied to the new SLOs for rapid incident detection.",
+        "Run a staged canary promotion for nextjs-prod under the new policy and validate stability before full cutover."
+      ],
+      "decisions": [
+        "Instrument all nine sessions before any further configuration changes to ensure observability coverage.",
+        "Enforce SLO-driven backpressure and circuit breakers rather than best-effort resource limits.",
+        "Require canary promotion with automated rollback for nextjs-prod; no direct full rollouts without staged validation."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -752,9 +772,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
-    "status": "running",
-    "started_at": "2026-05-06T09:40:02Z",
-    "completed_at": null
+    "task": "heartbeat \u00b7 sessions=9 health=100% blockers=0",
+    "status": "completed",
+    "started_at": "2026-05-06T09:41:00Z",
+    "completed_at": "2026-05-06T09:41:00Z"
   }
 }
