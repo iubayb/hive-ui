@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T22:55:42Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T22:56:52Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-06T22:54:10Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-06T22:56:44Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,32 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_b0f96911",
+      "ts": "2026-05-06T22:56:52Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Port conflict or bind failure may be contributing to worker timeouts (silent=1s intervals suggest blocked sockets)",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "f64b49a5baec827e2cebcb9bab0bf3a6"
+    },
+    {
+      "id": "b_e19b215c",
+      "ts": "2026-05-06T22:56:52Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded budget + 1800s worker timeouts causing runaway failure cascade (4874 failed, 60 done) with 4 errors and silent intervals",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "d5d54c8a51fb527345f45c9e6c150671"
+    },
     {
       "id": "b_000a4ffa",
       "ts": "2026-05-06T18:06:01Z",
@@ -475,11 +501,11 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "config-guardrail-inject",
-        "description": "Injects missing rate-limit and budget guardrails to prevent runaway retries and enforce controlled shutdowns.",
+        "description": "Injects missing rate-limit and budget guardrails to prevent runaway retries and enforce controlled shutdowns",
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t ps5-hive",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T22:06:48Z"
+        "last_updated": "2026-05-06T22:56:52Z"
       },
       {
         "id": "cap_27efd1db",
@@ -532,6 +558,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_43f80ac0",
+        "ts": "2026-05-06T22:56:52Z",
+        "hive": "default",
+        "summary": "Critical unbounded-budget runaway with worker timeouts requires immediate guardrail injection and port conflict resolution to halt failure cascade.",
+        "source": "doctor"
+      },
       {
         "id": "f_36841356",
         "ts": "2026-05-06T22:26:44Z",
@@ -979,7 +1012,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 123
+    "openrouter_calls_today": 124
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1200,7 +1233,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T22:55:21Z",
-    "completed_at": "2026-05-06T22:55:22Z"
+    "started_at": "2026-05-06T22:56:22Z",
+    "completed_at": "2026-05-06T22:56:23Z"
   }
 }
