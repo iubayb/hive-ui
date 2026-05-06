@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T07:51:54Z",
+  "last_updated": "2026-05-06T07:52:57Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-06T07:51:13Z",
+      "health_score": 0.75,
+      "last_seen": "2026-05-06T07:52:40Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -19,13 +19,65 @@
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
-      "errors_last_hour": 0,
+      "errors_last_hour": 19,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_f545c350",
+      "ts": "2026-05-06T07:52:46Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-live] logstream.py restart loop on port 8888 plus idle researcher-tracker implies dependency/service initialization failure and no active researcher config.",
+      "severity": "medium",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T07:52:57Z",
+      "resolution": "auto-pruned: hive-live is now alive",
+      "github_issue": null,
+      "_hash": "f4fa61d0e22d631b5d6a0e99de681849"
+    },
+    {
+      "id": "b_e158c598",
+      "ts": "2026-05-06T07:52:46Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-dev] logstream.py restart loop on port 8889 indicates crash-on-start (likely port bind conflict or missing resource).",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T07:52:57Z",
+      "resolution": "auto-pruned: hive-dev is now alive",
+      "github_issue": null,
+      "_hash": "6986ce85b45193f4b20125189de85505"
+    },
+    {
+      "id": "b_cfaa57aa",
+      "ts": "2026-05-06T07:52:43Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-live] Port 8888 conflict plus missing researcher config causing idle; upstream process likely dead.",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T07:52:57Z",
+      "resolution": "auto-pruned: hive-live is now alive",
+      "github_issue": null,
+      "_hash": "5ed4d11d1a3b64ec4364bf8db0a3f280"
+    },
+    {
+      "id": "b_37c3d729",
+      "ts": "2026-05-06T07:52:43Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-dev] Port 8889 conflict or logstream.py crash loop; repeated kill/restart suggests binding failure or runtime error.",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T07:52:57Z",
+      "resolution": "auto-pruned: hive-dev is now alive",
+      "github_issue": null,
+      "_hash": "6d5e47f9559098a53a6223ed308b236c"
+    },
     {
       "id": "b_5f3888c4",
       "ts": "2026-05-06T07:28:18Z",
@@ -1273,58 +1325,6 @@
       "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
       "github_issue": null,
       "_hash": "0707dd5d8c968e7c49a326db55a5511e"
-    },
-    {
-      "id": "b_c8f7cd55",
-      "ts": "2026-05-06T07:25:07Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=2.39 mem=19.7GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "9b39c45cbe1eca02b25b0ca653ab79ef"
-    },
-    {
-      "id": "b_c7199a26",
-      "ts": "2026-05-06T07:25:07Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=2.58 mem=19.9GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "bb4eae767660de12f7618e11fa2415e2"
-    },
-    {
-      "id": "b_72b1905e",
-      "ts": "2026-05-06T07:25:07Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=2.96 mem=45.6GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "185894b0261281014018f3f362de6ce6"
-    },
-    {
-      "id": "b_2d4380c3",
-      "ts": "2026-05-06T07:25:07Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=3.40 mem=21.9GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "9bcdd31ed3f6a900367dd43db465ce33"
     }
   ],
   "next_steps": [
@@ -1357,10 +1357,48 @@
     }
   ],
   "capabilities": {
-    "learned": []
+    "learned": [
+      {
+        "id": "cap_f8de811f",
+        "ts": "2026-05-06T07:52:46Z",
+        "source_hive": "default",
+        "source_agent": "hive-doctor",
+        "skill": "port-bind-check",
+        "description": "Quick pre-flight bind test to verify port availability before launching services.",
+        "example": "python3 -c \"import socket; s=socket.socket(); s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1); s.bind(('', PORT)); print('bind ok'); s.close()\"",
+        "tags": [],
+        "applicable_to": "all"
+      },
+      {
+        "id": "cap_1e534b8b",
+        "ts": "2026-05-06T07:52:43Z",
+        "source_hive": "default",
+        "source_agent": "hive-doctor",
+        "skill": "port-conflict-resolution",
+        "description": "Detects and clears port collisions before respawning dependent services.",
+        "example": "ss -tlnp | grep 8889 && lsof -ti:8889 | xargs -r kill -9; sleep 1; tmux respawn-window -t hive-dev",
+        "tags": [],
+        "applicable_to": "all"
+      }
+    ]
   },
   "knowledge": {
-    "findings": [],
+    "findings": [
+      {
+        "id": "f_996c4540",
+        "ts": "2026-05-06T07:52:46Z",
+        "hive": "default",
+        "summary": "Port collision or missing resource causes repeated logstream crashes in both hive-dev and hive-live.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_96ef1388",
+        "ts": "2026-05-06T07:52:43Z",
+        "hive": "default",
+        "summary": "Port collisions and missing config are driving crash loops in two sessions.",
+        "source": "doctor"
+      }
+    ],
     "patterns": [],
     "solutions": []
   },
@@ -1370,7 +1408,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 2
+    "openrouter_calls_today": 4
   },
   "model_champions": {
     "text": null,
@@ -1431,7 +1469,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T07:51:53Z",
-    "completed_at": "2026-05-06T07:51:54Z"
+    "started_at": "2026-05-06T07:52:56Z",
+    "completed_at": "2026-05-06T07:52:57Z"
   }
 }
