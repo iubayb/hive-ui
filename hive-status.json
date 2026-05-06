@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T13:09:40Z",
+  "last_updated": "2026-05-06T13:10:42Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 1.0,
-      "last_seen": "2026-05-06T13:08:22Z",
+      "last_seen": "2026-05-06T13:10:31Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -356,7 +356,7 @@
       "priority": 2,
       "description": "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
       "assigned_to": "default",
-      "status": "pending",
+      "status": "in_progress",
       "source": "orchestrator",
       "ts": "2026-05-06T13:08:39Z"
     },
@@ -840,7 +840,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T13:09:39Z",
-    "completed_at": "2026-05-06T13:09:40Z"
+    "started_at": "2026-05-06T13:10:41Z",
+    "completed_at": "2026-05-06T13:10:42Z"
   }
 }
