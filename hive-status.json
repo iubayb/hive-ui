@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T20:06:37Z",
+  "last_updated": "2026-05-06T20:07:38Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.889,
-      "last_seen": "2026-05-06T20:06:21Z",
+      "health_score": 0.85,
+      "last_seen": "2026-05-06T20:07:18Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_319f4929",
-      "ts": "2026-05-06T20:06:27Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Unbounded max_tasks and max_hours allow runaway retries; 4874 failures and 1800s timeouts indicate exhausted workers and no backoff limits.",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "4ea7551a040884863df3a7303d5f9097"
-    },
     {
       "id": "b_000a4ffa",
       "ts": "2026-05-06T18:06:01Z",
@@ -1148,9 +1135,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=4",
     "status": "completed",
-    "started_at": "2026-05-06T20:06:06Z",
-    "completed_at": "2026-05-06T20:06:07Z"
+    "started_at": "2026-05-06T20:07:18Z",
+    "completed_at": "2026-05-06T20:07:18Z"
   }
 }
