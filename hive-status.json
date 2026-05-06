@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T09:54:55Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T09:55:45Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.9,
-      "last_seen": "2026-05-06T09:53:21Z",
+      "health_score": 1.0,
+      "last_seen": "2026-05-06T09:55:28Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -593,7 +593,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 20
+    "openrouter_calls_today": 21
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -602,26 +602,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_5e07a983",
-      "ts": "2026-05-06T07:25:12Z",
-      "updated_by": "orchestrator",
-      "goal": "Reduce system load and memory pressure to resume paused research loops and stabilize hive operations.",
-      "summary": "The hive is experiencing critical load and memory saturation (cores up to 2.88\u00d7, memory up to 47.2 GB) causing research_loop pauses across multiple sessions. Health is nominal on the default queue but resource contention is blocking progress. Immediate triage and resource rebalancing are required to restore throughput.",
-      "progress": "Identified and logged critical load/memory/disk pressure and associated paused research_loop jobs across active sessions.",
-      "next_steps": [
-        "Kill or gracefully suspend non-essential sessions (e.g., ps5-hive, opencode) to free memory and CPU.",
-        "Apply stricter cgroup limits and lower niceness for research_loop jobs to reduce core contention.",
-        "Clear caches and temporary files to reclaim disk space and reduce I/O pressure.",
-        "Restart or reload overloaded sessions incrementally to smooth load spikes.",
-        "Implement a load watchdog to auto-pause low-priority work if core\u00d7mem exceeds safe thresholds."
-      ],
-      "decisions": [
-        "Prioritize research_loop resumption over auxiliary sessions by resource preemption.",
-        "Cap per-session memory and CPU shares to prevent single-session saturation.",
-        "Defer non-urgent tasks and background indexing until load/core < 1.5 and mem < 75%."
-      ]
-    },
     {
       "id": "sess_acec49a9",
       "ts": "2026-05-06T07:40:25Z",
@@ -801,6 +781,26 @@
         "Enforce SLO-driven backpressure and circuit breakers rather than best-effort resource limits.",
         "Require canary promotion with automated rollback for nextjs-prod; no direct full rollouts without staged validation."
       ]
+    },
+    {
+      "id": "sess_d017063d",
+      "ts": "2026-05-06T09:55:45Z",
+      "updated_by": "orchestrator",
+      "goal": "Establish resilient per-session SLOs and a controlled rollout for nextjs-prod while instrumenting all active sessions.",
+      "summary": "The hive is healthy and running at full capacity with nine active sessions. Next.js production UI is live on port 3001 with 12 routes, GitHub auth, and SSE streaming, yet instrumentation, SLOs, and rollout policy remain pending. We will complete instrumentation, define backpressure rules, and implement a canary rollout to harden the system.",
+      "progress": "Recently brought the Next.js production UI live on port 3001 with 12 routes, GitHub auth, and SSE streaming, and resolved port-bind and port-conflict issues.",
+      "next_steps": [
+        "Instrument each active session (build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, supervisor) with metrics, traces, and health endpoints.",
+        "Define per-session SLOs and backpressure rules, including CPU/memory thresholds and queue-depth limits with automated throttling.",
+        "Create and apply a controlled rollout policy for nextjs-prod with canary weights, health gates, and automated rollback triggers.",
+        "Run load and failure-injection tests on canary to validate SLOs and backpressure responses before full promotion.",
+        "Add alerting and dashboards for SLO burn rates and per-session saturation, then cut over traffic to the canary on green."
+      ],
+      "decisions": [
+        "Adopt per-session isolation with independent thresholds to prevent noisy-neighbor effects across the nine active sessions.",
+        "Use a 5% initial canary weight and graduated promotion only after consecutive SLO and health checks pass.",
+        "Prioritize instrumentation and SLOs before expanding session count or load to avoid regressions."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -812,9 +812,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: develop\u2192main promotion check + release draft",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-06T09:54:32Z",
-    "completed_at": "2026-05-06T09:54:35Z"
+    "started_at": "2026-05-06T09:55:38Z",
+    "completed_at": "2026-05-06T09:55:45Z"
   }
 }
