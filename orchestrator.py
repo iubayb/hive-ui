@@ -1257,7 +1257,14 @@ Knowledge findings: {s.get("knowledge", {}).get("findings_count", len(s.get("kno
         '  "progress": what was completed recently (1 sentence),\n'
         '  "next_steps": list of up to 5 concrete action strings,\n'
         '  "decisions": list of up to 3 key decision strings.\n'
-        "Return ONLY valid JSON. No markdown fences. No preamble."
+        "CRITICAL: next_steps MUST be concrete coding or improvement tasks for the hive-ui "
+        "codebase that an AI coding agent can act on immediately. Each must name a specific "
+        "file, function, or metric to change — e.g. "
+        "'Add retry logic to call_llm() in orchestrator.py when HTTP 429 is returned', "
+        "'Write unit tests for org_guard.py covering all forbidden path patterns', "
+        "'Add /api/metrics endpoint to logstream.py returning JSON of session stats'. "
+        "Never generate vague ops tasks like 'monitor X' or 'define policy for Y'. "
+        "The hive must ALWAYS have actionable work. Return ONLY valid JSON. No markdown fences."
     )
 
     _log("running compaction (LLM)...")
@@ -1494,6 +1501,36 @@ def main():
                     _log(f"triage error (non-fatal): {e}")
             last_triage = now
 
+            # ── dispatch pending next_steps to OpenCode (every triage cycle) ──
+            # Runs every 60s so OpenCode is never idle after finishing a task.
+            # _is_code_task filter removed: OpenCode handles code AND ops tasks.
+            try:
+                s = hive_status.load()
+                pending   = [n for n in s.get("next_steps", []) if n.get("status") == "pending"]
+                in_prog   = [n for n in s.get("next_steps", [])
+                             if n.get("status") == "in_progress"
+                             and n.get("assigned_to") == "opencode"]
+                # Only dispatch if OpenCode has no current in-progress task
+                if not in_prog and pending:
+                    step    = pending[0]
+                    desc    = step.get("description", "")
+                    step_id = step.get("id", "")
+                    _delegate_to_opencode(desc)
+                    if step_id:
+                        hive_status.update_next_step(step_id, "in_progress",
+                                                     updated_by="orchestrator")
+                        _log(f"[opencode] dispatched → {desc[:70]}")
+                # Early compaction: queue running low → generate fresh tasks now
+                if len(pending) < 2 and _llm_budget_ok():
+                    _log("[queue] pending steps < 2 — triggering early compaction")
+                    try:
+                        compaction()
+                        last_compaction = now
+                    except Exception as e:
+                        _log(f"early compaction error: {e}")
+            except Exception as e:
+                _log(f"[opencode] dispatch error (non-fatal): {e}")
+
         # ── compaction ────────────────────────────────────────────────────────
         if now - last_compaction >= COMPACTION_INTERVAL:
             with _doing("compaction: LLM summarising hive state"):
@@ -1502,32 +1539,8 @@ def main():
                 except Exception as e:
                     _log(f"compaction error (non-fatal): {e}")
             last_compaction = now
-
-            # Route code next_steps to OpenCode
-            try:
-                s = hive_status.load()
-                for step in s.get("next_steps", [])[-5:]:
-                    if not isinstance(step, dict):
-                        continue
-                    desc     = step.get("description", "")
-                    assigned = step.get("assigned_to", "")
-                    status   = step.get("status", "pending")
-                    # Only route steps that are still pending and not already
-                    # handed to opencode — prevents infinite re-delegation loop
-                    if (status == "pending"
-                            and _is_code_task(desc)
-                            and assigned not in ("opencode",)):
-                        _delegate_to_opencode(desc)
-                        step_id = step.get("id", "")
-                        if step_id:
-                            hive_status.update_next_step(
-                                step_id, "in_progress",
-                                updated_by="orchestrator",
-                            )
-                            _log(f"[opencode] marked step {step_id} in_progress")
-                        break  # one task at a time — OpenCode is single-threaded
-            except Exception as e:
-                _log(f"[opencode] routing error (non-fatal): {e}")
+            # Dispatch is now handled in the triage block every 60s — no post-compaction
+            # routing needed here.
 
         # ── self-test ─────────────────────────────────────────────────────────
         if now - last_self_test >= SELF_TEST_INTERVAL:
