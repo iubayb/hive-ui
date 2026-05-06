@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T23:55:40Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T23:57:01Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-06T23:55:40Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-06T23:56:57Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_fe5c3e07",
+      "ts": "2026-05-06T23:57:01Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded task/hour limits allowing infinite retry storm (4874 failed) with 30-minute worker timeouts; config missing guardrails causing resource exhaustion.",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "e72dc72344bca4f6fd63aeb0a8fe108e"
+    },
     {
       "id": "b_000a4ffa",
       "ts": "2026-05-06T18:06:01Z",
@@ -533,6 +546,13 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_e26d1534",
+        "ts": "2026-05-06T23:57:01Z",
+        "hive": "default",
+        "summary": "Missing guardrails caused unbounded retries and worker timeouts; config injected and session respawned to enforce limits.",
+        "source": "doctor"
+      },
+      {
         "id": "f_fb0e5a02",
         "ts": "2026-05-06T23:37:00Z",
         "hive": "default",
@@ -1007,7 +1027,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 131
+    "openrouter_calls_today": 132
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1226,9 +1246,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=4",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T23:55:40Z",
-    "completed_at": "2026-05-06T23:55:40Z"
+    "started_at": "2026-05-06T23:56:20Z",
+    "completed_at": "2026-05-06T23:56:21Z"
   }
 }
