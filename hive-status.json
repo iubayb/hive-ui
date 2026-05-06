@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T14:04:59Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-06T14:05:45Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -418,6 +418,17 @@
   "capabilities": {
     "learned": [
       {
+        "id": "cap_13dc7ebb",
+        "ts": "2026-05-06T14:05:05Z",
+        "source_hive": "default",
+        "source_agent": "hive-doctor",
+        "skill": "config-guardrail-inject",
+        "description": "Injects missing rate-limit and budget guardrails (timeouts, max_tasks, max_hours) to prevent runaway retry storms and force controlled shutdowns",
+        "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t SESSION",
+        "tags": [],
+        "applicable_to": "all"
+      },
+      {
         "id": "cap_27efd1db",
         "ts": "2026-05-06T13:55:07Z",
         "source_hive": "default",
@@ -468,6 +479,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_43f3c44a",
+        "ts": "2026-05-06T14:05:05Z",
+        "hive": "default",
+        "summary": "Critical runaway failure storm in ps5-hive due to unbounded budget and missing timeout, requiring immediate config guardrails and respawn.",
+        "source": "doctor"
+      },
       {
         "id": "f_a03d1039",
         "ts": "2026-05-06T13:55:07Z",
@@ -684,7 +702,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 55
+    "openrouter_calls_today": 56
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -903,9 +921,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-06T14:04:11Z",
-    "completed_at": "2026-05-06T14:04:12Z"
+    "started_at": "2026-05-06T14:05:43Z",
+    "completed_at": "2026-05-06T14:05:45Z"
   }
 }
