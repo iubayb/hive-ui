@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T13:07:00Z",
+  "last_updated": "2026-05-06T13:08:02Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -338,7 +338,7 @@
       "priority": 2,
       "description": "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
       "assigned_to": "default",
-      "status": "pending",
+      "status": "in_progress",
       "source": "orchestrator",
       "ts": "2026-05-06T08:55:35Z"
     },
@@ -811,9 +811,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: develop\u2192main promotion check + release draft",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T13:06:38Z",
-    "completed_at": "2026-05-06T13:06:40Z"
+    "started_at": "2026-05-06T13:07:30Z",
+    "completed_at": "2026-05-06T13:07:32Z"
   }
 }
