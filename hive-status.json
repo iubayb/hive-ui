@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T07:55:01Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-06T07:55:43Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 1.0,
-      "last_seen": "2026-05-06T07:53:17Z",
+      "last_seen": "2026-05-06T07:55:43Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -1408,7 +1408,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 4
+    "openrouter_calls_today": 5
   },
   "model_champions": {
     "text": null,
@@ -1456,6 +1456,26 @@
         "Use graceful SIGTERM then SIGKILL for non-critical sessions to minimize disruption.",
         "Defer new compute-intensive tasks until cache clear (P3) and cgroup limits (P2) are in place."
       ]
+    },
+    {
+      "id": "sess_7e5d58fd",
+      "ts": "2026-05-06T07:55:33Z",
+      "updated_by": "orchestrator",
+      "goal": "Reclaim resources and stabilize the hive by suspending non-essential sessions and tightening job controls.",
+      "summary": "The hive is running at full health with eight active sessions and no open blockers. Resource pressure is emerging from non-critical workloads and unbounded research_loop jobs, risking stability. Immediate action is required to cull or suspend low-priority sessions and enforce cgroup/niceness limits.",
+      "progress": "Identified non-essential sessions (e.g., ps5-hive, opencode) and prepared resource-control measures to reduce I/O and CPU contention.",
+      "next_steps": [
+        "Gracefully suspend or kill ps5-hive and opencode sessions to free CPU/memory.",
+        "Apply cgroup CPU/memory limits and lower niceness for research_loop jobs to protect core services.",
+        "Clear caches and temporary files to reclaim disk space and reduce I/O pressure.",
+        "Validate port-bind-check and port-conflict-resolution capabilities remain functional after changes.",
+        "Monitor hive health for 5 minutes and iterate limits if load remains high."
+      ],
+      "decisions": [
+        "Suspend ps5-hive and opencode immediately to reduce non-critical footprint.",
+        "Enforce cgroup limits and niceness penalties on research_loop jobs to prioritize core hive stability.",
+        "Defer new non-essential sessions until resource headroom is confirmed."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1467,9 +1487,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
-    "status": "running",
-    "started_at": "2026-05-06T07:55:01Z",
-    "completed_at": null
+    "task": "heartbeat \u00b7 sessions=8 health=100% blockers=0",
+    "status": "completed",
+    "started_at": "2026-05-06T07:55:43Z",
+    "completed_at": "2026-05-06T07:55:43Z"
   }
 }
