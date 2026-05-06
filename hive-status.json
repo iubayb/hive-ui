@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T08:51:51Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-06T08:52:56Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-06T08:51:30Z",
+      "health_score": 0.778,
+      "last_seen": "2026-05-06T08:52:51Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -36,6 +36,58 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_5caafe26",
+      "ts": "2026-05-06T08:52:56Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-live] PORT 8888 collision preventing logstream.py respawn; process stuck in restart loop",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "fc4978b8b3841f65d8a799d6ab0ec3cb"
+    },
+    {
+      "id": "b_55f0b59a",
+      "ts": "2026-05-06T08:52:56Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-dev] PORT 8889 collision preventing logstream.py respawn; process stuck in restart loop",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "45917cea6fecd4b108bf1d51f0b5c6cf"
+    },
+    {
+      "id": "b_0a9ce758",
+      "ts": "2026-05-06T08:52:51Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-live] PORT 8888 collision blocking logstream.py respawn; researcher-tracker idle due to missing config",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "3f2e716d48412dd4ebc65d36299eefce"
+    },
+    {
+      "id": "b_035d873f",
+      "ts": "2026-05-06T08:52:51Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-dev] PORT 8889 collision blocking logstream.py respawn; researcher-tracker idle due to missing config",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "14546abc9ff74ff2dfe89c14c8d91024"
+    },
     {
       "id": "b_029e8346",
       "ts": "2026-05-06T07:25:59Z",
@@ -346,16 +398,30 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "port-conflict-resolution",
-        "description": "Detects and clears port collisions before respawning dependent services.",
+        "description": "Detects and force-clears port collisions before respawning dependent tmux windows",
         "example": "ss -tlnp | grep PORT && lsof -ti:PORT | xargs -r kill -9; sleep 1; tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T08:22:51Z"
+        "last_updated": "2026-05-06T08:52:56Z"
       }
     ]
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_793137a7",
+        "ts": "2026-05-06T08:52:56Z",
+        "hive": "default",
+        "summary": "Port collisions on 8888 and 8889 are blocking logstream respawns in both monitored sessions, requiring force-clear and respawn.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_0b65cf04",
+        "ts": "2026-05-06T08:52:51Z",
+        "hive": "default",
+        "summary": "Port collisions on 8888/8889 prevent logstream respawns in both sessions; researcher-tracker idle states are secondary.",
+        "source": "doctor"
+      },
       {
         "id": "f_6520c9fa",
         "ts": "2026-05-06T08:22:51Z",
@@ -394,7 +460,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 10
+    "openrouter_calls_today": 12
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -535,7 +601,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T08:51:50Z",
-    "completed_at": "2026-05-06T08:51:51Z"
+    "started_at": "2026-05-06T08:52:51Z",
+    "completed_at": "2026-05-06T08:52:52Z"
   }
 }
