@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T12:54:53Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-06T12:55:21Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -51,9 +51,9 @@
       "agent": "hive-doctor",
       "description": "[ps5-hive] Task timeout too short for long-running worker calls (1800s exceeded); config task_timeout likely missing or insufficient.",
       "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T12:55:11Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
       "github_issue": null,
       "_hash": "329d6bc07003c41faf4ba45e1ddebdd3"
     },
@@ -64,9 +64,9 @@
       "agent": "hive-doctor",
       "description": "[hive-live] Port 8888 likely blocked or occupied, preventing logstream.py from binding and causing repeated errors.",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T12:55:11Z",
+      "resolution": "auto-pruned: hive-live is now alive",
       "github_issue": null,
       "_hash": "58c60ea3efa5ac4ce8c04ec8b043a35e"
     },
@@ -77,9 +77,9 @@
       "agent": "hive-doctor",
       "description": "[hive-dev] Port 8889 likely blocked or occupied, preventing logstream.py from binding and causing repeated errors.",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T12:55:11Z",
+      "resolution": "auto-pruned: hive-dev is now alive",
       "github_issue": null,
       "_hash": "f47084e63433ae84ca04b6e9c6ffcd9f"
     },
@@ -843,9 +843,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: develop\u2192main promotion check + release draft",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T12:54:48Z",
-    "completed_at": "2026-05-06T12:54:50Z"
+    "started_at": "2026-05-06T12:55:10Z",
+    "completed_at": "2026-05-06T12:55:11Z"
   }
 }
