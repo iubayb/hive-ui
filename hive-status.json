@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T12:53:50Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-06T12:54:53Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
-      "health_score": 1.0,
-      "last_seen": "2026-05-06T12:53:45Z",
+      "health_score": 0.667,
+      "last_seen": "2026-05-06T12:54:47Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
-      "errors_last_hour": 18,
+      "errors_last_hour": 10,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -45,43 +45,43 @@
   ],
   "blockers": [
     {
-      "id": "b_a8999773",
-      "ts": "2026-05-06T12:53:50Z",
+      "id": "b_44abd2c4",
+      "ts": "2026-05-06T12:54:53Z",
       "hive": "default",
       "agent": "hive-doctor",
-      "description": "[ps5-hive] worker task timeout (1800s) exceeded; config likely missing or below workload needs; high failure ratio (4874/60).",
+      "description": "[ps5-hive] Task timeout too short for long-running worker calls (1800s exceeded); config task_timeout likely missing or insufficient.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "329d6bc07003c41faf4ba45e1ddebdd3"
+    },
+    {
+      "id": "b_542f36e0",
+      "ts": "2026-05-06T12:54:53Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-live] Port 8888 likely blocked or occupied, preventing logstream.py from binding and causing repeated errors.",
       "severity": "high",
       "status": "open",
       "resolved_at": null,
       "resolution": null,
       "github_issue": null,
-      "_hash": "525c3ccc23032f0b8eedb079105ad7c0"
+      "_hash": "58c60ea3efa5ac4ce8c04ec8b043a35e"
     },
     {
-      "id": "b_82da2288",
-      "ts": "2026-05-06T12:53:50Z",
+      "id": "b_aed31879",
+      "ts": "2026-05-06T12:54:53Z",
       "hive": "default",
       "agent": "hive-doctor",
-      "description": "[hive-live] researcher-tracker has no researchers configured; idle loop producing redundant errors.",
-      "severity": "medium",
+      "description": "[hive-dev] Port 8889 likely blocked or occupied, preventing logstream.py from binding and causing repeated errors.",
+      "severity": "high",
       "status": "open",
       "resolved_at": null,
       "resolution": null,
       "github_issue": null,
-      "_hash": "5a696976895f8f95ffb7892709ea5cf8"
-    },
-    {
-      "id": "b_25d9e18c",
-      "ts": "2026-05-06T12:53:50Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[hive-dev] researcher-tracker has no researchers configured; idle loop producing redundant errors.",
-      "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "fad380165fe2f0e41ad8260c09ab9397"
+      "_hash": "f47084e63433ae84ca04b6e9c6ffcd9f"
     },
     {
       "id": "b_029e8346",
@@ -443,6 +443,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_063a646b",
+        "ts": "2026-05-06T12:54:53Z",
+        "hive": "default",
+        "summary": "Two hive-ui sessions have port conflicts (8888/8889) and one session has insufficient task timeout; fixes clear ports and safely bump timeout with respawns.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_5d147b96",
+        "ts": "2026-05-06T12:54:53Z",
+        "hive": "default",
+        "summary": "Two sessions have port collisions on 8888/8889 killing logstream workers; one session has undersized task_timeout causing worker timeouts.",
+        "source": "doctor"
+      },
+      {
         "id": "f_0217a91d",
         "ts": "2026-05-06T12:53:50Z",
         "hive": "default",
@@ -616,7 +630,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 42
+    "openrouter_calls_today": 43
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -829,9 +843,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=100% blockers=0",
+    "task": "gitops: develop\u2192main promotion check + release draft",
     "status": "completed",
-    "started_at": "2026-05-06T12:53:45Z",
-    "completed_at": "2026-05-06T12:53:45Z"
+    "started_at": "2026-05-06T12:54:48Z",
+    "completed_at": "2026-05-06T12:54:50Z"
   }
 }
