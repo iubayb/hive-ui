@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T19:25:53Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-06T19:26:45Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-06T19:25:53Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-06T19:26:10Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -475,11 +475,11 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "config-guardrail-inject",
-        "description": "Injects missing rate-limit and budget guardrails to prevent runaway retry storms and force controlled shutdowns.",
+        "description": "Injects missing rate-limit and budget guardrails to prevent runaway retries and enforce controlled shutdowns.",
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t ps5-hive",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T19:06:17Z"
+        "last_updated": "2026-05-06T19:26:14Z"
       },
       {
         "id": "cap_27efd1db",
@@ -532,6 +532,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_bc4e7af0",
+        "ts": "2026-05-06T19:26:14Z",
+        "hive": "default",
+        "summary": "Unbounded budget parameters triggered uncontrolled retry storm; inject guardrails and respawn to halt escalation.",
+        "source": "doctor"
+      },
       {
         "id": "f_a15aaeee",
         "ts": "2026-05-06T19:06:17Z",
@@ -888,7 +895,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 96
+    "openrouter_calls_today": 97
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1107,9 +1114,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=4",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T19:25:53Z",
-    "completed_at": "2026-05-06T19:25:53Z"
+    "started_at": "2026-05-06T19:26:43Z",
+    "completed_at": "2026-05-06T19:26:45Z"
   }
 }
