@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T14:34:47Z",
+  "last_updated": "2026-05-06T14:35:49Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 1.0,
-      "last_seen": "2026-05-06T14:33:05Z",
+      "last_seen": "2026-05-06T14:35:07Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_4e0a9a20",
+      "ts": "2026-05-06T14:35:17Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded budget and missing guardrails causing runaway retry storm (4874 failed, 60 done) plus config timeout injection race with window respawn",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "cc9264b5c40280b43d2a790413d45544"
+    },
     {
       "id": "b_029e8346",
       "ts": "2026-05-06T07:25:59Z",
@@ -427,7 +440,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T14:25:12Z"
+        "last_updated": "2026-05-06T14:35:17Z"
       },
       {
         "id": "cap_27efd1db",
@@ -480,6 +493,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_d306880a",
+        "ts": "2026-05-06T14:35:17Z",
+        "hive": "default",
+        "summary": "Critical runaway retry storm from unbounded budget and missing guardrails; inject limits and respawn to throttle and stabilize.",
+        "source": "doctor"
+      },
       {
         "id": "f_b20488bb",
         "ts": "2026-05-06T14:25:12Z",
@@ -710,7 +730,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 59
+    "openrouter_calls_today": 60
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -931,7 +951,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T14:34:06Z",
-    "completed_at": "2026-05-06T14:34:07Z"
+    "started_at": "2026-05-06T14:35:07Z",
+    "completed_at": "2026-05-06T14:35:09Z"
   }
 }
