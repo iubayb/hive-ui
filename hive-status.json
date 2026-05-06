@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T14:54:59Z",
+  "last_updated": "2026-05-06T14:56:00Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-06T14:53:37Z",
+      "health_score": 0.95,
+      "last_seen": "2026-05-06T14:55:39Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
-      "errors_last_hour": 8,
+      "errors_last_hour": 7,
       "tasks_completed_today": 3,
       "silent_minutes": 0
     }
@@ -423,11 +423,11 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "config-guardrail-inject",
-        "description": "Injects missing rate-limit and budget guardrails (max_tasks, max_hours, timeouts) to prevent runaway retry storms and force controlled shutdowns",
+        "description": "Injects missing rate-limit and budget guardrails (max_tasks, max_hours, timeouts) to prevent runaway retry storms and force controlled shutdowns.",
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T14:35:17Z"
+        "last_updated": "2026-05-06T14:55:17Z"
       },
       {
         "id": "cap_27efd1db",
@@ -480,6 +480,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_8e0ac0ec",
+        "ts": "2026-05-06T14:55:17Z",
+        "hive": "default",
+        "summary": "Missing budget guardrails allowed unbounded retry storms; inject limits and respawn to enforce controlled shutdown and reset state.",
+        "source": "doctor"
+      },
       {
         "id": "f_d306880a",
         "ts": "2026-05-06T14:35:17Z",
@@ -717,7 +724,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 61
+    "openrouter_calls_today": 62
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -938,7 +945,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T14:54:38Z",
-    "completed_at": "2026-05-06T14:54:39Z"
+    "started_at": "2026-05-06T14:55:39Z",
+    "completed_at": "2026-05-06T14:55:40Z"
   }
 }
