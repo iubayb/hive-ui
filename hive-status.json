@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T12:24:57Z",
+  "last_updated": "2026-05-06T12:25:58Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -43,9 +43,9 @@
       "agent": "hive-doctor",
       "description": "[ps5-hive] worker call timeout after 1800s indicates undersized task_timeout (currently 3600) for long-running qwen3.6-abliterated-q3km workloads.",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T12:25:08Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
       "github_issue": null,
       "_hash": "cc632c0d1c420360675604abec749313"
     },
@@ -56,9 +56,9 @@
       "agent": "hive-doctor",
       "description": "[hive-live] researcher-tracker idle due to missing researcher configuration \u2014 identical root cause as hive-dev.",
       "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T12:25:08Z",
+      "resolution": "auto-pruned: hive-live is now alive",
       "github_issue": null,
       "_hash": "28cd2c0c7c5731ef690da7704b7cdebf"
     },
@@ -69,9 +69,9 @@
       "agent": "hive-doctor",
       "description": "[hive-dev] researcher-tracker idle due to missing researcher configuration \u2014 likely uninitialized config file or empty registry.",
       "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-06T12:25:08Z",
+      "resolution": "auto-pruned: hive-dev is now alive",
       "github_issue": null,
       "_hash": "16f5f9de44725bf0b3cc4544a6b88f33"
     },
@@ -852,9 +852,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=95% blockers=3",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T12:24:27Z",
-    "completed_at": "2026-05-06T12:24:27Z"
+    "started_at": "2026-05-06T12:25:07Z",
+    "completed_at": "2026-05-06T12:25:08Z"
   }
 }
