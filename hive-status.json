@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T10:23:00Z",
+  "last_updated": "2026-05-06T10:24:02Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-06T10:22:19Z",
+      "health_score": 0.778,
+      "last_seen": "2026-05-06T10:23:10Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
-      "errors_last_hour": 18,
+      "errors_last_hour": 17,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -36,6 +36,58 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_d326b4eb",
+      "ts": "2026-05-06T10:23:30Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-live] PORT 8888 bind failure or conflict preventing logstream.py startup; researcher-tracker idle due to missing config",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T10:24:01Z",
+      "resolution": "auto-pruned: hive-live is now alive",
+      "github_issue": null,
+      "_hash": "f6bfa81e6bb1271faaf2d888f3fe70cd"
+    },
+    {
+      "id": "b_5c8e1585",
+      "ts": "2026-05-06T10:23:30Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-dev] PORT 8889 bind failure or conflict preventing logstream.py startup; researcher-tracker idle due to missing config",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T10:24:01Z",
+      "resolution": "auto-pruned: hive-dev is now alive",
+      "github_issue": null,
+      "_hash": "ed25143240dcbbeda58f6d009baee444"
+    },
+    {
+      "id": "b_04d7b5c3",
+      "ts": "2026-05-06T10:23:14Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-live] PORT 8888 already in use; logstream.py spawn failing and researcher-tracker idle",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T10:24:01Z",
+      "resolution": "auto-pruned: hive-live is now alive",
+      "github_issue": null,
+      "_hash": "01a694a080b1c77b59ad75f3298957ae"
+    },
+    {
+      "id": "b_d3a8a32f",
+      "ts": "2026-05-06T10:23:14Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-dev] PORT 8889 already in use; logstream.py spawn failing and researcher-tracker idle",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-06T10:24:01Z",
+      "resolution": "auto-pruned: hive-dev is now alive",
+      "github_issue": null,
+      "_hash": "f5a02d76a905479c8ff928b5371e7f97"
+    },
     {
       "id": "b_4f3cd5c5",
       "ts": "2026-05-06T09:53:05Z",
@@ -507,12 +559,26 @@
         "example": "ss -tlnp | grep PORT && lsof -ti:PORT | xargs -r kill -9; sleep 1; tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T09:53:05Z"
+        "last_updated": "2026-05-06T10:23:30Z"
       }
     ]
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_59d35369",
+        "ts": "2026-05-06T10:23:30Z",
+        "hive": "default",
+        "summary": "Port conflicts on 8888/8889 are blocking logstream services; clear collisions and respawn windows to restore streams.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_44e9d5e3",
+        "ts": "2026-05-06T10:23:14Z",
+        "hive": "default",
+        "summary": "Duplicate port conflicts on 8888/8889 prevent logstream.py from launching in both sessions.",
+        "source": "doctor"
+      },
       {
         "id": "f_348cd7c8",
         "ts": "2026-05-06T09:53:10Z",
@@ -593,7 +659,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 22
+    "openrouter_calls_today": 24
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -814,7 +880,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T10:22:59Z",
-    "completed_at": "2026-05-06T10:23:00Z"
+    "started_at": "2026-05-06T10:24:00Z",
+    "completed_at": "2026-05-06T10:24:02Z"
   }
 }
