@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T09:53:01Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-06T09:54:01Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.778,
-      "last_seen": "2026-05-06T09:53:01Z",
+      "health_score": 0.9,
+      "last_seen": "2026-05-06T09:53:21Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -36,6 +36,32 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_4f3cd5c5",
+      "ts": "2026-05-06T09:53:05Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-live] Port 8888 collision or bind failure causing logstream.py respawn loop; researcher-tracker idle with no configured endpoints.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "cfb9763c34c8c91d03f65ee21a23325c"
+    },
+    {
+      "id": "b_c1a39ab5",
+      "ts": "2026-05-06T09:53:05Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[hive-dev] Port 8889 collision or bind failure causing logstream.py respawn loop; researcher-tracker idle with no configured endpoints.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "53f5779da8afd4a40436a943af419fae"
+    },
     {
       "id": "b_780cf766",
       "ts": "2026-05-06T09:23:01Z",
@@ -481,12 +507,26 @@
         "example": "ss -tlnp | grep PORT && lsof -ti:PORT | xargs -r kill -9; sleep 1; tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T09:22:56Z"
+        "last_updated": "2026-05-06T09:53:05Z"
       }
     ]
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_348cd7c8",
+        "ts": "2026-05-06T09:53:10Z",
+        "hive": "default",
+        "summary": "{\n  \"diagnoses\": [\n    {\n      \"session\": \"hive-dev\",\n      \"problem\": \"PORT 8889 bind contention or socket reuse failure causing repeated launch errors despite kill attempts.\",\n      \"fix_command\": \"",
+        "source": "doctor"
+      },
+      {
+        "id": "f_2186cdee",
+        "ts": "2026-05-06T09:53:05Z",
+        "hive": "default",
+        "summary": "Port conflicts on 8888/8889 are triggering repeated logstream.py respawns and cascading session errors.",
+        "source": "doctor"
+      },
       {
         "id": "f_c53cda1e",
         "ts": "2026-05-06T09:23:01Z",
@@ -553,7 +593,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 18
+    "openrouter_calls_today": 20
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -773,8 +813,8 @@
   "active_task": {
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
-    "status": "completed",
-    "started_at": "2026-05-06T09:53:00Z",
-    "completed_at": "2026-05-06T09:53:01Z"
+    "status": "running",
+    "started_at": "2026-05-06T09:54:01Z",
+    "completed_at": null
   }
 }
