@@ -4677,3 +4677,25 @@ The audit reveals **Critical SQL Injection** vulnerabilities in core logic files
 
 ---
 *[Report trimmed to fit model context window. See audit log for full findings.]*
+
+
+---
+## Task #581: Analyze Socio.php, Util.php (+5 more)
+*model: `qwen/qwen3-coder-480b-a35b-07-25:free` · 2026-05-06T01:53:08.033983+00:00*
+
+## Summary
+Analyzed `contribuicao/model/Socio.php` and `contribuicao/helper/Util.php` for OWASP Top 10 vulnerabilities. The Socio model file contains only data structure and getters/setters with no user input handling. The Util helper file has one medium-risk XSS vulnerability in error handling and several functions requiring further contextual review to determine full impact, but no critical injection or command execution flaws were found.
+
+## Findings
+- **contribuicao/helper/Util.php:26** - XSS (Reflected) - Exception messages are directly output to browser via `echo json_encode()` without HTML encoding when handling PDOExceptions and generic exceptions, allowing potential script injection if exception messages contain user-controlled data.
+- **contribuicao/helper/Util.php:122** - Potential Logic Issue - The `mensalidadeInterna` function calls `exit()` after echoing JSON, which could lead to unexpected behavior in web contexts, though this is more of a functional than security issue.
+- **contribuicao/helper/Util.php:204** - Contextual Input Validation - The `verificarRegras` function outputs error messages using user-controlled `$valor` parameter in JSON response; while currently using `json_encode`, if the containing context changes, this could become exploitable.
+
+## Open questions
+- What is the full data flow for exception messages that reach Util.php:26 - are they ever populated with user-controllable content?
+- What's the intended behavior of the exit() call in `mensalidadeInterna` function regarding web application flow?
+
+## Follow-up
+- investigate: `contribuicao/helper/Util.php` line 26 - Determine if exception messages can ever contain user input that would make the direct JSON output exploitable
+- investigate: Exception handling patterns across the application - Review how exceptions are logged and displayed to identify potential XSS sources
+- investigate: Data flow into `verificarRegras` function - Check if `$valor` parameter can be influenced by user input in a way that affects security when output in JSON
