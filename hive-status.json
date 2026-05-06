@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-06T13:33:41Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-06T13:34:59Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-06T13:33:00Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-06T13:34:30Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_c4ba56ad",
+      "ts": "2026-05-06T13:34:59Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] config timeout missing or not applied + watchdog resetting stalled tasks with high failure rate (4874 failed vs 60 done) indicating executor or resource starvation",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "b5dc9a2f570498cb07ff6ac74901f63a"
+    },
     {
       "id": "b_029e8346",
       "ts": "2026-05-06T07:25:59Z",
@@ -427,7 +440,7 @@
         "example": "grep -q task_timeout ~/.hive/config || echo 'task_timeout=7200' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T13:24:57Z"
+        "last_updated": "2026-05-06T13:34:59Z"
       },
       {
         "id": "cap_f8de811f",
@@ -451,12 +464,19 @@
         "example": "ss -tlnp | grep PORT && lsof -ti:PORT | xargs -r kill -9; sleep 1; python3 -c \"import socket; s=socket.socket(); s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1); s.bind(('', PORT)); print('bind ok'); s.close()\" && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T11:24:07Z"
+        "last_updated": "2026-05-06T13:34:59Z"
       }
     ]
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_7b9d0be8",
+        "ts": "2026-05-06T13:34:59Z",
+        "hive": "default",
+        "summary": "ps5-hive suffers from missing task_timeout config and port/lock contention causing mass task failures; fix applies config, clears port 8080, and respawns the window.",
+        "source": "doctor"
+      },
       {
         "id": "f_01918170",
         "ts": "2026-05-06T13:24:57Z",
@@ -659,7 +679,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 51
+    "openrouter_calls_today": 52
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -880,7 +900,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-06T13:33:10Z",
-    "completed_at": "2026-05-06T13:33:11Z"
+    "started_at": "2026-05-06T13:34:11Z",
+    "completed_at": "2026-05-06T13:34:12Z"
   }
 }
