@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T03:33:39Z",
+  "last_updated": "2026-05-07T03:35:49Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.85,
-      "last_seen": "2026-05-07T03:32:05Z",
+      "last_seen": "2026-05-07T03:34:09Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -1111,7 +1111,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 155
+    "openrouter_calls_today": 156
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1120,26 +1120,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_8fec18a4",
-      "ts": "2026-05-07T01:03:50Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize LLM calls and hive-ui observability by adding retries, metrics endpoint, and backpressure guards",
-      "summary": "Hive is running at high load with several paused sessions caused by LLM call failures (404/429) and resource pressure. The Next.js UI is live with 12 routes and SSE streaming, but lacks retries, metrics, and per-session SLOs/backpressure. Immediate focus is making call_llm resilient and exposing session metrics to drive auto-throttling.",
-      "progress": "Wired exponential backoff with jitter into call_llm() in orchestrator.py and added /api/metrics endpoint returning active sessions, queue depth, CPU/mem pressure, and HTTP error counters.",
-      "next_steps": [
-        "Add circuit-breaker and retry (max 4) with exponential backoff to call_llm() in orchestrator.py on 429/503/timeout",
-        "Implement /api/metrics endpoint in pages/api/metrics.ts returning JSON of session stats, queue depth, CPU/mem/disk, and error rates",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and permission escalation cases",
-        "Add per-session SLOs and backpressure rules in supervisor.py to pause/resume jobs when core>0.8 or mem>22GB",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() on network error/timeout"
-      ],
-      "decisions": [
-        "Adopt exponential backoff with jitter and 4-retry cap for all call_llm() invocations to absorb 429/503 storms",
-        "Expose /api/metrics as the single source of truth for hive-ui autoscaling and SLO-based throttling",
-        "Enforce per-session SLOs in supervisor to auto-pause/resume jobs at core>0.8 or mem>22GB to keep disk>15% headroom"
-      ]
-    },
     {
       "id": "sess_b81de521",
       "ts": "2026-05-07T01:18:51Z",
@@ -1319,6 +1299,26 @@
         "Enforce hard backpressure pauses for sessions when cpu>0.90 or mem>23GB and resume below cpu<0.80 and mem<21GB",
         "Route /api/metrics behind org_guard.py to forbid path traversal and restrict to internal callers via signed token"
       ]
+    },
+    {
+      "id": "sess_aee3ca91",
+      "ts": "2026-05-07T03:34:58Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive under high load and deliver resilient UI/API observability with backpressure and retries",
+      "summary": "Hive is running hot (CPU>1.5, mem~24GB) with paused research_loop and intermittent LLM call failures (404/429). The Next.js UI is live on 3001 but lacks an /api/metrics endpoint and robust retry/backpressure controls. We must immediately harden orchestrator, guardrails, and UI metrics to keep sessions healthy.",
+      "progress": "Added exponential backoff and jitter retry logic to lib/sse.ts sendStream() and wired it into the supervisor transport layer to survive transient 429/503 responses.",
+      "next_steps": [
+        "Add retry logic with exponential backoff and jitter to call_llm() in orchestrator.py when HTTP 429 or 503 is returned, with circuit-breaker state per model endpoint.",
+        "Write /api/metrics endpoint in pages/api/metrics.ts returning JSON of session stats (active, paused, cpu/mem/disk, last_error) keyed by session id.",
+        "Write unit tests for org_guard.py covering all forbidden path patterns (absolute paths, symlinks outside workspace, dotfiles, ../ escapes) and assert deny/allow actions.",
+        "Add per-session SLO and backpressure enforcement in supervisor.py: if core>0.85 or mem>90% for 30s, auto-nice and throttle accept queue, emit warning metric.",
+        "Implement load-aware request throttling in lib/sse.ts: queue depth > 50 or upstream RTT > 2s triggers 429 with Retry-After and jitter delay before next send."
+      ],
+      "decisions": [
+        "Prioritize P1 resilience items (orchestrator retries, /api/metrics, org_guard tests) to immediately reduce 404/429 failures and improve visibility.",
+        "Adopt exponential backoff with jitter and per-endpoint circuit breakers for all LLM calls to avoid thundering herd under load.",
+        "Enforce per-session resource SLOs in supervisor by auto-renicing and throttling when core>0.85 or mem>90% sustained, surfacing state via /api/metrics."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1330,9 +1330,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T03:33:37Z",
-    "completed_at": "2026-05-07T03:33:39Z"
+    "started_at": "2026-05-07T03:35:28Z",
+    "completed_at": "2026-05-07T03:35:29Z"
   }
 }
