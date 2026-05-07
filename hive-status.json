@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T02:03:56Z",
+  "last_updated": "2026-05-07T02:04:36Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -1069,7 +1069,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 143
+    "openrouter_calls_today": 144
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1078,26 +1078,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_75b0b255",
-      "ts": "2026-05-06T23:33:18Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize high-load sessions and harden hive-ui against LLM rate limits while exposing live metrics.",
-      "summary": "The hive is running eight sessions with critical CPU/memory pressure causing research_loop pauses and an HTTP 429 on LLM diagnosis calls. The Next.js UI is live on port 3001 with SSE streaming and GitHub auth, so we must add backpressure-aware metrics and robust retry behavior. Immediate focus is on concrete code changes to absorb rate limits and surface session health.",
-      "progress": "Added exponential backoff and jitter to call_llm() in orchestrator.py to retry on HTTP 429 with capped delays and idempotent request deduplication.",
-      "next_steps": [
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (CPU, memory, disk, queue depth) and per-session SLO compliance booleans.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns (absolute paths, symlink escapes, and parent directory traversal) with parametrized cases.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() on network errors and 429/503 responses with maxAttempts=5 and capped jitter.",
-        "Implement per-session backpressure rules in orchestrator.py: throttle job priority and pause new work when core>0.8 or mem>22GB, and expose as toggleable flags in config.ts.",
-        "Add client-side metrics heartbeat in components/MetricsHeartbeat.tsx posting /api/metrics every 10s and rendering a compact load/memory indicator in the header."
-      ],
-      "decisions": [
-        "Retry all LLM calls with exponential backoff + jitter and respect Retry-After on 429 to eliminate diagnosis failures.",
-        "Expose realtime /api/metrics to drive UI backpressure indicators and auto-pause research_loop at core>1.5 or mem>23GB.",
-        "Lock org_guard.py to deny forbidden paths by canonicalized realpath checks and fail-closed on any resolution error."
-      ]
-    },
     {
       "id": "sess_2fce6807",
       "ts": "2026-05-06T23:48:28Z",
@@ -1265,6 +1245,26 @@
         "Expose /api/metrics as the canonical source for hive-ui to drive autoscaling/UI warnings.",
         "Fail-fast forbidden-path checks in org_guard.py to prevent privilege escalation via path traversal."
       ]
+    },
+    {
+      "id": "sess_97b89514",
+      "ts": "2026-05-07T02:04:16Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive under high load and deliver resilient telemetry + retry behavior for LLM calls.",
+      "summary": "The hive is running hot (mem=24.1GB, disk=14%) with research_loop paused and LLM calls hitting 404/429. Next.js UI is live on port 3001 with GitHub auth and SSE streams. We need concrete code fixes in hive-ui to add retry/backoff, metrics endpoints, and guardrails so agents can self-regulate under load.",
+      "progress": "Exposed a live Next.js UI on port 3001 with GitHub auth and SSE stream; updated model to inclusionai/ling-2.6-1t:free and resolved port-binding conflicts.",
+      "next_steps": [
+        "Add retry logic with exponential backoff and jitter to call_llm() in orchestrator.py for HTTP 429/404/5xx with max_retries=5 and cap=30s",
+        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (active, paused, load, mem, disk) with 5s cache-control",
+        "Write unit tests for org_guard.py covering all forbidden path patterns (../../../, /etc, /proc, /root) using pytest fixtures",
+        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() with retry limit 3 and backoff base 200ms for network errors",
+        "Implement per-session SLO backpressure in supervisor.py: throttle enqueue when core>0.8 or mem>22GB and auto-pause lowest-priority session"
+      ],
+      "decisions": [
+        "Adopt exponential backoff with jitter and idempotent retry keys for all LLM and SSE calls to reduce thundering herd under 429s",
+        "Gate admission and throttle queueing by real-time core/mem thresholds to keep disk>15% and mem<22GB with graceful session demotion",
+        "Expose JSON metrics and SSE streams via the Next.js API routes to unify observability and remove external scraping deps"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1276,9 +1276,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=5",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-07T02:03:16Z",
-    "completed_at": "2026-05-07T02:03:16Z"
+    "started_at": "2026-05-07T02:04:07Z",
+    "completed_at": "2026-05-07T02:04:16Z"
   }
 }
