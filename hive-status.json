@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T03:07:42Z",
+  "last_updated": "2026-05-07T03:08:45Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_9ff7ebb1",
-      "ts": "2026-05-07T03:07:31Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Unbounded budget (max_tasks='unbounded', max_hours='unbounded') allowing unbounded retries under heavy failure load (4874 failed tasks); 1800s task timeouts triggering repeated retries.",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "647921c829b9bbac35c7f9c2693e79f6"
-    },
     {
       "id": "b_adfad2d4",
       "ts": "2026-05-07T00:07:00Z",
@@ -1338,7 +1325,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T03:07:21Z",
-    "completed_at": "2026-05-07T03:07:22Z"
+    "started_at": "2026-05-07T03:08:24Z",
+    "completed_at": "2026-05-07T03:08:25Z"
   }
 }
