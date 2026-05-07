@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T08:08:39Z",
+  "last_updated": "2026-05-07T08:09:41Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_9043ede8",
+      "ts": "2026-05-07T08:09:35Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "LLM diagnosis call failed: _ssl.c:1012: The handshake operation timed out",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "9659ab5f0151e382653ff595f488d6e0"
+    },
     {
       "id": "b_adfad2d4",
       "ts": "2026-05-07T00:07:00Z",
@@ -1450,7 +1463,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T08:08:38Z",
-    "completed_at": "2026-05-07T08:08:39Z"
+    "started_at": "2026-05-07T08:09:40Z",
+    "completed_at": "2026-05-07T08:09:41Z"
   }
 }
