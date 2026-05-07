@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T11:39:41Z",
+  "last_updated": "2026-05-07T11:40:43Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.85,
-      "last_seen": "2026-05-07T11:38:28Z",
+      "last_seen": "2026-05-07T11:40:33Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -505,7 +505,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && grep -q '^max_hours=' ~/.hive/config || echo 'max_hours=48' >> ~/.hive/config && grep -q '^task_timeout=' ~/.hive/config || echo 'task_timeout=7200' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T11:29:18Z"
+        "last_updated": "2026-05-07T11:40:09Z"
       },
       {
         "id": "cap_27efd1db",
@@ -558,6 +558,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_daf62b63",
+        "ts": "2026-05-07T11:40:09Z",
+        "hive": "default",
+        "summary": "Unbounded retries and missing guardrails causing runaway failure accumulation; enforced budget and task limits to halt resource exhaustion.",
+        "source": "doctor"
+      },
       {
         "id": "f_eec9b5a9",
         "ts": "2026-05-07T11:29:18Z",
@@ -1250,13 +1257,6 @@
         "hive": "default",
         "summary": "Port conflicts on 8888/8889 are triggering endless respawn loops in both sessions.",
         "source": "doctor"
-      },
-      {
-        "id": "f_793137a7",
-        "ts": "2026-05-06T08:52:56Z",
-        "hive": "default",
-        "summary": "Port collisions on 8888 and 8889 are blocking logstream respawns in both monitored sessions, requiring force-clear and respawn.",
-        "source": "doctor"
       }
     ],
     "patterns": [],
@@ -1285,7 +1285,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 213
+    "openrouter_calls_today": 214
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1500,9 +1500,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=6",
     "status": "completed",
-    "started_at": "2026-05-07T11:39:30Z",
-    "completed_at": "2026-05-07T11:39:31Z"
+    "started_at": "2026-05-07T11:40:33Z",
+    "completed_at": "2026-05-07T11:40:33Z"
   }
 }
