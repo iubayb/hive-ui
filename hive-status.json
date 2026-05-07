@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T09:09:50Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-07T09:10:50Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.889,
-      "last_seen": "2026-05-07T09:09:40Z",
+      "health_score": 0.8,
+      "last_seen": "2026-05-07T09:10:17Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_600ab7f4",
-      "ts": "2026-05-07T09:09:50Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Unbounded budget (max_tasks/max_hours not set) causing runaway task accumulation and repeated 30-minute worker timeouts at attempt 4/4",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "d4d920ce4a3f4c283106d8ad96f915e6"
-    },
     {
       "id": "b_9043ede8",
       "ts": "2026-05-07T08:09:35Z",
@@ -1495,9 +1482,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-07T09:09:36Z",
-    "completed_at": "2026-05-07T09:09:37Z"
+    "started_at": "2026-05-07T09:10:49Z",
+    "completed_at": "2026-05-07T09:10:50Z"
   }
 }
