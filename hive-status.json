@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T03:57:59Z",
+  "last_updated": "2026-05-07T03:59:01Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.889,
-      "last_seen": "2026-05-07T03:57:31Z",
+      "health_score": 0.85,
+      "last_seen": "2026-05-07T03:58:41Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_c5298567",
-      "ts": "2026-05-07T03:57:36Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Unbounded budget (max_tasks/max_hours not set) causing runaway retries; worker timeout at 1800s with 4874 failures and stalled tasks blocking completion.",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "7b5dd4ee6fc398d9a0b410b200883f91"
-    },
     {
       "id": "b_adfad2d4",
       "ts": "2026-05-07T00:07:00Z",
@@ -1357,9 +1344,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=5",
     "status": "completed",
-    "started_at": "2026-05-07T03:57:08Z",
-    "completed_at": "2026-05-07T03:57:09Z"
+    "started_at": "2026-05-07T03:58:41Z",
+    "completed_at": "2026-05-07T03:58:41Z"
   }
 }
