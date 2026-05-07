@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T02:49:02Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-07T02:49:49Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
@@ -1090,7 +1090,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 149
+    "openrouter_calls_today": 150
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1099,22 +1099,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_f0d07b6c",
-      "ts": "2026-05-07T00:18:37Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
-        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
-      ],
-      "decisions": []
-    },
     {
       "id": "sess_05e199fe",
       "ts": "2026-05-07T00:33:40Z",
@@ -1290,6 +1274,26 @@
         "Use exponential backoff with jitter (base 1s, cap 30s) for all call_llm() retries and mark transient 429/5xx as retriable.",
         "Fail-fast org_guard.py on forbidden paths and log violations to stderr; unit tests must cover 100% of listed forbidden patterns."
       ]
+    },
+    {
+      "id": "sess_11868737",
+      "ts": "2026-05-07T02:49:38Z",
+      "updated_by": "orchestrator",
+      "goal": "Harden hive-ui reliability and observability under load by fixing LLM retries, adding metrics, and enforcing per-session backpressure.",
+      "summary": "The hive is running with high host load and full memory, causing research_loop pauses. Recent wins include the new text model and a live Next.js UI on port 3001. Immediate focus is stabilizing call_llm(), surfacing session metrics, and adding guardrails.",
+      "progress": "Deployed Next.js UI with GitHub auth and SSE streaming on port 3001 and added inclusionai/ling-2.6-1t:free as the active model.",
+      "next_steps": [
+        "Add exponential backoff with jitter and retry-on-429/503 logic to call_llm() in orchestrator.py, with max 5 attempts and full jitter.",
+        "Create pages/api/metrics.ts in hive-ui returning JSON of session stats (active, paused, cpu/mem/disk, model, SLO status).",
+        "Write unit tests for org_guard.py covering all forbidden path patterns (absolute, dot-segments, symlinks, escapes).",
+        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() handling HTTP 429/503/504 with max 4 retries.",
+        "Implement per-session SLO checks and backpressure in scheduler.py: reject new tasks when host CPU>0.85 or mem>90% and throttle paused sessions."
+      ],
+      "decisions": [
+        "Standardize on full jitter exponential backoff (base 1s, cap 30s) for all external LLM/SSE calls.",
+        "Expose /api/metrics as the single source of session health for autoscaling and UI dashboards.",
+        "Enforce strict path allowlisting in org_guard.py to prevent directory traversal and symlink escapes."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1303,7 +1307,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T02:48:41Z",
-    "completed_at": "2026-05-07T02:48:42Z"
+    "started_at": "2026-05-07T02:49:48Z",
+    "completed_at": "2026-05-07T02:49:49Z"
   }
 }
