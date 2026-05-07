@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T10:10:02Z",
+  "last_updated": "2026-05-07T10:10:33Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_0cb1d1a3",
-      "ts": "2026-05-07T10:10:01Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Unbounded retry budget (max_tasks/max_hours unconfigured) causing runaway failure loops; worker timeouts at 1800s with 4/4 attempts exhausted.",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "06eb077d388a5851e18dea91c2f1fa6a"
-    },
     {
       "id": "b_9043ede8",
       "ts": "2026-05-07T08:09:35Z",
@@ -1513,9 +1500,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=6",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T10:09:52Z",
-    "completed_at": "2026-05-07T10:09:52Z"
+    "started_at": "2026-05-07T10:10:22Z",
+    "completed_at": "2026-05-07T10:10:23Z"
   }
 }
