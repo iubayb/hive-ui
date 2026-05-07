@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T07:36:01Z",
+  "last_updated": "2026-05-07T07:36:39Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -1223,7 +1223,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 185
+    "openrouter_calls_today": 186
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1232,26 +1232,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_fcb32546",
-      "ts": "2026-05-07T05:05:29Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize hive under high load and restore LLM diagnostics by hardening orchestrator, adding metrics, and tightening guardrails.",
-      "summary": "The hive is running but CPU/memory pressure has paused research_loop jobs and caused LLM diagnosis failures (404/429). Next.js UI is live; we need immediate code fixes to add resilience and observability. Actionable improvements to orchestrator, metrics, SSE retry, org_guard, and SLO enforcement will restore throughput.",
-      "progress": "Integrated inclusionai/ling-2.6-1t:free and brought up the Next.js UI on port 3001 with GitHub auth and SSE streaming.",
-      "next_steps": [
-        "Add retry logic with exponential backoff and jitter to call_llm() in orchestrator.py on HTTP 429/5xx with max 5 attempts and backoff factor 0.5\u20132.0.",
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON with session counts, CPU/mem/disk stats, and per-session queue lengths.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() on network errors and 5xx responses with max 3 retries.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns (absolute, parent traversal, symlink, device, and glob exclusions).",
-        "Define per-session SLOs and backpressure rules in config/slos.json and enforce them in supervisor.py by throttling or pausing sessions when core>0.8 or mem>20GB."
-      ],
-      "decisions": [
-        "Adopt exponential backoff with jitter for all external LLM calls to reduce 429s.",
-        "Expose real-time /api/metrics to drive auto-scaling and alerting decisions.",
-        "Enforce SLO/backpressure thresholds in supervisor to prevent research_loop starvation under load."
-      ]
-    },
     {
       "id": "sess_bd343a06",
       "ts": "2026-05-07T05:20:31Z",
@@ -1423,6 +1403,26 @@
         "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
       ],
       "decisions": []
+    },
+    {
+      "id": "sess_95093725",
+      "ts": "2026-05-07T07:36:18Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize high-load sessions and harden hive-ui with resilient LLM calls and live metrics.",
+      "summary": "The system is running hot (CPU spikes, memory pressure) causing research_loop pauses, while the new Next.js UI is live but lacks backpressure-aware metrics and resilient LLM fallback. We must add retry/backoff to orchestrator call_llm, expose session metrics, and guard resource usage.",
+      "progress": "Added exponential backoff and jitter retry logic to call_llm() in orchestrator.py with HTTP 429/404/5xx handling and circuit-breaker fallback.",
+      "next_steps": [
+        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() with configurable attempts and HTTP/network error handling.",
+        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats, node runtime, and load/core/mem/disk gauges.",
+        "Add unit tests for org_guard.py covering all forbidden path patterns and boundary cases.",
+        "Define per-session SLOs and backpressure rules in config/slos.json and enforce them in pages/api/sessions/[id]/throttle.ts by throttling/pausing sessions when core>0.8 or mem>22GB.",
+        "Write unit tests for pages/api/metrics.ts verifying JSON schema, gauge fields, and error states."
+      ],
+      "decisions": [
+        "Enforce retry/backoff in both orchestrator.py and lib/sse.ts for HTTP 429/5xx with circuit-breaker fallback to cached results.",
+        "Expose /api/metrics as the single source of truth for load/core/mem/disk and per-session stats used by UI and autoscale triggers.",
+        "Apply per-session SLOs and automatic throttling in pages/api/sessions/[id]/throttle.ts to cap CPU at 0.8 and memory at 22GB."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1436,7 +1436,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T07:35:30Z",
-    "completed_at": "2026-05-07T07:35:31Z"
+    "started_at": "2026-05-07T07:36:38Z",
+    "completed_at": "2026-05-07T07:36:39Z"
   }
 }
