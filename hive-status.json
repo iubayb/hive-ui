@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T03:36:51Z",
+  "last_updated": "2026-05-07T03:37:52Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T03:36:09Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T03:37:31Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_282316b2",
+      "ts": "2026-05-07T03:37:36Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded max_tasks and max_hours with high failure rate (4874 failed) and task timeouts causing uncontrolled retries and budget exhaustion",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "0fb7ae9680cc3d338eacea84e410f613"
+    },
     {
       "id": "b_adfad2d4",
       "ts": "2026-05-07T00:07:00Z",
@@ -488,11 +501,11 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "config-guardrail-inject",
-        "description": "Injects max_tasks, max_hours, and task_timeout guardrails to prevent unbounded retries and enforce controlled shutdowns.",
+        "description": "Injects max_tasks, max_hours, and task_timeout guardrails to prevent unbounded retries and enforce controlled shutdowns",
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T03:27:31Z"
+        "last_updated": "2026-05-07T03:37:36Z"
       },
       {
         "id": "cap_27efd1db",
@@ -545,6 +558,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_574c222b",
+        "ts": "2026-05-07T03:37:36Z",
+        "hive": "default",
+        "summary": "Critical resource exhaustion due to missing guardrails causing infinite retry loops and budget blowout; enforced caps and respawn to restore control.",
+        "source": "doctor"
+      },
       {
         "id": "f_38bfb95e",
         "ts": "2026-05-07T03:27:31Z",
@@ -1111,7 +1131,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 156
+    "openrouter_calls_today": 157
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1332,7 +1352,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T03:36:29Z",
-    "completed_at": "2026-05-07T03:36:31Z"
+    "started_at": "2026-05-07T03:37:31Z",
+    "completed_at": "2026-05-07T03:37:32Z"
   }
 }
