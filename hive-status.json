@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T09:57:59Z",
+  "last_updated": "2026-05-07T09:59:00Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T09:57:38Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T09:58:29Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -505,7 +505,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && grep -q '^max_hours=' ~/.hive/config || echo 'max_hours=48' >> ~/.hive/config && grep -q '^task_timeout=' ~/.hive/config || echo 'task_timeout=7200' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T09:28:29Z"
+        "last_updated": "2026-05-07T09:58:34Z"
       },
       {
         "id": "cap_27efd1db",
@@ -558,6 +558,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_08922940",
+        "ts": "2026-05-07T09:58:34Z",
+        "hive": "default",
+        "summary": "Unbounded retry budget and timeout exhaustion driving runaway failure cascade; guardrail injection and respawn required.",
+        "source": "doctor"
+      },
       {
         "id": "f_fee61f60",
         "ts": "2026-05-07T09:39:56Z",
@@ -1250,13 +1257,6 @@
         "hive": "default",
         "summary": "Port collision or missing resource causes repeated logstream crashes in both hive-dev and hive-live.",
         "source": "doctor"
-      },
-      {
-        "id": "f_96ef1388",
-        "ts": "2026-05-06T07:52:43Z",
-        "hive": "default",
-        "summary": "Port collisions and missing config are driving crash loops in two sessions.",
-        "source": "doctor"
       }
     ],
     "patterns": [],
@@ -1285,7 +1285,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 201
+    "openrouter_calls_today": 202
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1502,7 +1502,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T09:57:58Z",
-    "completed_at": "2026-05-07T09:57:59Z"
+    "started_at": "2026-05-07T09:58:59Z",
+    "completed_at": "2026-05-07T09:59:00Z"
   }
 }
