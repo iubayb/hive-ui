@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T13:10:02Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-07T13:10:33Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T13:09:12Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T13:10:20Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_a705e1ac",
+      "ts": "2026-05-07T13:10:28Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded retry budget (max_tasks/unbounded, max_hours/unbounded) causing runaway failure loop (4874 failed, 60 done) and task timeouts at 1800s after 4 retries",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "d8dcf8082f36587b13ad899e88e10c20"
+    },
     {
       "id": "b_9043ede8",
       "ts": "2026-05-07T08:09:35Z",
@@ -501,11 +514,11 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "config-guardrail-inject",
-        "description": "Injects max_tasks, max_hours, and task_timeout guardrails into hive config and respawns session to prevent unbounded retries and enforce controlled shutdown.",
+        "description": "Injects max_tasks, max_hours, and task_timeout guardrails into hive config and respawns session to enforce controlled shutdown.",
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && grep -q '^max_hours=' ~/.hive/config || echo 'max_hours=48' >> ~/.hive/config && grep -q '^task_timeout=' ~/.hive/config || echo 'task_timeout=3600' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T12:59:47Z"
+        "last_updated": "2026-05-07T13:10:28Z"
       },
       {
         "id": "cap_27efd1db",
@@ -558,6 +571,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_85a7fbbe",
+        "ts": "2026-05-07T13:10:28Z",
+        "hive": "default",
+        "summary": "Critical unbounded retry loop exhausting tasks; inject guardrails and respawn to enforce hard limits and prevent runaway failures.",
+        "source": "doctor"
+      },
       {
         "id": "f_f4117897",
         "ts": "2026-05-07T12:59:47Z",
@@ -1250,13 +1270,6 @@
         "hive": "default",
         "summary": "Port collisions on 8888/8889 are blocking logstream.py; clear conflicts and respawn windows to restore service.",
         "source": "doctor"
-      },
-      {
-        "id": "f_59d35369",
-        "ts": "2026-05-06T10:23:30Z",
-        "hive": "default",
-        "summary": "Port conflicts on 8888/8889 are blocking logstream services; clear collisions and respawn windows to restore streams.",
-        "source": "doctor"
       }
     ],
     "patterns": [],
@@ -1285,7 +1298,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 222
+    "openrouter_calls_today": 223
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1493,8 +1506,8 @@
   "active_task": {
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
-    "status": "running",
+    "status": "completed",
     "started_at": "2026-05-07T13:10:02Z",
-    "completed_at": null
+    "completed_at": "2026-05-07T13:10:03Z"
   }
 }
