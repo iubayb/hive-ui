@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T05:26:32Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-07T05:27:51Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T05:25:19Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T05:27:46Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_1249bb6e",
+      "ts": "2026-05-07T05:27:51Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded max_tasks and max_hours with runaway worker failures (4874 failed vs 60 done) and 30-minute task timeouts causing cascading retries; silent=1s indicates worker hang or deadlock.",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "21e7afdb7dc9cec6e826d8b46187761d"
+    },
     {
       "id": "b_adfad2d4",
       "ts": "2026-05-07T00:07:00Z",
@@ -545,6 +558,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_242aaa63",
+        "ts": "2026-05-07T05:27:51Z",
+        "hive": "default",
+        "summary": "Critical runaway session with unbounded budgets and chronic timeouts; injected guardrails and respawned to halt cascade.",
+        "source": "doctor"
+      },
       {
         "id": "f_5fe4e0da",
         "ts": "2026-05-07T05:07:49Z",
@@ -1160,7 +1180,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 170
+    "openrouter_calls_today": 171
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1379,9 +1399,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=5",
     "status": "completed",
-    "started_at": "2026-05-07T05:26:10Z",
-    "completed_at": "2026-05-07T05:26:12Z"
+    "started_at": "2026-05-07T05:27:23Z",
+    "completed_at": "2026-05-07T05:27:23Z"
   }
 }
