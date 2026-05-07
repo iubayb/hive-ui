@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T14:10:46Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-07T14:11:37Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_9eec9f45",
-      "ts": "2026-05-07T14:10:38Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Unbounded task/hours budget with catastrophic failure rate (4874 failed vs 60 done) and repeated 30-minute worker timeouts indicating stuck/crashing tasks with no termination guardrails",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "d8fed6bb3ff1be8f36eab15995db0923"
-    },
     {
       "id": "b_9043ede8",
       "ts": "2026-05-07T08:09:35Z",
@@ -1505,9 +1492,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=80% blockers=7",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T14:10:46Z",
-    "completed_at": "2026-05-07T14:10:46Z"
+    "started_at": "2026-05-07T14:11:06Z",
+    "completed_at": "2026-05-07T14:11:07Z"
   }
 }
