@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T07:27:48Z",
+  "last_updated": "2026-05-07T07:28:51Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T07:27:17Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T07:28:07Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
-      "errors_last_hour": 8,
+      "errors_last_hour": 7,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -492,7 +492,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && grep -q '^max_hours=' ~/.hive/config || echo 'max_hours=48' >> ~/.hive/config && grep -q '^task_timeout=' ~/.hive/config || echo 'task_timeout=7200' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T06:58:07Z"
+        "last_updated": "2026-05-07T07:28:13Z"
       },
       {
         "id": "cap_27efd1db",
@@ -545,6 +545,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_ba115fe4",
+        "ts": "2026-05-07T07:28:13Z",
+        "hive": "default",
+        "summary": "Missing guardrails allow infinite retry exhaustion; injecting bounded limits and respawning to halt uncontrolled failure cascade.",
+        "source": "doctor"
+      },
       {
         "id": "f_5d8a0309",
         "ts": "2026-05-07T07:08:30Z",
@@ -1216,7 +1223,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 184
+    "openrouter_calls_today": 185
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1427,9 +1434,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-07T07:27:17Z",
-    "completed_at": "2026-05-07T07:27:18Z"
+    "started_at": "2026-05-07T07:28:39Z",
+    "completed_at": "2026-05-07T07:28:41Z"
   }
 }
