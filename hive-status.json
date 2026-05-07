@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T12:59:47Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-07T13:00:55Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.889,
-      "last_seen": "2026-05-07T12:59:41Z",
+      "health_score": 0.85,
+      "last_seen": "2026-05-07T13:00:55Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_5883f19b",
-      "ts": "2026-05-07T12:59:47Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Unbounded max_tasks and max_hours with recurring 1800s worker timeouts causing 4874 failures and runaway session (28+ hours).",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "d9ca9b5ae8b01eed1977a8288e4e4175"
-    },
     {
       "id": "b_9043ede8",
       "ts": "2026-05-07T08:09:35Z",
@@ -1505,9 +1492,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=6",
     "status": "completed",
-    "started_at": "2026-05-07T12:59:42Z",
-    "completed_at": "2026-05-07T12:59:43Z"
+    "started_at": "2026-05-07T13:00:55Z",
+    "completed_at": "2026-05-07T13:00:55Z"
   }
 }
