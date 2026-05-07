@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T08:39:40Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-07T08:40:40Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_4a33dff2",
-      "ts": "2026-05-07T08:39:40Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Unbounded retry loop: 4874 failed tasks, 28h elapsed, max_tasks/max_hours unbounded, worker timeout at 1800s after 4 attempts causing silent stall",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "27a792980cdbc30553375ff5fa542c93"
-    },
     {
       "id": "b_9043ede8",
       "ts": "2026-05-07T08:09:35Z",
@@ -1490,7 +1477,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T08:39:36Z",
-    "completed_at": "2026-05-07T08:39:37Z"
+    "started_at": "2026-05-07T08:40:39Z",
+    "completed_at": "2026-05-07T08:40:40Z"
   }
 }
