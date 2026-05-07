@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T10:09:01Z",
+  "last_updated": "2026-05-07T10:10:02Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T10:07:50Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T10:09:56Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_0cb1d1a3",
+      "ts": "2026-05-07T10:10:01Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded retry budget (max_tasks/max_hours unconfigured) causing runaway failure loops; worker timeouts at 1800s with 4/4 attempts exhausted.",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "06eb077d388a5851e18dea91c2f1fa6a"
+    },
     {
       "id": "b_9043ede8",
       "ts": "2026-05-07T08:09:35Z",
@@ -505,7 +518,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && grep -q '^max_hours=' ~/.hive/config || echo 'max_hours=48' >> ~/.hive/config && grep -q '^task_timeout=' ~/.hive/config || echo 'task_timeout=7200' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T09:58:34Z"
+        "last_updated": "2026-05-07T10:10:01Z"
       },
       {
         "id": "cap_27efd1db",
@@ -558,6 +571,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_c47c7d1e",
+        "ts": "2026-05-07T10:10:01Z",
+        "hive": "default",
+        "summary": "Critical runaway retry loop caused by missing budget guardrails; inject max_tasks, max_hours, and task_timeout then respawn to enforce containment.",
+        "source": "doctor"
+      },
       {
         "id": "f_08922940",
         "ts": "2026-05-07T09:58:34Z",
@@ -1250,13 +1270,6 @@
         "hive": "default",
         "summary": "Both sessions show repeated port conflicts on 8888/8889 causing logstream restart loops; clear collisions and respawn.",
         "source": "doctor"
-      },
-      {
-        "id": "f_996c4540",
-        "ts": "2026-05-06T07:52:46Z",
-        "hive": "default",
-        "summary": "Port collision or missing resource causes repeated logstream crashes in both hive-dev and hive-live.",
-        "source": "doctor"
       }
     ],
     "patterns": [],
@@ -1285,7 +1298,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 203
+    "openrouter_calls_today": 204
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1500,9 +1513,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=6",
     "status": "completed",
-    "started_at": "2026-05-07T10:08:20Z",
-    "completed_at": "2026-05-07T10:08:21Z"
+    "started_at": "2026-05-07T10:09:52Z",
+    "completed_at": "2026-05-07T10:09:52Z"
   }
 }
