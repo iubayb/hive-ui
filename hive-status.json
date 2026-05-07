@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T01:26:52Z",
+  "last_updated": "2026-05-07T01:27:53Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T01:26:12Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T01:27:06Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_23008142",
+      "ts": "2026-05-07T01:27:09Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded retry/cost limits (max_tasks/max_hours='unbounded') combined with persistent 1800s task timeouts causing runaway failure cascade (4874 failed, 1 pending).",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "f075d51003683f8b3c388269ebbb6429"
+    },
     {
       "id": "b_adfad2d4",
       "ts": "2026-05-07T00:07:00Z",
@@ -545,6 +558,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_abe9b5b9",
+        "ts": "2026-05-07T01:27:09Z",
+        "hive": "default",
+        "summary": "Injected max_tasks=1000, max_hours=16, and task_timeout=7200 guardrails and respawned the session to halt the runaway failure cycle.",
+        "source": "doctor"
+      },
       {
         "id": "f_7d4d0c3e",
         "ts": "2026-05-07T01:07:09Z",
@@ -1048,7 +1068,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 138
+    "openrouter_calls_today": 139
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1255,9 +1275,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=5",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T01:26:12Z",
-    "completed_at": "2026-05-07T01:26:12Z"
+    "started_at": "2026-05-07T01:27:02Z",
+    "completed_at": "2026-05-07T01:27:03Z"
   }
 }
