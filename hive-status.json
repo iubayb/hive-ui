@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T15:53:36Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-07T15:54:50Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
@@ -1308,26 +1308,6 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_88b1a9dc",
-      "ts": "2026-05-07T13:23:25Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize high-load research_loop and harden hive-ui against LLM call failures with metrics and retry guards.",
-      "summary": "The hive is running eight sessions on ling-2.6-1t:free with critical CPU/mem pressure causing research_loop pauses and recurring LLM handshake/404/429 failures. The Next.js UI is live on port 3001 and can surface telemetry to drive backpressure. Immediate action is needed to add retry/backoff, metrics, and guardrails so sessions self-regulate under load.",
-      "progress": "Wired exponential backoff and jitter into call_llm() in orchestrator.py to mitigate 429/timeout/404 failures and added a /api/metrics endpoint in pages/api/metrics.ts returning per-session CPU/mem/disk JSON.",
-      "next_steps": [
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() on network errors and 5xx responses with configurable maxRetries.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns including absolute paths, parent traversal, and non-whitelisted mounts.",
-        "Create definePerSessionSLOs() in sessions/slo.js that returns CPU/mem thresholds and implements backpressure hooks used by supervisor.",
-        "Add socket-level timeout and circuit breaker to call_llm() in orchestrator.py that aborts after 3 consecutive handshake timeouts and falls back to cached prompts.",
-        "Implement rate-limit guard in pages/api/chat.ts using per-session token buckets and HTTP 429 Retry-After headers."
-      ],
-      "decisions": [
-        "Enforce exponential backoff with jitter for all LLM calls to absorb 429/timeout/404 spikes.",
-        "Expose /api/metrics as the single source of truth for session resource usage to drive supervisor backpressure.",
-        "Fail fast via circuit breaker in call_llm() after repeated handshake timeouts to prevent cascading stalls."
-      ]
-    },
-    {
       "id": "sess_569c734f",
       "ts": "2026-05-07T13:38:26Z",
       "updated_by": "orchestrator",
@@ -1494,6 +1474,22 @@
         "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
       ],
       "decisions": []
+    },
+    {
+      "id": "sess_76a9d639",
+      "ts": "2026-05-07T15:54:08Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
+      "progress": "",
+      "next_steps": [
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
+        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
+        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
+        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
+        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
+      ],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -1505,9 +1501,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=7",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-07T15:53:16Z",
-    "completed_at": "2026-05-07T15:53:16Z"
+    "started_at": "2026-05-07T15:54:48Z",
+    "completed_at": "2026-05-07T15:54:50Z"
   }
 }
