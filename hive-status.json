@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T04:57:00Z",
+  "last_updated": "2026-05-07T04:58:01Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T04:56:20Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T04:57:41Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_26898d59",
+      "ts": "2026-05-07T04:57:46Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] unbounded task/hour budget with runaway failure rate (4874 failed vs 60 done) and repeated 1800s timeouts causing stall",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "b84787034f4cd38636bc890399ecbeec"
+    },
     {
       "id": "b_adfad2d4",
       "ts": "2026-05-07T00:07:00Z",
@@ -492,7 +505,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T04:37:44Z"
+        "last_updated": "2026-05-07T04:57:46Z"
       },
       {
         "id": "cap_27efd1db",
@@ -545,6 +558,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_29f250a0",
+        "ts": "2026-05-07T04:57:46Z",
+        "hive": "default",
+        "summary": "Unbounded budget and 30-minute timeouts are driving infinite retries and resource exhaustion; apply caps and respawn.",
+        "source": "doctor"
+      },
       {
         "id": "f_8b7c8e5b",
         "ts": "2026-05-07T04:37:44Z",
@@ -1146,7 +1166,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 166
+    "openrouter_calls_today": 167
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1365,9 +1385,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=5",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T04:56:20Z",
-    "completed_at": "2026-05-07T04:56:20Z"
+    "started_at": "2026-05-07T04:57:10Z",
+    "completed_at": "2026-05-07T04:57:11Z"
   }
 }
