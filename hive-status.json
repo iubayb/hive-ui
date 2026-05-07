@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T02:07:00Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-07T02:07:41Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T02:05:16Z",
+      "health_score": 0.8,
+      "last_seen": "2026-05-07T02:07:20Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -492,7 +492,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T01:57:14Z"
+        "last_updated": "2026-05-07T02:07:19Z"
       },
       {
         "id": "cap_27efd1db",
@@ -545,6 +545,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_298a1b2e",
+        "ts": "2026-05-07T02:07:19Z",
+        "hive": "default",
+        "summary": "ps5-hive is critically stalled due to missing guardrails and repeated 30-minute worker timeouts; injecting bounded budgets and respawning.",
+        "source": "doctor"
+      },
       {
         "id": "f_3ed61cd5",
         "ts": "2026-05-07T01:57:14Z",
@@ -1069,7 +1076,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 144
+    "openrouter_calls_today": 145
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1276,9 +1283,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T02:06:59Z",
-    "completed_at": "2026-05-07T02:07:00Z"
+    "started_at": "2026-05-07T02:07:20Z",
+    "completed_at": "2026-05-07T02:07:21Z"
   }
 }
