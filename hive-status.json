@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T06:58:02Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-07T06:58:32Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.889,
-      "last_seen": "2026-05-07T06:58:02Z",
+      "health_score": 0.8,
+      "last_seen": "2026-05-07T06:58:22Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_a21c744e",
+      "ts": "2026-05-07T06:58:07Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded max_tasks and max_hours with 4874 failures and 75-minute worker timeouts causing runaway resource consumption",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "0de43afada520d5c23db9435ad7526fa"
+    },
     {
       "id": "b_adfad2d4",
       "ts": "2026-05-07T00:07:00Z",
@@ -492,7 +505,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && grep -q '^max_hours=' ~/.hive/config || echo 'max_hours=48' >> ~/.hive/config && grep -q '^task_timeout=' ~/.hive/config || echo 'task_timeout=7200' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T06:38:24Z"
+        "last_updated": "2026-05-07T06:58:07Z"
       },
       {
         "id": "cap_27efd1db",
@@ -545,6 +558,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_31426993",
+        "ts": "2026-05-07T06:58:07Z",
+        "hive": "default",
+        "summary": "Critical runaway session with unbounded budgets and repeated 30-minute timeouts requires immediate guardrail injection and respawn.",
+        "source": "doctor"
+      },
       {
         "id": "f_ddcffcdb",
         "ts": "2026-05-07T06:38:24Z",
@@ -1202,7 +1222,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 182
+    "openrouter_calls_today": 183
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1421,9 +1441,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
-    "status": "running",
-    "started_at": "2026-05-07T06:58:00Z",
-    "completed_at": null
+    "task": "heartbeat \u00b7 sessions=9 health=80% blockers=6",
+    "status": "completed",
+    "started_at": "2026-05-07T06:58:22Z",
+    "completed_at": "2026-05-07T06:58:22Z"
   }
 }
