@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T09:08:36Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-07T09:09:50Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T09:08:15Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T09:09:40Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_600ab7f4",
+      "ts": "2026-05-07T09:09:50Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded budget (max_tasks/max_hours not set) causing runaway task accumulation and repeated 30-minute worker timeouts at attempt 4/4",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "d4d920ce4a3f4c283106d8ad96f915e6"
+    },
     {
       "id": "b_9043ede8",
       "ts": "2026-05-07T08:09:35Z",
@@ -505,7 +518,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && grep -q '^max_hours=' ~/.hive/config || echo 'max_hours=48' >> ~/.hive/config && grep -q '^task_timeout=' ~/.hive/config || echo 'task_timeout=7200' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T08:39:40Z"
+        "last_updated": "2026-05-07T09:09:50Z"
       },
       {
         "id": "cap_27efd1db",
@@ -558,6 +571,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_7a8aa610",
+        "ts": "2026-05-07T09:09:50Z",
+        "hive": "default",
+        "summary": "Critical runaway session due to missing budget guardrails and stale worker timeouts requiring immediate config injection and respawn.",
+        "source": "doctor"
+      },
       {
         "id": "f_ffe83671",
         "ts": "2026-05-07T08:39:40Z",
@@ -1264,7 +1284,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 196
+    "openrouter_calls_today": 197
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1477,7 +1497,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T09:08:35Z",
-    "completed_at": "2026-05-07T09:08:36Z"
+    "started_at": "2026-05-07T09:09:36Z",
+    "completed_at": "2026-05-07T09:09:37Z"
   }
 }
