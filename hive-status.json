@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T13:39:58Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-07T13:40:39Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T13:39:58Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T13:40:28Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_df761b32",
+      "ts": "2026-05-07T13:40:33Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded task/hours budget with repeated 1800s worker timeouts causing 4874 failures; session lacks max_tasks, max_hours, and task_timeout guardrails.",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "2f065500b6cb33aa2b653b0debfd7d8a"
+    },
     {
       "id": "b_9043ede8",
       "ts": "2026-05-07T08:09:35Z",
@@ -505,7 +518,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && grep -q '^max_hours=' ~/.hive/config || echo 'max_hours=48' >> ~/.hive/config && grep -q '^task_timeout=' ~/.hive/config || echo 'task_timeout=3600' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T13:29:52Z"
+        "last_updated": "2026-05-07T13:40:33Z"
       },
       {
         "id": "cap_27efd1db",
@@ -558,6 +571,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_b6c34d51",
+        "ts": "2026-05-07T13:40:33Z",
+        "hive": "default",
+        "summary": "Critical runaway session due to missing guardrails; injecting bounded limits and respawning to halt cascading timeouts.",
+        "source": "doctor"
+      },
       {
         "id": "f_2b7934cc",
         "ts": "2026-05-07T13:29:52Z",
@@ -1250,13 +1270,6 @@
         "hive": "default",
         "summary": "Port conflicts on 8888/8889 blocking logstream.py; clear collisions and verify binds before respawning windows.",
         "source": "doctor"
-      },
-      {
-        "id": "f_d6762e8d",
-        "ts": "2026-05-06T10:54:02Z",
-        "hive": "default",
-        "summary": "Port collisions on 8888/8889 stall logstream workers; researcher-tracker idle from missing configuration.",
-        "source": "doctor"
       }
     ],
     "patterns": [],
@@ -1285,7 +1298,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 226
+    "openrouter_calls_today": 227
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1492,9 +1505,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=6",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T13:39:58Z",
-    "completed_at": "2026-05-07T13:39:58Z"
+    "started_at": "2026-05-07T13:40:08Z",
+    "completed_at": "2026-05-07T13:40:09Z"
   }
 }
