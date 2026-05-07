@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T00:37:00Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-07T00:37:47Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -505,7 +505,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t ps5-hive",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-06T23:37:00Z"
+        "last_updated": "2026-05-07T00:37:05Z"
       },
       {
         "id": "cap_27efd1db",
@@ -558,6 +558,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_46d5d554",
+        "ts": "2026-05-07T00:37:05Z",
+        "hive": "default",
+        "summary": "Unbounded budget and missing timeout guardrails have caused runaway failures; inject limits and respawn to enforce controlled shutdown.",
+        "source": "doctor"
+      },
       {
         "id": "f_e26d1534",
         "ts": "2026-05-06T23:57:01Z",
@@ -1040,7 +1047,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 132
+    "openrouter_calls_today": 133
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1247,9 +1254,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=6",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T00:36:46Z",
-    "completed_at": "2026-05-07T00:36:46Z"
+    "started_at": "2026-05-07T00:37:26Z",
+    "completed_at": "2026-05-07T00:37:27Z"
   }
 }
