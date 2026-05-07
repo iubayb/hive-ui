@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T14:30:01Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-07T14:30:46Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_ba956aaf",
-      "ts": "2026-05-07T14:30:01Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Unbounded task/hour limits allowing runaway execution; repeated worker timeouts (1800s) causing exhaustion loop (4874 failed vs 60 done).",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "c81b8bf10a4e29a51b880832e42d9a6f"
-    },
     {
       "id": "b_9043ede8",
       "ts": "2026-05-07T08:09:35Z",
@@ -1507,7 +1494,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T14:29:44Z",
-    "completed_at": "2026-05-07T14:29:45Z"
+    "started_at": "2026-05-07T14:30:45Z",
+    "completed_at": "2026-05-07T14:30:46Z"
   }
 }
