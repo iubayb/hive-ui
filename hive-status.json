@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T04:07:53Z",
+  "last_updated": "2026-05-07T04:08:54Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_d564f0ac",
-      "ts": "2026-05-07T04:07:40Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Unbounded retry loop causing runaway task churn: 4874 failures with no max_tasks/max_hours guardrails, 1800s timeouts, and 14h+ elapsed with zero completions.",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "2cdf4227fad779ad991f5cc13c781d84"
-    },
     {
       "id": "b_adfad2d4",
       "ts": "2026-05-07T00:07:00Z",
@@ -1366,7 +1353,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T04:07:32Z",
-    "completed_at": "2026-05-07T04:07:33Z"
+    "started_at": "2026-05-07T04:08:33Z",
+    "completed_at": "2026-05-07T04:08:34Z"
   }
 }
