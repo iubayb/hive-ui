@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T09:39:56Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-07T09:40:40Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_8cdb3ded",
-      "ts": "2026-05-07T09:39:56Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Unbounded max_tasks and max_hours with task_timeout too low (1800s) causing repeated worker timeouts and runaway failure accumulation (4874 failed vs 60 done).",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "deeb07f71980e2341b242b361aa8dae1"
-    },
     {
       "id": "b_9043ede8",
       "ts": "2026-05-07T08:09:35Z",
@@ -1515,7 +1502,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T09:39:28Z",
-    "completed_at": "2026-05-07T09:39:29Z"
+    "started_at": "2026-05-07T09:40:29Z",
+    "completed_at": "2026-05-07T09:40:30Z"
   }
 }
