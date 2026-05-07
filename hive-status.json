@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T18:09:02Z",
+  "last_updated": "2026-05-07T18:09:43Z",
   "updated_by": "agent",
   "hives": {
     "default": {
@@ -1485,9 +1485,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=7",
-    "status": "completed",
-    "started_at": "2026-05-07T18:09:02Z",
-    "completed_at": "2026-05-07T18:09:02Z"
+    "task": "compaction: LLM summarising hive state",
+    "status": "running",
+    "started_at": "2026-05-07T18:09:43Z",
+    "completed_at": null
   }
 }
