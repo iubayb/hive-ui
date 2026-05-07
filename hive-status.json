@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T04:58:01Z",
+  "last_updated": "2026-05-07T04:58:32Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.889,
-      "last_seen": "2026-05-07T04:57:41Z",
+      "health_score": 0.85,
+      "last_seen": "2026-05-07T04:58:22Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_26898d59",
-      "ts": "2026-05-07T04:57:46Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] unbounded task/hour budget with runaway failure rate (4874 failed vs 60 done) and repeated 1800s timeouts causing stall",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "b84787034f4cd38636bc890399ecbeec"
-    },
     {
       "id": "b_adfad2d4",
       "ts": "2026-05-07T00:07:00Z",
@@ -1385,9 +1372,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=5",
     "status": "completed",
-    "started_at": "2026-05-07T04:57:10Z",
-    "completed_at": "2026-05-07T04:57:11Z"
+    "started_at": "2026-05-07T04:58:22Z",
+    "completed_at": "2026-05-07T04:58:22Z"
   }
 }
