@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T07:05:42Z",
+  "last_updated": "2026-05-07T07:06:44Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.85,
-      "last_seen": "2026-05-07T07:04:31Z",
+      "last_seen": "2026-05-07T07:06:43Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_2318a714",
+      "ts": "2026-05-07T07:06:32Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "Compaction LLM failed: The read operation timed out",
+      "severity": "low",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "8f5396ad764e4afa2b722e11a8c20048"
+    },
     {
       "id": "b_adfad2d4",
       "ts": "2026-05-07T00:07:00Z",
@@ -1219,26 +1232,6 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_0d6ba63c",
-      "ts": "2026-05-07T04:35:11Z",
-      "updated_by": "orchestrator",
-      "goal": "Eliminate high-load pauses and 404/429 LLM failures by hardening orchestrator retry paths and exposing real-time metrics via the Next.js UI.",
-      "summary": "The hive is running but research_loop is paused under high load and LLM calls are failing with 404/429. The Next.js UI is live on port 3001, and we need actionable code fixes to add retries, metrics, and backpressure to resume throughput.",
-      "progress": "Added exponential backoff with jitter and idempotency-key support to call_llm() in orchestrator/orchestrator.py, returning structured diagnostics on 404/429/503.",
-      "next_steps": [
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (cpu, mem, disk, paused jobs, recent errors) sampled every 5s.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns (absolute, symlink, escape, dotfile) with assertRaises cases.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() with configurable maxRetries and cancel on close.",
-        "Define per-session SLOs and backpressure rules in config/slos.yaml and wire into supervisor/supervisor.py to throttle or pause sessions when core>0.8 or mem>22GB.",
-        "Add in-memory ring buffer for recent diagnostics in orchestrator/diagnostics.py (max 256 entries) and expose GET /api/diagnostics returning newest-first JSON."
-      ],
-      "decisions": [
-        "Use exponential backoff starting at 500ms with full jitter and max 30s cap for all LLM and SSE retries.",
-        "Pause research_loop when core>1.5 or mem>23GB and resume when core<1.0 and mem<20GB via supervisor policy.",
-        "Reject forbidden path patterns at org_guard boundary and return 403 with matched rule ID; no fallback."
-      ]
-    },
-    {
       "id": "sess_fcd65112",
       "ts": "2026-05-07T04:50:20Z",
       "updated_by": "orchestrator",
@@ -1417,6 +1410,22 @@
         "Expose real-time /api/metrics as the source-of-truth for autoscaling and backpressure decisions.",
         "Enforce org_guard deny-first rules for any path containing '..' or absolute root escapes."
       ]
+    },
+    {
+      "id": "sess_e36f4096",
+      "ts": "2026-05-07T07:06:32Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "Compaction skipped \u2014 LLM unavailable: The read operation timed out",
+      "progress": "",
+      "next_steps": [
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
+        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
+        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
+        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
+        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
+      ],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -1430,7 +1439,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T07:05:11Z",
-    "completed_at": "2026-05-07T07:05:12Z"
+    "started_at": "2026-05-07T07:06:43Z",
+    "completed_at": "2026-05-07T07:06:44Z"
   }
 }
