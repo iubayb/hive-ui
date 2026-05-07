@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T14:40:44Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-07T14:41:37Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.889,
-      "last_seen": "2026-05-07T14:40:38Z",
+      "health_score": 0.85,
+      "last_seen": "2026-05-07T14:41:27Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_07ac7455",
-      "ts": "2026-05-07T14:40:44Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Unbounded task/hours budget + repeated 30-minute timeouts causing runaway failure accumulation (4874 failed vs 60 done) after 28h.",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "6e7cf74a3699381e709812d86f581fde"
-    },
     {
       "id": "b_9043ede8",
       "ts": "2026-05-07T08:09:35Z",
@@ -1505,9 +1492,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=6",
     "status": "completed",
-    "started_at": "2026-05-07T14:40:05Z",
-    "completed_at": "2026-05-07T14:40:06Z"
+    "started_at": "2026-05-07T14:41:27Z",
+    "completed_at": "2026-05-07T14:41:27Z"
   }
 }
