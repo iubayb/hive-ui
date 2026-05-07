@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T04:27:01Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-07T04:27:41Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T04:25:30Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T04:27:36Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
-      "errors_last_hour": 5,
+      "errors_last_hour": 6,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_8b6e0456",
+      "ts": "2026-05-07T04:27:41Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded max_tasks/max_hours causing runaway retry loop; 4874 failed tasks and 1800s call timeouts indicate exhausted budget and stalled worker.",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "98cb013e56af74960809b8c8020e78f5"
+    },
     {
       "id": "b_adfad2d4",
       "ts": "2026-05-07T00:07:00Z",
@@ -492,7 +505,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T04:07:40Z"
+        "last_updated": "2026-05-07T04:27:41Z"
       },
       {
         "id": "cap_27efd1db",
@@ -545,6 +558,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_d25155d6",
+        "ts": "2026-05-07T04:27:41Z",
+        "hive": "default",
+        "summary": "Unbounded budget and aggressive retries have saturated the hive with failures; inject guardrails and respawn to enforce limits and restore progress.",
+        "source": "doctor"
+      },
       {
         "id": "f_94148b0e",
         "ts": "2026-05-07T04:07:40Z",
@@ -1132,7 +1152,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 162
+    "openrouter_calls_today": 163
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1351,9 +1371,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=5",
     "status": "completed",
-    "started_at": "2026-05-07T04:26:10Z",
-    "completed_at": "2026-05-07T04:26:11Z"
+    "started_at": "2026-05-07T04:27:33Z",
+    "completed_at": "2026-05-07T04:27:33Z"
   }
 }
