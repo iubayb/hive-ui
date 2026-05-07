@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T14:28:43Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-07T14:30:01Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T14:27:10Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T14:29:57Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_ba956aaf",
+      "ts": "2026-05-07T14:30:01Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded task/hour limits allowing runaway execution; repeated worker timeouts (1800s) causing exhaustion loop (4874 failed vs 60 done).",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "c81b8bf10a4e29a51b880832e42d9a6f"
+    },
     {
       "id": "b_9043ede8",
       "ts": "2026-05-07T08:09:35Z",
@@ -501,11 +514,11 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "config-guardrail-inject",
-        "description": "Injects max_tasks, max_hours, and task_timeout guardrails into hive config and respawns session to enforce controlled shutdown",
+        "description": "Injects max_tasks, max_hours, and task_timeout guardrails into hive config and respawns session to enforce controlled shutdown.",
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && grep -q '^max_hours=' ~/.hive/config || echo 'max_hours=48' >> ~/.hive/config && grep -q '^task_timeout=' ~/.hive/config || echo 'task_timeout=3600' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T14:10:38Z"
+        "last_updated": "2026-05-07T14:30:01Z"
       },
       {
         "id": "cap_27efd1db",
@@ -558,6 +571,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_3ecce9d6",
+        "ts": "2026-05-07T14:30:01Z",
+        "hive": "default",
+        "summary": "Runaway session due to missing guardrails and persistent worker timeouts; inject limits and respawn to cap resource burn.",
+        "source": "doctor"
+      },
       {
         "id": "f_2b33ae8a",
         "ts": "2026-05-07T14:10:38Z",
@@ -1250,13 +1270,6 @@
         "hive": "default",
         "summary": "Port conflict on 8889 blocks hive-dev; hive-live and ps5-hive stalled on missing configuration and empty input respectively.",
         "source": "doctor"
-      },
-      {
-        "id": "f_bd61eeaa",
-        "ts": "2026-05-06T11:53:38Z",
-        "hive": "default",
-        "summary": "Port collision on hive-dev, config starvation in hive-live, and queue exhaustion with skewed success ratio in ps5-hive require respawns plus bind/config hygiene.",
-        "source": "doctor"
       }
     ],
     "patterns": [],
@@ -1285,7 +1298,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 232
+    "openrouter_calls_today": 233
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1494,7 +1507,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T14:28:42Z",
-    "completed_at": "2026-05-07T14:28:43Z"
+    "started_at": "2026-05-07T14:29:44Z",
+    "completed_at": "2026-05-07T14:29:45Z"
   }
 }
