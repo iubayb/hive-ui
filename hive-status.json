@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T03:06:41Z",
+  "last_updated": "2026-05-07T03:07:42Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T03:05:08Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T03:07:25Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_9ff7ebb1",
+      "ts": "2026-05-07T03:07:31Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded budget (max_tasks='unbounded', max_hours='unbounded') allowing unbounded retries under heavy failure load (4874 failed tasks); 1800s task timeouts triggering repeated retries.",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "647921c829b9bbac35c7f9c2693e79f6"
+    },
     {
       "id": "b_adfad2d4",
       "ts": "2026-05-07T00:07:00Z",
@@ -492,7 +505,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T02:57:25Z"
+        "last_updated": "2026-05-07T03:07:31Z"
       },
       {
         "id": "cap_27efd1db",
@@ -545,6 +558,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_a09778df",
+        "ts": "2026-05-07T03:07:31Z",
+        "hive": "default",
+        "summary": "Unbounded budget and timeout settings are enabling runaway retries and resource exhaustion in ps5-hive; guardrails required.",
+        "source": "doctor"
+      },
       {
         "id": "f_701d9972",
         "ts": "2026-05-07T02:57:25Z",
@@ -1097,7 +1117,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 152
+    "openrouter_calls_today": 153
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1318,7 +1338,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T03:06:19Z",
-    "completed_at": "2026-05-07T03:06:21Z"
+    "started_at": "2026-05-07T03:07:21Z",
+    "completed_at": "2026-05-07T03:07:22Z"
   }
 }
