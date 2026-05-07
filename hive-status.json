@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T06:27:01Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-07T06:28:02Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T06:25:29Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T06:27:57Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_64f4c8a7",
+      "ts": "2026-05-07T06:28:01Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded task/retry budget (max_tasks='unbounded', max_hours='unbounded') causing runaway failures (4874 failures) with repeated 30-minute task timeouts exhausting attempts",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "a8df6b8a2138f4af307441aa53e8fb48"
+    },
     {
       "id": "b_adfad2d4",
       "ts": "2026-05-07T00:07:00Z",
@@ -488,11 +501,11 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "config-guardrail-inject",
-        "description": "Injects max_tasks, max_hours, and task_timeout guardrails into hive config and respawns the session to prevent unbounded retries and enforce controlled shutdowns.",
+        "description": "Injects max_tasks, max_hours, and task_timeout guardrails into hive config and respawns the session to prevent unbounded retries and enforce controlled shutdowns",
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && grep -q '^max_hours=' ~/.hive/config || echo 'max_hours=48' >> ~/.hive/config && grep -q '^task_timeout=' ~/.hive/config || echo 'task_timeout=7200' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T05:57:57Z"
+        "last_updated": "2026-05-07T06:28:02Z"
       },
       {
         "id": "cap_27efd1db",
@@ -545,6 +558,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_64646686",
+        "ts": "2026-05-07T06:28:01Z",
+        "hive": "default",
+        "summary": "Critical runaway failure due to unbounded retry/task budget with repeated 30-min timeouts; injecting guardrails and respawning session.",
+        "source": "doctor"
+      },
       {
         "id": "f_b4bf21c1",
         "ts": "2026-05-07T06:08:18Z",
@@ -1188,7 +1208,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 178
+    "openrouter_calls_today": 179
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1407,9 +1427,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=5",
     "status": "completed",
-    "started_at": "2026-05-07T06:27:00Z",
-    "completed_at": "2026-05-07T06:27:01Z"
+    "started_at": "2026-05-07T06:27:33Z",
+    "completed_at": "2026-05-07T06:27:33Z"
   }
 }
