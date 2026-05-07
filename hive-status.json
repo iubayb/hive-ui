@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T08:38:36Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-07T08:39:40Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.85,
-      "last_seen": "2026-05-07T08:37:34Z",
+      "last_seen": "2026-05-07T08:39:36Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_4a33dff2",
+      "ts": "2026-05-07T08:39:40Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded retry loop: 4874 failed tasks, 28h elapsed, max_tasks/max_hours unbounded, worker timeout at 1800s after 4 attempts causing silent stall",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "27a792980cdbc30553375ff5fa542c93"
+    },
     {
       "id": "b_9043ede8",
       "ts": "2026-05-07T08:09:35Z",
@@ -505,7 +518,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && grep -q '^max_hours=' ~/.hive/config || echo 'max_hours=48' >> ~/.hive/config && grep -q '^task_timeout=' ~/.hive/config || echo 'task_timeout=7200' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T08:28:23Z"
+        "last_updated": "2026-05-07T08:39:40Z"
       },
       {
         "id": "cap_27efd1db",
@@ -558,6 +571,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_ffe83671",
+        "ts": "2026-05-07T08:39:40Z",
+        "hive": "default",
+        "summary": "Critical unbounded retry exhaustion: injected max_tasks=1000, max_hours=48, task_timeout=7200 guardrails and respawned session to halt runaway failures.",
+        "source": "doctor"
+      },
       {
         "id": "f_1291fa0f",
         "ts": "2026-05-07T08:28:23Z",
@@ -1257,7 +1277,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 193
+    "openrouter_calls_today": 194
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1470,7 +1490,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T08:38:35Z",
-    "completed_at": "2026-05-07T08:38:36Z"
+    "started_at": "2026-05-07T08:39:36Z",
+    "completed_at": "2026-05-07T08:39:37Z"
   }
 }
