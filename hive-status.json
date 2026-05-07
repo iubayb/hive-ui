@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T07:57:47Z",
+  "last_updated": "2026-05-07T07:58:48Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.85,
-      "last_seen": "2026-05-07T07:56:15Z",
+      "last_seen": "2026-05-07T07:58:17Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_2adc0658",
+      "ts": "2026-05-07T07:58:19Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded task/hour budget causing runaway failure loops and worker timeouts after 1800s (4/4 attempts exhausted). 4874 failed vs 60 done with 28+ hours elapsed indicates uncontrolled retry storm.",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "f5892ab987ac7380de7f42440c6bd3a2"
+    },
     {
       "id": "b_adfad2d4",
       "ts": "2026-05-07T00:07:00Z",
@@ -488,11 +501,11 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "config-guardrail-inject",
-        "description": "Injects max_tasks, max_hours, and task_timeout guardrails into hive config and respawns session to prevent unbounded retries and enforce controlled shutdowns",
+        "description": "Injects max_tasks, max_hours, and task_timeout guardrails into hive config and respawns session to prevent unbounded retries and enforce controlled shutdowns.",
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && grep -q '^max_hours=' ~/.hive/config || echo 'max_hours=48' >> ~/.hive/config && grep -q '^task_timeout=' ~/.hive/config || echo 'task_timeout=7200' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T07:38:34Z"
+        "last_updated": "2026-05-07T07:58:19Z"
       },
       {
         "id": "cap_27efd1db",
@@ -545,6 +558,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_5b87b3dd",
+        "ts": "2026-05-07T07:58:19Z",
+        "hive": "default",
+        "summary": "Unbounded budget and missing guardrails triggered runaway retries and worker timeouts; injecting caps and respawning to halt the failure loop.",
+        "source": "doctor"
+      },
       {
         "id": "f_951f10b5",
         "ts": "2026-05-07T07:38:34Z",
@@ -1230,7 +1250,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 188
+    "openrouter_calls_today": 189
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1443,7 +1463,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T07:57:16Z",
-    "completed_at": "2026-05-07T07:57:17Z"
+    "started_at": "2026-05-07T07:58:17Z",
+    "completed_at": "2026-05-07T07:58:18Z"
   }
 }
