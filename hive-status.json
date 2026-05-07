@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T16:53:44Z",
+  "last_updated": "2026-05-07T16:54:56Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.85,
-      "last_seen": "2026-05-07T16:52:53Z",
+      "last_seen": "2026-05-07T16:54:56Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -1308,26 +1308,6 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_9fb2b35a",
-      "ts": "2026-05-07T14:23:46Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive under high load and complete the metrics + retry backbone to unblock research_loop.",
-      "summary": "The hive is running hot (CPU>1.7, mem~24GB) and research_loop is paused under critical load. Recent wins include the Next.js UI (port 3001) and the ling-2.6-1t model, but open 429/404/SSL handshake errors in LLM calls and missing retry/backpressure logic remain blockers.",
-      "progress": "Added exponential backoff + jitter retry logic to call_llm() in orchestrator.py to absorb 429/404/SSL handshake failures and inserted a jittered retry with max 5 attempts and 1\u201330s backoff.",
-      "next_steps": [
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, cpuLoad, memUsage, diskPercent, pausedTasks) with 10s cache-control.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns using pytest and temporary directories to validate block/allow decisions.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() function with configurable attempts (default 5), base delay 250ms, and jitter 0.5\u20131.5x.",
-        "Define per-session SLOs and backpressure rules in config/slos.yaml and wire a check into supervisor to pause sessions when cpuLoad>1.6 or memUsage>22GB or diskPercent<15%.",
-        "Create a middleware throttler in middleware/throttle.ts that limits concurrent /api/llm calls to 4 and queues excess with 30s timeout, returning 429 with Retry-After when saturated."
-      ],
-      "decisions": [
-        "Adopt jittered exponential backoff (base 1s, cap 30s, jitter 0.5\u20131.5) for all LLM calls to absorb 429/404/SSL handshake failures.",
-        "Gate session execution behind SLO thresholds (cpuLoad>1.6, memUsage>22GB, diskPercent<15%) and auto-pause violating sessions to protect the hive.",
-        "Expose real-time metrics via /api/metrics and enforce concurrency limits on /api/llm to 4 to avoid cascading overload."
-      ]
-    },
-    {
       "id": "sess_e6d81bf5",
       "ts": "2026-05-07T14:38:54Z",
       "updated_by": "orchestrator",
@@ -1478,6 +1458,22 @@
         "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
       ],
       "decisions": []
+    },
+    {
+      "id": "sess_21714304",
+      "ts": "2026-05-07T16:54:25Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
+      "progress": "",
+      "next_steps": [
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
+        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
+        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
+        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
+        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
+      ],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -1489,9 +1485,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=7",
     "status": "completed",
-    "started_at": "2026-05-07T16:53:43Z",
-    "completed_at": "2026-05-07T16:53:44Z"
+    "started_at": "2026-05-07T16:54:56Z",
+    "completed_at": "2026-05-07T16:54:56Z"
   }
 }
