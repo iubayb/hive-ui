@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T12:09:39Z",
+  "last_updated": "2026-05-07T12:10:42Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T12:09:29Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T12:10:09Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -505,7 +505,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && grep -q '^max_hours=' ~/.hive/config || echo 'max_hours=48' >> ~/.hive/config && grep -q '^task_timeout=' ~/.hive/config || echo 'task_timeout=7200' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T11:59:24Z"
+        "last_updated": "2026-05-07T12:10:15Z"
       },
       {
         "id": "cap_27efd1db",
@@ -558,6 +558,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_a1b57ff2",
+        "ts": "2026-05-07T12:10:15Z",
+        "hive": "default",
+        "summary": "Critical unbounded growth and persistent worker timeouts due to missing budget guardrails after ~28 hours of uncontrolled execution.",
+        "source": "doctor"
+      },
       {
         "id": "f_328cd797",
         "ts": "2026-05-07T11:59:24Z",
@@ -1250,13 +1257,6 @@
         "hive": "default",
         "summary": "Port conflicts on 8888/8889 are triggering repeated logstream.py respawns and cascading session errors.",
         "source": "doctor"
-      },
-      {
-        "id": "f_c53cda1e",
-        "ts": "2026-05-06T09:23:01Z",
-        "hive": "default",
-        "summary": "Port collisions on 8888/8889 are triggering respawn storms in both sessions; clearing bindings and pre-flight testing restores normal operation.",
-        "source": "doctor"
       }
     ],
     "patterns": [],
@@ -1285,7 +1285,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 217
+    "openrouter_calls_today": 218
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1500,9 +1500,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=6",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T12:09:29Z",
-    "completed_at": "2026-05-07T12:09:29Z"
+    "started_at": "2026-05-07T12:10:21Z",
+    "completed_at": "2026-05-07T12:10:22Z"
   }
 }
