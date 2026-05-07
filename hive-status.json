@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T02:56:59Z",
+  "last_updated": "2026-05-07T02:58:02Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T02:56:58Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T02:57:20Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -492,7 +492,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T02:37:25Z"
+        "last_updated": "2026-05-07T02:57:25Z"
       },
       {
         "id": "cap_27efd1db",
@@ -545,6 +545,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_701d9972",
+        "ts": "2026-05-07T02:57:25Z",
+        "hive": "default",
+        "summary": "Critical runaway session with unbounded budget and 1800s timeouts; injected guardrails and respawning to halt failure accumulation.",
+        "source": "doctor"
+      },
       {
         "id": "f_bbcbaf73",
         "ts": "2026-05-07T02:37:25Z",
@@ -1090,7 +1097,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 150
+    "openrouter_calls_today": 151
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1305,9 +1312,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-07T02:56:58Z",
-    "completed_at": "2026-05-07T02:56:59Z"
+    "started_at": "2026-05-07T02:58:00Z",
+    "completed_at": "2026-05-07T02:58:02Z"
   }
 }
