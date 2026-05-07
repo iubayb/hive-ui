@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T13:10:33Z",
+  "last_updated": "2026-05-07T13:11:36Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.889,
-      "last_seen": "2026-05-07T13:10:20Z",
+      "health_score": 0.85,
+      "last_seen": "2026-05-07T13:11:14Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_a705e1ac",
-      "ts": "2026-05-07T13:10:28Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Unbounded retry budget (max_tasks/unbounded, max_hours/unbounded) causing runaway failure loop (4874 failed, 60 done) and task timeouts at 1800s after 4 retries",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "d8dcf8082f36587b13ad899e88e10c20"
-    },
     {
       "id": "b_9043ede8",
       "ts": "2026-05-07T08:09:35Z",
@@ -1505,9 +1492,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-07T13:10:02Z",
-    "completed_at": "2026-05-07T13:10:03Z"
+    "started_at": "2026-05-07T13:11:24Z",
+    "completed_at": "2026-05-07T13:11:26Z"
   }
 }
