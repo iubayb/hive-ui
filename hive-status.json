@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T09:38:38Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-07T09:39:56Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T09:37:05Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T09:39:50Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_8cdb3ded",
+      "ts": "2026-05-07T09:39:56Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded max_tasks and max_hours with task_timeout too low (1800s) causing repeated worker timeouts and runaway failure accumulation (4874 failed vs 60 done).",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "deeb07f71980e2341b242b361aa8dae1"
+    },
     {
       "id": "b_9043ede8",
       "ts": "2026-05-07T08:09:35Z",
@@ -558,6 +571,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_fee61f60",
+        "ts": "2026-05-07T09:39:56Z",
+        "hive": "default",
+        "summary": "Injected guardrails (max_tasks=1000, max_hours=48, task_timeout=7200) and respawned to halt unbounded retries and stop the failure spiral.",
+        "source": "doctor"
+      },
       {
         "id": "f_de815a4b",
         "ts": "2026-05-07T09:28:29Z",
@@ -1278,7 +1298,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 200
+    "openrouter_calls_today": 201
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1495,7 +1515,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T09:38:27Z",
-    "completed_at": "2026-05-07T09:38:28Z"
+    "started_at": "2026-05-07T09:39:28Z",
+    "completed_at": "2026-05-07T09:39:29Z"
   }
 }
