@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T16:08:59Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-07T16:09:41Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.85,
-      "last_seen": "2026-05-07T16:07:38Z",
+      "last_seen": "2026-05-07T16:09:41Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -1308,26 +1308,6 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_569c734f",
-      "ts": "2026-05-07T13:38:26Z",
-      "updated_by": "orchestrator",
-      "goal": "Harden hive-ui and API resilience while lowering load to unblock research_loop sessions under memory pressure.",
-      "summary": "The hive is running eight active sessions with critical load/mem pressure pausing research_loop. Recent wins include deploying the Next.js UI (port 3001) and a new LLM model, but transient failures (SSL handshake timeouts, 404/429) and missing retry/backpressure logic remain. Immediate focus is on concrete code changes to add retries, metrics, and guards so sessions can resume safely.",
-      "progress": "Deployed Next.js UI with GitHub auth and SSE streaming; identified failing call_llm paths and missing /api/metrics endpoint as primary targets.",
-      "next_steps": [
-        "Add exponential backoff with jitter and retry logic to call_llm() in orchestrator.py for HTTP 429/404/SSL timeout with max 5 attempts and circuit-breaker fallback.",
-        "Create pages/api/metrics.ts returning JSON session stats (active count, CPU/mem/disk usage, paused sessions) for the /api/metrics endpoint.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns (absolute paths, '..', symlinks, /proc, /sys, /dev) with parametrized cases.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() handling HTTP 5xx/429 with max retries and readable-stream error recovery.",
-        "Implement per-session SLO backpressure in supervisor.py: cap concurrent LLM calls per session and throttle when core > 1.5 or mem > 20GB, emitting metrics via the new /api/metrics endpoint."
-      ],
-      "decisions": [
-        "Retry call_llm with capped exponential backoff and circuit-breaker to suppress SSL/404/429 storms and reduce load spikes.",
-        "Expose /api/metrics JSON endpoint for real-time visibility into session pressure and enable autoscaling/throttling decisions.",
-        "Enforce org_guard forbidden-path unit tests and supervisor backpressure thresholds to prevent runaway resource consumption."
-      ]
-    },
-    {
       "id": "sess_cfd3881f",
       "ts": "2026-05-07T13:53:26Z",
       "updated_by": "orchestrator",
@@ -1490,6 +1470,22 @@
         "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
       ],
       "decisions": []
+    },
+    {
+      "id": "sess_fcea8638",
+      "ts": "2026-05-07T16:09:10Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
+      "progress": "",
+      "next_steps": [
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
+        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
+        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
+        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
+        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
+      ],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -1501,9 +1497,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=7",
     "status": "completed",
-    "started_at": "2026-05-07T16:08:28Z",
-    "completed_at": "2026-05-07T16:08:29Z"
+    "started_at": "2026-05-07T16:09:41Z",
+    "completed_at": "2026-05-07T16:09:41Z"
   }
 }
