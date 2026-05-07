@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T12:53:02Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-07T12:53:55Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -1295,26 +1295,6 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_856ae948",
-      "ts": "2026-05-07T10:22:09Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the research_loop under load and harden hive-ui with observability, retries, and guardrails.",
-      "summary": "The hive is running with eight active sessions and critical research_loop pauses due to high CPU/memory pressure. Recent wins include a new text model and a live Next.js UI (port 3001) with GitHub auth and SSE streams, but timeouts and 429/404 errors on LLM calls and missing metrics/backpressure controls remain open.",
-      "progress": "Added exponential backoff and jitter retry logic to lib/sse.ts sendStream to tolerate transient network/LLM errors and reduce cascading stalls.",
-      "next_steps": [
-        "Add retry logic to call_llm() in orchestrator.py with exponential backoff and jitter for HTTP 429/404 and SSL handshake timeouts.",
-        "Create pages/api/metrics.ts with a /api/metrics endpoint returning JSON of session stats, load/core/mem/disk, and SLO health.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and path-traversal edge cases.",
-        "Define per-session SLOs and backpressure rules in config/slos.json and add enforcement checks to supervisor.py that throttle/pause sessions when CPU>80% or mem>90%.",
-        "Implement load-aware throttle in pages/api/sse/stream.ts that batches events and applies backpressure when core>1.5 or mem>20GB to reduce research_loop pauses."
-      ],
-      "decisions": [
-        "Adopt exponential backoff + jitter for all LLM and SSE calls with max 5 retries and 30s cap.",
-        "Enforce per-session SLOs via supervisor.py using CPU>80%/mem>90% thresholds to auto-pause/resume sessions.",
-        "Expose real-time metrics via /api/metrics and integrate into hive-ui dashboards to drive load-aware throttling."
-      ]
-    },
-    {
       "id": "sess_3f974639",
       "ts": "2026-05-07T10:38:01Z",
       "updated_by": "orchestrator",
@@ -1485,6 +1465,22 @@
         "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
       ],
       "decisions": []
+    },
+    {
+      "id": "sess_1a935c85",
+      "ts": "2026-05-07T12:53:03Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
+        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
+        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
+        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
+        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
+      ],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -1496,9 +1492,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-07T12:53:02Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-07T12:53:33Z",
+    "completed_at": "2026-05-07T12:53:35Z"
   }
 }
