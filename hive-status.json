@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T12:58:52Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-07T12:59:47Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T12:58:52Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T12:59:41Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_5883f19b",
+      "ts": "2026-05-07T12:59:47Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded max_tasks and max_hours with recurring 1800s worker timeouts causing 4874 failures and runaway session (28+ hours).",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "d9ca9b5ae8b01eed1977a8288e4e4175"
+    },
     {
       "id": "b_9043ede8",
       "ts": "2026-05-07T08:09:35Z",
@@ -501,11 +514,11 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "config-guardrail-inject",
-        "description": "Injects max_tasks, max_hours, and task_timeout guardrails into hive config and respawns session to prevent unbounded retries and enforce controlled shutdown",
-        "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && grep -q '^max_hours=' ~/.hive/config || echo 'max_hours=48' >> ~/.hive/config && grep -q '^task_timeout=' ~/.hive/config || echo 'task_timeout=7200' >> ~/.hive/config && tmux respawn-window -t SESSION",
+        "description": "Injects max_tasks, max_hours, and task_timeout guardrails into hive config and respawns session to prevent unbounded retries and enforce controlled shutdown.",
+        "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && grep -q '^max_hours=' ~/.hive/config || echo 'max_hours=48' >> ~/.hive/config && grep -q '^task_timeout=' ~/.hive/config || echo 'task_timeout=3600' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T12:40:19Z"
+        "last_updated": "2026-05-07T12:59:47Z"
       },
       {
         "id": "cap_27efd1db",
@@ -558,6 +571,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_f4117897",
+        "ts": "2026-05-07T12:59:47Z",
+        "hive": "default",
+        "summary": "Critical runaway session due to unbounded budget and persistent 30m worker timeouts; guardrails injected and session respawned to enforce limits.",
+        "source": "doctor"
+      },
       {
         "id": "f_9e4eb9e5",
         "ts": "2026-05-07T12:40:19Z",
@@ -1250,13 +1270,6 @@
         "hive": "default",
         "summary": "Port conflicts on 8888/8889 are blocking logstream services; clear collisions and respawn windows to restore streams.",
         "source": "doctor"
-      },
-      {
-        "id": "f_44e9d5e3",
-        "ts": "2026-05-06T10:23:14Z",
-        "hive": "default",
-        "summary": "Duplicate port conflicts on 8888/8889 prevent logstream.py from launching in both sessions.",
-        "source": "doctor"
       }
     ],
     "patterns": [],
@@ -1285,7 +1298,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 220
+    "openrouter_calls_today": 221
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1492,9 +1505,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=6",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T12:58:52Z",
-    "completed_at": "2026-05-07T12:58:52Z"
+    "started_at": "2026-05-07T12:59:42Z",
+    "completed_at": "2026-05-07T12:59:43Z"
   }
 }
