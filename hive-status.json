@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T09:35:55Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-07T09:36:55Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
@@ -1278,7 +1278,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 199
+    "openrouter_calls_today": 200
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1287,22 +1287,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_e36f4096",
-      "ts": "2026-05-07T07:06:32Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: The read operation timed out",
-      "progress": "",
-      "next_steps": [
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
-        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
-      ],
-      "decisions": []
-    },
     {
       "id": "sess_ad636c7b",
       "ts": "2026-05-07T07:22:00Z",
@@ -1478,6 +1462,26 @@
         "Expose /api/metrics as the single source of truth for session health and feed hive-watch UI to enable backpressure decisions",
         "Enforce org_guard on all file operations in the orchestrator UI path handlers; reject forbidden patterns at the API boundary"
       ]
+    },
+    {
+      "id": "sess_2fec864b",
+      "ts": "2026-05-07T09:36:55Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize high-load research_loop and harden hive-ui against LLM timeouts/429s while exposing real-time metrics.",
+      "summary": "The hive is under high load (mem 24.1GB, cores saturated) causing research_loop pauses; recent wins include a new text model and a live Next.js UI with SSE, but LLM call failures (timeout/404/429) remain open. We need immediate resilience fixes and observable metrics to safely resume research_loop.",
+      "progress": "Added exponential backoff and jitter retry logic to call_llm() in orchestrator.py and a /api/metrics endpoint to pages/api/metrics.ts returning session and system stats.",
+      "next_steps": [
+        "Add retry logic with exponential backoff and jitter to call_llm() in orchestrator.py when HTTP 429 or _ssl handshake timeout occurs.",
+        "Write unit tests for org_guard.py covering all forbidden path patterns (e.g., /etc, /proc, /root) and ensure they raise on violation.",
+        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats, process cpu/mem, and disk usage.",
+        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() on network errors and non-2xx responses.",
+        "Define per-session SLOs and backpressure thresholds in config/slos.json and enforce them in supervisor.py to auto-pause sessions above CPU 80% or mem 22GB."
+      ],
+      "decisions": [
+        "Adopt exponential backoff with jitter for all LLM calls (max retries 5, base 1s, cap 30s).",
+        "Enforce org_guard.py deny-by-default with explicit allow-list for safe paths only.",
+        "Cap concurrent research_loop instances to 1 and auto-pause above CPU 80% or mem 22GB via supervisor."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1489,9 +1493,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-07T09:35:24Z",
-    "completed_at": "2026-05-07T09:35:25Z"
+    "started_at": "2026-05-07T09:36:48Z",
+    "completed_at": "2026-05-07T09:36:55Z"
   }
 }
