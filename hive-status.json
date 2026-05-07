@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T00:35:02Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-07T00:35:44Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -1247,9 +1247,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "self-test: running test_system.sh + auto-fix",
-    "status": "running",
-    "started_at": "2026-05-07T00:35:02Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-07T00:35:23Z",
+    "completed_at": "2026-05-07T00:35:24Z"
   }
 }
