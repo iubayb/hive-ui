@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T07:07:45Z",
+  "last_updated": "2026-05-07T07:08:48Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T07:06:43Z",
+      "health_score": 0.8,
+      "last_seen": "2026-05-07T07:08:47Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
-      "errors_last_hour": 7,
+      "errors_last_hour": 8,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -558,6 +558,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_5d8a0309",
+        "ts": "2026-05-07T07:08:30Z",
+        "hive": "default",
+        "summary": "Critical budget unboundedness and repeated timeouts require immediate guardrail injection and session respawn to stop the failure cascade.",
+        "source": "doctor"
+      },
       {
         "id": "f_31426993",
         "ts": "2026-05-07T06:58:07Z",
@@ -1222,7 +1229,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 183
+    "openrouter_calls_today": 184
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1439,7 +1446,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T07:07:44Z",
-    "completed_at": "2026-05-07T07:07:45Z"
+    "started_at": "2026-05-07T07:08:47Z",
+    "completed_at": "2026-05-07T07:08:48Z"
   }
 }
