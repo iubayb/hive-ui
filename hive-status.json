@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T05:06:52Z",
+  "last_updated": "2026-05-07T05:07:53Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T05:06:42Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T05:07:44Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_016e6737",
+      "ts": "2026-05-07T05:07:49Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded task budget (max_tasks/unbounded, max_hours/unbounded) with 4874 failures and repeated 1800s timeouts causing silent stall and retry exhaustion.",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "98a3409227fde186a583308e0f66fdbc"
+    },
     {
       "id": "b_adfad2d4",
       "ts": "2026-05-07T00:07:00Z",
@@ -492,7 +505,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T04:57:46Z"
+        "last_updated": "2026-05-07T05:07:49Z"
       },
       {
         "id": "cap_27efd1db",
@@ -545,6 +558,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_5fe4e0da",
+        "ts": "2026-05-07T05:07:49Z",
+        "hive": "default",
+        "summary": "Unbounded budget and long timeouts have driven catastrophic failure rates and silent stall; inject guardrails and respawn to enforce limits.",
+        "source": "doctor"
+      },
       {
         "id": "f_29f250a0",
         "ts": "2026-05-07T04:57:46Z",
@@ -1153,7 +1173,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 168
+    "openrouter_calls_today": 169
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1372,9 +1392,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=5",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T05:06:42Z",
-    "completed_at": "2026-05-07T05:06:42Z"
+    "started_at": "2026-05-07T05:07:32Z",
+    "completed_at": "2026-05-07T05:07:33Z"
   }
 }
