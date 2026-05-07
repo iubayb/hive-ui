@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T12:40:44Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-07T12:41:35Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_80413a53",
-      "ts": "2026-05-07T12:40:19Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Unbounded retry storm: 4874 failures on 60 successes with unbounded max_tasks/max_hours and 4/4 worker timeouts (1800s) causing silent hangs",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "51ee4fe29f4e9703a5be36aa06c02a87"
-    },
     {
       "id": "b_9043ede8",
       "ts": "2026-05-07T08:09:35Z",
@@ -1509,9 +1496,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T12:40:42Z",
-    "completed_at": "2026-05-07T12:40:44Z"
+    "started_at": "2026-05-07T12:41:14Z",
+    "completed_at": "2026-05-07T12:41:15Z"
   }
 }
