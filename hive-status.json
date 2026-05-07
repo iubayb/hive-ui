@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T06:37:56Z",
+  "last_updated": "2026-05-07T06:38:57Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T06:37:46Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T06:38:18Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -492,7 +492,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && grep -q '^max_hours=' ~/.hive/config || echo 'max_hours=48' >> ~/.hive/config && grep -q '^task_timeout=' ~/.hive/config || echo 'task_timeout=7200' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T06:28:02Z"
+        "last_updated": "2026-05-07T06:38:24Z"
       },
       {
         "id": "cap_27efd1db",
@@ -545,6 +545,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_ddcffcdb",
+        "ts": "2026-05-07T06:38:24Z",
+        "hive": "default",
+        "summary": "Critical runaway session with unbounded task budget and persistent 30-min timeouts\u2014guardrails and config limits injected, session respawning to enforce controls.",
+        "source": "doctor"
+      },
       {
         "id": "f_64646686",
         "ts": "2026-05-07T06:28:01Z",
@@ -1195,7 +1202,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 180
+    "openrouter_calls_today": 181
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1414,9 +1421,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=5",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T06:37:46Z",
-    "completed_at": "2026-05-07T06:37:46Z"
+    "started_at": "2026-05-07T06:38:26Z",
+    "completed_at": "2026-05-07T06:38:27Z"
   }
 }
