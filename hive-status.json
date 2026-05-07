@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T01:06:45Z",
+  "last_updated": "2026-05-07T01:07:46Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.85,
-      "last_seen": "2026-05-07T01:05:32Z",
+      "last_seen": "2026-05-07T01:07:36Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -489,10 +489,10 @@
         "source_agent": "hive-doctor",
         "skill": "config-guardrail-inject",
         "description": "Injects max_tasks, max_hours, and task_timeout guardrails to prevent unbounded retries and enforce controlled shutdowns.",
-        "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t SESSION",
+        "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t ps5-hive",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T00:57:06Z"
+        "last_updated": "2026-05-07T01:07:09Z"
       },
       {
         "id": "cap_27efd1db",
@@ -545,6 +545,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_7d4d0c3e",
+        "ts": "2026-05-07T01:07:09Z",
+        "hive": "default",
+        "summary": "Critical runaway due to unbounded budget caps and long timeouts; inject guardrails and restart session to enforce limits.",
+        "source": "doctor"
+      },
       {
         "id": "f_feb1dd91",
         "ts": "2026-05-07T00:57:06Z",
@@ -1041,7 +1048,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 136
+    "openrouter_calls_today": 137
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1248,9 +1255,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=5",
     "status": "completed",
-    "started_at": "2026-05-07T01:06:24Z",
-    "completed_at": "2026-05-07T01:06:25Z"
+    "started_at": "2026-05-07T01:07:36Z",
+    "completed_at": "2026-05-07T01:07:36Z"
   }
 }
