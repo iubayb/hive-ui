@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T10:58:01Z",
+  "last_updated": "2026-05-07T10:59:02Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T10:57:10Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T10:58:49Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_727a1f1a",
+      "ts": "2026-05-07T10:58:54Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded task/hours budget allowing runaway retries; worker calls timing out at 1800s after 4 attempts with 4874 failures. No max_tasks/max_hours guardrails configured.",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "51efa3f26fb8d5a322c4da350582d64b"
+    },
     {
       "id": "b_9043ede8",
       "ts": "2026-05-07T08:09:35Z",
@@ -558,6 +571,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_7c4a6363",
+        "ts": "2026-05-07T10:58:54Z",
+        "hive": "default",
+        "summary": "Critical runaway retry loop caused by missing budget guardrails; enforce max_tasks, max_hours, and task_timeout then respawn to halt unbounded execution.",
+        "source": "doctor"
+      },
       {
         "id": "f_82a2895a",
         "ts": "2026-05-07T10:28:49Z",
@@ -1250,13 +1270,6 @@
         "hive": "default",
         "summary": "Port collisions on 8888/8889 prevent logstream respawns in both sessions; researcher-tracker idle states are secondary.",
         "source": "doctor"
-      },
-      {
-        "id": "f_6520c9fa",
-        "ts": "2026-05-06T08:22:51Z",
-        "hive": "default",
-        "summary": "Both sessions stuck in respawn loops due to lingering port bindings; clear ports, confirm availability, then respawn windows.",
-        "source": "doctor"
       }
     ],
     "patterns": [],
@@ -1285,7 +1298,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 208
+    "openrouter_calls_today": 209
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1501,8 +1514,8 @@
   "active_task": {
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
-    "status": "completed",
-    "started_at": "2026-05-07T10:58:00Z",
-    "completed_at": "2026-05-07T10:58:01Z"
+    "status": "running",
+    "started_at": "2026-05-07T10:59:02Z",
+    "completed_at": null
   }
 }
