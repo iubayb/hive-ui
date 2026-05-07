@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T04:37:55Z",
+  "last_updated": "2026-05-07T04:38:57Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_bb9d2eb4",
-      "ts": "2026-05-07T04:37:44Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Unbounded budget (max_tasks/unbounded, max_hours/unbounded) + repeated 1800s worker timeouts causing runaway failure accumulation (4874 failed) and stalled progress.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "8613dcc0959b59c815f51938a3dff395"
-    },
     {
       "id": "b_adfad2d4",
       "ts": "2026-05-07T00:07:00Z",
@@ -1378,9 +1365,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=80% blockers=6",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T04:37:45Z",
-    "completed_at": "2026-05-07T04:37:45Z"
+    "started_at": "2026-05-07T04:38:35Z",
+    "completed_at": "2026-05-07T04:38:37Z"
   }
 }
