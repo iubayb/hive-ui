@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T02:36:41Z",
+  "last_updated": "2026-05-07T02:37:44Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T02:36:20Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T02:37:19Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_b7246734",
+      "ts": "2026-05-07T02:37:25Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Unbounded budget (max_tasks/max_hours unset) causing uncontrolled retries and 1800s worker timeouts after 14h runtime with 4874 failures; session is in runaway failure state.",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "a7e563ff40cdbc4ef9c354aae20dd1ea"
+    },
     {
       "id": "b_adfad2d4",
       "ts": "2026-05-07T00:07:00Z",
@@ -492,7 +505,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T02:27:20Z"
+        "last_updated": "2026-05-07T02:37:25Z"
       },
       {
         "id": "cap_27efd1db",
@@ -545,6 +558,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_bbcbaf73",
+        "ts": "2026-05-07T02:37:25Z",
+        "hive": "default",
+        "summary": "Unbounded budget and missing guardrails caused runaway failures; inject limits and respawn to enforce controlled shutdown/retry behavior.",
+        "source": "doctor"
+      },
       {
         "id": "f_4153fb99",
         "ts": "2026-05-07T02:27:20Z",
@@ -1083,7 +1103,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 148
+    "openrouter_calls_today": 149
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1294,9 +1314,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-07T02:36:20Z",
-    "completed_at": "2026-05-07T02:36:21Z"
+    "started_at": "2026-05-07T02:37:33Z",
+    "completed_at": "2026-05-07T02:37:34Z"
   }
 }
