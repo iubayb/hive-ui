@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T01:56:56Z",
+  "last_updated": "2026-05-07T01:57:58Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T01:55:03Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T01:57:09Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -492,7 +492,7 @@
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T01:37:14Z"
+        "last_updated": "2026-05-07T01:57:14Z"
       },
       {
         "id": "cap_27efd1db",
@@ -545,6 +545,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_3ed61cd5",
+        "ts": "2026-05-07T01:57:14Z",
+        "hive": "default",
+        "summary": "Critical unbounded-budget session with runaway task failures; enforce max_tasks/max_hours guardrails and respawn to cap resource burn.",
+        "source": "doctor"
+      },
       {
         "id": "f_9340f11e",
         "ts": "2026-05-07T01:37:14Z",
@@ -1062,7 +1069,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 142
+    "openrouter_calls_today": 143
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1271,7 +1278,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T01:56:55Z",
-    "completed_at": "2026-05-07T01:56:56Z"
+    "started_at": "2026-05-07T01:57:57Z",
+    "completed_at": "2026-05-07T01:57:58Z"
   }
 }
