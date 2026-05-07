@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T07:20:37Z",
+  "last_updated": "2026-05-07T07:22:00Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.85,
-      "last_seen": "2026-05-07T07:19:05Z",
+      "last_seen": "2026-05-07T07:21:07Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -44,19 +44,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_2318a714",
-      "ts": "2026-05-07T07:06:32Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "Compaction LLM failed: The read operation timed out",
-      "severity": "low",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "8f5396ad764e4afa2b722e11a8c20048"
-    },
     {
       "id": "b_adfad2d4",
       "ts": "2026-05-07T00:07:00Z",
@@ -1239,26 +1226,6 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_fcd65112",
-      "ts": "2026-05-07T04:50:20Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize research_loop and harden hive-ui against API throttling while exposing live metrics.",
-      "summary": "The hive is running with heavy memory and disk pressure causing research_loop pauses; the new Next.js UI is live but missing metrics and resilient LLM calls. We must add retry/backoff to call_llm, an /api/metrics endpoint, and unit tests for org_guard to reduce blockers.",
-      "progress": "Added exponential backoff and jitter retry to call_llm() in orchestrator.py for HTTP 429/404 and wired it through the supervisor.",
-      "next_steps": [
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats and system load (CPU/mem/disk).",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and permission escalation cases.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() with maxRetries and timeout handling.",
-        "Create a load-shedding function in supervisor.py that renices or pauses sessions when core > 1.5 or mem > 22GB.",
-        "Implement per-session SLO checks in build_monitor.py and emit violations to /api/metrics."
-      ],
-      "decisions": [
-        "Adopt exponential backoff with jitter for all external LLM calls (base 1s, cap 30s) to reduce 429s.",
-        "Expose /api/metrics as the single source of truth for hive health used by UI and autoscaling decisions.",
-        "Enforce org_guard path allow-list and fail-closed on any traversal attempt to prevent privilege escalation."
-      ]
-    },
-    {
       "id": "sess_fcb32546",
       "ts": "2026-05-07T05:05:29Z",
       "updated_by": "orchestrator",
@@ -1433,6 +1400,22 @@
         "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
       ],
       "decisions": []
+    },
+    {
+      "id": "sess_ad636c7b",
+      "ts": "2026-05-07T07:22:00Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
+        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
+        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
+        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
+        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
+      ],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -1444,9 +1427,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-07T07:20:06Z",
-    "completed_at": "2026-05-07T07:20:07Z"
+    "started_at": "2026-05-07T07:21:08Z",
+    "completed_at": "2026-05-07T07:22:00Z"
   }
 }
