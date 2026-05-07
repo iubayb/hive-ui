@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-07T10:28:00Z",
+  "last_updated": "2026-05-07T10:29:01Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-07T10:26:26Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-07T10:28:34Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -501,11 +501,11 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "config-guardrail-inject",
-        "description": "Injects max_tasks, max_hours, and task_timeout guardrails into hive config and respawns the session to prevent unbounded retries and enforce controlled shutdown.",
+        "description": "Injects max_tasks, max_hours, and task_timeout guardrails into hive config and respawns session to prevent unbounded retries and enforce controlled shutdown",
         "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && grep -q '^max_hours=' ~/.hive/config || echo 'max_hours=48' >> ~/.hive/config && grep -q '^task_timeout=' ~/.hive/config || echo 'task_timeout=7200' >> ~/.hive/config && tmux respawn-window -t SESSION",
         "tags": [],
         "applicable_to": "all",
-        "last_updated": "2026-05-07T10:10:01Z"
+        "last_updated": "2026-05-07T10:28:49Z"
       },
       {
         "id": "cap_27efd1db",
@@ -558,6 +558,13 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_82a2895a",
+        "ts": "2026-05-07T10:28:49Z",
+        "hive": "default",
+        "summary": "Critical unbounded budget and worker timeouts causing exponential failure cascade; guardrails injected and session respawned.",
+        "source": "doctor"
+      },
       {
         "id": "f_c47c7d1e",
         "ts": "2026-05-07T10:10:01Z",
@@ -1250,13 +1257,6 @@
         "hive": "default",
         "summary": "Both sessions stuck in respawn loops due to lingering port bindings; clear ports, confirm availability, then respawn windows.",
         "source": "doctor"
-      },
-      {
-        "id": "f_1df32a79",
-        "ts": "2026-05-06T08:22:47Z",
-        "hive": "default",
-        "summary": "Both sessions show repeated port conflicts on 8888/8889 causing logstream restart loops; clear collisions and respawn.",
-        "source": "doctor"
       }
     ],
     "patterns": [],
@@ -1285,7 +1285,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 205
+    "openrouter_calls_today": 206
   },
   "model_champions": {
     "text": "inclusionai/ling-2.6-1t:free",
@@ -1502,7 +1502,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-07T10:27:59Z",
-    "completed_at": "2026-05-07T10:28:00Z"
+    "started_at": "2026-05-07T10:29:00Z",
+    "completed_at": "2026-05-07T10:29:01Z"
   }
 }
