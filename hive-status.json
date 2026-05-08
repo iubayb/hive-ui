@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-08T13:26:03Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-08T13:26:43Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
