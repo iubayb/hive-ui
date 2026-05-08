@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-08T13:58:56Z",
+  "last_updated": "2026-05-08T13:59:58Z",
   "updated_by": "agent",
   "hives": {
     "default": {
@@ -1316,22 +1316,6 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_0f358cc8",
-      "ts": "2026-05-08T11:29:14Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
-        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
-      ],
-      "decisions": []
-    },
-    {
       "id": "sess_c0feac9d",
       "ts": "2026-05-08T11:44:17Z",
       "updated_by": "orchestrator",
@@ -1474,6 +1458,22 @@
         "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
       ],
       "decisions": []
+    },
+    {
+      "id": "sess_2c3d583c",
+      "ts": "2026-05-08T13:59:58Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
+      "progress": "",
+      "next_steps": [
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
+        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
+        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
+        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
+        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
+      ],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -1485,9 +1485,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-08T13:58:55Z",
-    "completed_at": "2026-05-08T13:58:56Z"
+    "started_at": "2026-05-08T13:59:57Z",
+    "completed_at": "2026-05-08T13:59:58Z"
   }
 }
