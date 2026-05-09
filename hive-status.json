@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T18:15:52Z",
+  "last_updated": "2026-05-09T18:17:45Z",
   "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.45,
-      "last_seen": "2026-05-09T18:15:21Z",
+      "status": "running",
+      "health_score": 0.889,
+      "last_seen": "2026-05-09T18:17:32Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 16,
+      "errors_last_hour": 14,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -52,6 +52,32 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_6945cdad",
+      "ts": "2026-05-09T18:17:45Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] High failure count (4880) with only 60 successful tasks indicates the worker is stuck on repeated errors, likely due to a persistent runtime exception or resource exhaustion (e.g., OOM or missing model files). The heartbeat shows no progress over time.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "c75f28ffbb7d5bde9ea036f8382a0a18"
+    },
+    {
+      "id": "b_5798d58f",
+      "ts": "2026-05-09T18:17:31Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] High failure count (4880) with only 60 successful tasks suggests a systemic service crash, likely the Ollama inference runner running out of memory (oom) causing repeated task failures.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "c5055d76f46c1f5a00ba64c369d1fe40"
+    },
     {
       "id": "b_c6250db5",
       "ts": "2026-05-09T17:43:30Z",
@@ -522,6 +548,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_35974bcb",
+        "ts": "2026-05-09T18:17:45Z",
+        "hive": "default",
+        "summary": "ps5\u2011hive is repeatedly failing tasks; a worker restart and log inspection are required.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_d9d58441",
+        "ts": "2026-05-09T18:17:31Z",
+        "hive": "default",
+        "summary": "The ps5-hive session is experiencing widespread task failures due to an OOM\u2011related Ollama service crash; restarting the service and resetting the hive session should restore normal operation.",
+        "source": "doctor"
+      },
+      {
         "id": "f_c0a81029",
         "ts": "2026-05-09T17:47:32Z",
         "hive": "default",
@@ -587,7 +627,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 18
+    "openrouter_calls_today": 20
   },
   "model_champions": {
     "text": null,
@@ -806,9 +846,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "heartbeat \u00b7 sessions=9 health=45% blockers=11",
     "status": "completed",
-    "started_at": "2026-05-09T18:15:42Z",
-    "completed_at": "2026-05-09T18:15:52Z"
+    "started_at": "2026-05-09T18:17:23Z",
+    "completed_at": "2026-05-09T18:17:23Z"
   }
 }
