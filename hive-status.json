@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T18:47:56Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-09T18:48:38Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.889,
-      "last_seen": "2026-05-09T18:47:45Z",
+      "health_score": 0.95,
+      "last_seen": "2026-05-09T18:48:18Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -60,32 +60,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_d574f2d8",
-      "ts": "2026-05-09T18:47:56Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive is stuck with a single running task while failures keep increasing (4880 failed), indicating a systemic failure likely due to a stuck or crashing worker (e.g., OOM in Ollama or broken task queue).",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "6ae26eecb426e4304ee1dbc7ae55480b"
-    },
-    {
-      "id": "b_01ab86a0",
-      "ts": "2026-05-09T18:47:42Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Excessive task failures (4880) with only 60 successes indicate a systemic runtime error, likely an out\u2011of\u2011memory (OOM) condition in the Ollama inference service that is causing tasks to abort silently.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "94421f9a3348d7b7e05553dc3635875c"
-    },
     {
       "id": "b_582e1a7a",
       "ts": "2026-05-09T18:33:43Z",
@@ -738,9 +712,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=95% blockers=1",
     "status": "completed",
-    "started_at": "2026-05-09T18:47:07Z",
-    "completed_at": "2026-05-09T18:47:08Z"
+    "started_at": "2026-05-09T18:48:18Z",
+    "completed_at": "2026-05-09T18:48:18Z"
   }
 }
