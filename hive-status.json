@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T18:58:49Z",
+  "last_updated": "2026-05-09T18:59:57Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -493,7 +493,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 24
+    "openrouter_calls_today": 25
   },
   "model_champions": {
     "text": null,
@@ -502,26 +502,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_9ca7330e",
-      "ts": "2026-05-09T16:28:48Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by reducing LLM call failures, exposing operational metrics, and addressing high system load issues.",
-      "summary": "The hive is running at 85% health but suffers from high CPU load and a failing Ollama runner due to memory constraints. Recent fixes restored supervisor and orchestrator sessions, and auto-fixes addressed invariant TS14. Immediate work focuses on robust LLM call handling and visibility into runtime metrics.",
-      "progress": "Supervisor tmux session was created and orchestrator restarted, and the TS14 invariant was auto\u2011fixed.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and timeout errors",
-        "Implement a new GET /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, disk, and job queue stats",
-        "Write unit tests for call_llm() in orchestrator.py covering success, rate\u2011limit, and network failure scenarios",
-        "Add a memory usage guard in orchestrator.py that aborts Ollama inference if free RAM < 1\u202fGB and logs a warning",
-        "Update hive-monitor.py to log average load/core ratio every minute and trigger a warning when ratio > 1.5"
-      ],
-      "decisions": [
-        "Prioritize exponential backoff for LLM calls to reduce failure rate under high load",
-        "Expose runtime metrics via /api/metrics to enable external monitoring and auto\u2011scaling",
-        "Implement a memory guard for Ollama inference to prevent crashes in low\u2011memory environments"
-      ]
-    },
     {
       "id": "sess_ab43810a",
       "ts": "2026-05-09T16:43:55Z",
@@ -701,6 +681,26 @@
         "Expose real\u2011time load metrics via /api/metrics to enable automated scaling decisions",
         "Limit retry attempts to 5 with a max backoff of 30 seconds to prevent runaway request loops"
       ]
+    },
+    {
+      "id": "sess_bb75ad8c",
+      "ts": "2026-05-09T18:59:47Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by resolving the CPU load blocker and improving resilience of LLM calls",
+      "summary": "The hive is running at 95% health but a high-priority self\u2011test failure shows excessive CPU load (27.08 on 8 cores). Recent work fixed several infrastructure issues and recovered the Ollama service. Immediate coding actions are needed to add retry/backoff for LLM calls and expose operational metrics.",
+      "progress": "Implemented exponential backoff stub for call_llm() and added basic logging for retry attempts.",
+      "next_steps": [
+        "Complete exponential backoff and retry logic in call_llm() within orchestrator.py, handling HTTP 429 and 5xx responses",
+        "Add a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, memory usage, and session counts",
+        "Write unit tests for the new /api/metrics endpoint in test_logstream.py covering normal and error cases",
+        "Integrate psutil-based CPU load monitoring into supervisor.sh to alert when load/core ratio exceeds 2.0",
+        "Create a watchdog thread in orchestrator.py that triggers a graceful restart of the hive if CPU load remains above threshold for 5 minutes"
+      ],
+      "decisions": [
+        "Prioritize fixing the TS20 CPU load blocker before adding new features",
+        "Adopt exponential backoff with jitter for all external LLM API calls",
+        "Expose internal metrics via /api/metrics to enable automated health monitoring"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -712,9 +712,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=95% blockers=1",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-09T18:58:29Z",
-    "completed_at": "2026-05-09T18:58:29Z"
+    "started_at": "2026-05-09T18:59:29Z",
+    "completed_at": "2026-05-09T18:59:47Z"
   }
 }
