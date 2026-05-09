@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T13:14:49Z",
+  "last_updated": "2026-05-09T13:15:52Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.65,
-      "last_seen": "2026-05-09T13:13:17Z",
+      "last_seen": "2026-05-09T13:15:19Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -195,16 +195,6 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_d7ec13a0",
-      "ts": "2026-05-09T13:05:06Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
-    {
       "id": "sess_4a385600",
       "ts": "2026-05-09T13:06:10Z",
       "updated_by": "orchestrator",
@@ -293,6 +283,16 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_a4e085cf",
+      "ts": "2026-05-09T13:15:20Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -304,9 +304,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-09T13:14:18Z",
-    "completed_at": "2026-05-09T13:14:19Z"
+    "started_at": "2026-05-09T13:15:20Z",
+    "completed_at": "2026-05-09T13:15:22Z"
   }
 }
