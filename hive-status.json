@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T19:17:56Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-09T19:18:37Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -60,19 +60,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_25ac092a",
-      "ts": "2026-05-09T19:17:56Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive is stuck with a single running task while failures have accumulated (4880 failed). This pattern usually indicates a persistent worker crash or OOM condition that prevents new tasks from completing.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "cb772d3696607cace1b369f891178127"
-    },
     {
       "id": "b_adf13ac8",
       "ts": "2026-05-09T19:09:55Z",
@@ -426,6 +413,13 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_5ef5a97c",
+        "ts": "2026-05-09T19:18:06Z",
+        "hive": "default",
+        "summary": "ps5\u2011hive is experiencing massive task failures likely due to a crashed Ollama service; restarting it and clearing the failure backlog should restore normal operation.",
+        "source": "doctor"
+      },
+      {
         "id": "f_eb2c2950",
         "ts": "2026-05-09T19:17:56Z",
         "hive": "default",
@@ -526,7 +520,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 27
+    "openrouter_calls_today": 28
   },
   "model_champions": {
     "text": null,
@@ -747,7 +741,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T19:17:06Z",
-    "completed_at": "2026-05-09T19:17:07Z"
+    "started_at": "2026-05-09T19:18:07Z",
+    "completed_at": "2026-05-09T19:18:07Z"
   }
 }
