@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T20:48:01Z",
+  "last_updated": "2026-05-09T20:48:48Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.75,
-      "last_seen": "2026-05-09T20:47:00Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-09T20:48:39Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 17,
+      "errors_last_hour": 15,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -60,6 +60,32 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_630981ee",
+      "ts": "2026-05-09T20:48:48Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive is repeatedly failing tasks (4880 failures) and appears stuck with a single inflight task, indicating a possible runaway failure or resource exhaustion.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "0f3f70f34527194c82e3e43a50bbbbbd"
+    },
+    {
+      "id": "b_3e277e3f",
+      "ts": "2026-05-09T20:48:44Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive is stuck with a single pending task and a large number of failures (4880), indicating a runaway failure loop and likely a TS14 invariant violation.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "6a076dc4664fabe3ff29fc4ae3fb4d0f"
+    },
     {
       "id": "b_2e1c9ba2",
       "ts": "2026-05-09T20:17:34Z",
@@ -449,6 +475,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_bcbf3989",
+        "ts": "2026-05-09T20:48:48Z",
+        "hive": "default",
+        "summary": "ps5-hive shows massive task failures and a stalled inflight job; restarting its service should reset the state.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_d3e4e8fe",
+        "ts": "2026-05-09T20:48:44Z",
+        "hive": "default",
+        "summary": "ps5-hive is in a failure loop; restarting the service and clearing the failed task queue should restore normal operation.",
+        "source": "doctor"
+      },
+      {
         "id": "f_0aa6e3e7",
         "ts": "2026-05-09T20:18:39Z",
         "hive": "default",
@@ -584,7 +624,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 38
+    "openrouter_calls_today": 40
   },
   "model_champions": {
     "text": null,
@@ -803,9 +843,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "self-test: running test_system.sh + auto-fix",
-    "status": "running",
-    "started_at": "2026-05-09T20:48:01Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-09T20:48:43Z",
+    "completed_at": "2026-05-09T20:48:44Z"
   }
 }
