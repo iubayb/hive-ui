@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T16:32:45Z",
+  "last_updated": "2026-05-09T16:33:46Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -52,6 +52,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_dbb0b84c",
+      "ts": "2026-05-09T16:33:10Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "HIGH load/core=1.14 mem=5.7GB disk=16% \u2014 jobs reniced",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "bfe3392aeb60115965bc9330eb7ede39"
+    },
     {
       "id": "b_e96e72ba",
       "ts": "2026-05-09T16:28:49Z",
@@ -605,7 +618,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T16:32:44Z",
-    "completed_at": "2026-05-09T16:32:45Z"
+    "started_at": "2026-05-09T16:33:46Z",
+    "completed_at": "2026-05-09T16:33:46Z"
   }
 }
