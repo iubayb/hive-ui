@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T22:48:44Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-09T22:49:54Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "error",
       "health_score": 0.0,
-      "last_seen": "2026-05-09T22:47:53Z",
+      "last_seen": "2026-05-09T22:49:54Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 10,
+      "errors_last_hour": 14,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -60,6 +60,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_de538ef4",
+      "ts": "2026-05-09T22:49:34Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive is stuck with a single running task while failures have accumulated to 4,880, indicating a TS14 invariant violation (runaway failures) and likely a deadlocked or crashed worker.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "9dd3f65a459901156247e7a817dc2753"
+    },
     {
       "id": "b_6c049277",
       "ts": "2026-05-09T22:23:12Z",
@@ -657,6 +670,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_366c5c5b",
+        "ts": "2026-05-09T22:49:34Z",
+        "hive": "default",
+        "summary": "ps5-hive is experiencing a runaway failure condition; restarting its systemd service should reset the hive.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_de2e679b",
+        "ts": "2026-05-09T22:49:21Z",
+        "hive": "default",
+        "summary": "The ps5-hive session has hit a TS14 failure lock; restarting its service should clear the error state and allow new tasks to be processed.",
+        "source": "doctor"
+      },
+      {
         "id": "f_f7991af1",
         "ts": "2026-05-09T22:19:14Z",
         "hive": "default",
@@ -848,7 +875,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 54
+    "openrouter_calls_today": 56
   },
   "model_champions": {
     "text": null,
@@ -1067,9 +1094,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=0% blockers=22",
     "status": "completed",
-    "started_at": "2026-05-09T22:48:33Z",
-    "completed_at": "2026-05-09T22:48:34Z"
+    "started_at": "2026-05-09T22:49:54Z",
+    "completed_at": "2026-05-09T22:49:54Z"
   }
 }
