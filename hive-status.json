@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T15:47:34Z",
+  "last_updated": "2026-05-09T15:48:39Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -24,7 +24,16 @@
       "silent_minutes": 0
     }
   },
-  "achievements": [],
+  "achievements": [
+    {
+      "id": "a_dd21e81f",
+      "ts": "2026-05-09T15:48:38Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "Auto-fixed system invariant TS14",
+      "evidence": "test_system.sh TS14 now passes after auto-fix"
+    }
+  ],
   "blockers": [
     {
       "id": "b_1aed5f47",
@@ -105,19 +114,6 @@
       "_hash": "6897daf3e3724c9f078fc0b16f4fe428"
     },
     {
-      "id": "b_9ac5434b",
-      "ts": "2026-05-09T13:05:06Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "self-test: TS14 failing \u2014 no auto-fix available or fix failed",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "b4c2ed2d4f13f2fecf6ce6f41e3eac7c"
-    },
-    {
       "id": "b_43031c2b",
       "ts": "2026-05-09T13:05:06Z",
       "hive": "default",
@@ -155,6 +151,19 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "82ed62237b8e342301c173b1539d754e"
+    },
+    {
+      "id": "b_9ac5434b",
+      "ts": "2026-05-09T13:05:06Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "self-test: TS14 failing \u2014 no auto-fix available or fix failed",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-09T15:48:38Z",
+      "resolution": "self-test: TS14 auto-fixed",
+      "github_issue": null,
+      "_hash": "b4c2ed2d4f13f2fecf6ce6f41e3eac7c"
     },
     {
       "id": "b_6c65bb73",
@@ -198,7 +207,23 @@
   ],
   "next_steps": [],
   "capabilities": {
-    "learned": []
+    "learned": [
+      {
+        "id": "cap_d9804ba6",
+        "ts": "2026-05-09T15:48:38Z",
+        "source_hive": "default",
+        "source_agent": "orchestrator",
+        "skill": "auto_fix_TS14",
+        "description": "Automatically detects and repairs TS14 system invariant failures",
+        "example": "Applied fix for TS14: systemctl restart ollama",
+        "tags": [
+          "self-healing",
+          "system-invariant",
+          "auto-fix"
+        ],
+        "applicable_to": "all"
+      }
+    ]
   },
   "knowledge": {
     "findings": [],
@@ -220,16 +245,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_c7ad49b0",
-      "ts": "2026-05-09T15:38:18Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_32a5e1cc",
       "ts": "2026-05-09T15:39:21Z",
@@ -319,6 +334,16 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_f74b240c",
+      "ts": "2026-05-09T15:48:35Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -330,9 +355,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-09T15:47:33Z",
-    "completed_at": "2026-05-09T15:47:33Z"
+    "started_at": "2026-05-09T15:48:38Z",
+    "completed_at": "2026-05-09T15:48:39Z"
   }
 }
