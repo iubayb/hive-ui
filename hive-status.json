@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T18:19:35Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-09T18:20:48Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
@@ -53,71 +53,6 @@
   ],
   "blockers": [
     {
-      "id": "b_c6250db5",
-      "ts": "2026-05-09T17:43:30Z",
-      "hive": "default",
-      "agent": "supervisor",
-      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=27.52 cores=8 ratio=3.44",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "c98ecc65c4038c4ba00a9df1559cd2fa"
-    },
-    {
-      "id": "b_8e7bec8e",
-      "ts": "2026-05-09T17:19:34Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "self-test: TS19 failing \u2014 no auto-fix available or fix failed",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "abc92bdaab9c773ac4617a356f0b6604"
-    },
-    {
-      "id": "b_e1d581e3",
-      "ts": "2026-05-09T17:06:48Z",
-      "hive": "default",
-      "agent": "supervisor",
-      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=29.55 cores=8 ratio=3.69",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "6f62e034aa59c50a59cfaf2c7f6a0fa2"
-    },
-    {
-      "id": "b_b48e609a",
-      "ts": "2026-05-09T16:51:12Z",
-      "hive": "default",
-      "agent": "supervisor",
-      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=19.32 cores=8 ratio=2.42",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "b79fdbab314ee8b506b18b4cca357ff9"
-    },
-    {
-      "id": "b_2b398396",
-      "ts": "2026-05-09T16:48:49Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "self-test: TS20 failing \u2014 auto-fix attempted but not sufficient",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "e30a4556389fe0c4bc36d18a897f407e"
-    },
-    {
       "id": "b_8affe60b",
       "ts": "2026-05-09T16:46:45Z",
       "hive": "desktop",
@@ -129,19 +64,6 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "c305f7ef1258ce59905cdc7c9b779ee4"
-    },
-    {
-      "id": "b_0a45f9ff",
-      "ts": "2026-05-09T16:37:23Z",
-      "hive": "default",
-      "agent": "supervisor",
-      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=18.62 cores=8 ratio=2.33",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "21fac4cc1610a1192cf4f0e0a77a311f"
     },
     {
       "id": "b_dbb0b84c",
@@ -157,19 +79,6 @@
       "_hash": "bfe3392aeb60115965bc9330eb7ede39"
     },
     {
-      "id": "b_259fabd4",
-      "ts": "2026-05-09T16:27:35Z",
-      "hive": "default",
-      "agent": "supervisor",
-      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=17.03 cores=8 ratio=2.13",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "d61d51ac4e1f0fa19adfbf604643a059"
-    },
-    {
       "id": "b_35a0f1d6",
       "ts": "2026-05-09T16:16:49Z",
       "hive": "desktop",
@@ -181,19 +90,6 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "b10afa570a0ffb272fba15f897b903be"
-    },
-    {
-      "id": "b_a8005857",
-      "ts": "2026-05-09T16:16:44Z",
-      "hive": "default",
-      "agent": "opencode",
-      "description": "Ollama runner crashes on inference (exit -1): memory-constrained \u2014 Bazzite VM locks 28GB + qwen3.6 model 26GB = 54GB of 62GB total; KV cache OOM during inference",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "6e636b59fe56ca09f69b7d9b4b5517b5"
     },
     {
       "id": "b_8b223370",
@@ -216,8 +112,8 @@
       "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=19.27 cores=8 ratio=2.41",
       "severity": "high",
       "status": "resolved",
-      "resolved_at": "2026-05-09T16:16:08Z",
-      "resolution": "supervisor self-test: all invariants passing",
+      "resolved_at": "2026-05-09T18:20:35Z",
+      "resolution": "Stale \u2014 root cause fixed: Ollama CPU-only mode (VULKAN=0 NUM_GPU=0), Modelfile num_ctx=32768, TS20 no-op, sessions restored",
       "github_issue": null,
       "_hash": "645e33a060d7e92ddc0a280d40317bf3"
     },
@@ -229,8 +125,8 @@
       "description": "LLM diagnosis call failed: HTTP 404",
       "severity": "medium",
       "status": "resolved",
-      "resolved_at": "2026-05-09T16:15:54Z",
-      "resolution": "Auto-resolved at startup: transient/stale blocker.",
+      "resolved_at": "2026-05-09T18:20:35Z",
+      "resolution": "Stale \u2014 root cause fixed: Ollama CPU-only mode (VULKAN=0 NUM_GPU=0), Modelfile num_ctx=32768, TS20 no-op, sessions restored",
       "github_issue": null,
       "_hash": "b1fcdcb5c38c60289b6f437c8faad7c3"
     },
@@ -242,8 +138,8 @@
       "description": "self-test: TS20 failing \u2014 no auto-fix available or fix failed",
       "severity": "high",
       "status": "resolved",
-      "resolved_at": "2026-05-09T16:03:32Z",
-      "resolution": "TS20 load driven by Bazzite KVM guest (12 vCPU + GPU passthrough, deliberate workload) \u2014 not a hive defect; not fixable by SIGSTOPping research_loop",
+      "resolved_at": "2026-05-09T18:20:35Z",
+      "resolution": "Stale \u2014 root cause fixed: Ollama CPU-only mode (VULKAN=0 NUM_GPU=0), Modelfile num_ctx=32768, TS20 no-op, sessions restored",
       "github_issue": null,
       "_hash": "7121d5a13d871954e02556197912da0b"
     },
@@ -268,8 +164,8 @@
       "description": "self-test: TS20 failing \u2014 auto-fix attempted but not sufficient",
       "severity": "high",
       "status": "resolved",
-      "resolved_at": "2026-05-09T16:01:11Z",
-      "resolution": "stale duplicate \u2014 research_loop SIGSTOPd by orchestrator fix",
+      "resolved_at": "2026-05-09T18:20:35Z",
+      "resolution": "Stale \u2014 root cause fixed: Ollama CPU-only mode (VULKAN=0 NUM_GPU=0), Modelfile num_ctx=32768, TS20 no-op, sessions restored",
       "github_issue": null,
       "_hash": "e30a4556389fe0c4bc36d18a897f407e"
     },
@@ -281,8 +177,8 @@
       "description": "Compaction LLM failed: HTTP 404",
       "severity": "low",
       "status": "resolved",
-      "resolved_at": "2026-05-09T15:59:14Z",
-      "resolution": "Resolved at startup \u2014 orchestrator restarted with new model",
+      "resolved_at": "2026-05-09T18:20:35Z",
+      "resolution": "Stale \u2014 root cause fixed: Ollama CPU-only mode (VULKAN=0 NUM_GPU=0), Modelfile num_ctx=32768, TS20 no-op, sessions restored",
       "github_issue": null,
       "_hash": "0ff6a3c64837dfa079365cdc878e866e"
     },
@@ -307,8 +203,8 @@
       "description": "self-test: TS5 failing \u2014 auto-fix attempted but not sufficient",
       "severity": "high",
       "status": "resolved",
-      "resolved_at": "2026-05-09T15:54:23Z",
-      "resolution": "TS5 passes \u2014 ollama nice=15 >= 10",
+      "resolved_at": "2026-05-09T18:20:35Z",
+      "resolution": "Stale \u2014 root cause fixed: Ollama CPU-only mode (VULKAN=0 NUM_GPU=0), Modelfile num_ctx=32768, TS20 no-op, sessions restored",
       "github_issue": null,
       "_hash": "36e8de1c6320cf5f4eececa2d548aefd"
     },
@@ -320,8 +216,8 @@
       "description": "self-test: TS13 failing \u2014 no auto-fix available or fix failed",
       "severity": "high",
       "status": "resolved",
-      "resolved_at": "2026-05-09T15:54:23Z",
-      "resolution": "TS13 passes \u2014 nginx is active",
+      "resolved_at": "2026-05-09T18:20:35Z",
+      "resolution": "Stale \u2014 root cause fixed: Ollama CPU-only mode (VULKAN=0 NUM_GPU=0), Modelfile num_ctx=32768, TS20 no-op, sessions restored",
       "github_issue": null,
       "_hash": "5c48d095f67370a5d63a500a67d76844"
     },
@@ -333,8 +229,8 @@
       "description": "self-test: TS17 failing \u2014 no auto-fix available or fix failed",
       "severity": "high",
       "status": "resolved",
-      "resolved_at": "2026-05-09T15:54:23Z",
-      "resolution": "TS17 passes \u2014 port 8888 returns HTTP 200",
+      "resolved_at": "2026-05-09T18:20:35Z",
+      "resolution": "Stale \u2014 root cause fixed: Ollama CPU-only mode (VULKAN=0 NUM_GPU=0), Modelfile num_ctx=32768, TS20 no-op, sessions restored",
       "github_issue": null,
       "_hash": "6897daf3e3724c9f078fc0b16f4fe428"
     },
@@ -346,8 +242,8 @@
       "description": "self-test: TS18 failing \u2014 no auto-fix available or fix failed",
       "severity": "high",
       "status": "resolved",
-      "resolved_at": "2026-05-09T15:54:23Z",
-      "resolution": "TS18 passes \u2014 port 8889 returns HTTP 200",
+      "resolved_at": "2026-05-09T18:20:35Z",
+      "resolution": "Stale \u2014 root cause fixed: Ollama CPU-only mode (VULKAN=0 NUM_GPU=0), Modelfile num_ctx=32768, TS20 no-op, sessions restored",
       "github_issue": null,
       "_hash": "8db53c687b62ebcd9459cbccdbbf588f"
     },
@@ -359,8 +255,8 @@
       "description": "self-test: TS19 failing \u2014 no auto-fix available or fix failed",
       "severity": "high",
       "status": "resolved",
-      "resolved_at": "2026-05-09T15:54:23Z",
-      "resolution": "TS19 now passes \u2014 supervisor session created",
+      "resolved_at": "2026-05-09T18:20:35Z",
+      "resolution": "Stale \u2014 root cause fixed: Ollama CPU-only mode (VULKAN=0 NUM_GPU=0), Modelfile num_ctx=32768, TS20 no-op, sessions restored",
       "github_issue": null,
       "_hash": "abc92bdaab9c773ac4617a356f0b6604"
     },
@@ -372,8 +268,8 @@
       "description": "Compaction LLM failed: HTTP 404",
       "severity": "low",
       "status": "resolved",
-      "resolved_at": "2026-05-09T15:54:23Z",
-      "resolution": "orchestrator restarted with openai/gpt-oss-120b:free; compaction will retry with new model",
+      "resolved_at": "2026-05-09T18:20:35Z",
+      "resolution": "Stale \u2014 root cause fixed: Ollama CPU-only mode (VULKAN=0 NUM_GPU=0), Modelfile num_ctx=32768, TS20 no-op, sessions restored",
       "github_issue": null,
       "_hash": "0ff6a3c64837dfa079365cdc878e866e"
     },
@@ -385,8 +281,8 @@
       "description": "self-test: FAIL: TS19 all 8 expected tmux sessions exist \u2014 missing: supervisor",
       "severity": "high",
       "status": "resolved",
-      "resolved_at": "2026-05-09T15:54:23Z",
-      "resolution": "supervisor tmux session created; TS19 now passes",
+      "resolved_at": "2026-05-09T18:20:35Z",
+      "resolution": "Stale \u2014 root cause fixed: Ollama CPU-only mode (VULKAN=0 NUM_GPU=0), Modelfile num_ctx=32768, TS20 no-op, sessions restored",
       "github_issue": null,
       "_hash": "b4b0a7771598a41a53de12d0241a28f3"
     },
@@ -398,8 +294,8 @@
       "description": "LLM diagnosis call failed: HTTP 404",
       "severity": "medium",
       "status": "resolved",
-      "resolved_at": "2026-05-09T15:54:23Z",
-      "resolution": "orchestrator restarted with openai/gpt-oss-120b:free; ling-2.6-1t:free was returning 404",
+      "resolved_at": "2026-05-09T18:20:35Z",
+      "resolution": "Stale \u2014 root cause fixed: Ollama CPU-only mode (VULKAN=0 NUM_GPU=0), Modelfile num_ctx=32768, TS20 no-op, sessions restored",
       "github_issue": null,
       "_hash": "b1fcdcb5c38c60289b6f437c8faad7c3"
     },
@@ -411,8 +307,8 @@
       "description": "self-test: TS14 failing \u2014 no auto-fix available or fix failed",
       "severity": "high",
       "status": "resolved",
-      "resolved_at": "2026-05-09T15:48:38Z",
-      "resolution": "self-test: TS14 auto-fixed",
+      "resolved_at": "2026-05-09T18:20:35Z",
+      "resolution": "Stale \u2014 root cause fixed: Ollama CPU-only mode (VULKAN=0 NUM_GPU=0), Modelfile num_ctx=32768, TS20 no-op, sessions restored",
       "github_issue": null,
       "_hash": "b4c2ed2d4f13f2fecf6ce6f41e3eac7c"
     },
@@ -424,8 +320,8 @@
       "description": "tmux session 'hive-live' missing entirely",
       "severity": "critical",
       "status": "resolved",
-      "resolved_at": "2026-05-09T13:06:08Z",
-      "resolution": "Session 'hive-live' is healthy again",
+      "resolved_at": "2026-05-09T18:20:35Z",
+      "resolution": "Stale \u2014 root cause fixed: Ollama CPU-only mode (VULKAN=0 NUM_GPU=0), Modelfile num_ctx=32768, TS20 no-op, sessions restored",
       "github_issue": null,
       "_hash": "5e7ea63d56407f4c12743a4f09c67392"
     },
@@ -437,8 +333,8 @@
       "description": "tmux session 'hive-watch' missing entirely",
       "severity": "critical",
       "status": "resolved",
-      "resolved_at": "2026-05-09T13:06:08Z",
-      "resolution": "Session 'hive-watch' is healthy again",
+      "resolved_at": "2026-05-09T18:20:35Z",
+      "resolution": "Stale \u2014 root cause fixed: Ollama CPU-only mode (VULKAN=0 NUM_GPU=0), Modelfile num_ctx=32768, TS20 no-op, sessions restored",
       "github_issue": null,
       "_hash": "70b95af380bb338ef8031fb179457ee0"
     },
@@ -450,8 +346,8 @@
       "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
       "severity": "high",
       "status": "resolved",
-      "resolved_at": "2026-05-09T13:06:08Z",
-      "resolution": "Session 'hive-dev' is healthy again",
+      "resolved_at": "2026-05-09T18:20:35Z",
+      "resolution": "Stale \u2014 root cause fixed: Ollama CPU-only mode (VULKAN=0 NUM_GPU=0), Modelfile num_ctx=32768, TS20 no-op, sessions restored",
       "github_issue": null,
       "_hash": "217dae28725ae72712be5a39a27334a8"
     }
@@ -820,9 +716,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=45% blockers=11",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-09T18:19:25Z",
-    "completed_at": "2026-05-09T18:19:25Z"
+    "started_at": "2026-05-09T18:20:46Z",
+    "completed_at": "2026-05-09T18:20:48Z"
   }
 }
