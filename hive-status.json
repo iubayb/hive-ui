@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-08T22:10:46Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-09T13:05:43Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-08T22:09:14Z",
+      "health_score": 1.0,
+      "last_seen": "2026-05-09T13:05:43Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -15,1290 +15,156 @@
         "nextjs-prod",
         "opencode",
         "orchestrator",
-        "ps5-hive",
-        "supervisor"
+        "ps5-hive"
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
-      "errors_last_hour": 7,
+      "errors_last_hour": 6,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
   },
-  "achievements": [
-    {
-      "id": "a_24592dbf",
-      "ts": "2026-05-07T17:42:38Z",
-      "hive": "default",
-      "agent": "model-arena",
-      "description": "New text champion: openai/gpt-oss-120b:free",
-      "evidence": "Score: 14/15"
-    },
-    {
-      "id": "a_64332d1c",
-      "ts": "2026-05-06T12:45:58Z",
-      "hive": "default",
-      "agent": "model-arena",
-      "description": "New text champion: inclusionai/ling-2.6-1t:free",
-      "evidence": "Score: 15/15"
-    },
-    {
-      "id": "a_930fd042",
-      "ts": "2026-05-06T08:41:30Z",
-      "hive": "default",
-      "agent": "opencode",
-      "description": "Full Next.js UI live on port 3001: 12 routes, GitHub auth, SSE stream, supervisor-managed",
-      "evidence": "curl http://localhost:3001/hive \u2192 200; all routes 200; SSE streaming; nextjs-prod in supervisor.conf"
-    }
-  ],
+  "achievements": [],
   "blockers": [
     {
-      "id": "b_9434dc68",
-      "ts": "2026-05-07T15:08:57Z",
+      "id": "b_b28eaa68",
+      "ts": "2026-05-09T13:05:06Z",
       "hive": "default",
       "agent": "orchestrator",
-      "description": "Compaction LLM failed: HTTP 404",
-      "severity": "low",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "0ff6a3c64837dfa079365cdc878e866e"
-    },
-    {
-      "id": "b_9043ede8",
-      "ts": "2026-05-07T08:09:35Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "LLM diagnosis call failed: _ssl.c:1012: The handshake operation timed out",
-      "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "9659ab5f0151e382653ff595f488d6e0"
-    },
-    {
-      "id": "b_adfad2d4",
-      "ts": "2026-05-07T00:07:00Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "LLM diagnosis call failed: HTTP 404",
-      "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "b1fcdcb5c38c60289b6f437c8faad7c3"
-    },
-    {
-      "id": "b_000a4ffa",
-      "ts": "2026-05-06T18:06:01Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "LLM diagnosis call failed: HTTP 429",
-      "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "4d7f2660716a46a6790c4f87e66d60ac"
-    },
-    {
-      "id": "b_7b6ae5ef",
-      "ts": "2026-05-06T15:51:36Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=1.57 mem=24.1GB disk=14% \u2014 research_loop PAUSED",
+      "description": "self-test: TS19 failing \u2014 no auto-fix available or fix failed",
       "severity": "high",
       "status": "open",
       "resolved_at": null,
       "resolution": null,
       "github_issue": null,
-      "_hash": "fd8856f44bce3e1054c54bb4dab1f981"
+      "_hash": "abc92bdaab9c773ac4617a356f0b6604"
     },
     {
-      "id": "b_62bc6371",
-      "ts": "2026-05-06T15:51:24Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=1.74 mem=24.1GB disk=14% \u2014 research_loop PAUSED",
+      "id": "b_901a5c5f",
+      "ts": "2026-05-09T13:05:06Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "self-test: TS18 failing \u2014 no auto-fix available or fix failed",
       "severity": "high",
       "status": "open",
       "resolved_at": null,
       "resolution": null,
       "github_issue": null,
-      "_hash": "d3d3e4e36b0cef74dfd58b78307f6566"
+      "_hash": "8db53c687b62ebcd9459cbccdbbf588f"
     },
     {
-      "id": "b_bc15a2c3",
-      "ts": "2026-05-06T15:51:12Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "HIGH load/core=0.86 mem=24.1GB disk=14% \u2014 jobs reniced",
+      "id": "b_6a462af0",
+      "ts": "2026-05-09T13:05:06Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "self-test: TS17 failing \u2014 no auto-fix available or fix failed",
       "severity": "high",
       "status": "open",
       "resolved_at": null,
       "resolution": null,
       "github_issue": null,
-      "_hash": "01642607179b07a9c50a5b0489f6da79"
+      "_hash": "6897daf3e3724c9f078fc0b16f4fe428"
     },
     {
-      "id": "b_029e8346",
-      "ts": "2026-05-06T07:25:59Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=2.41 mem=45.0GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "025d83cedb9fde97a30e5748766eb8dd"
-    },
-    {
-      "id": "b_ea93dacd",
-      "ts": "2026-05-06T07:25:56Z",
+      "id": "b_9ac5434b",
+      "ts": "2026-05-09T13:05:06Z",
       "hive": "default",
-      "agent": "supervisor",
-      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=51.94 cores=20 ratio=2.60",
+      "agent": "orchestrator",
+      "description": "self-test: TS14 failing \u2014 no auto-fix available or fix failed",
       "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
       "github_issue": null,
-      "_hash": "144ba05701952e2ef3c633a41b08c10d"
+      "_hash": "b4c2ed2d4f13f2fecf6ce6f41e3eac7c"
     },
     {
-      "id": "b_4cf04155",
-      "ts": "2026-05-06T07:25:54Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=2.60 mem=45.0GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "c6a2a784d8571659f80b7099ac8c6bd4"
-    },
-    {
-      "id": "b_ee8aeea4",
-      "ts": "2026-05-06T07:25:51Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=2.78 mem=45.0GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "0021a3fc8effee4fdc19b7d30e71b46b"
-    },
-    {
-      "id": "b_f918e673",
-      "ts": "2026-05-06T07:25:49Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=2.78 mem=45.1GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "de3101286724fb84d98bf9d3211b2066"
-    },
-    {
-      "id": "b_65c58fa7",
-      "ts": "2026-05-06T07:25:43Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=3.00 mem=45.0GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "d05237bc5430b2a2b5855e5ec3d31439"
-    },
-    {
-      "id": "b_f491e07c",
-      "ts": "2026-05-06T07:25:40Z",
+      "id": "b_43031c2b",
+      "ts": "2026-05-09T13:05:06Z",
       "hive": "default",
-      "agent": "supervisor",
-      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=64.45 cores=20 ratio=3.22",
+      "agent": "orchestrator",
+      "description": "self-test: TS13 failing \u2014 no auto-fix available or fix failed",
       "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
       "github_issue": null,
-      "_hash": "92235b5b00c5d91126286c7b74a7ba20"
+      "_hash": "5c48d095f67370a5d63a500a67d76844"
     },
     {
-      "id": "b_74d53f1e",
-      "ts": "2026-05-06T07:25:39Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=3.22 mem=45.0GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "be0e23529d197296a540df8477cd3525"
-    },
-    {
-      "id": "b_d2de4c30",
-      "ts": "2026-05-06T07:25:38Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=3.39 mem=45.1GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "0e47e06b289274695e6d171a8ef0e028"
-    },
-    {
-      "id": "b_7b2cab39",
-      "ts": "2026-05-06T07:25:36Z",
+      "id": "b_7c627c32",
+      "ts": "2026-05-09T13:05:06Z",
       "hive": "default",
-      "agent": "supervisor",
-      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=67.89 cores=20 ratio=3.39",
+      "agent": "orchestrator",
+      "description": "self-test: TS5 failing \u2014 auto-fix attempted but not sufficient",
       "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
       "github_issue": null,
-      "_hash": "2ed9138ef498660e4e0871631b118ad8"
+      "_hash": "36e8de1c6320cf5f4eececa2d548aefd"
     },
     {
-      "id": "b_4eb84dcb",
-      "ts": "2026-05-06T07:25:35Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=3.39 mem=45.0GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "9af58edb6a713622d11c38f87a0bcbfb"
-    },
-    {
-      "id": "b_0d666468",
-      "ts": "2026-05-06T07:25:32Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=3.47 mem=45.0GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "ed003cf3472d9f1e88e2e33e5c230906"
-    },
-    {
-      "id": "b_0a2d1010",
-      "ts": "2026-05-06T07:25:31Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=3.38 mem=45.1GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "29651723135604ba36b244bc881a3a43"
-    },
-    {
-      "id": "b_5ad6bdbb",
-      "ts": "2026-05-06T07:25:26Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=3.38 mem=45.0GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "3a5c607d7f20fd77dda55947c2337add"
-    },
-    {
-      "id": "b_eeb96d30",
-      "ts": "2026-05-06T07:25:22Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=3.30 mem=45.0GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "e40e1d71f8ee99c65064c1f37c9bb431"
-    },
-    {
-      "id": "b_6ba35ef8",
-      "ts": "2026-05-06T07:25:18Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=3.19 mem=45.0GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
-      "github_issue": null,
-      "_hash": "bf1cd6e064a89fa4528a5d0506b0db72"
-    },
-    {
-      "id": "b_1c39ed1e",
-      "ts": "2026-05-06T07:25:13Z",
+      "id": "b_c4975f9c",
+      "ts": "2026-05-09T13:05:05Z",
       "hive": "default",
-      "agent": "supervisor",
-      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=61.95 cores=20 ratio=3.10",
+      "agent": "orchestrator",
+      "description": "Live UI verification failed: curl failed: [Errno 111] Connection refused",
       "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
       "github_issue": null,
-      "_hash": "6df896b23242335b1fb78e1a410048ba"
+      "_hash": "82ed62237b8e342301c173b1539d754e"
     },
     {
-      "id": "b_93972382",
-      "ts": "2026-05-06T07:25:11Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=2.44 mem=19.8GB disk=14% \u2014 research_loop PAUSED",
+      "id": "b_dd1c77f6",
+      "ts": "2026-05-09T13:05:05Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
       "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
       "github_issue": null,
-      "_hash": "aa08921bb9ef18e707ad45d82fec60e2"
+      "_hash": "217dae28725ae72712be5a39a27334a8"
     },
     {
-      "id": "b_6916e6ac",
-      "ts": "2026-05-06T07:25:10Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=2.60 mem=46.0GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
+      "id": "b_4445c2ca",
+      "ts": "2026-05-09T13:05:05Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "tmux session 'hive-watch' missing entirely",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
       "github_issue": null,
-      "_hash": "44cce71b479ab9e60df44459dac2f6d1"
+      "_hash": "70b95af380bb338ef8031fb179457ee0"
     },
     {
-      "id": "b_8bb03977",
-      "ts": "2026-05-06T07:25:10Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "CRITICAL: load/core=2.67 mem=19.8GB disk=14% \u2014 research_loop PAUSED",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-06T07:29:20Z",
-      "resolution": "stale: zombie supervisor processes killed, CPU load normalised",
+      "id": "b_6c65bb73",
+      "ts": "2026-05-09T13:05:05Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "tmux session 'hive-live' missing entirely",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
       "github_issue": null,
-      "_hash": "0845f6bfaa860c41c9dc61b32335952b"
+      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
     }
   ],
-  "next_steps": [
-    {
-      "id": "ns_a57740e6",
-      "priority": 1,
-      "description": "Kill or gracefully suspend non-essential sessions (e.g., ps5-hive, opencode) to free memory and CPU.",
-      "assigned_to": "default",
-      "status": "done",
-      "source": "orchestrator",
-      "ts": "2026-05-06T07:25:12Z"
-    },
-    {
-      "id": "ns_cfaf8fb1",
-      "priority": 1,
-      "description": "Instrument each active session (build_monitor, hive-dev, hive-live, hive-watch, nextjs-prod, opencode, orchestrator, ps5-hive, supervisor) with standardized health/metrics endpoints and log correlation IDs.",
-      "assigned_to": "opencode",
-      "status": "in_progress",
-      "source": "orchestrator",
-      "ts": "2026-05-06T08:55:35Z"
-    },
-    {
-      "id": "ns_1df8cb10",
-      "priority": 1,
-      "description": "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-06T13:08:39Z"
-    },
-    {
-      "id": "ns_97131581",
-      "priority": 1,
-      "description": "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-06T13:11:52Z"
-    },
-    {
-      "id": "ns_5a5a9417",
-      "priority": 2,
-      "description": "Apply stricter cgroup limits and lower niceness for research_loop jobs to reduce core contention.",
-      "assigned_to": "default",
-      "status": "done",
-      "source": "orchestrator",
-      "ts": "2026-05-06T07:25:12Z"
-    },
-    {
-      "id": "ns_92ae908d",
-      "priority": 2,
-      "description": "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-06T08:55:35Z"
-    },
-    {
-      "id": "ns_bb8f7ad1",
-      "priority": 2,
-      "description": "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-06T13:08:39Z"
-    },
-    {
-      "id": "ns_5b950330",
-      "priority": 2,
-      "description": "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay.",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-06T13:11:52Z"
-    },
-    {
-      "id": "ns_e5581c94",
-      "priority": 3,
-      "description": "Clear caches and temporary files to reclaim disk space and reduce I/O pressure.",
-      "assigned_to": "default",
-      "status": "done",
-      "source": "orchestrator",
-      "ts": "2026-05-06T07:25:12Z"
-    },
-    {
-      "id": "ns_91174211",
-      "priority": 3,
-      "description": "Create a controlled rollout policy for nextjs-prod including canary weights, automated smoke checks, and instant rollback triggers on error-rate or latency breaches.",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-06T08:55:35Z"
-    },
-    {
-      "id": "ns_d903dda3",
-      "priority": 3,
-      "description": "Add /api/metrics endpoint to logstream.py returning JSON of session stats (sessions, throughput, errors).",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-06T13:08:39Z"
-    },
-    {
-      "id": "ns_ac2ab911",
-      "priority": 3,
-      "description": "Add auth middleware to middleware.ts that validates session cookie against NEXTAUTH_SECRET and injects user.role into request.locals before route handlers.",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-06T13:11:52Z"
-    }
-  ],
+  "next_steps": [],
   "capabilities": {
-    "learned": [
-      {
-        "id": "cap_13dc7ebb",
-        "ts": "2026-05-06T14:05:05Z",
-        "source_hive": "default",
-        "source_agent": "hive-doctor",
-        "skill": "config-guardrail-inject",
-        "description": "Injects max_tasks, max_hours, and task_timeout guardrails into hive config and respawns the session to enforce controlled shutdown.",
-        "example": "grep -q '^max_tasks=' ~/.hive/config || echo 'max_tasks=1000' >> ~/.hive/config && grep -q '^max_hours=' ~/.hive/config || echo 'max_hours=48' >> ~/.hive/config && grep -q '^task_timeout=' ~/.hive/config || echo 'task_timeout=3600' >> ~/.hive/config && tmux respawn-window -t SESSION",
-        "tags": [],
-        "applicable_to": "all",
-        "last_updated": "2026-05-07T14:40:44Z"
-      },
-      {
-        "id": "cap_27efd1db",
-        "ts": "2026-05-06T13:55:07Z",
-        "source_hive": "default",
-        "source_agent": "hive-doctor",
-        "skill": "port-conflict-resolution-and-respawn",
-        "description": "Detects and force-clears port collisions then verifies bind before respawning dependent tmux windows.",
-        "example": "ss -tlnp | grep PORT && lsof -ti:PORT | xargs -r kill -9; sleep 1; python3 -c \"import socket; s=socket.socket(); s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1); s.bind(('', PORT)); print('bind ok'); s.close()\" && tmux respawn-window -t SESSION",
-        "tags": [],
-        "applicable_to": "all"
-      },
-      {
-        "id": "cap_8a07808f",
-        "ts": "2026-05-06T12:24:19Z",
-        "source_hive": "default",
-        "source_agent": "hive-doctor",
-        "skill": "config-default-apply",
-        "description": "Safely injects missing config keys and applies them via window respawn to avoid stale state.",
-        "example": "grep -q task_timeout ~/.hive/config || echo 'task_timeout=7200' >> ~/.hive/config && tmux respawn-window -t SESSION",
-        "tags": [],
-        "applicable_to": "all",
-        "last_updated": "2026-05-06T13:34:59Z"
-      },
-      {
-        "id": "cap_f8de811f",
-        "ts": "2026-05-06T07:52:46Z",
-        "source_hive": "default",
-        "source_agent": "hive-doctor",
-        "skill": "port-bind-check",
-        "description": "pre-flight socket bind test to verify port availability before launching services",
-        "example": "python3 -c \"import socket; s=socket.socket(); s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1); s.bind(('', PORT)); print('bind ok'); s.close()\"",
-        "tags": [],
-        "applicable_to": "all",
-        "last_updated": "2026-05-06T11:54:13Z"
-      },
-      {
-        "id": "cap_1e534b8b",
-        "ts": "2026-05-06T07:52:43Z",
-        "source_hive": "default",
-        "source_agent": "hive-doctor",
-        "skill": "port-conflict-resolution",
-        "description": "Detects and force-clears port collisions then verifies bind before respawning dependent tmux windows.",
-        "example": "ss -tlnp | grep PORT && lsof -ti:PORT | xargs -r kill -9; sleep 1; python3 -c \"import socket; s=socket.socket(); s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1); s.bind(('', PORT)); print('bind ok'); s.close()\" && tmux respawn-window -t SESSION",
-        "tags": [],
-        "applicable_to": "all",
-        "last_updated": "2026-05-06T13:34:59Z"
-      }
-    ]
+    "learned": []
   },
   "knowledge": {
-    "findings": [
-      {
-        "id": "f_ff82562b",
-        "ts": "2026-05-07T14:40:44Z",
-        "hive": "default",
-        "summary": "Unbounded budget and repeated worker timeouts drove runaway failure; inject guardrails and respawn to enforce limits and reset state.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_3ecce9d6",
-        "ts": "2026-05-07T14:30:01Z",
-        "hive": "default",
-        "summary": "Runaway session due to missing guardrails and persistent worker timeouts; inject limits and respawn to cap resource burn.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_2b33ae8a",
-        "ts": "2026-05-07T14:10:38Z",
-        "hive": "default",
-        "summary": "Critical runaway session with unbounded budget and chronic 30-min timeouts requires immediate guardrail injection and respawn to prevent resource exhaustion.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_f6a60206",
-        "ts": "2026-05-07T13:59:57Z",
-        "hive": "default",
-        "summary": "Critical unbounded budget and worker timeouts causing mass failures; enforced guardrails and respawn to halt runaway execution.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_b6c34d51",
-        "ts": "2026-05-07T13:40:33Z",
-        "hive": "default",
-        "summary": "Critical runaway session due to missing guardrails; injecting bounded limits and respawning to halt cascading timeouts.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_2b7934cc",
-        "ts": "2026-05-07T13:29:52Z",
-        "hive": "default",
-        "summary": "Unbounded budgets and worker timeout cascaded into 4874 failures; enforcing max_tasks=1000, max_hours=48, and task_timeout=1800 via config-guardrail-inject and respawn.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_85a7fbbe",
-        "ts": "2026-05-07T13:10:28Z",
-        "hive": "default",
-        "summary": "Critical unbounded retry loop exhausting tasks; inject guardrails and respawn to enforce hard limits and prevent runaway failures.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_f4117897",
-        "ts": "2026-05-07T12:59:47Z",
-        "hive": "default",
-        "summary": "Critical runaway session due to unbounded budget and persistent 30m worker timeouts; guardrails injected and session respawned to enforce limits.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_9e4eb9e5",
-        "ts": "2026-05-07T12:40:19Z",
-        "hive": "default",
-        "summary": "Critical unbounded retry loop exhausting budget and workers; enforced task/hour/timeouts and respawn to halt storm.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_1637b561",
-        "ts": "2026-05-07T12:29:41Z",
-        "hive": "default",
-        "summary": "Unbounded budget and aggressive retries exhausted resources; guardrails injected and session respawned to enforce limits.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_a1b57ff2",
-        "ts": "2026-05-07T12:10:15Z",
-        "hive": "default",
-        "summary": "Critical unbounded growth and persistent worker timeouts due to missing budget guardrails after ~28 hours of uncontrolled execution.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_328cd797",
-        "ts": "2026-05-07T11:59:24Z",
-        "hive": "default",
-        "summary": "ps5-hive is in runaway retry state due to unbounded budget and repeated timeouts; enforce guardrails and respawn to halt unbounded growth.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_daf62b63",
-        "ts": "2026-05-07T11:40:09Z",
-        "hive": "default",
-        "summary": "Unbounded retries and missing guardrails causing runaway failure accumulation; enforced budget and task limits to halt resource exhaustion.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_eec9b5a9",
-        "ts": "2026-05-07T11:29:18Z",
-        "hive": "default",
-        "summary": "Critical unbounded retry storm with 4874 failures; injecting guardrails and respawning to halt uncontrolled execution.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_7c4a6363",
-        "ts": "2026-05-07T10:58:54Z",
-        "hive": "default",
-        "summary": "Critical runaway retry loop caused by missing budget guardrails; enforce max_tasks, max_hours, and task_timeout then respawn to halt unbounded execution.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_82a2895a",
-        "ts": "2026-05-07T10:28:49Z",
-        "hive": "default",
-        "summary": "Critical unbounded budget and worker timeouts causing exponential failure cascade; guardrails injected and session respawned.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_c47c7d1e",
-        "ts": "2026-05-07T10:10:01Z",
-        "hive": "default",
-        "summary": "Critical runaway retry loop caused by missing budget guardrails; inject max_tasks, max_hours, and task_timeout then respawn to enforce containment.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_08922940",
-        "ts": "2026-05-07T09:58:34Z",
-        "hive": "default",
-        "summary": "Unbounded retry budget and timeout exhaustion driving runaway failure cascade; guardrail injection and respawn required.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_fee61f60",
-        "ts": "2026-05-07T09:39:56Z",
-        "hive": "default",
-        "summary": "Injected guardrails (max_tasks=1000, max_hours=48, task_timeout=7200) and respawned to halt unbounded retries and stop the failure spiral.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_de815a4b",
-        "ts": "2026-05-07T09:28:29Z",
-        "hive": "default",
-        "summary": "Injected task and time caps to stop unbounded retries and respawn the session to enforce shutdown discipline.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_7a8aa610",
-        "ts": "2026-05-07T09:09:50Z",
-        "hive": "default",
-        "summary": "Critical runaway session due to missing budget guardrails and stale worker timeouts requiring immediate config injection and respawn.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_ffe83671",
-        "ts": "2026-05-07T08:39:40Z",
-        "hive": "default",
-        "summary": "Critical unbounded retry exhaustion: injected max_tasks=1000, max_hours=48, task_timeout=7200 guardrails and respawned session to halt runaway failures.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_1291fa0f",
-        "ts": "2026-05-07T08:28:23Z",
-        "hive": "default",
-        "summary": "Critical runaway session with unbounded retries and repeated task timeouts; enforced max_tasks, max_hours, and task_timeout guardrails and respawned to halt uncontrolled failure escalation.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_5b87b3dd",
-        "ts": "2026-05-07T07:58:19Z",
-        "hive": "default",
-        "summary": "Unbounded budget and missing guardrails triggered runaway retries and worker timeouts; injecting caps and respawning to halt the failure loop.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_951f10b5",
-        "ts": "2026-05-07T07:38:34Z",
-        "hive": "default",
-        "summary": "Unbounded retries exhausting resources and causing repeated worker timeouts; requires config guardrails and session respawn.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_ba115fe4",
-        "ts": "2026-05-07T07:28:13Z",
-        "hive": "default",
-        "summary": "Missing guardrails allow infinite retry exhaustion; injecting bounded limits and respawning to halt uncontrolled failure cascade.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_5d8a0309",
-        "ts": "2026-05-07T07:08:30Z",
-        "hive": "default",
-        "summary": "Critical budget unboundedness and repeated timeouts require immediate guardrail injection and session respawn to stop the failure cascade.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_31426993",
-        "ts": "2026-05-07T06:58:07Z",
-        "hive": "default",
-        "summary": "Critical runaway session with unbounded budgets and repeated 30-minute timeouts requires immediate guardrail injection and respawn.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_ddcffcdb",
-        "ts": "2026-05-07T06:38:24Z",
-        "hive": "default",
-        "summary": "Critical runaway session with unbounded task budget and persistent 30-min timeouts\u2014guardrails and config limits injected, session respawning to enforce controls.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_64646686",
-        "ts": "2026-05-07T06:28:01Z",
-        "hive": "default",
-        "summary": "Critical runaway failure due to unbounded retry/task budget with repeated 30-min timeouts; injecting guardrails and respawning session.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_b4bf21c1",
-        "ts": "2026-05-07T06:08:18Z",
-        "hive": "default",
-        "summary": "Unbounded retry loops and missing guardrails are causing runaway task failures; inject max_tasks/max_hours/task_timeout limits and respawn the session to enforce controlled shutdown.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_d348ae2d",
-        "ts": "2026-05-07T05:57:57Z",
-        "hive": "default",
-        "summary": "Critical budget and timeout misconfiguration leading to unbounded retries and worker timeouts; applying guardrails and respawning.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_e4eb7daa",
-        "ts": "2026-05-07T05:37:53Z",
-        "hive": "default",
-        "summary": "Critical runaway session with unbounded resource budget and persistent worker timeouts requiring immediate guardrail injection and respawn.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_242aaa63",
-        "ts": "2026-05-07T05:27:51Z",
-        "hive": "default",
-        "summary": "Critical runaway session with unbounded budgets and chronic timeouts; injected guardrails and respawned to halt cascade.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_5fe4e0da",
-        "ts": "2026-05-07T05:07:49Z",
-        "hive": "default",
-        "summary": "Unbounded budget and long timeouts have driven catastrophic failure rates and silent stall; inject guardrails and respawn to enforce limits.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_29f250a0",
-        "ts": "2026-05-07T04:57:46Z",
-        "hive": "default",
-        "summary": "Unbounded budget and 30-minute timeouts are driving infinite retries and resource exhaustion; apply caps and respawn.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_8b7c8e5b",
-        "ts": "2026-05-07T04:37:44Z",
-        "hive": "default",
-        "summary": "Unbounded budget and persistent worker timeouts are driving uncontrolled failure growth; inject guardrails and respawn to enforce limits.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_d25155d6",
-        "ts": "2026-05-07T04:27:41Z",
-        "hive": "default",
-        "summary": "Unbounded budget and aggressive retries have saturated the hive with failures; inject guardrails and respawn to enforce limits and restore progress.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_94148b0e",
-        "ts": "2026-05-07T04:07:40Z",
-        "hive": "default",
-        "summary": "Unbounded retries and missing budget guardrails are driving an uncontrolled failure cascade; inject limits and respawn to enforce containment.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_39972f96",
-        "ts": "2026-05-07T03:57:36Z",
-        "hive": "default",
-        "summary": "Critical budget overrun due to missing guardrails; injected max_tasks=1000, max_hours=24, task_timeout=1800 and respawned session to enforce controlled shutdown.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_574c222b",
-        "ts": "2026-05-07T03:37:36Z",
-        "hive": "default",
-        "summary": "Critical resource exhaustion due to missing guardrails causing infinite retry loops and budget blowout; enforced caps and respawn to restore control.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_38bfb95e",
-        "ts": "2026-05-07T03:27:31Z",
-        "hive": "default",
-        "summary": "Missing guardrails spawned an unbounded retry storm; inject max_tasks, max_hours, and task_timeout then respawn to halt the runaway loop.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_a09778df",
-        "ts": "2026-05-07T03:07:31Z",
-        "hive": "default",
-        "summary": "Unbounded budget and timeout settings are enabling runaway retries and resource exhaustion in ps5-hive; guardrails required.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_701d9972",
-        "ts": "2026-05-07T02:57:25Z",
-        "hive": "default",
-        "summary": "Critical runaway session with unbounded budget and 1800s timeouts; injected guardrails and respawning to halt failure accumulation.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_bbcbaf73",
-        "ts": "2026-05-07T02:37:25Z",
-        "hive": "default",
-        "summary": "Unbounded budget and missing guardrails caused runaway failures; inject limits and respawn to enforce controlled shutdown/retry behavior.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_4153fb99",
-        "ts": "2026-05-07T02:27:20Z",
-        "hive": "default",
-        "summary": "Unbounded budget and missing guardrails caused runaway retry storm; inject max_tasks, max_hours, and task_timeout then respawn to cap execution.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_298a1b2e",
-        "ts": "2026-05-07T02:07:19Z",
-        "hive": "default",
-        "summary": "ps5-hive is critically stalled due to missing guardrails and repeated 30-minute worker timeouts; injecting bounded budgets and respawning.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_3ed61cd5",
-        "ts": "2026-05-07T01:57:14Z",
-        "hive": "default",
-        "summary": "Critical unbounded-budget session with runaway task failures; enforce max_tasks/max_hours guardrails and respawn to cap resource burn.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_9340f11e",
-        "ts": "2026-05-07T01:37:14Z",
-        "hive": "default",
-        "summary": "Unbounded budget settings are causing uncontrolled retries and timeouts; inject guardrails and respawn to restore bounded execution.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_abe9b5b9",
-        "ts": "2026-05-07T01:27:09Z",
-        "hive": "default",
-        "summary": "Injected max_tasks=1000, max_hours=16, and task_timeout=7200 guardrails and respawned the session to halt the runaway failure cycle.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_7d4d0c3e",
-        "ts": "2026-05-07T01:07:09Z",
-        "hive": "default",
-        "summary": "Critical runaway due to unbounded budget caps and long timeouts; inject guardrails and restart session to enforce limits.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_feb1dd91",
-        "ts": "2026-05-07T00:57:06Z",
-        "hive": "default",
-        "summary": "{\n  \"diagnoses\": [\n    {\n      \"session\": \"ps5-hive\",\n      \"problem\": \"Missing guardrails (max_tasks/max_hours unbounded) causing runaway task failures and timeouts; 4874 failed tasks and 14h+ elapse",
-        "source": "doctor"
-      },
-      {
-        "id": "f_46d5d554",
-        "ts": "2026-05-07T00:37:05Z",
-        "hive": "default",
-        "summary": "Unbounded budget and missing timeout guardrails have caused runaway failures; inject limits and respawn to enforce controlled shutdown.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_e26d1534",
-        "ts": "2026-05-06T23:57:01Z",
-        "hive": "default",
-        "summary": "Missing guardrails caused unbounded retries and worker timeouts; config injected and session respawned to enforce limits.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_fb0e5a02",
-        "ts": "2026-05-06T23:37:00Z",
-        "hive": "default",
-        "summary": "Unbounded budget and missing timeouts caused a 14-hour runaway with catastrophic failure rate; injected guardrails and respawned to enforce limits.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_2149c36f",
-        "ts": "2026-05-06T23:26:57Z",
-        "hive": "default",
-        "summary": "Unbounded budgets and missing timeouts allowed runaway retries and 4874 failures; capped limits and timeouts are injected with respawn.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_14259be6",
-        "ts": "2026-05-06T23:06:54Z",
-        "hive": "default",
-        "summary": "Unbounded budget and long timeouts created a runaway queue; inject sane limits and respawn.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_43f80ac0",
-        "ts": "2026-05-06T22:56:52Z",
-        "hive": "default",
-        "summary": "Critical unbounded-budget runaway with worker timeouts requires immediate guardrail injection and port conflict resolution to halt failure cascade.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_36841356",
-        "ts": "2026-05-06T22:26:44Z",
-        "hive": "default",
-        "summary": "Unbounded budget and missing guardrails triggered uncontrolled retries and worker timeouts; inject limits and respawn to enforce containment.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_0bfc21ba",
-        "ts": "2026-05-06T22:06:48Z",
-        "hive": "default",
-        "summary": "Missing budget guardrails caused unbounded retries and task pileup; inject limits and respawn.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_df08ec4a",
-        "ts": "2026-05-06T21:56:39Z",
-        "hive": "default",
-        "summary": "Unbounded budget and missing rate-limit guardrails caused runaway retries and massive failure accumulation; inject limits and respawn to restore control.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_c111dcf1",
-        "ts": "2026-05-06T21:36:44Z",
-        "hive": "default",
-        "summary": "Critical runaway hive due to unbounded budget and long timeouts; injected guardrails and respawned to enforce sane limits.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_ad60a0c7",
-        "ts": "2026-05-06T21:26:34Z",
-        "hive": "default",
-        "summary": "Critical unbounded resource consumption causing cascade failures; applying rate-limit/budget guardrails and respawning to halt runaway tasks.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_a3e1135f",
-        "ts": "2026-05-06T21:06:39Z",
-        "hive": "default",
-        "summary": "Critical: unbounded budget and repeated timeouts caused runaway failure loop; injected rate-limit/budget guardrails and respawned to enforce controls.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_87cae506",
-        "ts": "2026-05-06T20:56:29Z",
-        "hive": "default",
-        "summary": "Missing rate-limit and budget guardrails caused unbounded retries and budget exhaustion; injected caps and respawned the session.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_dc455f91",
-        "ts": "2026-05-06T20:36:34Z",
-        "hive": "default",
-        "summary": "Critical runaway session caused by unbounded budgets and long timeouts; inject rate-limit and budget guardrails then respawn.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_d1180558",
-        "ts": "2026-05-06T20:26:23Z",
-        "hive": "default",
-        "summary": "Unbounded budget and timeouts caused runaway failures; inject guardrails and respawn to enforce limits.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_0f476263",
-        "ts": "2026-05-06T20:06:27Z",
-        "hive": "default",
-        "summary": "Missing rate-limit and budget guardrails caused unbounded retries, exhausting workers and triggering cascading timeouts.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_9757aad1",
-        "ts": "2026-05-06T19:56:18Z",
-        "hive": "default",
-        "summary": "Critical budget runaway: unbounded limits and excessive retries require guardrail injection and respawn to halt failure cascade.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_600ddd12",
-        "ts": "2026-05-06T19:36:21Z",
-        "hive": "default",
-        "summary": "Inject rate-limit and budget guardrails to cap tasks/hours and shrink timeouts, then respawn to stop the runaway failure loop.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_bc4e7af0",
-        "ts": "2026-05-06T19:26:14Z",
-        "hive": "default",
-        "summary": "Unbounded budget parameters triggered uncontrolled retry storm; inject guardrails and respawn to halt escalation.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_a15aaeee",
-        "ts": "2026-05-06T19:06:17Z",
-        "hive": "default",
-        "summary": "Unbounded budget and missing rate limits triggered a runaway retry storm, requiring immediate guardrail injection and respawn.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_37fb3254",
-        "ts": "2026-05-06T18:56:10Z",
-        "hive": "default",
-        "summary": "Injected rate-limit and budget guardrails (max_tasks=1000, max_hours=16, task_timeout=600) and respawned the session to halt the retry storm.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_85c50bcd",
-        "ts": "2026-05-06T18:36:06Z",
-        "hive": "default",
-        "summary": "Critical: unbounded budget and aggressive timeouts triggered a retry storm; injecting guardrails and respawning to enforce limits.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_30629acd",
-        "ts": "2026-05-06T18:26:04Z",
-        "hive": "default",
-        "summary": "Critical unbounded budget/rate limits triggered a runaway retry storm; injected max_tasks and max_hours guardrails and respawned the session to enforce controlled shutdowns.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_0cd7e82b",
-        "ts": "2026-05-06T17:56:00Z",
-        "hive": "default",
-        "summary": "Unbounded budgets and missing guardrails triggered a runaway failure storm; inject caps and timeouts then respawn to restore control.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_94ef07bc",
-        "ts": "2026-05-06T17:35:59Z",
-        "hive": "default",
-        "summary": "Missing budget and retry guardrails triggered uncontrolled failure cascade; inject limits and restart session.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_0a331755",
-        "ts": "2026-05-06T17:25:44Z",
-        "hive": "default",
-        "summary": "Unbounded budget and long timeouts triggered uncontrolled retry storm and session stall; guardrails injected and session respawned.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_7a482be4",
-        "ts": "2026-05-06T17:05:55Z",
-        "hive": "default",
-        "summary": "Critical budget runaway: unbounded limits and repeated timeouts require immediate guardrail injection and respawn to halt the failure spiral.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_151cee64",
-        "ts": "2026-05-06T16:55:39Z",
-        "hive": "default",
-        "summary": "Unbounded budget and excessive worker timeout triggered runaway retries; injected rate-limit/budget guardrails and respawned session.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_ebaebefc",
-        "ts": "2026-05-06T16:35:51Z",
-        "hive": "default",
-        "summary": "Unbounded budget and missing rate limits triggered a catastrophic retry storm with 4874 failures; injecting guardrails and respawning.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_c003e86e",
-        "ts": "2026-05-06T16:25:35Z",
-        "hive": "default",
-        "summary": "Unbounded budget and missing rate-limit guardrails caused a catastrophic failure storm (4874 failures) and 30-minute timeouts; injecting caps and respawning.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_5b4f458f",
-        "ts": "2026-05-06T16:05:46Z",
-        "hive": "default",
-        "summary": "Critical runaway retry storm caused by unbounded budget and missing rate-limit guardrails; inject limits and respawn session.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_3712570c",
-        "ts": "2026-05-06T15:55:29Z",
-        "hive": "default",
-        "summary": "Critical runaway retry storm in ps5-hive due to unbounded budget and missing timeouts; orchestrator has low-severity stale error state.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_002f97c6",
-        "ts": "2026-05-06T15:35:40Z",
-        "hive": "default",
-        "summary": "Unbounded budget settings triggered uncontrolled retry storm and silent resets; injecting rate-limit and budget guardrails and respawning.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_4b5fbceb",
-        "ts": "2026-05-06T15:25:23Z",
-        "hive": "default",
-        "summary": "Critical unbounded retry storm due to missing guardrails and stalled workers; inject rate-limits and verify port binds, then respawn.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_865fa816",
-        "ts": "2026-05-06T15:05:28Z",
-        "hive": "default",
-        "summary": "Unbounded budget and missing guardrails triggered 4874 task failures in ~11.5h; injecting max_tasks/max_hours/timeouts and respawning to enforce controlled shutdown.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_8e0ac0ec",
-        "ts": "2026-05-06T14:55:17Z",
-        "hive": "default",
-        "summary": "Missing budget guardrails allowed unbounded retry storms; inject limits and respawn to enforce controlled shutdown and reset state.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_d306880a",
-        "ts": "2026-05-06T14:35:17Z",
-        "hive": "default",
-        "summary": "Critical runaway retry storm from unbounded budget and missing guardrails; inject limits and respawn to throttle and stabilize.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_b20488bb",
-        "ts": "2026-05-06T14:25:12Z",
-        "hive": "default",
-        "summary": "Unbounded budget and missing rate limits triggered a catastrophic failure cascade requiring immediate guardrail injection and session respawn to halt the storm.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_43f3c44a",
-        "ts": "2026-05-06T14:05:05Z",
-        "hive": "default",
-        "summary": "Critical runaway failure storm in ps5-hive due to unbounded budget and missing timeout, requiring immediate config guardrails and respawn.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_a03d1039",
-        "ts": "2026-05-06T13:55:07Z",
-        "hive": "default",
-        "summary": "Missing config timeout and port/service contention causing cascading task failures\u2014resolved via config injection, port clearing, and window respawn.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_7b9d0be8",
-        "ts": "2026-05-06T13:34:59Z",
-        "hive": "default",
-        "summary": "ps5-hive suffers from missing task_timeout config and port/lock contention causing mass task failures; fix applies config, clears port 8080, and respawns the window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_01918170",
-        "ts": "2026-05-06T13:24:57Z",
-        "hive": "default",
-        "summary": "Missing timeout config triggered watchdog resets and task cascade failure; inject default and respawn to stabilize.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_bef71fc7",
-        "ts": "2026-05-06T13:04:30Z",
-        "hive": "default",
-        "summary": "Missing task_timeout config triggered repeated 1800s worker timeouts leading to mass failures; extend timeout and respawn.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_063a646b",
-        "ts": "2026-05-06T12:54:53Z",
-        "hive": "default",
-        "summary": "Two hive-ui sessions have port conflicts (8888/8889) and one session has insufficient task timeout; fixes clear ports and safely bump timeout with respawns.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_5d147b96",
-        "ts": "2026-05-06T12:54:53Z",
-        "hive": "default",
-        "summary": "Two sessions have port collisions on 8888/8889 killing logstream workers; one session has undersized task_timeout causing worker timeouts.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_0217a91d",
-        "ts": "2026-05-06T12:53:50Z",
-        "hive": "default",
-        "summary": "Missing researcher list and undersized task_timeout caused idle loops and worker timeouts; config-default-apply applied to stabilize sessions.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_51c112f5",
-        "ts": "2026-05-06T12:24:19Z",
-        "hive": "default",
-        "summary": "Fix missing researcher config in hive-dev/hive-live and increase task_timeout to 7200s in ps5-hive to prevent worker timeouts.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_8198ec8a",
-        "ts": "2026-05-06T12:23:44Z",
-        "hive": "default",
-        "summary": "Three sessions failing: two from empty researcher config, one from worker timeout with extreme failure ratio.",
-        "source": "doctor"
-      }
-    ],
+    "findings": [],
     "patterns": [],
-    "solutions": [
-      {
-        "id": "sol_7d319ef9",
-        "ts": "2026-05-06T12:23:44Z",
-        "problem": "worker qwen3.6-abliterated-q3km timing out after 1800s with high failure rate (4874 failed vs 60 done)",
-        "solution": "tmux send-keys -t ps5-hive 'cat ~/.hive/config | grep -q timeout || echo \"task_timeout=3600\" >> ~/.hive/config && tmux respawn-window -t ps5-hive' Enter",
-        "hive": "default",
-        "verified": true
-      },
-      {
-        "id": "sol_d7d99994",
-        "ts": "2026-05-06T11:53:38Z",
-        "problem": "Task queue drained with high failure ratio (4874 failed vs 60 done); synthesis triggered despite no files analyzed \u2014 likely stale state or upstream source exhaustion.",
-        "solution": "tmux send-keys -t ps5-hive 'tmux respawn-window -t ps5-hive' Enter && sleep 2 && tmux capture-pane -t ps5-hive -p | tail -5",
-        "hive": "default",
-        "verified": true
-      }
-    ]
+    "solutions": []
   },
   "metrics": {
     "tasks_completed_total": 0,
@@ -1306,173 +172,23 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 236
+    "openrouter_calls_today": 0
   },
   "model_champions": {
-    "text": "openai/gpt-oss-120b:free",
+    "text": null,
     "vision": null,
-    "updated": "2026-05-07T17:42:38Z"
+    "updated": null
   },
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_41c141fe",
-      "ts": "2026-05-08T19:47:00Z",
+      "id": "sess_d7ec13a0",
+      "ts": "2026-05-09T13:05:06Z",
       "updated_by": "orchestrator",
       "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
+      "summary": "",
       "progress": "",
-      "next_steps": [
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
-        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
-      ],
-      "decisions": []
-    },
-    {
-      "id": "sess_4ccb7fdf",
-      "ts": "2026-05-08T20:01:59Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
-        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
-      ],
-      "decisions": []
-    },
-    {
-      "id": "sess_fae69aed",
-      "ts": "2026-05-08T20:17:10Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
-        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
-      ],
-      "decisions": []
-    },
-    {
-      "id": "sess_a243c15f",
-      "ts": "2026-05-08T20:32:18Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
-        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
-      ],
-      "decisions": []
-    },
-    {
-      "id": "sess_30929ff1",
-      "ts": "2026-05-08T20:47:23Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
-        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
-      ],
-      "decisions": []
-    },
-    {
-      "id": "sess_68e9faeb",
-      "ts": "2026-05-08T21:02:31Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
-        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
-      ],
-      "decisions": []
-    },
-    {
-      "id": "sess_571308ee",
-      "ts": "2026-05-08T21:17:29Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
-        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
-      ],
-      "decisions": []
-    },
-    {
-      "id": "sess_bc7584aa",
-      "ts": "2026-05-08T21:32:39Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
-        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
-      ],
-      "decisions": []
-    },
-    {
-      "id": "sess_9beedd42",
-      "ts": "2026-05-08T21:47:46Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
-        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
-      ],
-      "decisions": []
-    },
-    {
-      "id": "sess_897b5f65",
-      "ts": "2026-05-08T22:02:55Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429/503 is returned.",
-        "Add /api/metrics endpoint to pages/api/metrics.ts returning JSON of session stats (activeSessions, model, uptime, errors) aggregated from runtime state.",
-        "Define per-session SLOs and backpressure rules (CPU/mem thresholds, queue depths) and wire them to hive-live for automated hysteresis scaling.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and escalation bypasses.",
-        "Add exponential backoff and jitter retry logic to lib/sse.ts sendStream() when HTTP 429/503 is returned and cap retries at 5 with 2^retry * 100ms base delay."
-      ],
+      "next_steps": [],
       "decisions": []
     }
   ],
@@ -1485,9 +201,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: develop\u2192main promotion check + release draft",
     "status": "completed",
-    "started_at": "2026-05-08T22:10:45Z",
-    "completed_at": "2026-05-08T22:10:46Z"
+    "started_at": "2026-05-09T13:05:12Z",
+    "completed_at": "2026-05-09T13:05:18Z"
   }
 }
