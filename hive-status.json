@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T21:14:47Z",
+  "last_updated": "2026-05-09T21:15:53Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
       "health_score": 0.15,
-      "last_seen": "2026-05-09T21:13:37Z",
+      "last_seen": "2026-05-09T21:15:53Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -754,7 +754,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 41
+    "openrouter_calls_today": 42
   },
   "model_champions": {
     "text": null,
@@ -763,26 +763,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_bb9b1548",
-      "ts": "2026-05-09T18:44:54Z",
-      "updated_by": "orchestrator",
-      "goal": "Maintain hive health by reducing CPU load and improving reliability of LLM calls",
-      "summary": "The hive is running at 95% health but faces a high CPU load blocker (TS20). Recent fixes have restored Ollama and stabilized supervisor processes, and automatic invariant fixes are in place. Immediate work focuses on mitigating load and enhancing LLM call resilience.",
-      "progress": "Implemented automatic fixes for TS14 and repaired the supervisor script, eliminating duplicate TS blockers.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and transient errors",
-        "Create /api/metrics endpoint in logstream.py that returns JSON with CPU load, core count, and session statistics",
-        "Instrument orchestrator.py to log call_llm() latency and failure rates to the new metrics endpoint",
-        "Optimize the TS20 load monitor in health_checker.py to trigger autoscaling when load/core ratio exceeds 2.0",
-        "Write unit tests for the new backoff logic in orchestrator_test.py covering success, retry, and max\u2011retry scenarios"
-      ],
-      "decisions": [
-        "Prioritize exponential backoff implementation before adding new metrics to ensure LLM stability",
-        "Expose real\u2011time load metrics via /api/metrics to enable automated scaling decisions",
-        "Limit retry attempts to 5 with a max backoff of 30 seconds to prevent runaway request loops"
-      ]
-    },
     {
       "id": "sess_bb75ad8c",
       "ts": "2026-05-09T18:59:47Z",
@@ -962,6 +942,26 @@
         "Use exponential backoff with jitter to avoid thundering herd on LLM service.",
         "Fail fast on high load conditions by halting new requests until load normalizes."
       ]
+    },
+    {
+      "id": "sess_505aabae",
+      "ts": "2026-05-09T21:15:43Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive infrastructure and unblock the research_loop for continued AI research.",
+      "summary": "The hive is currently in an error state due to high CPU load and repeated critical resource blocker alerts, causing the research_loop to be paused. Recent auto\u2011fixes have recovered Ollama and resolved several supervisor issues, but load ratios remain above safe thresholds. Immediate code improvements are required to make LLM calls more resilient and to expose runtime metrics for better monitoring.",
+      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py and added a basic /api/metrics endpoint in logstream.py.",
+      "next_steps": [
+        "Add detailed error handling and circuit\u2011breaker reset in call_llm() within orchestrator.py to avoid cascading failures after repeated 429/500 responses.",
+        "Extend /api/metrics endpoint in logstream.py to include CPU load, memory usage, and disk utilization JSON fields.",
+        "Write unit tests for the new retry logic in orchestrator.py covering success, transient failures, and permanent failures.",
+        "Instrument supervisor.sh to log per\u2011session resource usage to a new file and expose it via /api/metrics.",
+        "Create a health check script (health_check.py) that reads the metrics endpoint and automatically triggers a graceful restart of the research_loop when load/core > 1.2."
+      ],
+      "decisions": [
+        "Prioritize code\u2011level resilience (retry, circuit\u2011breaker) before scaling hardware resources.",
+        "Expose internal resource metrics via a public API to enable automated monitoring and alerts.",
+        "Automate health\u2011check\u2011driven restarts of the research_loop to reduce manual intervention."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -973,9 +973,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=15% blockers=17",
     "status": "completed",
-    "started_at": "2026-05-09T21:14:17Z",
-    "completed_at": "2026-05-09T21:14:17Z"
+    "started_at": "2026-05-09T21:15:53Z",
+    "completed_at": "2026-05-09T21:15:53Z"
   }
 }
