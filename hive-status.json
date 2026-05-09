@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T16:26:38Z",
+  "last_updated": "2026-05-09T16:27:38Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -52,6 +52,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_259fabd4",
+      "ts": "2026-05-09T16:27:35Z",
+      "hive": "default",
+      "agent": "supervisor",
+      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=17.03 cores=8 ratio=2.13",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "d61d51ac4e1f0fa19adfbf604643a059"
+    },
     {
       "id": "b_35a0f1d6",
       "ts": "2026-05-09T16:16:49Z",
@@ -569,7 +582,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T16:26:27Z",
-    "completed_at": "2026-05-09T16:26:28Z"
+    "started_at": "2026-05-09T16:27:28Z",
+    "completed_at": "2026-05-09T16:27:28Z"
   }
 }
