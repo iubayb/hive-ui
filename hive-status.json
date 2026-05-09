@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T20:59:54Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-09T21:00:52Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
@@ -598,7 +598,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 40
+    "openrouter_calls_today": 41
   },
   "model_champions": {
     "text": null,
@@ -607,26 +607,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_0b76864b",
-      "ts": "2026-05-09T18:29:41Z",
-      "updated_by": "orchestrator",
-      "goal": "Ensure continuous, reliable operation of the hive platform while enhancing observability and resilience of core services.",
-      "summary": "The hive is running at full health with recent successful recoveries of Ollama and supervisor components. Audits have fixed several critical bugs, and automatic invariant repairs are now active. Current focus is on strengthening LLM call reliability and adding operational metrics.",
-      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py, completing the P2 task.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py when HTTP 429 or network errors occur (ensure configurable max retries).",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with session stats, error rates, and request latencies.",
-        "Write unit tests for orchestrator.call_llm() covering success, retry, and failure paths in tests/test_orchestrator.py.",
-        "Instrument logstream.py to record request duration and error counts using a Prometheus Counter and Histogram.",
-        "Update Dockerfile for the orchestrator service to include the new retry and metrics dependencies (e.g., backoff, prometheus_client)."
-      ],
-      "decisions": [
-        "Retry logic will use exponential backoff with jitter and a maximum of 5 attempts.",
-        "Metrics endpoint will be secured behind existing API authentication and expose only non-sensitive data.",
-        "All new code changes must be covered by unit tests achieving at least 90% coverage before merge."
-      ]
-    },
     {
       "id": "sess_bb9b1548",
       "ts": "2026-05-09T18:44:54Z",
@@ -806,6 +786,26 @@
         "Enforce exponential backoff as the default retry strategy for all external LLM calls",
         "Expose detailed runtime metrics via /api/metrics to enable automated alerting"
       ]
+    },
+    {
+      "id": "sess_5a428680",
+      "ts": "2026-05-09T21:00:52Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing high CPU load and improving LLM call reliability.",
+      "summary": "The hive is running at 75% health with multiple TS20 CPU load failures and a failing TS12 self-test. Recent fixes recovered Ollama and addressed several supervisor issues, but load spikes persist. Immediate work must add resiliency to LLM calls and expose metrics for load monitoring.",
+      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py.",
+      "next_steps": [
+        "Add exponential backoff and jitter to retry logic in call_llm() in orchestrator.py for HTTP 429 and 5xx errors.",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, cores, and load/core ratio.",
+        "Create unit tests for the new /api/metrics endpoint in tests/test_logstream.py covering normal and overload scenarios.",
+        "Add a background task in supervisor.sh to log CPU load every 30 seconds to a shared Redis key for real\u2011time monitoring.",
+        "Introduce a throttling guard in orchestrator.py that pauses new LLM requests when load/core ratio exceeds 3.0."
+      ],
+      "decisions": [
+        "Prioritize adding observable metrics before scaling resources.",
+        "Use exponential backoff with jitter to avoid thundering herd on LLM service.",
+        "Fail fast on high load conditions by halting new requests until load normalizes."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -817,9 +817,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-09T20:59:54Z",
-    "completed_at": "2026-05-09T20:59:54Z"
+    "started_at": "2026-05-09T21:00:14Z",
+    "completed_at": "2026-05-09T21:00:52Z"
   }
 }
