@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T21:02:33Z",
+  "last_updated": "2026-05-09T21:03:36Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 0.75,
-      "last_seen": "2026-05-09T21:01:23Z",
+      "status": "stalled",
+      "health_score": 0.6,
+      "last_seen": "2026-05-09T21:03:26Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -60,6 +60,45 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_6345499e",
+      "ts": "2026-05-09T21:03:14Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "self-test: TS19 failing \u2014 no auto-fix available or fix failed",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "abc92bdaab9c773ac4617a356f0b6604"
+    },
+    {
+      "id": "b_262a78bb",
+      "ts": "2026-05-09T21:03:05Z",
+      "hive": "default",
+      "agent": "supervisor",
+      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=27.87 cores=8 ratio=3.48",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "7423772dc960a20e710270984362f659"
+    },
+    {
+      "id": "b_b80f6645",
+      "ts": "2026-05-09T21:03:05Z",
+      "hive": "default",
+      "agent": "supervisor",
+      "description": "self-test: FAIL: TS12 research-loop.service (user) is active \u2014 research-loop not active",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "94cf9b45953811bdba7eeb829a4c0f77"
+    },
     {
       "id": "b_2e1c9ba2",
       "ts": "2026-05-09T20:17:34Z",
@@ -817,9 +856,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=60% blockers=8",
     "status": "completed",
-    "started_at": "2026-05-09T21:02:03Z",
-    "completed_at": "2026-05-09T21:02:03Z"
+    "started_at": "2026-05-09T21:03:26Z",
+    "completed_at": "2026-05-09T21:03:26Z"
   }
 }
