@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T19:44:51Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-09T19:45:54Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.85,
-      "last_seen": "2026-05-09T19:43:40Z",
+      "last_seen": "2026-05-09T19:45:43Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -533,7 +533,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 29
+    "openrouter_calls_today": 30
   },
   "model_champions": {
     "text": null,
@@ -542,26 +542,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_ebc4e709",
-      "ts": "2026-05-09T17:14:08Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by reducing CPU load, fixing self-test failures, and improving monitoring reliability",
-      "summary": "The hive is currently stalled with high CPU load ratios on TS20 and several self-test failures. Recent actions fixed supervisor script issues and restored orchestrator operation, but load and test failures persist. Immediate code improvements are needed to add robust retry logic and expose metrics for proactive monitoring.",
-      "progress": "Created a supervisor tmux session and auto\u2011fixed invariant TS14, which restored basic orchestration functionality.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and 500 responses",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, memory usage, and job queue length",
-        "Write unit tests for the new /api/metrics endpoint in tests/test_logstream_metrics.py covering success and error cases",
-        "Add load monitoring and alerting in health_check.py to trigger a graceful worker slowdown when load/core exceeds 1.0",
-        "Refactor self_test_TS20() in self_tests.py to include automatic mitigation steps (e.g., renice processes) when load/core thresholds are breached"
-      ],
-      "decisions": [
-        "Prioritize adding retry/backoff in orchestrator over more extensive refactoring of TS20 self\u2011test logic",
-        "Expose internal metrics via an HTTP endpoint to enable external monitoring tools",
-        "Introduce automated load\u2011based throttling as a short\u2011term mitigation while investigating root causes"
-      ]
-    },
     {
       "id": "sess_299b5c59",
       "ts": "2026-05-09T17:29:07Z",
@@ -741,6 +721,26 @@
         "Require all LLM call wrappers to use exponential backoff with jitter.",
         "Expose internal health metrics via a public API for external monitoring."
       ]
+    },
+    {
+      "id": "sess_a1ebe67a",
+      "ts": "2026-05-09T19:45:13Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive performance by handling LLM call errors and exposing runtime metrics",
+      "summary": "The hive is currently running at high CPU load, causing self-test failures. Recent work fixed critical crashes and restored core services, but request reliability and observability remain issues. Implementing retry logic and a metrics endpoint will address immediate stability and monitoring needs.",
+      "progress": "Added exponential backoff and retry logic to call_llm() in orchestrator.py and verified it reduces 429 errors in integration tests.",
+      "next_steps": [
+        "Add unit tests for the new backoff logic in orchestrator.py covering max retries and jitter behavior",
+        "Implement /api/metrics endpoint in logstream.py to return JSON with CPU load, session count, and error rates",
+        "Add Prometheus exposition format support to logstream.py for external monitoring systems",
+        "Create a watchdog script (watchdog.py) that triggers a graceful restart of orchestrator when CPU load/core ratio exceeds 3.0 for 2 minutes",
+        "Update supervisor.sh to include the new watchdog process in the tmux session and ensure it restarts on failure"
+      ],
+      "decisions": [
+        "Use exponential backoff with jitter and a maximum of 5 retries for LLM API calls",
+        "Expose metrics in both JSON and Prometheus formats to support flexible monitoring",
+        "Integrate a lightweight CPU load watchdog to preemptively recycle overloaded components"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -752,9 +752,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-09T19:44:51Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-09T19:45:43Z",
+    "completed_at": "2026-05-09T19:45:44Z"
   }
 }
