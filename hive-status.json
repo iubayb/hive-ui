@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T17:47:02Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-09T17:47:41Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.889,
-      "last_seen": "2026-05-09T17:47:02Z",
+      "last_seen": "2026-05-09T17:47:14Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -522,6 +522,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_c0a81029",
+        "ts": "2026-05-09T17:47:32Z",
+        "hive": "default",
+        "summary": "The ps5-hive session is dead\u2011locked with many failures; restarting its systemd service should clear the stuck worker and provide fresh logs.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_70c4e24e",
+        "ts": "2026-05-09T17:47:18Z",
+        "hive": "default",
+        "summary": "Restart the affected hive service to clear the deadlocked runner and expose recent error logs.",
+        "source": "doctor"
+      },
+      {
         "id": "f_ca99ae78",
         "ts": "2026-05-09T17:17:14Z",
         "hive": "default",
@@ -573,7 +587,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 14
+    "openrouter_calls_today": 16
   },
   "model_champions": {
     "text": null,
@@ -774,7 +788,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T17:46:40Z",
-    "completed_at": "2026-05-09T17:46:40Z"
+    "started_at": "2026-05-09T17:47:40Z",
+    "completed_at": "2026-05-09T17:47:41Z"
   }
 }
