@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T19:16:36Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-09T19:17:56Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.9,
-      "last_seen": "2026-05-09T19:15:03Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-09T19:17:56Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 15,
+      "errors_last_hour": 13,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -60,6 +60,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_25ac092a",
+      "ts": "2026-05-09T19:17:56Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive is stuck with a single running task while failures have accumulated (4880 failed). This pattern usually indicates a persistent worker crash or OOM condition that prevents new tasks from completing.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "cb772d3696607cace1b369f891178127"
+    },
     {
       "id": "b_adf13ac8",
       "ts": "2026-05-09T19:09:55Z",
@@ -413,6 +426,13 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_eb2c2950",
+        "ts": "2026-05-09T19:17:56Z",
+        "hive": "default",
+        "summary": "ps5\u2011hive is stalled by a failing worker; restart the worker (and its tmux session) to recover.",
+        "source": "doctor"
+      },
+      {
         "id": "f_c3ca69c8",
         "ts": "2026-05-09T18:47:56Z",
         "hive": "default",
@@ -506,7 +526,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 26
+    "openrouter_calls_today": 27
   },
   "model_champions": {
     "text": null,
@@ -725,9 +745,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T19:16:35Z",
-    "completed_at": "2026-05-09T19:16:36Z"
+    "started_at": "2026-05-09T19:17:06Z",
+    "completed_at": "2026-05-09T19:17:07Z"
   }
 }
