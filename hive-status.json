@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T13:05:43Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-09T13:06:40Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -26,6 +26,19 @@
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_a90a3f94",
+      "ts": "2026-05-09T13:06:10Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "Compaction LLM failed: HTTP 404",
+      "severity": "low",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "0ff6a3c64837dfa079365cdc878e866e"
+    },
     {
       "id": "b_b28eaa68",
       "ts": "2026-05-09T13:05:06Z",
@@ -118,17 +131,17 @@
       "_hash": "82ed62237b8e342301c173b1539d754e"
     },
     {
-      "id": "b_dd1c77f6",
+      "id": "b_6c65bb73",
       "ts": "2026-05-09T13:05:05Z",
       "hive": "default",
       "agent": "orchestrator",
-      "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "description": "tmux session 'hive-live' missing entirely",
+      "severity": "critical",
+      "status": "resolved",
+      "resolved_at": "2026-05-09T13:06:08Z",
+      "resolution": "Session 'hive-live' is healthy again",
       "github_issue": null,
-      "_hash": "217dae28725ae72712be5a39a27334a8"
+      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
     },
     {
       "id": "b_4445c2ca",
@@ -137,24 +150,24 @@
       "agent": "orchestrator",
       "description": "tmux session 'hive-watch' missing entirely",
       "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-09T13:06:08Z",
+      "resolution": "Session 'hive-watch' is healthy again",
       "github_issue": null,
       "_hash": "70b95af380bb338ef8031fb179457ee0"
     },
     {
-      "id": "b_6c65bb73",
+      "id": "b_dd1c77f6",
       "ts": "2026-05-09T13:05:05Z",
       "hive": "default",
       "agent": "orchestrator",
-      "description": "tmux session 'hive-live' missing entirely",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-09T13:06:08Z",
+      "resolution": "Session 'hive-dev' is healthy again",
       "github_issue": null,
-      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
+      "_hash": "217dae28725ae72712be5a39a27334a8"
     }
   ],
   "next_steps": [],
@@ -190,6 +203,16 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_4a385600",
+      "ts": "2026-05-09T13:06:10Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -201,9 +224,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: develop\u2192main promotion check + release draft",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T13:05:12Z",
-    "completed_at": "2026-05-09T13:05:18Z"
+    "started_at": "2026-05-09T13:06:08Z",
+    "completed_at": "2026-05-09T13:06:09Z"
   }
 }
