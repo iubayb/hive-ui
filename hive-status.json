@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T18:20:48Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-09T18:21:48Z",
+  "updated_by": "opencode",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.45,
-      "last_seen": "2026-05-09T18:19:25Z",
+      "status": "running",
+      "health_score": 1.0,
+      "last_seen": "2026-05-09T18:21:29Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,12 +20,20 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 14,
+      "errors_last_hour": 0,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
   },
   "achievements": [
+    {
+      "id": "a_ad4f89a7",
+      "ts": "2026-05-09T18:21:48Z",
+      "hive": "default",
+      "agent": "opencode",
+      "description": "Ollama full recovery: fixed Mesa LLVMpipe segfaults (OLLAMA_VULKAN=0 + OLLAMA_NUM_GPU=0), patched Modelfile num_ctx 131072->32768, fixed TS20 SIGSTOP anti-fix (no-op), added llama runner crash to OOM_PATTERNS, set synth-max-chars=60000, PER_CALL_TIMEOUT_S=3600. ps5-hive now running cleanly on pure CPU backend.",
+      "evidence": ""
+    },
     {
       "id": "a_6061a273",
       "ts": "2026-05-09T16:18:54Z",
@@ -52,45 +60,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_8affe60b",
-      "ts": "2026-05-09T16:46:45Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "HIGH load/core=0.90 mem=12.4GB disk=18% \u2014 jobs reniced",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "c305f7ef1258ce59905cdc7c9b779ee4"
-    },
-    {
-      "id": "b_dbb0b84c",
-      "ts": "2026-05-09T16:33:10Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "HIGH load/core=1.14 mem=5.7GB disk=16% \u2014 jobs reniced",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "bfe3392aeb60115965bc9330eb7ede39"
-    },
-    {
-      "id": "b_35a0f1d6",
-      "ts": "2026-05-09T16:16:49Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "HIGH load/core=0.97 mem=6.0GB disk=16% \u2014 jobs reniced",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "b10afa570a0ffb272fba15f897b903be"
-    },
     {
       "id": "b_8b223370",
       "ts": "2026-05-09T16:03:43Z",
@@ -716,9 +685,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "heartbeat \u00b7 sessions=9 health=100% blockers=0",
     "status": "completed",
-    "started_at": "2026-05-09T18:20:46Z",
-    "completed_at": "2026-05-09T18:20:48Z"
+    "started_at": "2026-05-09T18:21:29Z",
+    "completed_at": "2026-05-09T18:21:29Z"
   }
 }
