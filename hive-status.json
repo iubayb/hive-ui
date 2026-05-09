@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T16:15:55Z",
+  "last_updated": "2026-05-09T16:16:55Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.517,
-      "last_seen": "2026-05-09T16:15:55Z",
+      "status": "running",
+      "health_score": 0.778,
+      "last_seen": "2026-05-09T16:16:33Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 11,
+      "errors_last_hour": 15,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -45,6 +45,84 @@
   ],
   "blockers": [
     {
+      "id": "b_35a0f1d6",
+      "ts": "2026-05-09T16:16:49Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "HIGH load/core=0.97 mem=6.0GB disk=16% \u2014 jobs reniced",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "b10afa570a0ffb272fba15f897b903be"
+    },
+    {
+      "id": "b_3ea7b72e",
+      "ts": "2026-05-09T16:16:45Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Backend LLM service (Ollama) returned HTTP 500 for the chat completions endpoint, causing worker errors and request retries.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "255a2ecfa039e9282b4f0c0809a75ea2"
+    },
+    {
+      "id": "b_45212b13",
+      "ts": "2026-05-09T16:16:45Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[orchestrator] Watchdog reports error state despite verification passing; likely the orchestrator process hung or missed its heartbeat, causing repeated error flags.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "bc5719100bea9c241520489e789e7b6a"
+    },
+    {
+      "id": "b_a8005857",
+      "ts": "2026-05-09T16:16:44Z",
+      "hive": "default",
+      "agent": "opencode",
+      "description": "Ollama runner crashes on inference (exit -1): memory-constrained \u2014 Bazzite VM locks 28GB + qwen3.6 model 26GB = 54GB of 62GB total; KV cache OOM during inference",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "6e636b59fe56ca09f69b7d9b4b5517b5"
+    },
+    {
+      "id": "b_8e3faaea",
+      "ts": "2026-05-09T16:16:40Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The ps5-hive workers are receiving HTTP 500 responses from the local Ollama inference server, suggesting the Ollama service is unhealthy or has crashed.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "5156e3b6fe9ca781e76582938ce0f210"
+    },
+    {
+      "id": "b_c8df2fb4",
+      "ts": "2026-05-09T16:16:40Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[orchestrator] The orchestrator session repeatedly reports errors despite all verification checks passing, indicating a possible silent crash or deadlock in its tmux pane causing it to stop processing new tasks.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "a7b0cac429b50ebfb8288c25ac54c2eb"
+    },
+    {
       "id": "b_213152cc",
       "ts": "2026-05-09T16:05:14Z",
       "hive": "desktop",
@@ -58,30 +136,30 @@
       "_hash": "ee1f38122a82c010b1dd820ba49935de"
     },
     {
-      "id": "b_abf36948",
-      "ts": "2026-05-09T16:03:53Z",
-      "hive": "default",
-      "agent": "supervisor",
-      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=19.27 cores=8 ratio=2.41",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "645e33a060d7e92ddc0a280d40317bf3"
-    },
-    {
       "id": "b_8b223370",
       "ts": "2026-05-09T16:03:43Z",
       "hive": "desktop",
       "agent": "resource-guardian",
       "description": "HIGH load/core=1.01 mem=4.8GB disk=19% \u2014 jobs reniced",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-09T16:16:44Z",
+      "resolution": "stale measurement \u2014 resource guardian will re-raise if still in crit state",
       "github_issue": null,
       "_hash": "81d82424f46295dfc5c98bbfc3e7b8d9"
+    },
+    {
+      "id": "b_abf36948",
+      "ts": "2026-05-09T16:03:53Z",
+      "hive": "default",
+      "agent": "supervisor",
+      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=19.27 cores=8 ratio=2.41",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-09T16:16:08Z",
+      "resolution": "supervisor self-test: all invariants passing",
+      "github_issue": null,
+      "_hash": "645e33a060d7e92ddc0a280d40317bf3"
     },
     {
       "id": "b_48616da7",
@@ -367,7 +445,22 @@
     ]
   },
   "knowledge": {
-    "findings": [],
+    "findings": [
+      {
+        "id": "f_b993cde1",
+        "ts": "2026-05-09T16:16:45Z",
+        "hive": "default",
+        "summary": "Restart the orchestrator service and its tmux session, and restart the Ollama backend that is returning 500 errors.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_34508f6d",
+        "ts": "2026-05-09T16:16:40Z",
+        "hive": "default",
+        "summary": "Orchestrator likely hung; restart its tmux session. Ollama backend is failing; restart the Ollama service.",
+        "source": "doctor"
+      }
+    ],
     "patterns": [],
     "solutions": []
   },
@@ -377,7 +470,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 2
+    "openrouter_calls_today": 4
   },
   "model_champions": {
     "text": null,
@@ -516,9 +609,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=52% blockers=3",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T16:15:55Z",
-    "completed_at": "2026-05-09T16:15:55Z"
+    "started_at": "2026-05-09T16:16:15Z",
+    "completed_at": "2026-05-09T16:16:15Z"
   }
 }
