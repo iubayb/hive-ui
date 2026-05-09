@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T15:53:52Z",
+  "last_updated": "2026-05-09T15:54:54Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -37,6 +37,19 @@
   ],
   "blockers": [
     {
+      "id": "b_cd4421bd",
+      "ts": "2026-05-09T15:54:54Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "Compaction LLM failed: HTTP 404",
+      "severity": "low",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "0ff6a3c64837dfa079365cdc878e866e"
+    },
+    {
       "id": "b_bb4964b2",
       "ts": "2026-05-09T15:53:39Z",
       "hive": "default",
@@ -63,95 +76,17 @@
       "_hash": "93595e8f81980e92821e7bf9850dddfc"
     },
     {
-      "id": "b_1aed5f47",
-      "ts": "2026-05-09T13:35:37Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "LLM diagnosis call failed: HTTP 404",
-      "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "b1fcdcb5c38c60289b6f437c8faad7c3"
-    },
-    {
-      "id": "b_ecd35de3",
-      "ts": "2026-05-09T13:21:52Z",
-      "hive": "default",
-      "agent": "supervisor",
-      "description": "self-test: FAIL: TS19 all 8 expected tmux sessions exist \u2014 missing: supervisor",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "b4b0a7771598a41a53de12d0241a28f3"
-    },
-    {
-      "id": "b_a90a3f94",
-      "ts": "2026-05-09T13:06:10Z",
+      "id": "b_c4975f9c",
+      "ts": "2026-05-09T13:05:05Z",
       "hive": "default",
       "agent": "orchestrator",
-      "description": "Compaction LLM failed: HTTP 404",
-      "severity": "low",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "0ff6a3c64837dfa079365cdc878e866e"
-    },
-    {
-      "id": "b_b28eaa68",
-      "ts": "2026-05-09T13:05:06Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "self-test: TS19 failing \u2014 no auto-fix available or fix failed",
+      "description": "Live UI verification failed: curl failed: [Errno 111] Connection refused",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-09T15:54:23Z",
+      "resolution": "hive-live port 8888 now returns HTTP 200",
       "github_issue": null,
-      "_hash": "abc92bdaab9c773ac4617a356f0b6604"
-    },
-    {
-      "id": "b_901a5c5f",
-      "ts": "2026-05-09T13:05:06Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "self-test: TS18 failing \u2014 no auto-fix available or fix failed",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "8db53c687b62ebcd9459cbccdbbf588f"
-    },
-    {
-      "id": "b_6a462af0",
-      "ts": "2026-05-09T13:05:06Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "self-test: TS17 failing \u2014 no auto-fix available or fix failed",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "6897daf3e3724c9f078fc0b16f4fe428"
-    },
-    {
-      "id": "b_43031c2b",
-      "ts": "2026-05-09T13:05:06Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "self-test: TS13 failing \u2014 no auto-fix available or fix failed",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "5c48d095f67370a5d63a500a67d76844"
+      "_hash": "82ed62237b8e342301c173b1539d754e"
     },
     {
       "id": "b_7c627c32",
@@ -160,24 +95,102 @@
       "agent": "orchestrator",
       "description": "self-test: TS5 failing \u2014 auto-fix attempted but not sufficient",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-09T15:54:23Z",
+      "resolution": "TS5 passes \u2014 ollama nice=15 >= 10",
       "github_issue": null,
       "_hash": "36e8de1c6320cf5f4eececa2d548aefd"
     },
     {
-      "id": "b_c4975f9c",
-      "ts": "2026-05-09T13:05:05Z",
+      "id": "b_43031c2b",
+      "ts": "2026-05-09T13:05:06Z",
       "hive": "default",
       "agent": "orchestrator",
-      "description": "Live UI verification failed: curl failed: [Errno 111] Connection refused",
+      "description": "self-test: TS13 failing \u2014 no auto-fix available or fix failed",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-09T15:54:23Z",
+      "resolution": "TS13 passes \u2014 nginx is active",
       "github_issue": null,
-      "_hash": "82ed62237b8e342301c173b1539d754e"
+      "_hash": "5c48d095f67370a5d63a500a67d76844"
+    },
+    {
+      "id": "b_6a462af0",
+      "ts": "2026-05-09T13:05:06Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "self-test: TS17 failing \u2014 no auto-fix available or fix failed",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-09T15:54:23Z",
+      "resolution": "TS17 passes \u2014 port 8888 returns HTTP 200",
+      "github_issue": null,
+      "_hash": "6897daf3e3724c9f078fc0b16f4fe428"
+    },
+    {
+      "id": "b_901a5c5f",
+      "ts": "2026-05-09T13:05:06Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "self-test: TS18 failing \u2014 no auto-fix available or fix failed",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-09T15:54:23Z",
+      "resolution": "TS18 passes \u2014 port 8889 returns HTTP 200",
+      "github_issue": null,
+      "_hash": "8db53c687b62ebcd9459cbccdbbf588f"
+    },
+    {
+      "id": "b_b28eaa68",
+      "ts": "2026-05-09T13:05:06Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "self-test: TS19 failing \u2014 no auto-fix available or fix failed",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-09T15:54:23Z",
+      "resolution": "TS19 now passes \u2014 supervisor session created",
+      "github_issue": null,
+      "_hash": "abc92bdaab9c773ac4617a356f0b6604"
+    },
+    {
+      "id": "b_a90a3f94",
+      "ts": "2026-05-09T13:06:10Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "Compaction LLM failed: HTTP 404",
+      "severity": "low",
+      "status": "resolved",
+      "resolved_at": "2026-05-09T15:54:23Z",
+      "resolution": "orchestrator restarted with openai/gpt-oss-120b:free; compaction will retry with new model",
+      "github_issue": null,
+      "_hash": "0ff6a3c64837dfa079365cdc878e866e"
+    },
+    {
+      "id": "b_ecd35de3",
+      "ts": "2026-05-09T13:21:52Z",
+      "hive": "default",
+      "agent": "supervisor",
+      "description": "self-test: FAIL: TS19 all 8 expected tmux sessions exist \u2014 missing: supervisor",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-09T15:54:23Z",
+      "resolution": "supervisor tmux session created; TS19 now passes",
+      "github_issue": null,
+      "_hash": "b4b0a7771598a41a53de12d0241a28f3"
+    },
+    {
+      "id": "b_1aed5f47",
+      "ts": "2026-05-09T13:35:37Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "LLM diagnosis call failed: HTTP 404",
+      "severity": "medium",
+      "status": "resolved",
+      "resolved_at": "2026-05-09T15:54:23Z",
+      "resolution": "orchestrator restarted with openai/gpt-oss-120b:free; ling-2.6-1t:free was returning 404",
+      "github_issue": null,
+      "_hash": "b1fcdcb5c38c60289b6f437c8faad7c3"
     },
     {
       "id": "b_9ac5434b",
@@ -273,16 +286,6 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_1879aab0",
-      "ts": "2026-05-09T15:44:30Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
-    {
       "id": "sess_7537862c",
       "ts": "2026-05-09T15:45:31Z",
       "updated_by": "orchestrator",
@@ -371,6 +374,16 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_42a41e23",
+      "ts": "2026-05-09T15:54:54Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -384,7 +397,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T15:53:51Z",
-    "completed_at": "2026-05-09T15:53:51Z"
+    "started_at": "2026-05-09T15:54:52Z",
+    "completed_at": "2026-05-09T15:54:52Z"
   }
 }
