@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T16:00:44Z",
+  "last_updated": "2026-05-09T16:01:44Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.9,
-      "last_seen": "2026-05-09T15:59:14Z",
+      "health_score": 0.95,
+      "last_seen": "2026-05-09T16:01:24Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -58,30 +58,30 @@
       "_hash": "7121d5a13d871954e02556197912da0b"
     },
     {
-      "id": "b_bb4964b2",
-      "ts": "2026-05-09T15:53:39Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "self-test: TS20 failing \u2014 auto-fix attempted but not sufficient",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "e30a4556389fe0c4bc36d18a897f407e"
-    },
-    {
       "id": "b_e8f90b1d",
       "ts": "2026-05-09T15:52:58Z",
       "hive": "desktop",
       "agent": "resource-guardian",
       "description": "HIGH load/core=1.09 mem=4.8GB disk=16% \u2014 jobs reniced",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-09T16:01:11Z",
+      "resolution": "stale load reading (1.09) \u2014 processes SIGSTOPd, load decaying",
       "github_issue": null,
       "_hash": "93595e8f81980e92821e7bf9850dddfc"
+    },
+    {
+      "id": "b_bb4964b2",
+      "ts": "2026-05-09T15:53:39Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "self-test: TS20 failing \u2014 auto-fix attempted but not sufficient",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-09T16:01:11Z",
+      "resolution": "stale duplicate \u2014 research_loop SIGSTOPd by orchestrator fix",
+      "github_issue": null,
+      "_hash": "e30a4556389fe0c4bc36d18a897f407e"
     },
     {
       "id": "b_cd4421bd",
@@ -456,7 +456,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T16:00:44Z",
-    "completed_at": "2026-05-09T16:00:44Z"
+    "started_at": "2026-05-09T16:01:44Z",
+    "completed_at": "2026-05-09T16:01:44Z"
   }
 }
