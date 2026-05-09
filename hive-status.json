@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T13:13:48Z",
+  "last_updated": "2026-05-09T13:14:49Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -283,6 +283,16 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_e19b8c67",
+      "ts": "2026-05-09T13:14:19Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -296,7 +306,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T13:13:17Z",
-    "completed_at": "2026-05-09T13:13:17Z"
+    "started_at": "2026-05-09T13:14:18Z",
+    "completed_at": "2026-05-09T13:14:19Z"
   }
 }
