@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T16:00:00Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-09T16:00:44Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_be38a68d",
+      "ts": "2026-05-09T16:00:30Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "self-test: TS20 failing \u2014 no auto-fix available or fix failed",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "7121d5a13d871954e02556197912da0b"
+    },
     {
       "id": "b_bb4964b2",
       "ts": "2026-05-09T15:53:39Z",
@@ -258,8 +271,8 @@
       "id": "ns_47efa7c3",
       "priority": 1,
       "description": "Investigate and fix the cause of TS20 failure by updating validation logic in tests/self_test.py and adding detailed assertions.",
-      "assigned_to": "default",
-      "status": "pending",
+      "assigned_to": "opencode",
+      "status": "in_progress",
       "source": "orchestrator",
       "ts": "2026-05-09T16:00:00Z"
     },
@@ -441,9 +454,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "self-test: running test_system.sh + auto-fix",
-    "status": "running",
-    "started_at": "2026-05-09T16:00:00Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-09T16:00:44Z",
+    "completed_at": "2026-05-09T16:00:44Z"
   }
 }
