@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T15:51:43Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-09T15:52:58Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
@@ -35,6 +35,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_e8f90b1d",
+      "ts": "2026-05-09T15:52:58Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "HIGH load/core=1.09 mem=4.8GB disk=16% \u2014 jobs reniced",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "93595e8f81980e92821e7bf9850dddfc"
+    },
     {
       "id": "b_1aed5f47",
       "ts": "2026-05-09T13:35:37Z",
@@ -246,16 +259,6 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_97a646f2",
-      "ts": "2026-05-09T15:42:25Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
-    {
       "id": "sess_2b3f0fcf",
       "ts": "2026-05-09T15:43:27Z",
       "updated_by": "orchestrator",
@@ -344,6 +347,16 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_fd08cd4a",
+      "ts": "2026-05-09T15:52:45Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -357,7 +370,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T15:51:42Z",
-    "completed_at": "2026-05-09T15:51:42Z"
+    "started_at": "2026-05-09T15:52:43Z",
+    "completed_at": "2026-05-09T15:52:44Z"
   }
 }
