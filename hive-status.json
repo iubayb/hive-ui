@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T23:18:37Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-09T23:19:42Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "error",
-      "health_score": 0.0,
-      "last_seen": "2026-05-09T23:18:37Z",
+      "status": "running",
+      "health_score": 0.889,
+      "last_seen": "2026-05-09T23:19:34Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 14,
+      "errors_last_hour": 15,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -60,6 +60,32 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_c320b9bc",
+      "ts": "2026-05-09T23:19:42Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive is in error state with a high failure count (4880 failed tasks) and only one running task, indicating a persistent task failure loop or resource exhaustion.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "8254d159dcf3e7a2a68c0c0e87d1891e"
+    },
+    {
+      "id": "b_0c2afc5d",
+      "ts": "2026-05-09T23:19:29Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive is in an error state with a massive number of failed tasks (4880) and no progress; likely a runaway task or resource deadlock causing TS14 invariant violation.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "4d20ceaabb5e844b162bca3d1744ec8d"
+    },
     {
       "id": "b_84c87657",
       "ts": "2026-05-09T22:59:55Z",
@@ -670,6 +696,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_0ec98345",
+        "ts": "2026-05-09T23:19:42Z",
+        "hive": "default",
+        "summary": "ps5\u2011hive is failing repeatedly; a service restart plus pruning of the failed task backlog should recover it.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_f8864cc2",
+        "ts": "2026-05-09T23:19:29Z",
+        "hive": "default",
+        "summary": "Hive ps5-hive is stalled with thousands of failures; restarting its service should clear the error state.",
+        "source": "doctor"
+      },
+      {
         "id": "f_366c5c5b",
         "ts": "2026-05-09T22:49:34Z",
         "hive": "default",
@@ -875,7 +915,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 58
+    "openrouter_calls_today": 60
   },
   "model_champions": {
     "text": null,
@@ -1094,9 +1134,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=0% blockers=22",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T23:18:37Z",
-    "completed_at": "2026-05-09T23:18:37Z"
+    "started_at": "2026-05-09T23:19:17Z",
+    "completed_at": "2026-05-09T23:19:18Z"
   }
 }
