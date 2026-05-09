@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T23:49:57Z",
+  "last_updated": "2026-05-09T23:50:57Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -61,30 +61,17 @@
   ],
   "blockers": [
     {
-      "id": "b_a459d19f",
-      "ts": "2026-05-09T23:49:50Z",
+      "id": "b_59fadf2b",
+      "ts": "2026-05-09T23:50:10Z",
       "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] High failure count (4880 failed) with only one pending task suggests a runaway task or corrupted state causing repeated errors; the hive is stuck in error status.",
+      "agent": "supervisor",
+      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=26.01 cores=8 ratio=3.25",
       "severity": "high",
       "status": "open",
       "resolved_at": null,
       "resolution": null,
       "github_issue": null,
-      "_hash": "f3ab587a66e4c32b05893753bceeb6c1"
-    },
-    {
-      "id": "b_b782a0f2",
-      "ts": "2026-05-09T23:49:47Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive is repeatedly failing tasks (4880 failures) while only a single task remains pending, indicating a likely systemic error such as a runaway failure loop or resource exhaustion (e.g., OOM) that prevents progress.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "bab3792d838a4c7fe2f87c6e08a23dc0"
+      "_hash": "293f00f6c2d14bbf272b58b037730769"
     },
     {
       "id": "b_84c87657",
@@ -1148,9 +1135,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=0% blockers=22",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T23:49:17Z",
-    "completed_at": "2026-05-09T23:49:17Z"
+    "started_at": "2026-05-09T23:50:07Z",
+    "completed_at": "2026-05-09T23:50:07Z"
   }
 }
