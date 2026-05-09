@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T19:28:51Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-09T19:29:55Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.85,
-      "last_seen": "2026-05-09T19:27:17Z",
+      "last_seen": "2026-05-09T19:29:21Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -533,7 +533,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 28
+    "openrouter_calls_today": 29
   },
   "model_champions": {
     "text": null,
@@ -542,26 +542,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_a5cea93e",
-      "ts": "2026-05-09T16:59:01Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by reducing CPU overload, completing retry logic, and exposing operational metrics.",
-      "summary": "The hive is currently stalled with high CPU load on TS20 and several self\u2011test failures. Recent auto\u2011fixes have recovered core services, but load\u2011related blockers remain. Immediate work must finish the retry implementation and expose metrics to aid monitoring.",
-      "progress": "Implemented exponential backoff scaffold for call_llm() and added supervisor tmux session to recover orchestration.",
-      "next_steps": [
-        "Complete exponential backoff and retry logic in call_llm() in orchestrator/orchestrator.py, handling HTTP 429 and 5xx responses with max 5 retries.",
-        "Implement full /api/metrics endpoint in logstream.py to return JSON with cpu_load, mem_usage, job_queue_length, and hive health status.",
-        "Add unit tests for the new retry logic in orchestrator/tests/test_call_llm.py covering backoff timing and failure thresholds.",
-        "Create health_check() function in health.py that validates TS20 CPU load/core ratio and returns HTTP 503 when >2.0, then expose via /api/health endpoint.",
-        "Refactor load monitoring in monitor.py to renice jobs dynamically based on cpu_load/core ratio, and log adjustments to hive.log."
-      ],
-      "decisions": [
-        "Prioritize fixing TS20 load issues before adding new features.",
-        "Limit retry attempts to five with jitter to avoid cascading load.",
-        "Expose metrics via a dedicated endpoint rather than embedding in existing logs."
-      ]
-    },
     {
       "id": "sess_ebc4e709",
       "ts": "2026-05-09T17:14:08Z",
@@ -741,6 +721,26 @@
         "Expose internal metrics via /api/metrics to enable external dashboarding and alerts.",
         "Introduce automated load\u2011based session throttling to keep TS20 CPU load/core below 2.0."
       ]
+    },
+    {
+      "id": "sess_18f115e6",
+      "ts": "2026-05-09T19:29:55Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive performance and ensure reliable LLM API interactions",
+      "summary": "The hive recovered from recent Ollama issues and completed a comprehensive audit, fixing several supervisor and orchestrator problems. However, high CPU load on TS20 remains a critical blocker, and retry logic for LLM calls is still pending. Immediate code improvements are needed to lower load and make external calls more resilient.",
+      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py and added a basic /api/metrics endpoint stub in logstream.py.",
+      "next_steps": [
+        "Optimize thread pool size in orchestrator.py by adding dynamic scaling based on CPU load and implement load shedding for TS20.",
+        "Complete the /api/metrics endpoint in logstream.py to return JSON with session stats, CPU load, and request latency.",
+        "Add unit tests for the new exponential backoff logic in orchestrator.py covering HTTP 429 and 5xx responses.",
+        "Integrate CPU load monitoring into hive-watch session and expose the metric via the new /api/metrics endpoint.",
+        "Refactor supervisor.sh to include a watchdog that restarts over\u2011loaded TS20 processes automatically."
+      ],
+      "decisions": [
+        "Prioritize CPU load mitigation on TS20 before adding new features.",
+        "Require all LLM call wrappers to use exponential backoff with jitter.",
+        "Expose internal health metrics via a public API for external monitoring."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -752,9 +752,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: develop\u2192main promotion check + release draft",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-09T19:28:48Z",
-    "completed_at": "2026-05-09T19:28:51Z"
+    "started_at": "2026-05-09T19:29:41Z",
+    "completed_at": "2026-05-09T19:29:55Z"
   }
 }
