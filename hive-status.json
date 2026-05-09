@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T17:13:55Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-09T17:14:52Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -533,7 +533,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 9
+    "openrouter_calls_today": 10
   },
   "model_champions": {
     "text": null,
@@ -542,16 +542,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_f1bffb80",
-      "ts": "2026-05-09T15:53:52Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_42a41e23",
       "ts": "2026-05-09T15:54:54Z",
@@ -691,6 +681,26 @@
         "Limit retry attempts to five with jitter to avoid cascading load.",
         "Expose metrics via a dedicated endpoint rather than embedding in existing logs."
       ]
+    },
+    {
+      "id": "sess_ebc4e709",
+      "ts": "2026-05-09T17:14:08Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by reducing CPU load, fixing self-test failures, and improving monitoring reliability",
+      "summary": "The hive is currently stalled with high CPU load ratios on TS20 and several self-test failures. Recent actions fixed supervisor script issues and restored orchestrator operation, but load and test failures persist. Immediate code improvements are needed to add robust retry logic and expose metrics for proactive monitoring.",
+      "progress": "Created a supervisor tmux session and auto\u2011fixed invariant TS14, which restored basic orchestration functionality.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and 500 responses",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, memory usage, and job queue length",
+        "Write unit tests for the new /api/metrics endpoint in tests/test_logstream_metrics.py covering success and error cases",
+        "Add load monitoring and alerting in health_check.py to trigger a graceful worker slowdown when load/core exceeds 1.0",
+        "Refactor self_test_TS20() in self_tests.py to include automatic mitigation steps (e.g., renice processes) when load/core thresholds are breached"
+      ],
+      "decisions": [
+        "Prioritize adding retry/backoff in orchestrator over more extensive refactoring of TS20 self\u2011test logic",
+        "Expose internal metrics via an HTTP endpoint to enable external monitoring tools",
+        "Introduce automated load\u2011based throttling as a short\u2011term mitigation while investigating root causes"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -702,9 +712,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-09T17:13:55Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-09T17:14:41Z",
+    "completed_at": "2026-05-09T17:14:42Z"
   }
 }
