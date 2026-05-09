@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T16:14:16Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-09T16:15:55Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-09T16:13:46Z",
+      "status": "stalled",
+      "health_score": 0.517,
+      "last_seen": "2026-05-09T16:15:55Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -45,19 +45,6 @@
   ],
   "blockers": [
     {
-      "id": "b_48616da7",
-      "ts": "2026-05-09T16:06:06Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "LLM diagnosis call failed: HTTP 404",
-      "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "b1fcdcb5c38c60289b6f437c8faad7c3"
-    },
-    {
       "id": "b_213152cc",
       "ts": "2026-05-09T16:05:14Z",
       "hive": "desktop",
@@ -95,6 +82,19 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "81d82424f46295dfc5c98bbfc3e7b8d9"
+    },
+    {
+      "id": "b_48616da7",
+      "ts": "2026-05-09T16:06:06Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "LLM diagnosis call failed: HTTP 404",
+      "severity": "medium",
+      "status": "resolved",
+      "resolved_at": "2026-05-09T16:15:54Z",
+      "resolution": "Auto-resolved at startup: transient/stale blocker.",
+      "github_issue": null,
+      "_hash": "b1fcdcb5c38c60289b6f437c8faad7c3"
     },
     {
       "id": "b_be38a68d",
@@ -377,7 +377,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 1
+    "openrouter_calls_today": 2
   },
   "model_champions": {
     "text": null,
@@ -386,16 +386,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_f5cb1e20",
-      "ts": "2026-05-09T15:49:41Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_e0bde968",
       "ts": "2026-05-09T15:50:42Z",
@@ -495,6 +485,26 @@
         "Adopt exponential backoff for external API calls to mitigate high load conditions.",
         "Expose internal performance metrics via an API endpoint for easier observability."
       ]
+    },
+    {
+      "id": "sess_1ec9c13d",
+      "ts": "2026-05-09T16:15:03Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive under high load and improve LLM call reliability",
+      "summary": "The hive recovered from recent failures and auto-fixed invariant TS14, but remains under high CPU load and is experiencing HTTP 404 errors on LLM calls. Immediate code fixes are needed to add retry logic, expose health metrics, and guard against overload. Progress has been made in restarting core services and creating a supervisor session.",
+      "progress": "Supervisor tmux session was created and the orchestrator was restarted, clearing the immediate deadlock.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 404/429 responses",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, and job queue stats",
+        "Introduce a load-shedding check in orchestrator.py that rejects new LLM jobs when load/core > 0.9 and logs a warning",
+        "Write unit tests for call_llm() in orchestrator.py covering success, 404, 429, and retry paths",
+        "Add detailed error logging in orchestrator.py for failed LLM calls, including request payload and response headers"
+      ],
+      "decisions": [
+        "Retry with exponential backoff will be the default strategy for transient LLM errors",
+        "Expose runtime metrics via /api/metrics to enable external monitoring and auto-scaling",
+        "Enforce load-shedding in the orchestrator to prevent cascade failures under high CPU load"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -506,9 +516,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-09T16:14:16Z",
-    "completed_at": null
+    "task": "heartbeat \u00b7 sessions=9 health=52% blockers=3",
+    "status": "completed",
+    "started_at": "2026-05-09T16:15:55Z",
+    "completed_at": "2026-05-09T16:15:55Z"
   }
 }
