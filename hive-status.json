@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T16:45:37Z",
+  "last_updated": "2026-05-09T16:47:38Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 0.75,
-      "last_seen": "2026-05-09T16:44:57Z",
+      "status": "stalled",
+      "health_score": 0.65,
+      "last_seen": "2026-05-09T16:46:58Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 15,
+      "errors_last_hour": 11,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -52,6 +52,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_8affe60b",
+      "ts": "2026-05-09T16:46:45Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "HIGH load/core=0.90 mem=12.4GB disk=18% \u2014 jobs reniced",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "c305f7ef1258ce59905cdc7c9b779ee4"
+    },
     {
       "id": "b_0a45f9ff",
       "ts": "2026-05-09T16:37:23Z",
@@ -444,6 +457,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_a7e613dc",
+        "ts": "2026-05-09T16:47:03Z",
+        "hive": "default",
+        "summary": "The ps5\u2011hive session is failing due to persistent internal 500 errors; a service restart and session recreation is recommended.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_9ce5c8a1",
+        "ts": "2026-05-09T16:46:51Z",
+        "hive": "default",
+        "summary": "The ps5-hive session is repeatedly hitting HTTP\u202f500 errors, leading to a large number of failed tasks; restarting the hive service, resetting the session state, and pruning failed tasks should recover normal operation.",
+        "source": "doctor"
+      },
+      {
         "id": "f_b993cde1",
         "ts": "2026-05-09T16:16:45Z",
         "hive": "default",
@@ -467,7 +494,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 6
+    "openrouter_calls_today": 8
   },
   "model_champions": {
     "text": null,
@@ -628,7 +655,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T16:45:07Z",
-    "completed_at": "2026-05-09T16:45:07Z"
+    "started_at": "2026-05-09T16:47:08Z",
+    "completed_at": "2026-05-09T16:47:08Z"
   }
 }
