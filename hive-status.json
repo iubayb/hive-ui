@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T22:45:49Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-09T22:46:43Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
@@ -848,7 +848,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 53
+    "openrouter_calls_today": 54
   },
   "model_champions": {
     "text": null,
@@ -857,26 +857,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_999e0864",
-      "ts": "2026-05-09T20:15:33Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by mitigating high CPU load failures and improving observability and resilience of core orchestration calls.",
-      "summary": "The hive is currently healthy at 80% but is blocked by repeated self\u2011test failures due to excessive CPU load per core. Recent recovery work fixed critical system components and auto\u2011fixed invariant TS14, but the load issue remains. Immediate code improvements are needed to reduce call failures and expose runtime metrics for proactive scaling.",
-      "progress": "Completed a full Ollama recovery, audit fixes, supervisor session restoration, and auto\u2011fix of invariant TS14.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and 5xx responses",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, session counts, and error rates",
-        "Write unit tests for the new backoff logic in tests/test_orchestrator_backoff.py covering max retries and jitter",
-        "Add a health check wrapper in orchestrator.py that logs CPU load/core ratios and raises a warning if >2.5",
-        "Create a Prometheus exporter in metrics_exporter.py that pulls data from the /api/metrics endpoint and pushes to /metrics"
-      ],
-      "decisions": [
-        "Prioritize fixing call_llm() reliability before addressing scaling infrastructure",
-        "Expose runtime metrics via a dedicated API to enable automated monitoring and alerts",
-        "Defer implementation of auto\u2011scaling policies until metric collection is stable"
-      ]
-    },
     {
       "id": "sess_bb81478e",
       "ts": "2026-05-09T20:30:29Z",
@@ -1056,6 +1036,26 @@
         "Expose real-time metrics via /api/metrics to enable external dashboards and alerting",
         "Introduce automated CPU load monitoring and self\u2011healing restart as a short\u2011term mitigation for TS20 overload"
       ]
+    },
+    {
+      "id": "sess_912f0e44",
+      "ts": "2026-05-09T22:46:02Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive performance and expose operational metrics via API",
+      "summary": "The hive is currently in an error state due to high CPU load blockers, but recent recovery actions have restored core services and auto-fixed invariant TS14. Outstanding high\u2011priority issues include persistent CPU load failures and missing metrics endpoint.",
+      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py, and created a supervisor tmux session to stabilize orchestrator restarts.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py when HTTP 429 or network errors occur",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, session counts, and error rates",
+        "Write unit tests for the new /api/metrics endpoint in tests/test_logstream_metrics.py covering success and error paths",
+        "Introduce a rate\u2011limiting guard in orchestrator.py to pause new LLM calls when CPU load/core ratio exceeds 2.0",
+        "Update supervisor.sh to monitor TS20 CPU load and automatically restart overloaded workers"
+      ],
+      "decisions": [
+        "Prioritize fixing TS20 CPU load blockers before adding new features",
+        "Expose operational metrics via /api/metrics to enable external monitoring and alerting",
+        "Apply exponential backoff globally to all LLM API calls to reduce throttling errors"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1067,9 +1067,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-09T22:45:49Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-09T22:46:32Z",
+    "completed_at": "2026-05-09T22:46:33Z"
   }
 }
