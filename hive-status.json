@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T17:43:56Z",
+  "last_updated": "2026-05-09T17:44:32Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
-      "health_score": 0.5,
-      "last_seen": "2026-05-09T17:42:25Z",
+      "health_score": 0.45,
+      "last_seen": "2026-05-09T17:44:32Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -573,7 +573,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 13
+    "openrouter_calls_today": 14
   },
   "model_champions": {
     "text": null,
@@ -582,16 +582,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_e21c0df0",
-      "ts": "2026-05-09T15:55:55Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_ffc6479f",
       "ts": "2026-05-09T15:56:57Z",
@@ -751,6 +741,26 @@
         "Expose real\u2011time metrics via /api/metrics to aid monitoring and auto\u2011scaling",
         "Implement exponential backoff globally for all LLM calls to reduce rate\u2011limit failures"
       ]
+    },
+    {
+      "id": "sess_48f6b2ec",
+      "ts": "2026-05-09T17:44:22Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore hive health by reducing CPU overload and adding robust LLM call handling",
+      "summary": "The hive is currently stalled with high CPU load on TS20 and multiple self\u2011test failures. Recent work stabilized TS19 and auto\u2011fixed TS14, but TS20 remains overloaded and lacks retry logic for LLM calls.",
+      "progress": "Supervisor tmux session was created and orchestrator restarted, clearing TS19 failures and auto\u2011fixing TS14.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator/orchestrator.py for HTTP 429 and 500 responses",
+        "Implement a /api/metrics endpoint in logstream.py that returns JSON with CPU load, session health, and retry stats",
+        "Add CPU load monitoring and auto\u2011throttle in system_monitor.py to shed load when TS20 load/core > 2.0",
+        "Write unit tests for the new retry logic in orchestrator/tests/test_call_llm_retry.py covering backoff intervals",
+        "Create integration test in logstream/tests/test_metrics_endpoint.py to verify JSON schema and values under high load"
+      ],
+      "decisions": [
+        "Prioritize fixing TS20 overload before adding new features",
+        "Use exponential backoff with jitter for LLM retries to avoid thundering herd",
+        "Expose metrics via /api/metrics to enable external monitoring dashboards"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -764,7 +774,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T17:43:26Z",
-    "completed_at": "2026-05-09T17:43:26Z"
+    "started_at": "2026-05-09T17:44:32Z",
+    "completed_at": "2026-05-09T17:44:32Z"
   }
 }
