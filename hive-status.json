@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T18:13:41Z",
+  "last_updated": "2026-05-09T18:14:51Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -587,7 +587,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 17
+    "openrouter_calls_today": 18
   },
   "model_champions": {
     "text": null,
@@ -596,16 +596,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_cdb26052",
-      "ts": "2026-05-09T15:58:10Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_fdc48b8b",
       "ts": "2026-05-09T16:00:00Z",
@@ -785,6 +775,26 @@
         "Expose real\u2011time system metrics via /api/metrics to aid automated load monitoring",
         "Implement load\u2011shedding to prevent TS20 CPU overload while other fixes are applied"
       ]
+    },
+    {
+      "id": "sess_75b0f482",
+      "ts": "2026-05-09T18:14:41Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by fixing high\u2011priority self\u2011test failures and restoring full health monitoring",
+      "summary": "The hive is currently stalled at 45% health due to repeated TS20 CPU load failures and a lingering TS19 error. Recent audit work cleared several supervisor blockers and auto\u2011fixed TS14, but the high\u2011severity load issues remain. Immediate code changes are needed to improve resilience and expose metrics for better diagnostics.",
+      "progress": "Completed a hive audit that fixed supervisor.sh TS\u2011blocker deduplication, created a supervisor tmux session for TS19, and auto\u2011fixed invariant TS14.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and 5xx responses",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, session counts, and retry statistics",
+        "Introduce a load\u2011shedding guard in system_monitor.py that throttles new LLM calls when CPU load/core > 2.0",
+        "Write unit tests for the new retry/backoff logic in orchestrator.py covering success, transient failure, and max\u2011retry exhaustion",
+        "Update supervisor.sh to automatically restart the TS20 monitor process if CPU load exceeds the threshold for more than 30 seconds"
+      ],
+      "decisions": [
+        "Prioritize exponential backoff in the orchestrator to reduce TS20 overload",
+        "Expose real\u2011time metrics via /api/metrics to track the effectiveness of the fixes",
+        "Add a proactive load\u2011shedding mechanism before the CPU load self\u2011test fails again"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -798,7 +808,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T18:13:21Z",
-    "completed_at": "2026-05-09T18:13:21Z"
+    "started_at": "2026-05-09T18:14:51Z",
+    "completed_at": "2026-05-09T18:14:51Z"
   }
 }
