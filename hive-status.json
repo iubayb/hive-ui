@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T14:17:49Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-09T14:18:51Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.6,
-      "last_seen": "2026-05-09T14:16:48Z",
+      "last_seen": "2026-05-09T14:18:50Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -221,26 +221,6 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_7df8fa43",
-      "ts": "2026-05-09T14:07:34Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
-    {
-      "id": "sess_5be57fe2",
-      "ts": "2026-05-09T14:08:35Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
-    {
       "id": "sess_666d972b",
       "ts": "2026-05-09T14:09:36Z",
       "updated_by": "orchestrator",
@@ -319,6 +299,26 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_7c278de9",
+      "ts": "2026-05-09T14:18:10Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
+    },
+    {
+      "id": "sess_3a86be5b",
+      "ts": "2026-05-09T14:18:51Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -332,7 +332,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T14:17:49Z",
-    "completed_at": "2026-05-09T14:17:49Z"
+    "started_at": "2026-05-09T14:18:50Z",
+    "completed_at": "2026-05-09T14:18:50Z"
   }
 }
