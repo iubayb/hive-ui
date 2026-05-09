@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T22:49:54Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-09T22:50:48Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
@@ -60,19 +60,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_de538ef4",
-      "ts": "2026-05-09T22:49:34Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive is stuck with a single running task while failures have accumulated to 4,880, indicating a TS14 invariant violation (runaway failures) and likely a deadlocked or crashed worker.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "9dd3f65a459901156247e7a817dc2753"
-    },
     {
       "id": "b_6c049277",
       "ts": "2026-05-09T22:23:12Z",
@@ -1094,9 +1081,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=0% blockers=22",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T22:49:54Z",
-    "completed_at": "2026-05-09T22:49:54Z"
+    "started_at": "2026-05-09T22:50:37Z",
+    "completed_at": "2026-05-09T22:50:38Z"
   }
 }
