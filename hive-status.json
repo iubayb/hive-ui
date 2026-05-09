@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T20:44:53Z",
+  "last_updated": "2026-05-09T20:45:40Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -584,7 +584,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 37
+    "openrouter_calls_today": 38
   },
   "model_champions": {
     "text": null,
@@ -593,26 +593,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_75b0f482",
-      "ts": "2026-05-09T18:14:41Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by fixing high\u2011priority self\u2011test failures and restoring full health monitoring",
-      "summary": "The hive is currently stalled at 45% health due to repeated TS20 CPU load failures and a lingering TS19 error. Recent audit work cleared several supervisor blockers and auto\u2011fixed TS14, but the high\u2011severity load issues remain. Immediate code changes are needed to improve resilience and expose metrics for better diagnostics.",
-      "progress": "Completed a hive audit that fixed supervisor.sh TS\u2011blocker deduplication, created a supervisor tmux session for TS19, and auto\u2011fixed invariant TS14.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and 5xx responses",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, session counts, and retry statistics",
-        "Introduce a load\u2011shedding guard in system_monitor.py that throttles new LLM calls when CPU load/core > 2.0",
-        "Write unit tests for the new retry/backoff logic in orchestrator.py covering success, transient failure, and max\u2011retry exhaustion",
-        "Update supervisor.sh to automatically restart the TS20 monitor process if CPU load exceeds the threshold for more than 30 seconds"
-      ],
-      "decisions": [
-        "Prioritize exponential backoff in the orchestrator to reduce TS20 overload",
-        "Expose real\u2011time metrics via /api/metrics to track the effectiveness of the fixes",
-        "Add a proactive load\u2011shedding mechanism before the CPU load self\u2011test fails again"
-      ]
-    },
     {
       "id": "sess_0b76864b",
       "ts": "2026-05-09T18:29:41Z",
@@ -792,6 +772,26 @@
         "Use exponential backoff with jitter for LLM calls to reduce API hammering.",
         "Expose internal metrics via /api/metrics to enable external monitoring dashboards."
       ]
+    },
+    {
+      "id": "sess_b81ff764",
+      "ts": "2026-05-09T20:45:29Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive performance by fixing high CPU load failures and resolving TS12 self-test error",
+      "summary": "The hive is currently running at 75% health but suffering from repeated TS20 CPU load failures and a critical TS12 self-test failure. Recent work restored Ollama and applied several auto\u2011fixes, yet the CPU overload persists. Immediate coding actions are needed to add robustness to LLM calls and expose metrics for monitoring.",
+      "progress": "Implemented exponential backoff and retry logic for call_llm() and added preliminary metric endpoint scaffolding.",
+      "next_steps": [
+        "Complete the /api/metrics endpoint in logstream.py to include real-time CPU load, core count, and load/core ratio JSON fields",
+        "Add unit tests for the new backoff logic in orchestrator.py covering HTTP 429 and transient network errors",
+        "Instrument orchestrator.py to emit a Prometheus gauge for call_llm() success/failure counts",
+        "Create a watchdog script hive_cpu_watchdog.sh that triggers a graceful restart of orchestrator when load/core > 3.0",
+        "Document the TS12 self-test failure handling in README.md and add a fallback verification step in self_test.py"
+      ],
+      "decisions": [
+        "Prioritize fixing TS20 CPU overload before addressing lower\u2011priority blockers",
+        "Enforce exponential backoff as the default retry strategy for all external LLM calls",
+        "Expose detailed runtime metrics via /api/metrics to enable automated alerting"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -803,9 +803,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=75% blockers=5",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T20:44:53Z",
-    "completed_at": "2026-05-09T20:44:53Z"
+    "started_at": "2026-05-09T20:45:39Z",
+    "completed_at": "2026-05-09T20:45:40Z"
   }
 }
