@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T17:15:52Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-09T17:17:02Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.55,
-      "last_seen": "2026-05-09T17:15:32Z",
+      "status": "running",
+      "health_score": 0.889,
+      "last_seen": "2026-05-09T17:16:51Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 11,
+      "errors_last_hour": 14,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -52,6 +52,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_189dd5a2",
+      "ts": "2026-05-09T17:17:02Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive heartbeat shows no progress (done stays at 60) while failed tasks accumulate (4879). The hive process is likely hung or its task queue worker has crashed, causing the session to remain in error state.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "e1a177fba27872056a2c6c875ef40963"
+    },
     {
       "id": "b_e1d581e3",
       "ts": "2026-05-09T17:06:48Z",
@@ -496,6 +509,13 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_f04009ad",
+        "ts": "2026-05-09T17:17:02Z",
+        "hive": "default",
+        "summary": "Hive 'ps5-hive' is stalled with a growing failure count; restarting its systemd service should restore normal operation.",
+        "source": "doctor"
+      },
+      {
         "id": "f_a7e613dc",
         "ts": "2026-05-09T16:47:03Z",
         "hive": "default",
@@ -533,7 +553,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 10
+    "openrouter_calls_today": 11
   },
   "model_champions": {
     "text": null,
@@ -714,7 +734,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T17:15:42Z",
-    "completed_at": "2026-05-09T17:15:42Z"
+    "started_at": "2026-05-09T17:16:42Z",
+    "completed_at": "2026-05-09T17:16:43Z"
   }
 }
