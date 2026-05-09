@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T21:49:02Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-09T21:49:52Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -618,6 +618,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_85e1ee7b",
+        "ts": "2026-05-09T21:49:06Z",
+        "hive": "default",
+        "summary": "The ps5\u2011hive session is trapped in a runaway failure loop and should be restarted to clear the TS14 invariant violation.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_c202a965",
+        "ts": "2026-05-09T21:49:04Z",
+        "hive": "default",
+        "summary": "Restarted the ps5-hive service to break the failure loop and re\u2011establish healthy task processing.",
+        "source": "doctor"
+      },
+      {
         "id": "f_6490786f",
         "ts": "2026-05-09T21:18:59Z",
         "hive": "default",
@@ -781,7 +795,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 46
+    "openrouter_calls_today": 48
   },
   "model_champions": {
     "text": null,
@@ -1000,9 +1014,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T21:49:01Z",
-    "completed_at": "2026-05-09T21:49:02Z"
+    "started_at": "2026-05-09T21:49:12Z",
+    "completed_at": "2026-05-09T21:49:12Z"
   }
 }
