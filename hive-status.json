@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T21:18:59Z",
+  "last_updated": "2026-05-09T21:20:00Z",
   "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 0.889,
-      "last_seen": "2026-05-09T21:18:48Z",
+      "status": "error",
+      "health_score": 0.15,
+      "last_seen": "2026-05-09T21:19:58Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -61,30 +61,17 @@
   ],
   "blockers": [
     {
-      "id": "b_44c6f65d",
-      "ts": "2026-05-09T21:18:59Z",
+      "id": "b_1c50980e",
+      "ts": "2026-05-09T21:20:00Z",
       "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive is repeatedly failing tasks (\u22484,880 failures) while only a single task remains inflight, indicating a runaway failure loop that breaches the TS14 invariant and stalls progress.",
+      "agent": "supervisor",
+      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=28.93 cores=8 ratio=3.62",
       "severity": "high",
       "status": "open",
       "resolved_at": null,
       "resolution": null,
       "github_issue": null,
-      "_hash": "4e2f0aae50cc49576131a1bea8eee14d"
-    },
-    {
-      "id": "b_fbafe147",
-      "ts": "2026-05-09T21:18:58Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive is stuck with 1 running task and a very high failure count (4880 failed), indicating a runaway failure loop and possible TS14 invariant violation.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "e4779f1e4e14c348117cf33a3be1774b"
+      "_hash": "2868936d71eb0b51ecf4b5f0f225b24f"
     },
     {
       "id": "b_0ed81c43",
@@ -1013,9 +1000,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "heartbeat \u00b7 sessions=9 health=15% blockers=17",
     "status": "completed",
-    "started_at": "2026-05-09T21:18:25Z",
-    "completed_at": "2026-05-09T21:18:27Z"
+    "started_at": "2026-05-09T21:19:58Z",
+    "completed_at": "2026-05-09T21:19:58Z"
   }
 }
