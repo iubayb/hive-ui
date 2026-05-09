@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T16:19:57Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-09T16:20:54Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
@@ -371,6 +371,21 @@
   "capabilities": {
     "learned": [
       {
+        "id": "cap_c66ecf1e",
+        "ts": "2026-05-09T16:20:52Z",
+        "source_hive": "default",
+        "source_agent": "orchestrator",
+        "skill": "auto_test_oom",
+        "description": "Auto-generated test for 'oom' from incident: Ollama runner crashes on inference (exit -1): memory-constra",
+        "example": "tests/learned/test_oom.sh",
+        "tags": [
+          "self-improving",
+          "auto-generated",
+          "issue-to-test"
+        ],
+        "applicable_to": "all"
+      },
+      {
         "id": "cap_d9804ba6",
         "ts": "2026-05-09T15:48:38Z",
         "source_hive": "default",
@@ -552,9 +567,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=90% blockers=2",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-09T16:19:57Z",
-    "completed_at": "2026-05-09T16:19:57Z"
+    "started_at": "2026-05-09T16:20:52Z",
+    "completed_at": "2026-05-09T16:20:54Z"
   }
 }
