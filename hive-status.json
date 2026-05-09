@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T14:31:51Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-09T14:32:45Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -221,16 +221,6 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_4392902a",
-      "ts": "2026-05-09T14:21:57Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
-    {
       "id": "sess_e547391b",
       "ts": "2026-05-09T14:22:58Z",
       "updated_by": "orchestrator",
@@ -319,6 +309,16 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_696ed3a1",
+      "ts": "2026-05-09T14:32:25Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -330,9 +330,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T14:31:49Z",
-    "completed_at": "2026-05-09T14:31:51Z"
+    "started_at": "2026-05-09T14:32:11Z",
+    "completed_at": "2026-05-09T14:32:11Z"
   }
 }
