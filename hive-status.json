@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T15:58:40Z",
+  "last_updated": "2026-05-09T16:00:00Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.9,
-      "last_seen": "2026-05-09T15:57:47Z",
+      "last_seen": "2026-05-09T15:59:14Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -19,7 +19,7 @@
         "supervisor"
       ],
       "current_goal": "",
-      "active_model": "inclusionai/ling-2.6-1t:free",
+      "active_model": "openai/gpt-oss-120b:free",
       "errors_last_hour": 13,
       "tasks_completed_today": 0,
       "silent_minutes": 0
@@ -45,19 +45,6 @@
   ],
   "blockers": [
     {
-      "id": "b_cd4421bd",
-      "ts": "2026-05-09T15:54:54Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "Compaction LLM failed: HTTP 404",
-      "severity": "low",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "0ff6a3c64837dfa079365cdc878e866e"
-    },
-    {
       "id": "b_bb4964b2",
       "ts": "2026-05-09T15:53:39Z",
       "hive": "default",
@@ -82,6 +69,19 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "93595e8f81980e92821e7bf9850dddfc"
+    },
+    {
+      "id": "b_cd4421bd",
+      "ts": "2026-05-09T15:54:54Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "Compaction LLM failed: HTTP 404",
+      "severity": "low",
+      "status": "resolved",
+      "resolved_at": "2026-05-09T15:59:14Z",
+      "resolution": "Resolved at startup \u2014 orchestrator restarted with new model",
+      "github_issue": null,
+      "_hash": "0ff6a3c64837dfa079365cdc878e866e"
     },
     {
       "id": "b_c4975f9c",
@@ -253,7 +253,35 @@
       "_hash": "217dae28725ae72712be5a39a27334a8"
     }
   ],
-  "next_steps": [],
+  "next_steps": [
+    {
+      "id": "ns_47efa7c3",
+      "priority": 1,
+      "description": "Investigate and fix the cause of TS20 failure by updating validation logic in tests/self_test.py and adding detailed assertions.",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-09T16:00:00Z"
+    },
+    {
+      "id": "ns_27d7bca0",
+      "priority": 2,
+      "description": "Add exponential backoff and retry logic to call_llm() in orchestrator.py to handle HTTP 429 responses and reduce load spikes.",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-09T16:00:00Z"
+    },
+    {
+      "id": "ns_bdddf7b7",
+      "priority": 3,
+      "description": "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, and job queue lengths for real-time monitoring.",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-09T16:00:00Z"
+    }
+  ],
   "capabilities": {
     "learned": [
       {
@@ -284,7 +312,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 0
+    "openrouter_calls_today": 1
   },
   "model_champions": {
     "text": null,
@@ -293,16 +321,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_f74b240c",
-      "ts": "2026-05-09T15:48:35Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_f5cb1e20",
       "ts": "2026-05-09T15:49:41Z",
@@ -392,6 +410,26 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_fdc48b8b",
+      "ts": "2026-05-09T16:00:00Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by fixing failing self-tests and reducing system load while improving monitoring and reliability of the hive-ui codebase.",
+      "summary": "The hive recovered from recent issues, restarting the orchestrator and auto-fixing TS14. However, self-test TS20 is still failing and the system is experiencing high load. Immediate code fixes and enhanced metrics are needed to restore full health.",
+      "progress": "Supervisor tmux session was created and the orchestrator was restarted, and TS14 was auto-fixed.",
+      "next_steps": [
+        "Investigate and fix the cause of TS20 failure by updating validation logic in tests/self_test.py and adding detailed assertions.",
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py to handle HTTP 429 responses and reduce load spikes.",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, and job queue lengths for real-time monitoring.",
+        "Write unit tests for the new metrics endpoint in tests/test_metrics.py covering normal and error cases.",
+        "Introduce load shedding in job_scheduler.py by adding a threshold check that pauses low-priority jobs when load/core > 1.0."
+      ],
+      "decisions": [
+        "Prioritize fixing TS20 before adding new features to ensure test suite integrity.",
+        "Adopt exponential backoff for external API calls to mitigate high load conditions.",
+        "Expose internal performance metrics via an API endpoint for easier observability."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -405,7 +443,7 @@
     "agent": "orchestrator",
     "task": "self-test: running test_system.sh + auto-fix",
     "status": "running",
-    "started_at": "2026-05-09T15:58:40Z",
+    "started_at": "2026-05-09T16:00:00Z",
     "completed_at": null
   }
 }
