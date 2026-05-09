@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T15:52:58Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-09T15:53:52Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
-      "health_score": 0.65,
-      "last_seen": "2026-05-09T15:51:32Z",
+      "health_score": 0.6,
+      "last_seen": "2026-05-09T15:53:35Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -15,7 +15,8 @@
         "nextjs-prod",
         "opencode",
         "orchestrator",
-        "ps5-hive"
+        "ps5-hive",
+        "supervisor"
       ],
       "current_goal": "",
       "active_model": "inclusionai/ling-2.6-1t:free",
@@ -35,6 +36,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_bb4964b2",
+      "ts": "2026-05-09T15:53:39Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "self-test: TS20 failing \u2014 auto-fix attempted but not sufficient",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "e30a4556389fe0c4bc36d18a897f407e"
+    },
     {
       "id": "b_e8f90b1d",
       "ts": "2026-05-09T15:52:58Z",
@@ -259,16 +273,6 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_2b3f0fcf",
-      "ts": "2026-05-09T15:43:27Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
-    {
       "id": "sess_1879aab0",
       "ts": "2026-05-09T15:44:30Z",
       "updated_by": "orchestrator",
@@ -357,6 +361,16 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_f1bffb80",
+      "ts": "2026-05-09T15:53:52Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -370,7 +384,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T15:52:43Z",
-    "completed_at": "2026-05-09T15:52:44Z"
+    "started_at": "2026-05-09T15:53:51Z",
+    "completed_at": "2026-05-09T15:53:51Z"
   }
 }
