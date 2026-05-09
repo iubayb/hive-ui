@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T21:09:01Z",
+  "last_updated": "2026-05-09T21:09:54Z",
   "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.6,
-      "last_seen": "2026-05-09T21:07:28Z",
+      "status": "error",
+      "health_score": 0.3,
+      "last_seen": "2026-05-09T21:09:32Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -60,6 +60,32 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_38e85ed9",
+      "ts": "2026-05-09T21:09:54Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=1.52 mem=10.7GB disk=16% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "3c37118e584c8000796e22ddde543f82"
+    },
+    {
+      "id": "b_4ca6e41c",
+      "ts": "2026-05-09T21:09:43Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=1.52 mem=10.8GB disk=16% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "eeb7c0d0ee5011882d45782124956ca7"
+    },
     {
       "id": "b_165c5ab1",
       "ts": "2026-05-09T21:09:01Z",
@@ -934,9 +960,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "heartbeat \u00b7 sessions=9 health=30% blockers=14",
     "status": "completed",
-    "started_at": "2026-05-09T21:08:20Z",
-    "completed_at": "2026-05-09T21:08:21Z"
+    "started_at": "2026-05-09T21:09:32Z",
+    "completed_at": "2026-05-09T21:09:32Z"
   }
 }
