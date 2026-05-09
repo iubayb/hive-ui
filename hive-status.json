@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T19:47:57Z",
+  "last_updated": "2026-05-09T19:48:58Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.889,
-      "last_seen": "2026-05-09T19:47:56Z",
+      "last_seen": "2026-05-09T19:48:06Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -426,6 +426,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_14e88648",
+        "ts": "2026-05-09T19:48:21Z",
+        "hive": "default",
+        "summary": "ps5-hive is in a halted state with massive failures; restarting its service and clearing the tmux session should restore normal operation.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_9263bcf9",
+        "ts": "2026-05-09T19:48:14Z",
+        "hive": "default",
+        "summary": "ps5-hive is stuck with massive task failures; a service restart (or tmux session recycle) should recover normal operation.",
+        "source": "doctor"
+      },
+      {
         "id": "f_5ef5a97c",
         "ts": "2026-05-09T19:18:06Z",
         "hive": "default",
@@ -533,7 +547,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 30
+    "openrouter_calls_today": 32
   },
   "model_champions": {
     "text": null,
@@ -754,7 +768,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T19:47:47Z",
-    "completed_at": "2026-05-09T19:47:47Z"
+    "started_at": "2026-05-09T19:48:47Z",
+    "completed_at": "2026-05-09T19:48:48Z"
   }
 }
