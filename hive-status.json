@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T16:42:51Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-09T16:43:56Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
@@ -77,19 +77,6 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "bfe3392aeb60115965bc9330eb7ede39"
-    },
-    {
-      "id": "b_e96e72ba",
-      "ts": "2026-05-09T16:28:49Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "self-test: TS20 failing \u2014 auto-fix attempted but not sufficient",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "e30a4556389fe0c4bc36d18a897f407e"
     },
     {
       "id": "b_259fabd4",
@@ -480,7 +467,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 5
+    "openrouter_calls_today": 6
   },
   "model_champions": {
     "text": null,
@@ -489,16 +476,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_499a8e58",
-      "ts": "2026-05-09T15:51:43Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_fd08cd4a",
       "ts": "2026-05-09T15:52:45Z",
@@ -618,6 +595,26 @@
         "Expose runtime metrics via /api/metrics to enable external monitoring and auto\u2011scaling",
         "Implement a memory guard for Ollama inference to prevent crashes in low\u2011memory environments"
       ]
+    },
+    {
+      "id": "sess_ab43810a",
+      "ts": "2026-05-09T16:43:55Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive performance, reduce CPU load issues, and add runtime metrics monitoring.",
+      "summary": "The hive recovered from recent crashes, recreated the supervisor tmux session, and auto\u2011fixed invariant TS14. However, high CPU load on TS20 and failing self\u2011tests remain critical blockers. Immediate code improvements are needed to add resilience to LLM calls and expose operational metrics.",
+      "progress": "Supervisor session was recreated and orchestrator restarted, clearing the immediate outage.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and 5xx responses.",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, memory usage, and job queue length.",
+        "Write unit tests for call_llm() in orchestrator.py covering retry behavior and error handling.",
+        "Add a health check function in ts_monitor.py that validates TS20 CPU load/core ratio and logs a warning if >1.5.",
+        "Create a script fix_ts20_load.sh that automatically renice or reschedule low\u2011priority jobs when load/core exceeds the threshold."
+      ],
+      "decisions": [
+        "Prioritize fixing TS20 load issues before adding new features.",
+        "Enforce exponential backoff as the default retry strategy for all external LLM calls.",
+        "Expose runtime metrics via /api/metrics to enable external monitoring dashboards."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -629,9 +626,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-09T16:42:51Z",
-    "completed_at": "2026-05-09T16:42:51Z"
+    "started_at": "2026-05-09T16:43:55Z",
+    "completed_at": "2026-05-09T16:43:56Z"
   }
 }
