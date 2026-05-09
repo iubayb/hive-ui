@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T21:17:54Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-09T21:18:59Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "error",
-      "health_score": 0.15,
-      "last_seen": "2026-05-09T21:17:54Z",
+      "status": "running",
+      "health_score": 0.889,
+      "last_seen": "2026-05-09T21:18:48Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 15,
+      "errors_last_hour": 14,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -60,6 +60,32 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_44c6f65d",
+      "ts": "2026-05-09T21:18:59Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive is repeatedly failing tasks (\u22484,880 failures) while only a single task remains inflight, indicating a runaway failure loop that breaches the TS14 invariant and stalls progress.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "4e2f0aae50cc49576131a1bea8eee14d"
+    },
+    {
+      "id": "b_fbafe147",
+      "ts": "2026-05-09T21:18:58Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive is stuck with 1 running task and a very high failure count (4880 failed), indicating a runaway failure loop and possible TS14 invariant violation.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "e4779f1e4e14c348117cf33a3be1774b"
+    },
     {
       "id": "b_0ed81c43",
       "ts": "2026-05-09T21:10:06Z",
@@ -605,6 +631,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_6490786f",
+        "ts": "2026-05-09T21:18:59Z",
+        "hive": "default",
+        "summary": "High\u2011severity TS14 invariant violation in ps5\u2011hive; restart the hive service to reset failure counters and resume normal operation.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_95cfd833",
+        "ts": "2026-05-09T21:18:58Z",
+        "hive": "default",
+        "summary": "ps5-hive is in a failure loop; restarting its service should clear the stuck state.",
+        "source": "doctor"
+      },
+      {
         "id": "f_bcbf3989",
         "ts": "2026-05-09T20:48:48Z",
         "hive": "default",
@@ -754,7 +794,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 42
+    "openrouter_calls_today": 44
   },
   "model_champions": {
     "text": null,
@@ -973,9 +1013,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=15% blockers=17",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-09T21:17:54Z",
-    "completed_at": "2026-05-09T21:17:54Z"
+    "started_at": "2026-05-09T21:18:25Z",
+    "completed_at": "2026-05-09T21:18:27Z"
   }
 }
