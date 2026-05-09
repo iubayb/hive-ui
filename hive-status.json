@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T15:54:54Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-09T15:56:00Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.6,
-      "last_seen": "2026-05-09T15:53:35Z",
+      "status": "running",
+      "health_score": 0.9,
+      "last_seen": "2026-05-09T15:55:44Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -26,6 +26,14 @@
     }
   },
   "achievements": [
+    {
+      "id": "a_11c5ddae",
+      "ts": "2026-05-09T15:56:00Z",
+      "hive": "default",
+      "agent": "opencode",
+      "description": "Hive recovery: created supervisor tmux session (TS19), restarted orchestrator with openai/gpt-oss-120b:free (resolves LLM HTTP 404), resolved 9 stale blockers",
+      "evidence": "TS19 now passes; orchestrator restarted; all 9 stale blockers resolved in hive-status.json"
+    },
     {
       "id": "a_dd21e81f",
       "ts": "2026-05-09T15:48:38Z",
@@ -286,16 +294,6 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_7537862c",
-      "ts": "2026-05-09T15:45:31Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
-    {
       "id": "sess_a2f51ac7",
       "ts": "2026-05-09T15:46:33Z",
       "updated_by": "orchestrator",
@@ -384,6 +382,16 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_e21c0df0",
+      "ts": "2026-05-09T15:55:55Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -397,7 +405,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T15:54:52Z",
-    "completed_at": "2026-05-09T15:54:52Z"
+    "started_at": "2026-05-09T15:55:54Z",
+    "completed_at": "2026-05-09T15:55:54Z"
   }
 }
