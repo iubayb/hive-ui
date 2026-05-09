@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T15:23:56Z",
+  "last_updated": "2026-05-09T15:24:57Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.6,
-      "last_seen": "2026-05-09T15:22:37Z",
+      "last_seen": "2026-05-09T15:24:46Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -221,16 +221,6 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_41ad8e3c",
-      "ts": "2026-05-09T15:14:36Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
-    {
       "id": "sess_d184a36f",
       "ts": "2026-05-09T15:15:38Z",
       "updated_by": "orchestrator",
@@ -319,6 +309,16 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_f34b9853",
+      "ts": "2026-05-09T15:24:57Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -332,7 +332,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T15:23:54Z",
-    "completed_at": "2026-05-09T15:23:55Z"
+    "started_at": "2026-05-09T15:24:56Z",
+    "completed_at": "2026-05-09T15:24:56Z"
   }
 }
