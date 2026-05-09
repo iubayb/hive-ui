@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T16:27:38Z",
+  "last_updated": "2026-05-09T16:28:53Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.9,
-      "last_seen": "2026-05-09T16:26:07Z",
+      "health_score": 0.85,
+      "last_seen": "2026-05-09T16:28:34Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -52,6 +52,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_e96e72ba",
+      "ts": "2026-05-09T16:28:49Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "self-test: TS20 failing \u2014 auto-fix attempted but not sufficient",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "e30a4556389fe0c4bc36d18a897f407e"
+    },
     {
       "id": "b_259fabd4",
       "ts": "2026-05-09T16:27:35Z",
@@ -441,7 +454,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 4
+    "openrouter_calls_today": 5
   },
   "model_champions": {
     "text": null,
@@ -450,16 +463,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_e0bde968",
-      "ts": "2026-05-09T15:50:42Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "Compaction skipped \u2014 LLM unavailable: HTTP 404",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_499a8e58",
       "ts": "2026-05-09T15:51:43Z",
@@ -569,6 +572,26 @@
         "Expose runtime metrics via /api/metrics to enable external monitoring and auto-scaling",
         "Enforce load-shedding in the orchestrator to prevent cascade failures under high CPU load"
       ]
+    },
+    {
+      "id": "sess_9ca7330e",
+      "ts": "2026-05-09T16:28:48Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by reducing LLM call failures, exposing operational metrics, and addressing high system load issues.",
+      "summary": "The hive is running at 85% health but suffers from high CPU load and a failing Ollama runner due to memory constraints. Recent fixes restored supervisor and orchestrator sessions, and auto-fixes addressed invariant TS14. Immediate work focuses on robust LLM call handling and visibility into runtime metrics.",
+      "progress": "Supervisor tmux session was created and orchestrator restarted, and the TS14 invariant was auto\u2011fixed.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and timeout errors",
+        "Implement a new GET /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, disk, and job queue stats",
+        "Write unit tests for call_llm() in orchestrator.py covering success, rate\u2011limit, and network failure scenarios",
+        "Add a memory usage guard in orchestrator.py that aborts Ollama inference if free RAM < 1\u202fGB and logs a warning",
+        "Update hive-monitor.py to log average load/core ratio every minute and trigger a warning when ratio > 1.5"
+      ],
+      "decisions": [
+        "Prioritize exponential backoff for LLM calls to reduce failure rate under high load",
+        "Expose runtime metrics via /api/metrics to enable external monitoring and auto\u2011scaling",
+        "Implement a memory guard for Ollama inference to prevent crashes in low\u2011memory environments"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -580,9 +603,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: develop\u2192main promotion check + release draft",
     "status": "completed",
-    "started_at": "2026-05-09T16:27:28Z",
-    "completed_at": "2026-05-09T16:27:28Z"
+    "started_at": "2026-05-09T16:28:51Z",
+    "completed_at": "2026-05-09T16:28:53Z"
   }
 }
