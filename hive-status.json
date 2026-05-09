@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T20:48:48Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-09T20:49:44Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 0.889,
-      "last_seen": "2026-05-09T20:48:39Z",
+      "status": "stalled",
+      "health_score": 0.65,
+      "last_seen": "2026-05-09T20:49:04Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -60,32 +60,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_630981ee",
-      "ts": "2026-05-09T20:48:48Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive is repeatedly failing tasks (4880 failures) and appears stuck with a single inflight task, indicating a possible runaway failure or resource exhaustion.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "0f3f70f34527194c82e3e43a50bbbbbd"
-    },
-    {
-      "id": "b_3e277e3f",
-      "ts": "2026-05-09T20:48:44Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive is stuck with a single pending task and a large number of failures (4880), indicating a runaway failure loop and likely a TS14 invariant violation.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "6a076dc4664fabe3ff29fc4ae3fb4d0f"
-    },
     {
       "id": "b_2e1c9ba2",
       "ts": "2026-05-09T20:17:34Z",
@@ -845,7 +819,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T20:48:43Z",
-    "completed_at": "2026-05-09T20:48:44Z"
+    "started_at": "2026-05-09T20:49:44Z",
+    "completed_at": "2026-05-09T20:49:44Z"
   }
 }
