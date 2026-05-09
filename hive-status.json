@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T18:28:48Z",
+  "last_updated": "2026-05-09T18:29:51Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 1.0,
-      "last_seen": "2026-05-09T18:27:35Z",
+      "last_seen": "2026-05-09T18:29:51Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -466,7 +466,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 20
+    "openrouter_calls_today": 21
   },
   "model_champions": {
     "text": null,
@@ -475,26 +475,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_fdc48b8b",
-      "ts": "2026-05-09T16:00:00Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by fixing failing self-tests and reducing system load while improving monitoring and reliability of the hive-ui codebase.",
-      "summary": "The hive recovered from recent issues, restarting the orchestrator and auto-fixing TS14. However, self-test TS20 is still failing and the system is experiencing high load. Immediate code fixes and enhanced metrics are needed to restore full health.",
-      "progress": "Supervisor tmux session was created and the orchestrator was restarted, and TS14 was auto-fixed.",
-      "next_steps": [
-        "Investigate and fix the cause of TS20 failure by updating validation logic in tests/self_test.py and adding detailed assertions.",
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py to handle HTTP 429 responses and reduce load spikes.",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, and job queue lengths for real-time monitoring.",
-        "Write unit tests for the new metrics endpoint in tests/test_metrics.py covering normal and error cases.",
-        "Introduce load shedding in job_scheduler.py by adding a threshold check that pauses low-priority jobs when load/core > 1.0."
-      ],
-      "decisions": [
-        "Prioritize fixing TS20 before adding new features to ensure test suite integrity.",
-        "Adopt exponential backoff for external API calls to mitigate high load conditions.",
-        "Expose internal performance metrics via an API endpoint for easier observability."
-      ]
-    },
     {
       "id": "sess_1ec9c13d",
       "ts": "2026-05-09T16:15:03Z",
@@ -674,6 +654,26 @@
         "Expose real\u2011time metrics via /api/metrics to track the effectiveness of the fixes",
         "Add a proactive load\u2011shedding mechanism before the CPU load self\u2011test fails again"
       ]
+    },
+    {
+      "id": "sess_0b76864b",
+      "ts": "2026-05-09T18:29:41Z",
+      "updated_by": "orchestrator",
+      "goal": "Ensure continuous, reliable operation of the hive platform while enhancing observability and resilience of core services.",
+      "summary": "The hive is running at full health with recent successful recoveries of Ollama and supervisor components. Audits have fixed several critical bugs, and automatic invariant repairs are now active. Current focus is on strengthening LLM call reliability and adding operational metrics.",
+      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py, completing the P2 task.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py when HTTP 429 or network errors occur (ensure configurable max retries).",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with session stats, error rates, and request latencies.",
+        "Write unit tests for orchestrator.call_llm() covering success, retry, and failure paths in tests/test_orchestrator.py.",
+        "Instrument logstream.py to record request duration and error counts using a Prometheus Counter and Histogram.",
+        "Update Dockerfile for the orchestrator service to include the new retry and metrics dependencies (e.g., backoff, prometheus_client)."
+      ],
+      "decisions": [
+        "Retry logic will use exponential backoff with jitter and a maximum of 5 attempts.",
+        "Metrics endpoint will be secured behind existing API authentication and expose only non-sensitive data.",
+        "All new code changes must be covered by unit tests achieving at least 90% coverage before merge."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -685,9 +685,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: develop\u2192main promotion check + release draft",
+    "task": "heartbeat \u00b7 sessions=9 health=100% blockers=0",
     "status": "completed",
-    "started_at": "2026-05-09T18:28:45Z",
-    "completed_at": "2026-05-09T18:28:48Z"
+    "started_at": "2026-05-09T18:29:51Z",
+    "completed_at": "2026-05-09T18:29:51Z"
   }
 }
