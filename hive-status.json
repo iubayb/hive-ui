@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T19:13:43Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-09T19:14:53Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
@@ -506,7 +506,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 25
+    "openrouter_calls_today": 26
   },
   "model_champions": {
     "text": null,
@@ -515,26 +515,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_ab43810a",
-      "ts": "2026-05-09T16:43:55Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize hive performance, reduce CPU load issues, and add runtime metrics monitoring.",
-      "summary": "The hive recovered from recent crashes, recreated the supervisor tmux session, and auto\u2011fixed invariant TS14. However, high CPU load on TS20 and failing self\u2011tests remain critical blockers. Immediate code improvements are needed to add resilience to LLM calls and expose operational metrics.",
-      "progress": "Supervisor session was recreated and orchestrator restarted, clearing the immediate outage.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and 5xx responses.",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, memory usage, and job queue length.",
-        "Write unit tests for call_llm() in orchestrator.py covering retry behavior and error handling.",
-        "Add a health check function in ts_monitor.py that validates TS20 CPU load/core ratio and logs a warning if >1.5.",
-        "Create a script fix_ts20_load.sh that automatically renice or reschedule low\u2011priority jobs when load/core exceeds the threshold."
-      ],
-      "decisions": [
-        "Prioritize fixing TS20 load issues before adding new features.",
-        "Enforce exponential backoff as the default retry strategy for all external LLM calls.",
-        "Expose runtime metrics via /api/metrics to enable external monitoring dashboards."
-      ]
-    },
     {
       "id": "sess_a5cea93e",
       "ts": "2026-05-09T16:59:01Z",
@@ -714,6 +694,26 @@
         "Adopt exponential backoff with jitter for all external LLM API calls",
         "Expose internal metrics via /api/metrics to enable automated health monitoring"
       ]
+    },
+    {
+      "id": "sess_3b539d8e",
+      "ts": "2026-05-09T19:14:53Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize Hive operation by reducing CPU overload and improving LLM call reliability and observability.",
+      "summary": "The Hive is currently running at high CPU load (ratio >3) causing self\u2011test failures. Recent work recovered Ollama, audited supervisor scripts, and auto\u2011fixed invariant TS14. Immediate focus is on resilient LLM calls and exposing metric data to guide load mitigation.",
+      "progress": "Auto\u2011fixed system invariant TS14 and restored Ollama after LLVMpipe segfaults.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and transient network errors.",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, session counts, and error rates.",
+        "Write unit tests for call_llm() in orchestrator.py covering success, rate\u2011limit, and timeout scenarios.",
+        "Add a monitoring hook in supervisor.sh to log CPU load per session and trigger a graceful restart when ratio exceeds 2.5.",
+        "Create a configuration file (config/auto_scale.yaml) defining thresholds and scaling actions for TS20 CPU load, and load it in orchestrator.py."
+      ],
+      "decisions": [
+        "Use exponential backoff with jitter for LLM retries to avoid thundering herd.",
+        "Expose internal metrics via /api/metrics to enable external dashboarding and alerts.",
+        "Introduce automated load\u2011based session throttling to keep TS20 CPU load/core below 2.0."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -725,9 +725,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-09T19:13:42Z",
-    "completed_at": "2026-05-09T19:13:43Z"
+    "started_at": "2026-05-09T19:14:33Z",
+    "completed_at": "2026-05-09T19:14:53Z"
   }
 }
