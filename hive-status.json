@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T22:18:59Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-09T22:19:53Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "error",
       "health_score": 0.0,
-      "last_seen": "2026-05-09T22:17:18Z",
+      "last_seen": "2026-05-09T22:19:19Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 14,
+      "errors_last_hour": 10,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -644,6 +644,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_f7991af1",
+        "ts": "2026-05-09T22:19:14Z",
+        "hive": "default",
+        "summary": "ps5\u2011hive is in a failure loop; restarting its systemd service should clear the stuck state.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_872a907f",
+        "ts": "2026-05-09T22:19:10Z",
+        "hive": "default",
+        "summary": "Hive ps5-hive is stalled with many failed tasks; restarting its service should clear the deadlock and allow normal operation.",
+        "source": "doctor"
+      },
+      {
         "id": "f_85e1ee7b",
         "ts": "2026-05-09T21:49:06Z",
         "hive": "default",
@@ -821,7 +835,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 50
+    "openrouter_calls_today": 52
   },
   "model_champions": {
     "text": null,
@@ -1042,7 +1056,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T22:18:49Z",
-    "completed_at": "2026-05-09T22:18:49Z"
+    "started_at": "2026-05-09T22:19:52Z",
+    "completed_at": "2026-05-09T22:19:53Z"
   }
 }
