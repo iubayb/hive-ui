@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T21:29:40Z",
+  "last_updated": "2026-05-09T21:30:51Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
       "health_score": 0.1,
-      "last_seen": "2026-05-09T21:28:04Z",
+      "last_seen": "2026-05-09T21:30:11Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -781,7 +781,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 44
+    "openrouter_calls_today": 45
   },
   "model_champions": {
     "text": null,
@@ -790,26 +790,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_bb75ad8c",
-      "ts": "2026-05-09T18:59:47Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by resolving the CPU load blocker and improving resilience of LLM calls",
-      "summary": "The hive is running at 95% health but a high-priority self\u2011test failure shows excessive CPU load (27.08 on 8 cores). Recent work fixed several infrastructure issues and recovered the Ollama service. Immediate coding actions are needed to add retry/backoff for LLM calls and expose operational metrics.",
-      "progress": "Implemented exponential backoff stub for call_llm() and added basic logging for retry attempts.",
-      "next_steps": [
-        "Complete exponential backoff and retry logic in call_llm() within orchestrator.py, handling HTTP 429 and 5xx responses",
-        "Add a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, memory usage, and session counts",
-        "Write unit tests for the new /api/metrics endpoint in test_logstream.py covering normal and error cases",
-        "Integrate psutil-based CPU load monitoring into supervisor.sh to alert when load/core ratio exceeds 2.0",
-        "Create a watchdog thread in orchestrator.py that triggers a graceful restart of the hive if CPU load remains above threshold for 5 minutes"
-      ],
-      "decisions": [
-        "Prioritize fixing the TS20 CPU load blocker before adding new features",
-        "Adopt exponential backoff with jitter for all external LLM API calls",
-        "Expose internal metrics via /api/metrics to enable automated health monitoring"
-      ]
-    },
     {
       "id": "sess_3b539d8e",
       "ts": "2026-05-09T19:14:53Z",
@@ -989,6 +969,26 @@
         "Expose internal resource metrics via a public API to enable automated monitoring and alerts.",
         "Automate health\u2011check\u2011driven restarts of the research_loop to reduce manual intervention."
       ]
+    },
+    {
+      "id": "sess_a8e34a94",
+      "ts": "2026-05-09T21:30:40Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive operation by mitigating overload, implementing robust retry logic, and exposing health metrics.",
+      "summary": "The hive is currently under high CPU load causing research loops to pause and self-test failures. Recent fixes restored Ollama and supervisor functionality, but load-related blockers persist. Immediate code actions are needed to improve resilience and observability.",
+      "progress": "Added exponential backoff and retry logic to call_llm() in orchestrator.py.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py when HTTP 429 or timeout occurs (ensure jitter and max retries).",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with cpu_load, mem_usage, disk_usage, and active session counts.",
+        "Create unit tests for the new backoff logic in orchestrator.py covering success, transient failure, and max\u2011retry scenarios.",
+        "Add a health_check() function in health.py that evaluates load/core ratio and triggers a graceful throttling flag; integrate it into the main loop.",
+        "Update supervisor.sh to emit load metrics to the /api/metrics endpoint after each tick."
+      ],
+      "decisions": [
+        "Prioritize exponential backoff implementation before adding new metrics.",
+        "Expose system load metrics via an HTTP endpoint to enable external monitoring.",
+        "Add automated unit tests for critical resilience features to prevent regression."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1002,7 +1002,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T21:29:40Z",
-    "completed_at": "2026-05-09T21:29:40Z"
+    "started_at": "2026-05-09T21:30:50Z",
+    "completed_at": "2026-05-09T21:30:51Z"
   }
 }
