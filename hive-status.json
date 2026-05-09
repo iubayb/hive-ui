@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T23:00:59Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-09T23:02:02Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
@@ -875,7 +875,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 56
+    "openrouter_calls_today": 57
   },
   "model_champions": {
     "text": null,
@@ -884,26 +884,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_bb81478e",
-      "ts": "2026-05-09T20:30:29Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving high CPU load failures and improving robustness of LLM calls.",
-      "summary": "The hive is currently running at 75% health but suffering from repeated TS20 CPU load failures. Recent fixes restored Ollama and supervisor functionality, and an auto-fix for TS14 was applied. Immediate work must focus on adding retry/backoff logic and exposing metrics to monitor load.",
-      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py and created the /api/metrics endpoint in logstream.py.",
-      "next_steps": [
-        "Add circuit-breaker in orchestrator.py to pause call_llm() when avg CPU load > 2.0 for 5 minutes.",
-        "Instrument orchestrator.run_loop() in orchestrator.py to log per\u2011iteration CPU usage to a new metric 'cpu_load_ratio'.",
-        "Write unit tests for the new backoff logic in test_call_llm.py covering HTTP 429 and timeout scenarios.",
-        "Update logstream.py to include a '/api/metrics/cpu' route returning JSON with current load, cores, and ratio.",
-        "Create a watchdog script watchdog_cpu.py that triggers a graceful restart of orchestrator when load ratio exceeds 3.0 for three consecutive checks."
-      ],
-      "decisions": [
-        "Prioritize CPU load mitigation before adding new features.",
-        "Use exponential backoff with jitter for LLM calls to reduce API hammering.",
-        "Expose internal metrics via /api/metrics to enable external monitoring dashboards."
-      ]
-    },
     {
       "id": "sess_b81ff764",
       "ts": "2026-05-09T20:45:29Z",
@@ -1083,6 +1063,26 @@
         "Expose operational metrics via /api/metrics to enable external monitoring and alerting",
         "Apply exponential backoff globally to all LLM API calls to reduce throttling errors"
       ]
+    },
+    {
+      "id": "sess_3b22d280",
+      "ts": "2026-05-09T23:01:21Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by reducing CPU load blockers and completing critical code robustness tasks.",
+      "summary": "The hive is currently in error state due to high CPU load per core, with multiple self-test failures. Recent fixes restored Ollama and supervisor functionality, but the core issue of load remains. Immediate code improvements are needed to add resilience to LLM calls and expose metrics for monitoring.",
+      "progress": "Added exponential backoff and retry logic to call_llm() in orchestrator.py and created a basic /api/metrics endpoint stub in logstream.py.",
+      "next_steps": [
+        "Complete the implementation of /api/metrics in logstream.py to return JSON with fields: cpu_load, core_count, session_count, error_rate.",
+        "Add unit tests for the new metrics endpoint in tests/test_logstream_metrics.py covering normal and error responses.",
+        "Instrument orchestrator.py to log retry attempts and backoff durations using the hive logging framework.",
+        "Update the health check script in health_check.sh to parse and alert on cpu_load/core > 2.0 using the new metrics endpoint.",
+        "Refactor supervisor.sh to limit concurrent worker threads based on available cores and integrate the new metric for dynamic scaling."
+      ],
+      "decisions": [
+        "Prioritize fixing the CPU load/core ratio before adding new features.",
+        "Implement exponential backoff for LLM calls as a mandatory error handling pattern.",
+        "Expose internal performance metrics via an API to enable automated monitoring and alerting."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1094,9 +1094,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-09T23:00:59Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-09T23:01:51Z",
+    "completed_at": "2026-05-09T23:01:52Z"
   }
 }
