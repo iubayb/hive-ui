@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T16:05:56Z",
+  "last_updated": "2026-05-09T16:06:56Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.85,
-      "last_seen": "2026-05-09T16:05:25Z",
+      "health_score": 0.889,
+      "last_seen": "2026-05-09T16:06:07Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -19,8 +19,8 @@
         "supervisor"
       ],
       "current_goal": "",
-      "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 13,
+      "active_model": "inclusionai/ling-2.6-1t:free",
+      "errors_last_hour": 11,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -44,6 +44,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_48616da7",
+      "ts": "2026-05-09T16:06:06Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "LLM diagnosis call failed: HTTP 404",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "b1fcdcb5c38c60289b6f437c8faad7c3"
+    },
     {
       "id": "b_213152cc",
       "ts": "2026-05-09T16:05:14Z",
@@ -495,7 +508,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T16:05:45Z",
-    "completed_at": "2026-05-09T16:05:46Z"
+    "started_at": "2026-05-09T16:06:46Z",
+    "completed_at": "2026-05-09T16:06:46Z"
   }
 }
