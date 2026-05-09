@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T16:02:45Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-09T16:03:53Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.95,
-      "last_seen": "2026-05-09T16:01:24Z",
+      "last_seen": "2026-05-09T16:03:25Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -45,15 +45,41 @@
   ],
   "blockers": [
     {
+      "id": "b_abf36948",
+      "ts": "2026-05-09T16:03:53Z",
+      "hive": "default",
+      "agent": "supervisor",
+      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=19.27 cores=8 ratio=2.41",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "645e33a060d7e92ddc0a280d40317bf3"
+    },
+    {
+      "id": "b_8b223370",
+      "ts": "2026-05-09T16:03:43Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "HIGH load/core=1.01 mem=4.8GB disk=19% \u2014 jobs reniced",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "81d82424f46295dfc5c98bbfc3e7b8d9"
+    },
+    {
       "id": "b_be38a68d",
       "ts": "2026-05-09T16:00:30Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS20 failing \u2014 no auto-fix available or fix failed",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-09T16:03:32Z",
+      "resolution": "TS20 load driven by Bazzite KVM guest (12 vCPU + GPU passthrough, deliberate workload) \u2014 not a hive defect; not fixable by SIGSTOPping research_loop",
       "github_issue": null,
       "_hash": "7121d5a13d871954e02556197912da0b"
     },
@@ -456,7 +482,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T16:02:44Z",
-    "completed_at": "2026-05-09T16:02:45Z"
+    "started_at": "2026-05-09T16:03:45Z",
+    "completed_at": "2026-05-09T16:03:45Z"
   }
 }
