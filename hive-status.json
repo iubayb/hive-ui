@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T20:17:47Z",
+  "last_updated": "2026-05-09T20:18:47Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 0.8,
-      "last_seen": "2026-05-09T20:16:23Z",
+      "health_score": 0.75,
+      "last_seen": "2026-05-09T20:18:27Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 15,
+      "errors_last_hour": 17,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -438,19 +438,30 @@
         "source_hive": "default",
         "source_agent": "orchestrator",
         "skill": "auto_fix_TS14",
-        "description": "Automatically detects and repairs TS14 system invariant failures",
-        "example": "Applied fix for TS14: systemctl restart ollama",
-        "tags": [
-          "self-healing",
-          "system-invariant",
-          "auto-fix"
-        ],
-        "applicable_to": "all"
+        "description": "Detects TS14 invariant violations (e.g., runaway failures) and automatically restarts the affected hive service.",
+        "example": "systemctl restart hive-<name>.service",
+        "tags": [],
+        "applicable_to": "all",
+        "last_updated": "2026-05-09T20:18:30Z"
       }
     ]
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_0aa6e3e7",
+        "ts": "2026-05-09T20:18:39Z",
+        "hive": "default",
+        "summary": "The hive is stuck with a crashing worker causing massive task failures; restart the Ollama service and clear the pending queue.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_07efa34b",
+        "ts": "2026-05-09T20:18:30Z",
+        "hive": "default",
+        "summary": "{\n  \"diagnoses\": [\n    {\n      \"session\": \"ps5-hive\",\n      \"problem\": \"The hive is in error state with a high number of failed tasks (4880) and no progress; likely a stuck or failing worker process c",
+        "source": "doctor"
+      },
       {
         "id": "f_14e88648",
         "ts": "2026-05-09T19:48:21Z",
@@ -573,7 +584,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 34
+    "openrouter_calls_today": 36
   },
   "model_champions": {
     "text": null,
@@ -794,7 +805,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T20:17:46Z",
-    "completed_at": "2026-05-09T20:17:47Z"
+    "started_at": "2026-05-09T20:18:47Z",
+    "completed_at": "2026-05-09T20:18:47Z"
   }
 }
