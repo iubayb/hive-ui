@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T16:17:56Z",
+  "last_updated": "2026-05-09T16:18:56Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -26,6 +26,14 @@
     }
   },
   "achievements": [
+    {
+      "id": "a_6061a273",
+      "ts": "2026-05-09T16:18:54Z",
+      "hive": "default",
+      "agent": "opencode",
+      "description": "Extensive hive audit: fixed supervisor.sh TS-blocker dedup, fixed resource-guardian agent-based dedup, fixed OPENROUTER_MODEL in ~/.config/research-hive/env, restarted hive-live/hive-dev (model now gpt-oss-120b:free), identified Ollama runner OOM root cause (Bazzite 28GB + model 26GB = 54GB/62GB)",
+      "evidence": "33/34 self-tests pass; model=gpt-oss-120b:free in all UI and orchestrator; 2 legitimate open blockers"
+    },
     {
       "id": "a_11c5ddae",
       "ts": "2026-05-09T15:56:00Z",
@@ -69,19 +77,6 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "6e636b59fe56ca09f69b7d9b4b5517b5"
-    },
-    {
-      "id": "b_213152cc",
-      "ts": "2026-05-09T16:05:14Z",
-      "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "HIGH load/core=0.98 mem=5.8GB disk=16% \u2014 jobs reniced",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "ee1f38122a82c010b1dd820ba49935de"
     },
     {
       "id": "b_8b223370",
@@ -557,9 +552,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=85% blockers=3",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T16:17:56Z",
-    "completed_at": "2026-05-09T16:17:56Z"
+    "started_at": "2026-05-09T16:18:16Z",
+    "completed_at": "2026-05-09T16:18:16Z"
   }
 }
