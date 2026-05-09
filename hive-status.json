@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T20:07:54Z",
+  "last_updated": "2026-05-09T20:08:55Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.85,
-      "last_seen": "2026-05-09T20:06:10Z",
+      "last_seen": "2026-05-09T20:08:14Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -766,9 +766,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T20:07:22Z",
-    "completed_at": "2026-05-09T20:07:24Z"
+    "started_at": "2026-05-09T20:08:14Z",
+    "completed_at": "2026-05-09T20:08:15Z"
   }
 }
