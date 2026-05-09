@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T22:15:38Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-09T22:16:58Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
@@ -821,7 +821,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 49
+    "openrouter_calls_today": 50
   },
   "model_champions": {
     "text": null,
@@ -830,26 +830,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_a1ebe67a",
-      "ts": "2026-05-09T19:45:13Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize hive performance by handling LLM call errors and exposing runtime metrics",
-      "summary": "The hive is currently running at high CPU load, causing self-test failures. Recent work fixed critical crashes and restored core services, but request reliability and observability remain issues. Implementing retry logic and a metrics endpoint will address immediate stability and monitoring needs.",
-      "progress": "Added exponential backoff and retry logic to call_llm() in orchestrator.py and verified it reduces 429 errors in integration tests.",
-      "next_steps": [
-        "Add unit tests for the new backoff logic in orchestrator.py covering max retries and jitter behavior",
-        "Implement /api/metrics endpoint in logstream.py to return JSON with CPU load, session count, and error rates",
-        "Add Prometheus exposition format support to logstream.py for external monitoring systems",
-        "Create a watchdog script (watchdog.py) that triggers a graceful restart of orchestrator when CPU load/core ratio exceeds 3.0 for 2 minutes",
-        "Update supervisor.sh to include the new watchdog process in the tmux session and ensure it restarts on failure"
-      ],
-      "decisions": [
-        "Use exponential backoff with jitter and a maximum of 5 retries for LLM API calls",
-        "Expose metrics in both JSON and Prometheus formats to support flexible monitoring",
-        "Integrate a lightweight CPU load watchdog to preemptively recycle overloaded components"
-      ]
-    },
     {
       "id": "sess_4ce204ab",
       "ts": "2026-05-09T20:00:35Z",
@@ -1029,6 +1009,26 @@
         "Expose runtime health metrics via a dedicated HTTP endpoint for external monitoring.",
         "Implement automatic throttling of research_loop based on real\u2011time load signals."
       ]
+    },
+    {
+      "id": "sess_77bf48f5",
+      "ts": "2026-05-09T22:16:18Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by resolving CPU load issues and completing pending reliability improvements",
+      "summary": "The hive is currently in an error state due to excessive CPU load per core, causing the research loop to pause. Recent fixes have recovered Ollama and addressed several supervisor and orchestrator problems, but the high load blockers remain. Immediate work must focus on reducing load and adding robustness to LLM calls and metrics reporting.",
+      "progress": "Recovered Ollama, audited and fixed supervisor TS-blocker deduplication, and auto-fixed invariant TS14.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and timeout errors",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, memory usage, and active session count",
+        "Profile orchestrator.py to identify hot loops and add async batching in process_tasks() to lower CPU usage",
+        "Introduce a background load throttler in hive-dev/session_manager.py that pauses non\u2011critical tasks when load/core > 2.0",
+        "Write unit tests for the new backoff logic in orchestrator.py and the /api/metrics endpoint in logstream.py"
+      ],
+      "decisions": [
+        "Prioritize CPU load reduction before expanding new features",
+        "Use exponential backoff with jitter for LLM retries to prevent cascade failures",
+        "Expose real\u2011time metrics via /api/metrics to enable automated monitoring and auto\u2011scaling"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1040,9 +1040,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-09T22:15:38Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-09T22:16:48Z",
+    "completed_at": "2026-05-09T22:16:48Z"
   }
 }
