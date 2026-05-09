@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-09T23:30:56Z",
+  "last_updated": "2026-05-09T23:31:48Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -889,7 +889,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 60
+    "openrouter_calls_today": 61
   },
   "model_champions": {
     "text": null,
@@ -898,26 +898,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_5a428680",
-      "ts": "2026-05-09T21:00:52Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing high CPU load and improving LLM call reliability.",
-      "summary": "The hive is running at 75% health with multiple TS20 CPU load failures and a failing TS12 self-test. Recent fixes recovered Ollama and addressed several supervisor issues, but load spikes persist. Immediate work must add resiliency to LLM calls and expose metrics for load monitoring.",
-      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py.",
-      "next_steps": [
-        "Add exponential backoff and jitter to retry logic in call_llm() in orchestrator.py for HTTP 429 and 5xx errors.",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, cores, and load/core ratio.",
-        "Create unit tests for the new /api/metrics endpoint in tests/test_logstream.py covering normal and overload scenarios.",
-        "Add a background task in supervisor.sh to log CPU load every 30 seconds to a shared Redis key for real\u2011time monitoring.",
-        "Introduce a throttling guard in orchestrator.py that pauses new LLM requests when load/core ratio exceeds 3.0."
-      ],
-      "decisions": [
-        "Prioritize adding observable metrics before scaling resources.",
-        "Use exponential backoff with jitter to avoid thundering herd on LLM service.",
-        "Fail fast on high load conditions by halting new requests until load normalizes."
-      ]
-    },
     {
       "id": "sess_505aabae",
       "ts": "2026-05-09T21:15:43Z",
@@ -1097,6 +1077,26 @@
         "Enforce exponential backoff as the default strategy for all external LLM calls",
         "Expose detailed runtime metrics via /api/metrics for automated monitoring dashboards"
       ]
+    },
+    {
+      "id": "sess_a3306241",
+      "ts": "2026-05-09T23:31:38Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by reducing CPU overload and exposing runtime metrics",
+      "summary": "The hive is currently in an error state due to high CPU load per core across multiple TS20 self\u2011tests. Recent fixes have recovered Ollama and repaired several supervisor and orchestrator issues, but the overload persists. Implementing retry/backoff and a metrics endpoint will help monitor and mitigate the load.",
+      "progress": "Added exponential backoff and retry logic to call_llm() in orchestrator.py to reduce throttling errors.",
+      "next_steps": [
+        "Add dynamic load\u2011shedding in orchestrator.py: if CPU load/core > 2.5, pause new LLM calls for 10 seconds",
+        "Instrument orchestrator.py to record call_llm() latency and error rates, export to prometheus via add_metric()",
+        "Implement /api/metrics endpoint in logstream.py returning JSON with cpu_load, call_llm_latency, and error_counts",
+        "Create unit tests for the new /api/metrics endpoint in tests/test_logstream.py covering success and failure paths",
+        "Update supervisor.sh to restart orchestrator automatically when CPU load/core exceeds 3.0"
+      ],
+      "decisions": [
+        "Retry logic will use exponential backoff with max 5 attempts before failing.",
+        "Metrics will be exposed in Prometheus format but also provided as a simple JSON endpoint for quick debugging.",
+        "Load\u2011shedding thresholds are set to 2.5 for warning and 3.0 for forced pause."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1108,9 +1108,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-09T23:30:54Z",
-    "completed_at": "2026-05-09T23:30:56Z"
+    "started_at": "2026-05-09T23:31:48Z",
+    "completed_at": "2026-05-09T23:31:48Z"
   }
 }
