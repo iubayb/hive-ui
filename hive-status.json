@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T03:44:51Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-10T03:46:42Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
       "health_score": 0.0,
-      "last_seen": "2026-05-10T03:43:37Z",
+      "last_seen": "2026-05-10T03:45:42Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -60,6 +60,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_3219341f",
+      "ts": "2026-05-10T03:45:32Z",
+      "hive": "default",
+      "agent": "supervisor",
+      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=27.71 cores=8 ratio=3.46",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "d9719d5c0a327ea2a12bbe7e0067f4d6"
+    },
     {
       "id": "b_dc6d001e",
       "ts": "2026-05-10T03:28:41Z",
@@ -1339,9 +1352,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T03:44:48Z",
-    "completed_at": "2026-05-10T03:44:51Z"
+    "started_at": "2026-05-10T03:46:32Z",
+    "completed_at": "2026-05-10T03:46:32Z"
   }
 }
