@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T05:41:02Z",
+  "last_updated": "2026-05-10T05:41:48Z",
   "updated_by": "agent",
   "hives": {
     "default": {
@@ -60,6 +60,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_667a9bc9",
+      "ts": "2026-05-10T05:41:48Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "HIGH load/core=0.89 mem=34.8GB disk=17% \u2014 jobs reniced",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "9a2a7f754e68e5432cb02a5d7fa6e84a"
+    },
     {
       "id": "b_59447ecf",
       "ts": "2026-05-10T02:35:41Z",
@@ -1053,9 +1066,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=55% blockers=14",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-10T05:41:02Z",
-    "completed_at": "2026-05-10T05:41:02Z"
+    "started_at": "2026-05-10T05:41:23Z",
+    "completed_at": "2026-05-10T05:41:24Z"
   }
 }
