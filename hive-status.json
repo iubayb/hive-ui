@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T21:40:53Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-10T21:41:53Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 0.875,
-      "last_seen": "2026-05-10T21:40:25Z",
+      "status": "stalled",
+      "health_score": 0.45,
+      "last_seen": "2026-05-10T21:41:23Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -475,7 +475,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 25
+    "openrouter_calls_today": 26
   },
   "model_champions": {
     "text": null,
@@ -484,26 +484,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_ceccfe35",
-      "ts": "2026-05-10T19:10:06Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore all failing self-test modules (TS17\u2011TS21) and stabilize hive health",
-      "summary": "The hive is currently running but several critical self\u2011test modules (TS17\u2011TS21) are failing, causing high\u2011priority blockers. No recent fixes have succeeded, and the system is operating near disk capacity. Immediate code\u2011level interventions are required to add fallback logic and improve health monitoring.",
-      "progress": "No self\u2011test failures were resolved in the last cycle.",
-      "next_steps": [
-        "Add fallback handling to ts21_repair.py in orchestrator/self_fix/ to safely skip unrecoverable errors and log diagnostics",
-        "Implement a health check wrapper in health_monitor.py that retries failed self\u2011tests up to 3 times before marking them as hard failures",
-        "Create unit tests for ts17_repair.py, ts18_repair.py, ts19_repair.py, and ts20_repair.py covering success, retry, and fallback paths",
-        "Add disk usage alert in health_monitor.py to trigger automatic log rotation when usage exceeds 90%",
-        "Refactor call_llm() in orchestrator.py to include exponential backoff and retry on HTTP 429 responses"
-      ],
-      "decisions": [
-        "Prioritize fixing TS21 fallback first as it impacts subsequent test chains",
-        "Introduce automatic log rotation to prevent disk\u2011full shutdowns",
-        "Enforce a maximum of three retry attempts for any self\u2011test before escalation"
-      ]
-    },
     {
       "id": "sess_26d6afbd",
       "ts": "2026-05-10T19:25:14Z",
@@ -683,6 +663,26 @@
         "Health\u2011check wrapper will be the central point for auto\u2011retries before escalating to manual intervention",
         "Disk usage guard will be enforced to prevent further degradation until cleanup scripts run"
       ]
+    },
+    {
+      "id": "sess_3b0f2c88",
+      "ts": "2026-05-10T21:41:13Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive operation by fixing critical self-test failures and stabilizing the ps5-hive process",
+      "summary": "The hive is under high load with several critical blockers, notably TS21 and TS19 self-test failures and a hung ps5-hive process. A tmux-recover capability has been learned, but no concrete fixes have been applied yet. Immediate coding actions are needed to add fallback handling and health monitoring.",
+      "progress": "Implemented the tmux-recover capability to auto\u2011restart hung tmux windows.",
+      "next_steps": [
+        "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to safely abort and log when repair steps fail",
+        "Implement a health check wrapper in health_monitor.py that pings each hive process and restarts any that enter an error state",
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses",
+        "Create unit tests for ts19_check() in self_test.py covering both passing and failing scenarios",
+        "Add a /api/health endpoint to logstream.py that returns JSON status of all active sessions and resource usage"
+      ],
+      "decisions": [
+        "Prioritize fixing TS21 fallback before addressing TS19 as TS21 impacts more services",
+        "Integrate automatic process restart via health_monitor.py to reduce manual tmux recovery",
+        "Introduce exponential backoff for LLM calls to mitigate rate\u2011limit errors during self\u2011fix operations"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -694,9 +694,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-10T21:40:53Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-10T21:41:23Z",
+    "completed_at": "2026-05-10T21:41:23Z"
   }
 }
