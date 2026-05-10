@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T04:17:52Z",
+  "last_updated": "2026-05-10T04:18:42Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
       "health_score": 0.0,
-      "last_seen": "2026-05-10T04:16:32Z",
+      "last_seen": "2026-05-10T04:18:41Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -1133,7 +1133,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 86
+    "openrouter_calls_today": 87
   },
   "model_champions": {
     "text": null,
@@ -1142,26 +1142,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_700a4da0",
-      "ts": "2026-05-10T01:47:33Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing critical service failures and improving resilience",
-      "summary": "The hive is currently in an error state with high CPU load and several critical session backoffs. Recent auto-fixes have recovered Ollama and resolved some supervisor invariants, but high-load warnings and service invariant violations persist. Immediate code changes are needed to improve retry handling and expose metrics for monitoring.",
-      "progress": "Auto-fixed system invariant TS14 and recovered Ollama by disabling LLVMpipe segmentation faults.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and network errors",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, session restarts, and backoff counts",
-        "Update supervisor.sh to automatically restart research-loop.service if TS12 invariant violation is detected",
-        "Add unit tests for the new backoff logic in orchestrator.py covering max retries and jitter behavior",
-        "Integrate metrics endpoint into hive-ui dashboard by updating src/components/MetricsPanel.jsx to fetch and display /api/metrics data"
-      ],
-      "decisions": [
-        "Prioritize fixing the high CPU load self-test failures before adding new services",
-        "Adopt exponential backoff with jitter as the standard retry strategy for all external API calls",
-        "Expose operational metrics via a dedicated endpoint to enable real-time health monitoring"
-      ]
-    },
     {
       "id": "sess_dab0f75c",
       "ts": "2026-05-10T02:02:29Z",
@@ -1341,6 +1321,26 @@
         "Expose real-time metrics via /api/metrics for external monitoring",
         "Add retry/backoff to LLM calls to reduce immediate load spikes"
       ]
+    },
+    {
+      "id": "sess_fd2f95ce",
+      "ts": "2026-05-10T04:18:31Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by reducing CPU overload and adding observability metrics",
+      "summary": "The hive is currently overwhelmed by high CPU load per core, causing self-test failures and degraded health. Recent fixes have recovered Ollama and restored core services, but the underlying load issue remains. Implementing robust retry logic and exposing runtime metrics will help mitigate failures and guide further scaling actions.",
+      "progress": "Added exponential backoff and retry logic to call_llm() in orchestrator.py and created a supervisor tmux session to restart failing services.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py when HTTP 429 or 5xx responses are received",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, request latency, and error rates",
+        "Update supervisor.sh to monitor TS20 CPU load and automatically restart high\u2011load workers",
+        "Write unit tests for the new metrics endpoint in tests/test_logstream_metrics.py covering success and error paths",
+        "Add a Prometheus exporter in orchestrator.py exposing call_llm() retry counts and backoff durations"
+      ],
+      "decisions": [
+        "Prioritize exponential backoff implementation before adding new metrics",
+        "Expose only aggregated metrics (average CPU load, request latency) to avoid excessive data volume",
+        "Commit to automated unit test coverage for all new API endpoints"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1354,7 +1354,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T04:17:22Z",
-    "completed_at": "2026-05-10T04:17:22Z"
+    "started_at": "2026-05-10T04:18:41Z",
+    "completed_at": "2026-05-10T04:18:42Z"
   }
 }
