@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T13:50:54Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-10T13:51:51Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-10T13:50:54Z",
+      "status": "error",
+      "health_score": 0.0,
+      "last_seen": "2026-05-10T13:51:15Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -1694,7 +1694,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 124
+    "openrouter_calls_today": 125
   },
   "model_champions": {
     "text": null,
@@ -1703,26 +1703,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_4423d21b",
-      "ts": "2026-05-10T11:21:03Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize hive operations by reducing LLM call failures and improving monitoring metrics",
-      "summary": "The hive has recovered critical components and cleared several system invariants, but high load and disk usage keep research loops paused. Immediate work focuses on making LLM calls resilient and exposing runtime metrics for better auto\u2011scaling decisions.",
-      "progress": "Implemented crash fixes for Ollama, supervisor deduplication, and auto\u2011fixed TS14 invariant.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and 5xx responses",
-        "Write unit tests for the new retry logic in orchestrator_test.py covering max retries and backoff timing",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, disk, and queue lengths",
-        "Update logstream.py to emit Prometheus\u2011compatible metrics on each request and on LLM call outcomes",
-        "Add a health check in health_check.py that aborts research_loop when disk usage > 90% and triggers a graceful pause"
-      ],
-      "decisions": [
-        "Prioritize exponential backoff over simple retry to avoid hammering LLM service under high load",
-        "Expose metrics via /api/metrics before integrating external monitoring tools",
-        "Enforce a hard disk usage threshold (90%) in health_check to automatically pause compute\u2011intensive loops"
-      ]
-    },
     {
       "id": "sess_dbdb9a00",
       "ts": "2026-05-10T11:35:53Z",
@@ -1902,6 +1882,26 @@
         "Enforce automatic disk cleanup before exceeding 92% usage.",
         "Expose real-time health metrics via a dedicated API for external monitoring."
       ]
+    },
+    {
+      "id": "sess_9344c1a8",
+      "ts": "2026-05-10T13:51:51Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive performance by addressing critical resource overloads and completing pending code improvements",
+      "summary": "The hive is currently erroring due to high CPU load and near\u2011full disk usage, causing research_loop tasks to pause. Recent work has recovered Ollama, fixed supervisor issues, and auto\u2011fixed invariant TS14, but critical resource blockers remain.",
+      "progress": "Implemented exponential backoff and retry logic in call_llm() and added a stub for /api/metrics in logstream.py.",
+      "next_steps": [
+        "Complete the /api/metrics endpoint implementation in logstream.py to return JSON of session stats",
+        "Add disk usage monitoring and automatic log rotation in supervisor.sh to keep disk below 85%",
+        "Refactor research_loop.py to respect a configurable max_cpu_load threshold and pause when exceeded",
+        "Write unit tests for call_llm() retry logic in orchestrator.py covering HTTP 429 and 500 responses",
+        "Create a health check endpoint in orchestrator.py that reports current core load, memory, and disk usage"
+      ],
+      "decisions": [
+        "Prioritize fixing resource overloads before adding new features",
+        "Enforce exponential backoff globally for all LLM calls",
+        "Introduce automatic log rotation to prevent disk saturation"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1913,9 +1913,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-10T13:50:34Z",
-    "completed_at": "2026-05-10T13:50:34Z"
+    "started_at": "2026-05-10T13:51:35Z",
+    "completed_at": "2026-05-10T13:51:51Z"
   }
 }
