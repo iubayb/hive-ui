@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T18:54:48Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-10T18:55:53Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -226,7 +226,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 4
+    "openrouter_calls_today": 5
   },
   "model_champions": {
     "text": null,
@@ -235,16 +235,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_46d7859a",
-      "ts": "2026-05-10T17:48:12Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_810a19da",
       "ts": "2026-05-10T17:49:19Z",
@@ -374,6 +364,26 @@
         "Enforce automated health\u2011check wrappers to prevent jobs from running on a failing hive",
         "Add comprehensive unit test coverage for all self\u2011fix modules to catch regressions early"
       ]
+    },
+    {
+      "id": "sess_c020acdc",
+      "ts": "2026-05-10T18:55:11Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and improving resilience of monitoring components",
+      "summary": "The hive is stalled at 55% health due to high load and four critical self-test failures (TS21, TS19, TS18, TS17). Automatic fixes have not resolved the issues, and only fallback handling for TS21 is partially queued. Immediate code work is required to add robust fallback, health\u2011check wrappers, and missing auto\u2011fix implementations.",
+      "progress": "No recent achievements; the last attempted actions were queued fallback code for TS21 and a placeholder health check wrapper.",
+      "next_steps": [
+        "Implement fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to gracefully handle TS21 failures and log detailed diagnostics",
+        "Add a health check wrapper in health_monitor.py that retries self\u2011test functions up to 3 times with exponential backoff and updates the hive health status",
+        "Create auto\u2011fix modules for TS19, TS18, and TS17 in orchestrator/self_fix/ (e.g., ts19_fix.py, ts18_fix.py, ts17_fix.py) with concrete remediation steps",
+        "Add retry logic with rate\u2011limit handling to call_llm() in orchestrator.py for HTTP 429 responses",
+        "Write unit tests for all new self\u2011fix functions and health monitor wrappers covering success, failure, and fallback paths"
+      ],
+      "decisions": [
+        "Prioritize code fixes for self\u2011tests before addressing load/memory pressure, as test failures block health recovery",
+        "Use exponential backoff and max\u2011retry limits for all self\u2011test invocations to avoid cascading load",
+        "Integrate detailed logging and metrics for each auto\u2011fix attempt to enable future automated analysis"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -385,9 +395,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-10T18:54:48Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-10T18:55:43Z",
+    "completed_at": "2026-05-10T18:55:43Z"
   }
 }
