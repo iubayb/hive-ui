@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T08:33:45Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-10T08:34:52Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
@@ -860,7 +860,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 103
+    "openrouter_calls_today": 104
   },
   "model_champions": {
     "text": null,
@@ -869,26 +869,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_e3a6831a",
-      "ts": "2026-05-10T06:04:17Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving high load issues, fixing supervisor invariants, and improving reliability of LLM calls and monitoring.",
-      "summary": "The hive has recovered from recent crashes and auto\u2011fixed TS14, but high CPU load and several supervisor TS12 invariant failures remain. Immediate work focuses on making LLM calls resilient and exposing internal metrics for better observability.",
-      "progress": "Implemented exponential backoff skeleton in call_llm() and restored supervisor services after TS14 auto\u2011fix.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py, handling HTTP 429 and 5xx responses.",
-        "Write unit tests for call_llm() in tests/test_orchestrator.py covering backoff and retry behavior.",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, queue lengths, and retry statistics.",
-        "Update supervisor health check script (supervisor.sh) to monitor research-loop.service status and auto\u2011restart on failure.",
-        "Add structured logging of backoff attempts and metric endpoint hits in orchestrator.py and logstream.py."
-      ],
-      "decisions": [
-        "Use exponential backoff with jitter for all LLM API calls.",
-        "Expose internal performance metrics via a dedicated /api/metrics endpoint.",
-        "Prioritize fixing TS12 invariant failures by enhancing the supervisor watchdog."
-      ]
-    },
     {
       "id": "sess_ef72ca44",
       "ts": "2026-05-10T06:19:16Z",
@@ -1068,6 +1048,26 @@
         "Expose internal hive metrics via a dedicated /api/metrics endpoint rather than embedding them in existing logs",
         "Enforce unit test coverage >= 90% for all new retry and metric code before merging"
       ]
+    },
+    {
+      "id": "sess_684c9824",
+      "ts": "2026-05-10T08:34:52Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive performance under high load and expose operational metrics",
+      "summary": "The hive is currently stalled at 45% health due to high CPU load and several supervisor invariant failures. Recent work recovered Ollama, fixed supervisor issues, and added auto-fix for TS14, but retry and observability gaps remain.",
+      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py and drafted a basic /api/metrics endpoint stub in logstream.py.",
+      "next_steps": [
+        "Complete the /api/metrics endpoint in logstream.py to return JSON with CPU, memory, queue length, and error counts",
+        "Add unit tests for the new backoff logic in orchestrator.py covering HTTP 429, 500, and network timeouts",
+        "Instrument orchestrator.call_llm() to emit Prometheus counters for retries, failures, and latency",
+        "Fix the TS12 invariant failure by adding a watchdog restart loop in supervisor.sh for research-loop.service",
+        "Create a healthcheck endpoint in hive-ui/server.py that returns overall hive status and recent error logs"
+      ],
+      "decisions": [
+        "Use exponential backoff with jitter for LLM calls to mitigate rate\u2011limit spikes",
+        "Expose metrics via a dedicated /api/metrics route rather than embedding in existing logs",
+        "Prioritize automated restart of critical services (e.g., research-loop.service) to reduce manual intervention"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1079,9 +1079,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-10T08:33:44Z",
-    "completed_at": "2026-05-10T08:33:45Z"
+    "started_at": "2026-05-10T08:34:35Z",
+    "completed_at": "2026-05-10T08:34:52Z"
   }
 }
