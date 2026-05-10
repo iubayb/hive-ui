@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T15:37:00Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-10T15:37:57Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
       "health_score": 0.0,
-      "last_seen": "2026-05-10T15:35:18Z",
+      "last_seen": "2026-05-10T15:37:26Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -1694,7 +1694,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 131
+    "openrouter_calls_today": 132
   },
   "model_champions": {
     "text": null,
@@ -1703,26 +1703,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_f96373cc",
-      "ts": "2026-05-10T13:06:33Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize hive operations by resolving critical resource overloads and improving reliability of LLM calls and monitoring.",
-      "summary": "The hive is currently halted by repeated critical resource overloads that have paused the research_loop. Recent fixes restored Ollama and supervisor, and an auto\u2011fix for invariant TS14 is active, but the system remains at high CPU and disk usage. Immediate work must add resilience to LLM calls and expose internal metrics to guide remediation.",
-      "progress": "Recovered Ollama, audited and fixed supervisor scripts, and auto\u2011fixed invariant TS14, allowing the orchestrator to restart.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py, handling HTTP 429 and 500 responses.",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with cpu, memory, disk usage, and active session counts.",
-        "Write unit tests for the new retry logic in orchestrator.py covering success, transient failure, and max\u2011retry exhaustion.",
-        "Add a helper function monitor_resource_pressure() in health_check.py that logs warnings when cpu>80% or disk>85% and triggers a graceful throttling flag.",
-        "Update the Dockerfile to set a lower default OLLAMA_VULKAN flag and rebuild the image to reduce memory footprint."
-      ],
-      "decisions": [
-        "Prioritize automatic backoff for LLM calls before tackling resource throttling mechanisms.",
-        "Expose internal metrics via /api/metrics to enable external dashboards and automated alerts.",
-        "Include unit tests for any new reliability code to prevent regressions during future deployments."
-      ]
-    },
     {
       "id": "sess_beea2ffd",
       "ts": "2026-05-10T13:21:50Z",
@@ -1902,6 +1882,26 @@
         "Expose internal resource stats via a dedicated HTTP endpoint for external monitoring",
         "Automate log rotation and disk cleanup to prevent future disk\u2011space blockers"
       ]
+    },
+    {
+      "id": "sess_2d008e5b",
+      "ts": "2026-05-10T15:37:16Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive operations under high load and expose runtime metrics via API",
+      "summary": "The hive is currently under critical load with CPU and disk pressure causing the research_loop to pause. Recent fixes have recovered core services and added automatic invariant repairs, but the system remains vulnerable to overload and lacks observable metrics. Immediate coding actions are needed to improve resilience and visibility.",
+      "progress": "Implemented exponential backoff and retry logic in call_llm() and recovered core supervisor processes.",
+      "next_steps": [
+        "Add unit tests for the new backoff and retry logic in orchestrator.py's call_llm() function.",
+        "Implement a /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, and disk usage.",
+        "Add a health check in orchestrator.py that aborts research_loop when disk usage exceeds 90% and logs a warning.",
+        "Refactor research_loop to respect a new pause_reason flag and automatically resume when resources are below thresholds.",
+        "Create a Prometheus exporter in metrics.py that scrapes the /api/metrics endpoint every 30s."
+      ],
+      "decisions": [
+        "Prioritize exponential backoff in LLM calls to reduce API rate\u2011limit failures.",
+        "Expose runtime metrics via a dedicated endpoint for external monitoring.",
+        "Introduce automatic pause/resume logic for research_loop based on resource thresholds."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1913,9 +1913,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-10T15:37:00Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-10T15:37:26Z",
+    "completed_at": "2026-05-10T15:37:27Z"
   }
 }
