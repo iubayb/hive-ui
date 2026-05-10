@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T09:08:48Z",
+  "last_updated": "2026-05-10T09:09:55Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
       "health_score": 0.35,
-      "last_seen": "2026-05-10T09:07:37Z",
+      "last_seen": "2026-05-10T09:09:45Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -587,6 +587,21 @@
   "capabilities": {
     "learned": [
       {
+        "id": "cap_8adeb2f5",
+        "ts": "2026-05-10T09:09:13Z",
+        "source_hive": "default",
+        "source_agent": "orchestrator",
+        "skill": "auto_test_disk_space",
+        "description": "Auto-generated test for 'disk_space' from incident: self-test: FAIL: TS21 disk / usage < 90% \u2014 disk 92% >= 90%",
+        "example": "tests/learned/test_disk_space.sh",
+        "tags": [
+          "self-improving",
+          "auto-generated",
+          "issue-to-test"
+        ],
+        "applicable_to": "all"
+      },
+      {
         "id": "cap_c66ecf1e",
         "ts": "2026-05-09T16:20:52Z",
         "source_hive": "default",
@@ -1107,7 +1122,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T09:08:38Z",
-    "completed_at": "2026-05-10T09:08:38Z"
+    "started_at": "2026-05-10T09:09:45Z",
+    "completed_at": "2026-05-10T09:09:45Z"
   }
 }
