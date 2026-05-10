@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T01:49:45Z",
+  "last_updated": "2026-05-10T01:50:45Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "error",
-      "health_score": 0.0,
-      "last_seen": "2026-05-10T01:49:15Z",
+      "status": "running",
+      "health_score": 0.889,
+      "last_seen": "2026-05-10T01:50:38Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 10,
+      "errors_last_hour": 8,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -60,6 +60,32 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_b2e8ed65",
+      "ts": "2026-05-10T01:50:44Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[supervisor] TS12 invariant failure \u2013 the user service `research-loop.service` is not active, causing the supervisor self\u2011test to error.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "89421cc2c1672a90a8be329670fc8a34"
+    },
+    {
+      "id": "b_f973b3ae",
+      "ts": "2026-05-10T01:50:17Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[supervisor] TS12 invariant violation \u2013 the user\u2011level service\u202fresearch-loop.service is not running, causing the supervisor to enter an error state.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "d3b003de37b2689581b6d37c5fcd84e2"
+    },
     {
       "id": "b_e9f05ba6",
       "ts": "2026-05-10T01:20:38Z",
@@ -722,6 +748,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_e6a4cb10",
+        "ts": "2026-05-10T01:50:44Z",
+        "hive": "default",
+        "summary": "Restart the inactive research-loop.service to satisfy the TS12 invariant.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_ea08220e",
+        "ts": "2026-05-10T01:50:17Z",
+        "hive": "default",
+        "summary": "Supervisor error stems from a stopped research-loop service; restarting it should clear the TS12 failure.",
+        "source": "doctor"
+      },
+      {
         "id": "f_7b05185c",
         "ts": "2026-05-10T01:20:38Z",
         "hive": "default",
@@ -969,7 +1009,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 74
+    "openrouter_calls_today": 76
   },
   "model_champions": {
     "text": null,
@@ -1190,7 +1230,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T01:49:15Z",
-    "completed_at": "2026-05-10T01:49:15Z"
+    "started_at": "2026-05-10T01:50:15Z",
+    "completed_at": "2026-05-10T01:50:15Z"
   }
 }
