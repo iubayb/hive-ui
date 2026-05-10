@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T06:48:48Z",
+  "last_updated": "2026-05-10T06:49:57Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -860,7 +860,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 96
+    "openrouter_calls_today": 97
   },
   "model_champions": {
     "text": null,
@@ -869,26 +869,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_fd2f95ce",
-      "ts": "2026-05-10T04:18:31Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by reducing CPU overload and adding observability metrics",
-      "summary": "The hive is currently overwhelmed by high CPU load per core, causing self-test failures and degraded health. Recent fixes have recovered Ollama and restored core services, but the underlying load issue remains. Implementing robust retry logic and exposing runtime metrics will help mitigate failures and guide further scaling actions.",
-      "progress": "Added exponential backoff and retry logic to call_llm() in orchestrator.py and created a supervisor tmux session to restart failing services.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py when HTTP 429 or 5xx responses are received",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, request latency, and error rates",
-        "Update supervisor.sh to monitor TS20 CPU load and automatically restart high\u2011load workers",
-        "Write unit tests for the new metrics endpoint in tests/test_logstream_metrics.py covering success and error paths",
-        "Add a Prometheus exporter in orchestrator.py exposing call_llm() retry counts and backoff durations"
-      ],
-      "decisions": [
-        "Prioritize exponential backoff implementation before adding new metrics",
-        "Expose only aggregated metrics (average CPU load, request latency) to avoid excessive data volume",
-        "Commit to automated unit test coverage for all new API endpoints"
-      ]
-    },
     {
       "id": "sess_90be5e0f",
       "ts": "2026-05-10T04:33:45Z",
@@ -1068,6 +1048,26 @@
         "Expose runtime statistics via a dedicated /api/metrics endpoint for external monitoring tools",
         "Enforce a hard limit of 5 consecutive LLM failures before triggering circuit\u2011breaker pause"
       ]
+    },
+    {
+      "id": "sess_1ab36732",
+      "ts": "2026-05-10T06:49:46Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive performance and enhance observability while addressing high load blockers",
+      "summary": "The hive has recovered critical services and auto-fixed several invariants, but high CPU load and memory pressure remain, causing a stalled health state. Pending tasks include adding exponential backoff to LLM calls and exposing runtime metrics, which are essential for preventing overload and improving monitoring.",
+      "progress": "Auto-fixed TS14 invariant and restored the supervisor and orchestrator services, reducing immediate failures.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and timeout errors",
+        "Implement /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, and active job counts",
+        "Add unit tests for the new /api/metrics endpoint in tests/test_logstream_metrics.py",
+        "Instrument orchestrator.py to log retry attempts and backoff durations to hive-monitor.log",
+        "Create a dashboard widget in hive-ui/src/components/MetricsWidget.jsx to display the metrics from /api/metrics"
+      ],
+      "decisions": [
+        "Prioritize exponential backoff in LLM calls to mitigate overload before adding new metrics",
+        "Expose internal resource usage via a dedicated metrics endpoint for real-time monitoring",
+        "Validate new functionality with automated tests to prevent regressions under high load"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1081,7 +1081,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T06:48:48Z",
-    "completed_at": "2026-05-10T06:48:48Z"
+    "started_at": "2026-05-10T06:49:56Z",
+    "completed_at": "2026-05-10T06:49:57Z"
   }
 }
