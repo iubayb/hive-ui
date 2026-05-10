@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T16:36:59Z",
+  "last_updated": "2026-05-10T16:38:02Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -1707,7 +1707,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 135
+    "openrouter_calls_today": 136
   },
   "model_champions": {
     "text": null,
@@ -1716,26 +1716,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_33dd7fa1",
-      "ts": "2026-05-10T14:07:04Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving critical resource overloads and improving reliability of core orchestration calls",
-      "summary": "The hive is currently facing critical CPU, memory, and disk pressure causing research loops to pause. Recent auto-fixes have restored the Ollama service and repaired supervisor invariants, but core orchestration remains fragile under load. Immediate code improvements are needed to add resilience and observability.",
-      "progress": "Auto-fixed invariant TS14 and restored supervisor and Ollama services, allowing the hive to restart key sessions.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and timeout errors",
-        "Write unit tests for call_llm() covering success, rate\u2011limit, and network\u2011failure scenarios in tests/test_orchestrator.py",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, and disk usage metrics",
-        "Add periodic disk\u2011space cleanup in supervisor.sh to prune log files when disk > 90%",
-        "Instrument research_loop in research.py to log iteration latency and abort if avg latency > 2s"
-      ],
-      "decisions": [
-        "Prioritize adding backoff/retry to orchestrator call_llm() to unblock research loops",
-        "Deploy the /api/metrics endpoint first to gain real\u2011time insight into resource saturation",
-        "Defer non\u2011critical UI enhancements until core stability metrics improve"
-      ]
-    },
     {
       "id": "sess_1df01c3f",
       "ts": "2026-05-10T14:22:23Z",
@@ -1915,6 +1895,26 @@
         "Use exponential backoff parameters (initial 1s, max 30s, factor 2) for LLM calls",
         "Expose metrics via JSON API to enable external monitoring and automated alerts"
       ]
+    },
+    {
+      "id": "sess_4a715e8b",
+      "ts": "2026-05-10T16:37:51Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive operations by reducing resource overload and improving reliability of core services",
+      "summary": "The hive is currently facing critical resource constraints with high CPU load, memory usage, and disk utilization causing research loops to pause. Recent fixes have restored Ollama and supervisor functionality, and auto-fix mechanisms are in place, but immediate code improvements are needed to handle overload and add observability.",
+      "progress": "Implemented exponential backoff and retry logic for LLM calls and added a basic /api/metrics endpoint in logstream.py.",
+      "next_steps": [
+        "Add disk usage monitoring and automated cleanup in utils/disk_manager.py to trigger when usage exceeds 85%",
+        "Enhance call_llm() in orchestrator.py to log retry attempts and backoff intervals to metrics",
+        "Extend /api/metrics endpoint in logstream.py to include CPU load, memory usage, and active session counts",
+        "Write unit tests for the new backoff logic in orchestrator.py covering HTTP 429 and timeout scenarios",
+        "Implement a health check handler in health.py that returns detailed resource stats and integrates with the hive dashboard"
+      ],
+      "decisions": [
+        "Prioritize exponential backoff in LLM calls to reduce throttling errors",
+        "Expose real-time resource metrics via /api/metrics for automated scaling decisions",
+        "Add automated disk cleanup to prevent hard failures from disk saturation"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1928,7 +1928,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T16:36:58Z",
-    "completed_at": "2026-05-10T16:36:59Z"
+    "started_at": "2026-05-10T16:38:01Z",
+    "completed_at": "2026-05-10T16:38:02Z"
   }
 }
