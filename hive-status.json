@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T20:24:47Z",
+  "last_updated": "2026-05-10T20:25:52Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.55,
-      "last_seen": "2026-05-10T20:23:47Z",
+      "last_seen": "2026-05-10T20:25:51Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -307,7 +307,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 14
+    "openrouter_calls_today": 15
   },
   "model_champions": {
     "text": null,
@@ -316,26 +316,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_be02fd69",
-      "ts": "2026-05-10T17:54:43Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests and reducing resource pressure",
-      "summary": "The hive is currently stalled with high memory usage and several critical self\u2011test failures (TS17\u2011TS21). No recent progress has been made and the system remains under heavy load. Immediate code fixes and resource adjustments are required to bring the hive back to a healthy state.",
-      "progress": "No new fixes have been applied since the last snapshot.",
-      "next_steps": [
-        "Update self_test_suite.py in /hive/tests to add missing mock data for TS17 and correct assertion logic",
-        "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to retry the database reset when the first attempt fails",
-        "Implement a health check wrapper in health_monitor.py to automatically restart services when disk usage exceeds 90%",
-        "Refactor memory\u2011intensive data loading in data_loader.py to use streaming generators instead of full list copies",
-        "Write unit tests in test_ts19.py covering edge cases for TS19 and integrate them into the CI pipeline"
-      ],
-      "decisions": [
-        "Prioritize fixing TS21 via improved retry logic before addressing TS17\u2011TS19",
-        "Allocate an additional 16\u202fGB RAM to the orchestrator container to mitigate memory pressure",
-        "Schedule a rolling restart of all active sessions after code changes are merged"
-      ]
-    },
     {
       "id": "sess_33f1da63",
       "ts": "2026-05-10T18:09:53Z",
@@ -515,6 +495,26 @@
         "Health check wrapper will standardize all self-test results into a HealthStatus enum (PASS, WARN, FAIL)",
         "Exponential backoff settings will start at 2 seconds and cap at 30 seconds"
       ]
+    },
+    {
+      "id": "sess_c16a8f7e",
+      "ts": "2026-05-10T20:25:41Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and improving robustness of core monitoring components.",
+      "summary": "The hive is currently stalled with four critical self-test failures (TS17\u2011TS21) and high resource pressure. No recent progress has been recorded, and the primary blockers are missing fallback logic and health\u2011check automation. Immediate code work is needed to address these failures and prevent future stalls.",
+      "progress": "No new fixes have been applied since the last snapshot.",
+      "next_steps": [
+        "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to gracefully handle unrecoverable TS21 errors.",
+        "Implement a health check wrapper in health_monitor.py that automatically retries and logs failures for core health checks.",
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 and transient network errors.",
+        "Write unit tests for ts17_repair.py, ts18_repair.py, and ts19_repair.py covering success, fallback, and unrecoverable paths.",
+        "Introduce log rotation in logger.py to limit log file size and prevent disk from reaching 100% usage."
+      ],
+      "decisions": [
+        "Prioritize fixing TS21 fallback and adding the health_monitor wrapper before tackling lower\u2011priority self\u2011tests.",
+        "Add retry/backoff to LLM calls to reduce load spikes that contribute to high mem/disk usage.",
+        "Defer non\u2011essential feature work until the hive health status returns to green."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -528,7 +528,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T20:24:27Z",
-    "completed_at": "2026-05-10T20:24:27Z"
+    "started_at": "2026-05-10T20:25:51Z",
+    "completed_at": "2026-05-10T20:25:52Z"
   }
 }
