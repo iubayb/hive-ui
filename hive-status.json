@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T01:16:59Z",
+  "last_updated": "2026-05-10T01:17:41Z",
   "updated_by": "agent",
   "hives": {
     "default": {
@@ -929,7 +929,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 69
+    "openrouter_calls_today": 70
   },
   "model_champions": {
     "text": null,
@@ -938,26 +938,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_912f0e44",
-      "ts": "2026-05-09T22:46:02Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize hive performance and expose operational metrics via API",
-      "summary": "The hive is currently in an error state due to high CPU load blockers, but recent recovery actions have restored core services and auto-fixed invariant TS14. Outstanding high\u2011priority issues include persistent CPU load failures and missing metrics endpoint.",
-      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py, and created a supervisor tmux session to stabilize orchestrator restarts.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py when HTTP 429 or network errors occur",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, session counts, and error rates",
-        "Write unit tests for the new /api/metrics endpoint in tests/test_logstream_metrics.py covering success and error paths",
-        "Introduce a rate\u2011limiting guard in orchestrator.py to pause new LLM calls when CPU load/core ratio exceeds 2.0",
-        "Update supervisor.sh to monitor TS20 CPU load and automatically restart overloaded workers"
-      ],
-      "decisions": [
-        "Prioritize fixing TS20 CPU load blockers before adding new features",
-        "Expose operational metrics via /api/metrics to enable external monitoring and alerting",
-        "Apply exponential backoff globally to all LLM API calls to reduce throttling errors"
-      ]
-    },
     {
       "id": "sess_3b22d280",
       "ts": "2026-05-09T23:01:21Z",
@@ -1137,6 +1117,26 @@
         "Expose internal metrics via a dedicated API to enable automated monitoring and alerts",
         "Introduce automated CPU load checks as a gating condition for session restarts"
       ]
+    },
+    {
+      "id": "sess_1ff311de",
+      "ts": "2026-05-10T01:17:20Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by improving LLM call resilience and adding operational metrics endpoint",
+      "summary": "The hive is currently in an error state with high CPU load and several sessions in backoff. Recent automated fixes have restored core services, but call_llm() lacks robust retry logic and there is no metrics API for monitoring health.",
+      "progress": "Auto-fixed the TS14 invariant and restored the supervisor tmux session, bringing core orchestration back online.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and network errors",
+        "Create /api/metrics endpoint in logstream.py that returns JSON with session health, CPU load, and backoff counts",
+        "Write unit tests for the new retry logic in orchestrator.py covering max retries and jitter behavior",
+        "Instrument orchestrator.py to emit Prometheus-style counters for LLM call successes, failures, and retries",
+        "Update supervisor.sh to gracefully restart sessions after 5 consecutive backoff failures"
+      ],
+      "decisions": [
+        "Use jittered exponential backoff with a max wait of 30 seconds for call_llm() retries",
+        "Expose metrics via a JSON endpoint rather than raw logs to simplify monitoring integration",
+        "Prioritize fixing CPU load issues after stabilizing LLM call handling"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1148,9 +1148,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-10T01:16:59Z",
-    "completed_at": null
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "status": "completed",
+    "started_at": "2026-05-10T01:17:40Z",
+    "completed_at": "2026-05-10T01:17:41Z"
   }
 }
