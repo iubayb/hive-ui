@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T17:06:48Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-10T17:07:58Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "error",
       "health_score": 0.0,
-      "last_seen": "2026-05-10T17:05:17Z",
+      "last_seen": "2026-05-10T17:07:18Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -1707,7 +1707,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 137
+    "openrouter_calls_today": 138
   },
   "model_champions": {
     "text": null,
@@ -1716,26 +1716,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_d69d48f7",
-      "ts": "2026-05-10T14:37:31Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by addressing critical resource overloads and improving reliability of core services",
-      "summary": "The hive is currently suffering from high CPU load and near\u2011full disk usage, causing research loops to pause. Recent fixes restored Ollama and repaired several supervisor and orchestrator issues, but the underlying resource exhaustion remains unresolved.",
-      "progress": "Auto\u2011fixed invariant TS14 and restored the supervisor tmux session, allowing the orchestrator to restart.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and transient failures",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, and disk usage stats",
-        "Add disk usage monitoring and automatic log rotation in logger.py to keep /var/log/hive below 80% capacity",
-        "Create unit tests for the new backoff logic in orchestrator_test.py covering success, retry, and max\u2011retry failure cases",
-        "Instrument research_loop.py to record and report pause reasons to the new metrics endpoint"
-      ],
-      "decisions": [
-        "Prioritize fixing resource exhaustion before expanding research tasks",
-        "Enforce exponential backoff on all external LLM calls to reduce load spikes",
-        "Expose real\u2011time resource metrics via an API for automated monitoring and alerting"
-      ]
-    },
     {
       "id": "sess_df0c8012",
       "ts": "2026-05-10T14:52:14Z",
@@ -1915,6 +1895,26 @@
         "Expose detailed metrics via /api/metrics to enable external monitoring dashboards.",
         "Enforce retry backoff on all LLM API calls to reduce failure impact during high load."
       ]
+    },
+    {
+      "id": "sess_69465bd1",
+      "ts": "2026-05-10T17:07:58Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore hive health by reducing resource load and implementing robust retry and monitoring features",
+      "summary": "The hive is currently in an error state due to high CPU load, memory usage, and disk saturation, causing research loops to be paused. Recent work fixed critical system bugs and recovered Ollama, but resource pressure remains. Implementing exponential backoff for LLM calls and adding a metrics endpoint will improve stability and observability.",
+      "progress": "Auto-fixed the TS14 invariant and recovered the Ollama service, clearing immediate crashes.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator/orchestrator.py for HTTP 429 and network errors",
+        "Create /api/metrics endpoint in logstream.py that returns JSON with CPU load, memory usage, disk usage, and active session counts",
+        "Write unit tests for the new backoff logic in orchestrator/tests/test_call_llm.py covering success, retry, and max\u2011retry failures",
+        "Instrument orchestrator.py to emit Prometheus\u2011compatible metrics for call_llm() latency and retry counts",
+        "Implement a disk cleanup helper in utils/disk_manager.py that removes logs older than 30 days and schedule it via cron"
+      ],
+      "decisions": [
+        "Prioritize exponential backoff for LLM calls to reduce load spikes",
+        "Add real\u2011time metrics endpoint to aid in monitoring and auto\u2011scaling decisions",
+        "Introduce automated log cleanup to free disk space and prevent future disk\u2011full failures"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1926,9 +1926,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-10T17:06:28Z",
-    "completed_at": "2026-05-10T17:06:28Z"
+    "started_at": "2026-05-10T17:07:40Z",
+    "completed_at": "2026-05-10T17:07:58Z"
   }
 }
