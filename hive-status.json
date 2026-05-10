@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T21:24:54Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-10T21:25:59Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -420,7 +420,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 22
+    "openrouter_calls_today": 23
   },
   "model_champions": {
     "text": null,
@@ -429,26 +429,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_c020acdc",
-      "ts": "2026-05-10T18:55:11Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests and improving resilience of monitoring components",
-      "summary": "The hive is stalled at 55% health due to high load and four critical self-test failures (TS21, TS19, TS18, TS17). Automatic fixes have not resolved the issues, and only fallback handling for TS21 is partially queued. Immediate code work is required to add robust fallback, health\u2011check wrappers, and missing auto\u2011fix implementations.",
-      "progress": "No recent achievements; the last attempted actions were queued fallback code for TS21 and a placeholder health check wrapper.",
-      "next_steps": [
-        "Implement fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to gracefully handle TS21 failures and log detailed diagnostics",
-        "Add a health check wrapper in health_monitor.py that retries self\u2011test functions up to 3 times with exponential backoff and updates the hive health status",
-        "Create auto\u2011fix modules for TS19, TS18, and TS17 in orchestrator/self_fix/ (e.g., ts19_fix.py, ts18_fix.py, ts17_fix.py) with concrete remediation steps",
-        "Add retry logic with rate\u2011limit handling to call_llm() in orchestrator.py for HTTP 429 responses",
-        "Write unit tests for all new self\u2011fix functions and health monitor wrappers covering success, failure, and fallback paths"
-      ],
-      "decisions": [
-        "Prioritize code fixes for self\u2011tests before addressing load/memory pressure, as test failures block health recovery",
-        "Use exponential backoff and max\u2011retry limits for all self\u2011test invocations to avoid cascading load",
-        "Integrate detailed logging and metrics for each auto\u2011fix attempt to enable future automated analysis"
-      ]
-    },
     {
       "id": "sess_ceccfe35",
       "ts": "2026-05-10T19:10:06Z",
@@ -628,6 +608,26 @@
         "Introduce automatic retry logic in health_monitor.py to reduce manual intervention for transient failures.",
         "Allocate additional temporary disk space (increase quota to 110%) to allow repair scripts to complete without hitting the 93% disk usage limit."
       ]
+    },
+    {
+      "id": "sess_346a5fbb",
+      "ts": "2026-05-10T21:25:59Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and stabilizing resource usage",
+      "summary": "The hive is currently stalled with 55% health due to multiple high\u2011priority self\u2011test failures (TS17\u2011TS21) and high disk usage. Auto\u2011fix attempts have not resolved the issues, and a fallback mechanism is pending. Immediate code work is required to add robust repair and health\u2011check logic.",
+      "progress": "Auto\u2011fix was attempted for TS21 but was insufficient, highlighting the need for fallback handling.",
+      "next_steps": [
+        "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to trigger a full restart of the affected subsystem when the primary fix fails",
+        "Implement a health\u2011check wrapper in health_monitor.py that retries failed self\u2011tests up to 3 times and logs detailed diagnostics",
+        "Create unit tests for ts17_repair.py, ts18_repair.py, and ts19_repair.py covering both success and fallback paths",
+        "Add disk usage guard in resource_manager.py to abort new jobs when disk > 90% and generate an alert via /api/metrics endpoint",
+        "Update orchestrator.py to include exponential backoff for call_llm() when receiving HTTP 429 responses"
+      ],
+      "decisions": [
+        "Fallback mechanisms will be preferred over immediate job termination for self\u2011test repairs",
+        "Health\u2011check wrapper will be the central point for auto\u2011retries before escalating to manual intervention",
+        "Disk usage guard will be enforced to prevent further degradation until cleanup scripts run"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -639,9 +639,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-10T21:24:54Z",
-    "completed_at": "2026-05-10T21:24:54Z"
+    "started_at": "2026-05-10T21:25:44Z",
+    "completed_at": "2026-05-10T21:25:59Z"
   }
 }
