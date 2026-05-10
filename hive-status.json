@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T10:19:58Z",
+  "last_updated": "2026-05-10T10:20:56Z",
   "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "error",
-      "health_score": 0.0,
-      "last_seen": "2026-05-10T10:19:23Z",
+      "status": "running",
+      "health_score": 1.0,
+      "last_seen": "2026-05-10T10:20:54Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 4,
+      "errors_last_hour": 7,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -60,6 +60,32 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_04aa8763",
+      "ts": "2026-05-10T10:20:56Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=41.08 mem=40.3GB disk=92% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "ee7aa2c0b642924791924cfde091873a"
+    },
+    {
+      "id": "b_d45ec37b",
+      "ts": "2026-05-10T10:20:34Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=52.37 mem=40.3GB disk=92% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "5920814be5602ade61d55a1b6b7239dc"
+    },
     {
       "id": "b_4012a8d6",
       "ts": "2026-05-10T10:19:58Z",
@@ -1382,7 +1408,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 110
+    "openrouter_calls_today": 111
   },
   "model_champions": {
     "text": null,
@@ -1391,26 +1417,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_028c257e",
-      "ts": "2026-05-10T07:49:43Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive infrastructure and improve reliability of core services",
-      "summary": "The hive has recovered from recent crashes and key services are back online, but high system load and several supervisor invariants remain problematic. Recent work added exponential backoff to LLM calls and created a metrics API stub, yet further coding is needed to solidify these fixes and add monitoring.",
-      "progress": "Implemented exponential backoff and retry logic in call_llm() and added a partial /api/metrics endpoint in logstream.py.",
-      "next_steps": [
-        "Complete the /api/metrics endpoint in logstream.py to return JSON with CPU, memory, and job queue stats",
-        "Add unit tests for call_llm() in orchestrator.py covering backoff behavior and HTTP 429 handling",
-        "Refactor supervisor.sh to automatically restart research-loop.service when TS12 invariant fails",
-        "Implement resource throttling in orchestrator.py to limit concurrent jobs when load > 0.9",
-        "Update health_check.py to include disk usage alerts and integrate with the new /api/metrics endpoint"
-      ],
-      "decisions": [
-        "Use exponential backoff with jitter for LLM call retries",
-        "Expose core system metrics via a JSON API for external monitoring tools",
-        "Prioritize fixing supervisor invariants before adding new features"
-      ]
-    },
     {
       "id": "sess_4e7eeb4e",
       "ts": "2026-05-10T08:05:04Z",
@@ -1590,6 +1596,26 @@
         "Expose metrics via /api/metrics without authentication for internal monitoring tools.",
         "Prioritize automated disk cleanup for TS21 over manual intervention."
       ]
+    },
+    {
+      "id": "sess_39117870",
+      "ts": "2026-05-10T10:20:30Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by reducing resource overload and fixing critical workflow failures",
+      "summary": "The hive is currently in an error state with high CPU load, memory pressure, and disk usage, causing the research_loop to pause repeatedly. Recent fixes have restored Ollama and improved supervisor reliability, but core resource constraints remain critical.",
+      "progress": "Implemented exponential backoff and retry logic for call_llm() and added a /api/metrics endpoint to expose real-time resource stats.",
+      "next_steps": [
+        "Optimize memory usage in orchestrator.py by adding lazy-loading for large model payloads",
+        "Add disk space cleanup routine in logstream.py to purge logs older than 7 days when disk > 85%",
+        "Implement rate limiting in research_loop.py to cap core usage at 40% and prevent pause loops",
+        "Write unit tests for the new /api/metrics endpoint in tests/test_metrics.py covering JSON schema and error handling",
+        "Add alerting in supervisor.sh to restart orchestrator automatically when load/core exceeds 50%"
+      ],
+      "decisions": [
+        "Use exponential backoff for all external LLM calls to mitigate API throttling",
+        "Expose real-time metrics via /api/metrics for automated monitoring",
+        "Introduce automatic log cleanup to keep disk usage below critical thresholds"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1601,9 +1627,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=0% blockers=53",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-10T10:19:23Z",
-    "completed_at": "2026-05-10T10:19:23Z"
+    "started_at": "2026-05-10T10:20:41Z",
+    "completed_at": "2026-05-10T10:20:44Z"
   }
 }
