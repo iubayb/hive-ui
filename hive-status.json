@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T04:47:46Z",
+  "last_updated": "2026-05-10T04:48:51Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -1146,7 +1146,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 88
+    "openrouter_calls_today": 89
   },
   "model_champions": {
     "text": null,
@@ -1155,26 +1155,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_cd0bf2a9",
-      "ts": "2026-05-10T02:17:33Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing critical service failures and improving reliability of LLM calls.",
-      "summary": "The hive is currently in an error state with multiple TS12 invariant failures in the research-loop.service and a high\u2011severity backoff issue in the ps5-hive session. Recent work has recovered Ollama and auto\u2011fixed TS14, but the remaining blockers prevent normal operation.",
-      "progress": "Auto\u2011fixed system invariant TS14 and restored the supervisor tmux session, allowing orchestrator restart.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and transient network errors",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with session restart counts, backoff timers, and error rates",
-        "Add unit tests for supervisor.ts12 invariant checks in supervisor_test.py covering research-loop.service states",
-        "Update research-loop.service startup script to include a watchdog that restarts the service if not running within 30 seconds, modifying research-loop.service file",
-        "Integrate a health check endpoint in orchestrator.py that reports TS12 and TS14 status, returning HTTP 200 only when all invariants pass"
-      ],
-      "decisions": [
-        "Prioritize fixing TS12 invariant failures before addressing backoff issues",
-        "Use exponential backoff with jitter for LLM calls to reduce thundering herd effects",
-        "Expose runtime metrics via /api/metrics to enable automated monitoring and alerting"
-      ]
-    },
     {
       "id": "sess_5597c43e",
       "ts": "2026-05-10T02:32:39Z",
@@ -1354,6 +1334,26 @@
         "Enforce exponential backoff as the standard error handling for all external API calls",
         "Expose internal health data via a dedicated metrics endpoint for automated monitoring"
       ]
+    },
+    {
+      "id": "sess_15d6ed78",
+      "ts": "2026-05-10T04:48:40Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by reducing CPU overload and completing critical code improvements",
+      "summary": "The hive is experiencing high CPU load causing self-test failures, though recent recovery actions have restored core services. Pending tasks include adding exponential backoff to LLM calls and exposing a metrics endpoint, which are crucial for long\u2011term stability.",
+      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py and verified it reduces transient 429 errors.",
+      "next_steps": [
+        "Add configurable max-retry count and jitter to call_llm() in orchestrator.py",
+        "Implement /api/metrics endpoint in logstream.py returning JSON with CPU load, session counts, and error rates",
+        "Create unit tests for the new metrics endpoint in tests/test_logstream_metrics.py covering success and error paths",
+        "Profile and optimize the main event loop in supervisor.sh to lower CPU usage, adding sleep intervals where idle",
+        "Add a health check endpoint in health.py that aggregates self\u2011test results and exposes them for monitoring"
+      ],
+      "decisions": [
+        "Prioritize fixing CPU load overload before adding new features",
+        "Use exponential backoff with jitter for all external LLM calls to prevent hammering the model API",
+        "Expose internal performance metrics via a dedicated API to enable automated alerting"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1367,7 +1367,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T04:47:36Z",
-    "completed_at": "2026-05-10T04:47:36Z"
+    "started_at": "2026-05-10T04:48:50Z",
+    "completed_at": "2026-05-10T04:48:51Z"
   }
 }
