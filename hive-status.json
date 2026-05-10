@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T06:34:00Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-10T06:34:37Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -847,7 +847,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 95
+    "openrouter_calls_today": 96
   },
   "model_champions": {
     "text": null,
@@ -856,26 +856,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_35be994c",
-      "ts": "2026-05-10T04:03:18Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by reducing CPU overload and fixing critical API failures",
-      "summary": "The hive is currently in an error state due to extreme CPU load per core, causing self-test failures. Recent work has recovered Ollama and fixed several supervisor and orchestration issues, but the high load persists and metrics reporting is incomplete.",
-      "progress": "Auto-fixed system invariant TS14 and restored supervisor and orchestrator sessions.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 responses",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON of session stats and CPU load",
-        "Optimize process_pool usage in orchestrator.py by reducing max_workers to 4 to lower CPU contention",
-        "Add unit tests for the new /api/metrics endpoint in tests/test_logstream.py covering error and success cases",
-        "Introduce a load monitoring daemon in utils/load_monitor.py that logs CPU load per core every minute"
-      ],
-      "decisions": [
-        "Limit orchestrator's parallelism to prevent CPU overload",
-        "Expose real-time metrics via /api/metrics for external monitoring",
-        "Add retry/backoff to LLM calls to reduce immediate load spikes"
-      ]
-    },
     {
       "id": "sess_fd2f95ce",
       "ts": "2026-05-10T04:18:31Z",
@@ -1055,6 +1035,26 @@
         "Expose runtime statistics via a JSON metrics endpoint for real\u2011time monitoring",
         "Add automated health checks for user services to prevent supervisor TS12 violations"
       ]
+    },
+    {
+      "id": "sess_e09d8924",
+      "ts": "2026-05-10T06:34:27Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive performance and observability under high load",
+      "summary": "The hive has recovered core services and auto\u2011fixed TS14 invariants, but remains stalled at 50% due to high CPU load and missing observability. Immediate work focuses on resilient LLM calls and exposing runtime metrics. Completing these will unblock pending jobs and improve monitoring.",
+      "progress": "Added exponential backoff and retry logic to call_llm() in orchestrator.py and verified it handles HTTP 429 without crashing.",
+      "next_steps": [
+        "Implement /api/metrics endpoint in logstream.py to return JSON with CPU, memory, and job queue lengths",
+        "Add unit tests for the new metrics endpoint in tests/test_logstream_metrics.py",
+        "Refactor orchestrator.update_load_metrics() to publish metrics to the new endpoint after each job batch",
+        "Introduce a circuit\u2011breaker wrapper around call_llm() in orchestrator.py to pause calls after 5 consecutive failures",
+        "Update Dockerfile to expose port 8081 for the metrics endpoint and ensure healthcheck uses /api/metrics"
+      ],
+      "decisions": [
+        "Use exponential backoff with jitter for LLM retries to avoid thundering herd",
+        "Expose runtime statistics via a dedicated /api/metrics endpoint for external monitoring tools",
+        "Enforce a hard limit of 5 consecutive LLM failures before triggering circuit\u2011breaker pause"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1066,9 +1066,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-10T06:34:00Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-10T06:34:37Z",
+    "completed_at": "2026-05-10T06:34:37Z"
   }
 }
