@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T07:48:33Z",
+  "last_updated": "2026-05-10T07:49:53Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.45,
-      "last_seen": "2026-05-10T07:47:41Z",
+      "last_seen": "2026-05-10T07:49:53Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -860,7 +860,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 100
+    "openrouter_calls_today": 101
   },
   "model_champions": {
     "text": null,
@@ -869,26 +869,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_c8d7ecc4",
-      "ts": "2026-05-10T05:18:48Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive environment and add operational metrics endpoint",
-      "summary": "The hive is currently impaired by high CPU load failures, but recent self-recoveries and audits have restored core services. Immediate work focuses on making the orchestrator more resilient to LLM call failures and exposing runtime metrics via a new API.",
-      "progress": "Added exponential backoff and retry logic to call_llm() in orchestrator.py to mitigate transient HTTP errors.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 responses",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with session stats and error counts",
-        "Write unit tests for orchestrator.call_llm() covering success, rate limit, and network failure scenarios",
-        "Add CPU load monitoring in health_check.py and emit a warning metric when load/core > 2.0",
-        "Update supervisor.sh to automatically restart orchestrator when health_check reports TS20 failures"
-      ],
-      "decisions": [
-        "Prioritize robust LLM call handling before adding new features",
-        "Expose runtime metrics via HTTP to enable external monitoring tools",
-        "Integrate automated health metrics into the existing supervisor supervision loop"
-      ]
-    },
     {
       "id": "sess_26ade9bb",
       "ts": "2026-05-10T05:33:57Z",
@@ -1068,6 +1048,26 @@
         "Expose real\u2011time metrics via /api/metrics before adding external monitoring",
         "Add automated unit tests for critical retry pathways to prevent regressions"
       ]
+    },
+    {
+      "id": "sess_028c257e",
+      "ts": "2026-05-10T07:49:43Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive infrastructure and improve reliability of core services",
+      "summary": "The hive has recovered from recent crashes and key services are back online, but high system load and several supervisor invariants remain problematic. Recent work added exponential backoff to LLM calls and created a metrics API stub, yet further coding is needed to solidify these fixes and add monitoring.",
+      "progress": "Implemented exponential backoff and retry logic in call_llm() and added a partial /api/metrics endpoint in logstream.py.",
+      "next_steps": [
+        "Complete the /api/metrics endpoint in logstream.py to return JSON with CPU, memory, and job queue stats",
+        "Add unit tests for call_llm() in orchestrator.py covering backoff behavior and HTTP 429 handling",
+        "Refactor supervisor.sh to automatically restart research-loop.service when TS12 invariant fails",
+        "Implement resource throttling in orchestrator.py to limit concurrent jobs when load > 0.9",
+        "Update health_check.py to include disk usage alerts and integrate with the new /api/metrics endpoint"
+      ],
+      "decisions": [
+        "Use exponential backoff with jitter for LLM call retries",
+        "Expose core system metrics via a JSON API for external monitoring tools",
+        "Prioritize fixing supervisor invariants before adding new features"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1081,7 +1081,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T07:48:32Z",
-    "completed_at": "2026-05-10T07:48:33Z"
+    "started_at": "2026-05-10T07:49:53Z",
+    "completed_at": "2026-05-10T07:49:53Z"
   }
 }
