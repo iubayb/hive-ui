@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T10:11:47Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-10T10:13:00Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "error",
@@ -60,6 +60,32 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_509903df",
+      "ts": "2026-05-10T10:13:00Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=11.15 mem=40.1GB disk=92% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "855fcc0ee7df18499c5fd502bb52644a"
+    },
+    {
+      "id": "b_2494b209",
+      "ts": "2026-05-10T10:12:45Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=7.35 mem=40.1GB disk=92% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "068e834ffda63dff72de524256d3431d"
+    },
     {
       "id": "b_d5357f0f",
       "ts": "2026-05-10T09:57:41Z",
@@ -1148,7 +1174,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T10:11:47Z",
-    "completed_at": "2026-05-10T10:11:47Z"
+    "started_at": "2026-05-10T10:12:47Z",
+    "completed_at": "2026-05-10T10:12:48Z"
   }
 }
