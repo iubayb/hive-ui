@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T03:27:55Z",
+  "last_updated": "2026-05-10T03:28:55Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -60,6 +60,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_dc6d001e",
+      "ts": "2026-05-10T03:28:41Z",
+      "hive": "default",
+      "agent": "supervisor",
+      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=26.73 cores=8 ratio=3.34",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "9e13bd62ddffd54e339bb45fcd77b57a"
+    },
     {
       "id": "b_ec3de3a4",
       "ts": "2026-05-10T03:18:42Z",
@@ -215,19 +228,6 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "1b64b8d4e5412e752388955939c3495b"
-    },
-    {
-      "id": "b_5334a6b0",
-      "ts": "2026-05-10T00:08:47Z",
-      "hive": "desktop",
-      "agent": "supervisor",
-      "description": "Session 'ps5-hive' in long backoff (160s) \u2014 15 restart(s), may need manual intervention",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "ceaaf6a3506ac6fc6d2d75d295f0cdfe"
     },
     {
       "id": "b_59fadf2b",
@@ -1341,7 +1341,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T03:27:44Z",
-    "completed_at": "2026-05-10T03:27:45Z"
+    "started_at": "2026-05-10T03:28:45Z",
+    "completed_at": "2026-05-10T03:28:45Z"
   }
 }
