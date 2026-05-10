@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T02:01:52Z",
+  "last_updated": "2026-05-10T02:02:40Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -1009,7 +1009,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 76
+    "openrouter_calls_today": 77
   },
   "model_champions": {
     "text": null,
@@ -1018,26 +1018,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_a3306241",
-      "ts": "2026-05-09T23:31:38Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by reducing CPU overload and exposing runtime metrics",
-      "summary": "The hive is currently in an error state due to high CPU load per core across multiple TS20 self\u2011tests. Recent fixes have recovered Ollama and repaired several supervisor and orchestrator issues, but the overload persists. Implementing retry/backoff and a metrics endpoint will help monitor and mitigate the load.",
-      "progress": "Added exponential backoff and retry logic to call_llm() in orchestrator.py to reduce throttling errors.",
-      "next_steps": [
-        "Add dynamic load\u2011shedding in orchestrator.py: if CPU load/core > 2.5, pause new LLM calls for 10 seconds",
-        "Instrument orchestrator.py to record call_llm() latency and error rates, export to prometheus via add_metric()",
-        "Implement /api/metrics endpoint in logstream.py returning JSON with cpu_load, call_llm_latency, and error_counts",
-        "Create unit tests for the new /api/metrics endpoint in tests/test_logstream.py covering success and failure paths",
-        "Update supervisor.sh to restart orchestrator automatically when CPU load/core exceeds 3.0"
-      ],
-      "decisions": [
-        "Retry logic will use exponential backoff with max 5 attempts before failing.",
-        "Metrics will be exposed in Prometheus format but also provided as a simple JSON endpoint for quick debugging.",
-        "Load\u2011shedding thresholds are set to 2.5 for warning and 3.0 for forced pause."
-      ]
-    },
     {
       "id": "sess_6e0c2eab",
       "ts": "2026-05-09T23:46:45Z",
@@ -1217,6 +1197,26 @@
         "Adopt exponential backoff with jitter as the standard retry strategy for all external API calls",
         "Expose operational metrics via a dedicated endpoint to enable real-time health monitoring"
       ]
+    },
+    {
+      "id": "sess_dab0f75c",
+      "ts": "2026-05-10T02:02:29Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by resolving TS12 invariant failures and stabilizing service restarts",
+      "summary": "The hive is currently in an error state with multiple TS12 invariant failures in the research-loop.service and a critical backoff issue in the ps5-hive session. Recent auto-fixes have recovered Ollama and applied TS14 fixes, but the system remains unstable. Immediate code changes are needed to add robust retry logic and address the invariant checks.",
+      "progress": "Auto-fixed TS14 invariants and recovered the Ollama service, allowing the orchestrator and supervisor to restart.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and network errors",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with session restart counts and backoff times",
+        "Refactor supervisor.ts12_check() in supervisor.py to correctly verify that research-loop.service is running and log detailed diagnostics",
+        "Write unit tests for supervisor.ts12_check() covering running, stopped, and crash-loop states in tests/test_supervisor_ts12.py",
+        "Introduce configurable backoff parameters in config.yaml and read them in orchestrator.py for the retry mechanism"
+      ],
+      "decisions": [
+        "Prioritize fixing TS12 invariant failures before addressing lower\u2011priority backoff issues",
+        "Expose runtime metrics via /api/metrics to aid future automated health monitoring",
+        "Make backoff behavior configurable to allow rapid tuning without code changes"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1230,7 +1230,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T02:01:21Z",
-    "completed_at": "2026-05-10T02:01:22Z"
+    "started_at": "2026-05-10T02:02:39Z",
+    "completed_at": "2026-05-10T02:02:40Z"
   }
 }
