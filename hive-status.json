@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T13:35:45Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-10T13:37:01Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "error",
       "health_score": 0.0,
-      "last_seen": "2026-05-10T13:34:54Z",
+      "last_seen": "2026-05-10T13:37:01Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -1694,7 +1694,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 123
+    "openrouter_calls_today": 124
   },
   "model_champions": {
     "text": null,
@@ -1703,26 +1703,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_8f8c7ba3",
-      "ts": "2026-05-10T11:05:51Z",
-      "updated_by": "orchestrator",
-      "goal": "Maintain stable hive operation by resolving critical resource overloads and improving system resilience",
-      "summary": "The hive is currently in an error state due to high CPU load and near-full disk usage, causing research loops to pause. Recent fixes restored Ollama and supervisor services, and auto-fix mechanisms addressed TS14 invariants. Immediate work must focus on reducing load spikes and adding observability.",
-      "progress": "Implemented exponential backoff and retry logic for LLM calls in orchestrator.py, reducing immediate API throttling errors.",
-      "next_steps": [
-        "Add memory usage guard in orchestrator.py to pause research_loop when mem>38GB",
-        "Implement disk cleanup routine in logstream.py that deletes oldest log files when disk>90%",
-        "Create /api/metrics endpoint in logstream.py returning JSON with cpu, mem, disk, and active session counts",
-        "Add unit tests for the new backoff logic in orchestrator_test.py covering HTTP 429 and 500 responses",
-        "Integrate exponential backoff parameters into config.yaml and expose them via UI settings"
-      ],
-      "decisions": [
-        "Prioritize automated resource throttling over manual restarts",
-        "Expose core metrics via a new API endpoint for external monitoring",
-        "Standardize retry/backoff configuration in a shared config file"
-      ]
-    },
     {
       "id": "sess_4423d21b",
       "ts": "2026-05-10T11:21:03Z",
@@ -1902,6 +1882,26 @@
         "Expose internal hive health via a dedicated metrics endpoint for external monitoring",
         "Adopt exponential backoff with jitter as the standard retry strategy for all external API calls"
       ]
+    },
+    {
+      "id": "sess_75ab7064",
+      "ts": "2026-05-10T13:36:41Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by eliminating critical load blockers and completing pending code improvements.",
+      "summary": "The hive is currently in an error state due to high CPU load and disk usage, causing the research_loop to be paused. Recent fixes have recovered Ollama and addressed several supervisor and invariant issues, but critical resource overload remains. Immediate coding work is needed to improve resilience and observability.",
+      "progress": "Implemented exponential backoff and retry logic for call_llm() and added a basic /api/metrics endpoint stub.",
+      "next_steps": [
+        "Add disk usage monitoring and auto-cleanup routine to health_check.py to trigger log rotation when disk >90%.",
+        "Implement load shedding in orchestrator.py by limiting concurrent research_loop tasks based on core usage threshold.",
+        "Complete the /api/metrics endpoint in logstream.py to return JSON with fields: cpu_load, mem_usage, disk_usage, active_sessions.",
+        "Write unit tests for the new backoff logic in orchestrator.py covering HTTP 429, 500, and timeout scenarios.",
+        "Add Prometheus metrics exporter in metrics_exporter.py and integrate it with the /api/metrics endpoint."
+      ],
+      "decisions": [
+        "Prioritize resource-aware task scheduling to prevent research_loop pauses.",
+        "Enforce automatic disk cleanup before exceeding 92% usage.",
+        "Expose real-time health metrics via a dedicated API for external monitoring."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1913,9 +1913,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=0% blockers=79",
     "status": "completed",
-    "started_at": "2026-05-10T13:35:14Z",
-    "completed_at": "2026-05-10T13:35:15Z"
+    "started_at": "2026-05-10T13:37:01Z",
+    "completed_at": "2026-05-10T13:37:01Z"
   }
 }
