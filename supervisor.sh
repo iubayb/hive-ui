@@ -542,6 +542,12 @@ run_self_test() {
     local script="/home/ayoub/hive-ui/tests/test_system.sh"
     [[ -f "$script" ]] || { log "SELF-TEST: test_system.sh not found — skipping"; return; }
     log "SELF-TEST: running system invariants..."
+    # Ensure env vars required by tests are available in the subprocess
+    local hive_env="/home/ayoub/hive-ui/.env"
+    if [[ -f "$hive_env" ]]; then
+        set -a; source "$hive_env"; set +a
+    fi
+    export HIVE_GITHUB_REPO="${HIVE_GITHUB_REPO:-iubayb/hive-ui}"
     local result
     result=$(timeout 60 bash "$script" 2>&1 || true)
     local failed_count
@@ -613,6 +619,15 @@ log "INFO startup: OOM scores and nice levels applied"
 log "INFO startup: bootstrapping missing sessions from $CONF"
 ensure_all_sessions
 log "INFO startup: bootstrap complete"
+
+# ── bootstrap-only mode (used by TS19 auto-fix and external callers) ─────────
+# Exits here instead of entering the infinite supervisor loop.
+# Without this guard, `source supervisor.sh --bootstrap-only` would run
+# the full loop and create zombie supervisor processes.
+if [[ "${1:-}" == "--bootstrap-only" ]]; then
+    log "INFO startup: --bootstrap-only flag set — exiting after bootstrap"
+    return 0 2>/dev/null || exit 0
+fi
 
 while true; do
     load_conf

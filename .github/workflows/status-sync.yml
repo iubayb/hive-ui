@@ -1,0 +1,34 @@
+name: status-sync
+
+on:
+  push:
+    branches: [develop, master]
+  schedule:
+    - cron: "* * * * *"   # every minute — free on public repos
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: status
+          fetch-depth: 0
+
+      - name: Pull latest hive-status.json from server
+        run: |
+          # Oracle ARM server pushes to this branch every 60s via status-push.sh
+          # This job just ensures the branch stays healthy and triggers Vercel revalidation
+          echo "status branch last commit: $(git log -1 --oneline)"
+
+      - name: Revalidate Vercel ISR cache
+        if: env.VERCEL_REVALIDATE_URL != ''
+        env:
+          VERCEL_REVALIDATE_URL: ${{ secrets.VERCEL_REVALIDATE_URL }}
+          REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
+        run: |
+          curl -s -X POST \
+            "${VERCEL_REVALIDATE_URL}?token=${REVALIDATE_SECRET}" \
+            -H "Content-Type: application/json" \
+            -d '{}' | head -c 200

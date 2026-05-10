@@ -78,10 +78,16 @@ PING_INTERVAL       = 30     # 30 s  — keep SSE stream alive between cycles
 # ── rate limiting ─────────────────────────────────────────────────────────────
 _MAX_LLM_CALLS_HR = 8        # conservative — shares OpenRouter free quota
 _llm_call_times   = []
+_llm_retry_after: float = 0.0   # epoch time before which LLM calls are suppressed (429 backoff)
 
 
 def _llm_budget_ok() -> bool:
+    global _llm_retry_after
     now = time.time()
+    if now < _llm_retry_after:
+        remaining = int(_llm_retry_after - now)
+        _log(f"[llm] rate-limit backoff active — {remaining}s remaining")
+        return False
     _llm_call_times[:] = [t for t in _llm_call_times if now - t < 3600]
     return len(_llm_call_times) < _MAX_LLM_CALLS_HR
 
@@ -121,6 +127,11 @@ def call_llm(messages: list, max_tokens: int = 512, timeout: int = 60):
         raw  = resp.read().decode("utf-8", errors="replace")
         conn.close()
         if resp.status != 200:
+            if resp.status == 429:
+                global _llm_retry_after
+                _llm_retry_after = time.time() + 60   # 60-second backoff
+                _log("[llm] rate-limited (429) — backing off 60s")
+                return "", "rate_limited"
             return "", f"HTTP {resp.status}"
         data = json.loads(raw)
         # Handle reasoning models (delta.reasoning before delta.content)
@@ -768,6 +779,16 @@ if [[ "$avail" -gt 512000 ]]; then _pass "$id" "$desc (${avail}kB)"
 else _fail "$id" "$desc" "only ${avail}kB available" "$fix"; fi
 """,
     ),
+    r"hive_github_repo.*not set|github.*repo.*missing|env.*not set": (
+        "env_github_repo",
+        """# Auto-generated: HIVE_GITHUB_REPO env var check
+id=TSauto_env_github_repo
+desc="HIVE_GITHUB_REPO is set in environment"
+fix="grep -q HIVE_GITHUB_REPO /home/ayoub/hive-ui/.env || echo 'HIVE_GITHUB_REPO=iubayb/hive-ui' >> /home/ayoub/hive-ui/.env"
+if [[ -n "${HIVE_GITHUB_REPO:-}" ]]; then _pass "$id" "$desc"
+else _fail "$id" "$desc" "HIVE_GITHUB_REPO not in environment" "$fix"; fi
+""",
+    ),
 }
 
 _issue_test_committed: set = set()   # patterns already turned into tests
@@ -1236,7 +1257,14 @@ Knowledge findings: {s.get("knowledge", {}).get("findings_count", len(s.get("kno
         '  "progress": what was completed recently (1 sentence),\n'
         '  "next_steps": list of up to 5 concrete action strings,\n'
         '  "decisions": list of up to 3 key decision strings.\n'
-        "Return ONLY valid JSON. No markdown fences. No preamble."
+        "CRITICAL: next_steps MUST be concrete coding or improvement tasks for the hive-ui "
+        "codebase that an AI coding agent can act on immediately. Each must name a specific "
+        "file, function, or metric to change — e.g. "
+        "'Add retry logic to call_llm() in orchestrator.py when HTTP 429 is returned', "
+        "'Write unit tests for org_guard.py covering all forbidden path patterns', "
+        "'Add /api/metrics endpoint to logstream.py returning JSON of session stats'. "
+        "Never generate vague ops tasks like 'monitor X' or 'define policy for Y'. "
+        "The hive must ALWAYS have actionable work. Return ONLY valid JSON. No markdown fences."
     )
 
     _log("running compaction (LLM)...")
@@ -1247,7 +1275,10 @@ Knowledge findings: {s.get("knowledge", {}).get("findings_count", len(s.get("kno
         timeout=30,
     )
 
-    if err:
+    if err == "rate_limited":
+        _log("[llm] skipping cycle — rate-limit backoff active")
+        # do not treat as permanent failure
+    elif err:
         _log(f"compaction LLM error: {err}")
         # Deduplicate: only add a new blocker if no open compaction-failure blocker exists
         _es = hive_status.load()
@@ -1424,15 +1455,28 @@ def main():
                 f"| blockers={open_b} | next_steps={pending} "
                 f"| model={OPENROUTER_MODEL.split('/')[-1]}"
             )
+            # Compute status from live_health — never preserve stale doctor "stalled"
+            live_status = (
+                "running" if live_health >= 0.7
+                else ("error" if live_health < 0.4 else "stalled")
+            )
+            # Count tasks completed today from done next_steps
+            today = _now_iso()[:10]  # "YYYY-MM-DD"
+            tasks_today = sum(
+                1 for n in s.get("next_steps", [])
+                if n.get("status") == "done"
+                and n.get("ts", "")[:10] == today
+            )
             # Sync active model, sessions, and live health into hive-status
             hive_status.update_hive_health(
                 hive_name   = HIVE_NAME,
                 sessions    = sessions_alive,
-                status      = h.get("status", "running"),
+                status      = live_status,
                 health_score= live_health,
                 current_goal= h.get("current_goal", ""),
                 active_model= OPENROUTER_MODEL,
                 errors_last_hour = h.get("errors_last_hour", 0),
+                tasks_completed_today = tasks_today,
                 silent_minutes   = 0,
                 updated_by  = "orchestrator",
             )
@@ -1457,6 +1501,37 @@ def main():
                     _log(f"triage error (non-fatal): {e}")
             last_triage = now
 
+            # ── dispatch pending next_steps to OpenCode (every triage cycle) ──
+            # Runs every 60s so OpenCode is never idle after finishing a task.
+            # _is_code_task filter removed: OpenCode handles code AND ops tasks.
+            try:
+                s = hive_status.load()
+                pending   = [n for n in s.get("next_steps", []) if n.get("status") == "pending"]
+                in_prog   = [n for n in s.get("next_steps", [])
+                             if n.get("status") == "in_progress"
+                             and n.get("assigned_to") == "opencode"]
+                # Only dispatch if OpenCode has no current in-progress task
+                if not in_prog and pending:
+                    step    = pending[0]
+                    desc    = step.get("description", "")
+                    step_id = step.get("id", "")
+                    _delegate_to_opencode(desc)
+                    if step_id:
+                        hive_status.update_next_step(step_id, "in_progress",
+                                                     assigned_to="opencode",
+                                                     updated_by="orchestrator")
+                        _log(f"[opencode] dispatched → {desc[:70]}")
+                # Early compaction: queue running low → generate fresh tasks now
+                if len(pending) < 2 and _llm_budget_ok():
+                    _log("[queue] pending steps < 2 — triggering early compaction")
+                    try:
+                        compaction()
+                        last_compaction = now
+                    except Exception as e:
+                        _log(f"early compaction error: {e}")
+            except Exception as e:
+                _log(f"[opencode] dispatch error (non-fatal): {e}")
+
         # ── compaction ────────────────────────────────────────────────────────
         if now - last_compaction >= COMPACTION_INTERVAL:
             with _doing("compaction: LLM summarising hive state"):
@@ -1465,18 +1540,8 @@ def main():
                 except Exception as e:
                     _log(f"compaction error (non-fatal): {e}")
             last_compaction = now
-
-            # Route code next_steps to OpenCode
-            try:
-                s = hive_status.load()
-                for step in s.get("next_steps", [])[-5:]:
-                    desc = step.get("description", "") if isinstance(step, dict) else str(step)
-                    assigned = step.get("assigned_to", "") if isinstance(step, dict) else ""
-                    if _is_code_task(desc) and assigned not in ("opencode",):
-                        _delegate_to_opencode(desc)
-                        break  # one task at a time — OpenCode is single-threaded
-            except Exception as e:
-                _log(f"[opencode] routing error (non-fatal): {e}")
+            # Dispatch is now handled in the triage block every 60s — no post-compaction
+            # routing needed here.
 
         # ── self-test ─────────────────────────────────────────────────────────
         if now - last_self_test >= SELF_TEST_INTERVAL:
@@ -1490,7 +1555,7 @@ def main():
                 try:
                     hive_status.set_active_task("orchestrator", "issue→test: scanning blockers for new test patterns")
                     s = hive_status.load()
-                    for b in s.get("blockers", [])[-20:]:
+                    for b in s.get("blockers", [])[:20]:
                         if b.get("status") == "open":
                             _issue_to_test(b.get("description", ""))
                 except Exception as e:
