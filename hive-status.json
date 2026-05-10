@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T09:06:47Z",
+  "last_updated": "2026-05-10T09:07:48Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
-      "health_score": 0.4,
-      "last_seen": "2026-05-10T09:05:36Z",
+      "health_score": 0.35,
+      "last_seen": "2026-05-10T09:07:37Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -60,6 +60,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_43c86d10",
+      "ts": "2026-05-10T09:07:29Z",
+      "hive": "default",
+      "agent": "supervisor",
+      "description": "self-test: FAIL: TS21 disk / usage < 90% \u2014 disk 92% >= 90%",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "8ba4c98730dc8489773735b0e2ed7ded"
+    },
     {
       "id": "b_b7f6b33f",
       "ts": "2026-05-10T09:04:04Z",
@@ -1094,7 +1107,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T09:06:37Z",
-    "completed_at": "2026-05-10T09:06:37Z"
+    "started_at": "2026-05-10T09:07:37Z",
+    "completed_at": "2026-05-10T09:07:38Z"
   }
 }
