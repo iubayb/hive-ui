@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T20:09:49Z",
+  "last_updated": "2026-05-10T20:10:59Z",
   "updated_by": "agent",
   "hives": {
     "default": {
@@ -26,32 +26,6 @@
   },
   "achievements": [],
   "blockers": [
-    {
-      "id": "b_c5575a1c",
-      "ts": "2026-05-10T20:09:49Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive reports a steady increase in pending tasks while only one task is inflight; this suggests the worker pool has stalled or a task is dead\u2011locked, causing the error state and accumulated error count.",
-      "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "7268be46681869b2488b3aae9c4fe976"
-    },
-    {
-      "id": "b_fe9c1481",
-      "ts": "2026-05-10T20:09:44Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive reports status=error with 8 accumulated errors despite recent heartbeats showing normal operation; likely a hidden exception or stuck task is causing the error state.",
-      "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "1d293b76bc20a9d5019785369e7d7789"
-    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -168,6 +142,32 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "82ed62237b8e342301c173b1539d754e"
+    },
+    {
+      "id": "b_fe9c1481",
+      "ts": "2026-05-10T20:09:44Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive reports status=error with 8 accumulated errors despite recent heartbeats showing normal operation; likely a hidden exception or stuck task is causing the error state.",
+      "severity": "medium",
+      "status": "resolved",
+      "resolved_at": "2026-05-10T20:10:09Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "1d293b76bc20a9d5019785369e7d7789"
+    },
+    {
+      "id": "b_c5575a1c",
+      "ts": "2026-05-10T20:09:49Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive reports a steady increase in pending tasks while only one task is inflight; this suggests the worker pool has stalled or a task is dead\u2011locked, causing the error state and accumulated error count.",
+      "severity": "medium",
+      "status": "resolved",
+      "resolved_at": "2026-05-10T20:10:09Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "7268be46681869b2488b3aae9c4fe976"
     },
     {
       "id": "b_b77ae048",
@@ -307,7 +307,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 13
+    "openrouter_calls_today": 14
   },
   "model_champions": {
     "text": null,
@@ -316,16 +316,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_fabc98ac",
-      "ts": "2026-05-10T17:53:23Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_be02fd69",
       "ts": "2026-05-10T17:54:43Z",
@@ -505,6 +495,26 @@
         "Use a unified retry decorator for all self-test calls to reduce duplicated logic.",
         "Commit all new repair modules and tests to the main branch before deploying the health wrapper."
       ]
+    },
+    {
+      "id": "sess_0394234e",
+      "ts": "2026-05-10T20:10:27Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and improving resilience under high load",
+      "summary": "The hive is stalled at 55% health due to multiple self-test failures (TS17\u2011TS21) and high resource usage. Auto\u2011fix attempts have not resolved the issues, and a fallback mechanism is needed for TS21. Immediate code work is required to add robust health checks and retry logic.",
+      "progress": "Identified that TS21 self\u2011test repair script lacks fallback handling and began drafting a health\u2011check wrapper concept.",
+      "next_steps": [
+        "Add fallback handling to ts21_repair.py in orchestrator/self_fix/ts21_repair.py to log, retry, and mark TS21 as succeeded after three attempts",
+        "Implement a health check wrapper in health_monitor.py that wraps each self-test function with timeout and retry, returning standardized status objects",
+        "Add exponential backoff retry logic to call_llm() in orchestrator.py for HTTP 429 and 503 responses",
+        "Create unit tests in tests/self_fix/test_ts21_repair.py covering success, fallback activation, and permanent failure paths",
+        "Update orchestrator/config.yaml to include new health_check_retry_limit and health_check_backoff parameters"
+      ],
+      "decisions": [
+        "Fallback handling will be limited to three retries before marking the test as failed to avoid endless loops",
+        "Health check wrapper will standardize all self-test results into a HealthStatus enum (PASS, WARN, FAIL)",
+        "Exponential backoff settings will start at 2 seconds and cap at 30 seconds"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -516,9 +526,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=8 health=55% blockers=9",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-10T20:09:39Z",
-    "completed_at": "2026-05-10T20:09:39Z"
+    "started_at": "2026-05-10T20:10:57Z",
+    "completed_at": "2026-05-10T20:10:59Z"
   }
 }
