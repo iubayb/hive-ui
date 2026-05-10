@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T19:24:56Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-10T19:25:36Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -226,7 +226,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 6
+    "openrouter_calls_today": 7
   },
   "model_champions": {
     "text": null,
@@ -235,16 +235,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_e5dd5e43",
-      "ts": "2026-05-10T17:50:20Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_082db533",
       "ts": "2026-05-10T17:51:21Z",
@@ -394,6 +384,26 @@
         "Introduce automatic log rotation to prevent disk\u2011full shutdowns",
         "Enforce a maximum of three retry attempts for any self\u2011test before escalation"
       ]
+    },
+    {
+      "id": "sess_26d6afbd",
+      "ts": "2026-05-10T19:25:14Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and improving resilience under load",
+      "summary": "The hive is currently stalled with high memory usage and four critical self-test failures (TS17-TS21). Auto-fix attempts have not resolved the issues, and load handling is strained. Immediate code changes are needed to add fallback handling, health check wrappers, and robust retry mechanisms.",
+      "progress": "No recent successful fixes; all self-test failures remain.",
+      "next_steps": [
+        "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to gracefully handle unrecoverable errors",
+        "Implement a health check wrapper in health_monitor.py that reruns failing self-tests and reports status via /api/health endpoint",
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses",
+        "Create a memory usage guard in load_manager.py that triggers graceful degradation when mem>50GB",
+        "Write unit tests for TS19, TS18, and TS17 repair modules in tests/self_fix/ covering error paths and successful fixes"
+      ],
+      "decisions": [
+        "Prioritize fixing TS21 fallback before addressing other self-test failures",
+        "Introduce a centralized health check wrapper to auto\u2011retry failing tests",
+        "Implement memory guard and retry logic to prevent stalls under high load"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -405,9 +415,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-10T19:24:56Z",
-    "completed_at": null
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "status": "completed",
+    "started_at": "2026-05-10T19:25:25Z",
+    "completed_at": "2026-05-10T19:25:26Z"
   }
 }
