@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T01:19:50Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-10T01:20:42Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 0.889,
-      "last_seen": "2026-05-10T01:19:50Z",
+      "status": "error",
+      "health_score": 0.0,
+      "last_seen": "2026-05-10T01:20:42Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -60,6 +60,32 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_e9f05ba6",
+      "ts": "2026-05-10T01:20:38Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[supervisor] TS12 invariant violation: `research-loop.service` is not running although it should be active, causing the supervisor to enter an error state.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "dc9c8b11a63cd2a3045f71b2968cede5"
+    },
+    {
+      "id": "b_0f65c134",
+      "ts": "2026-05-10T01:20:10Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[supervisor] Self\u2011test TS12 detected that the user\u2011level service `research-loop.service` is not active; the automatic restart command was issued but the service remains in a failed state, causing the supervisor hive to enter error status.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "1b64b8d4e5412e752388955939c3495b"
+    },
     {
       "id": "b_5334a6b0",
       "ts": "2026-05-10T00:08:47Z",
@@ -696,6 +722,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_7b05185c",
+        "ts": "2026-05-10T01:20:38Z",
+        "hive": "default",
+        "summary": "The supervisor hive failed its TS12 self\u2011test because the research\u2011loop service is down; restarting it should restore normal operation.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_16b89957",
+        "ts": "2026-05-10T01:20:10Z",
+        "hive": "default",
+        "summary": "The supervisor hive\u2019s `research-loop.service` is repeatedly failing to start; run a status check, view recent logs, and restart the service to restore normal operation.",
+        "source": "doctor"
+      },
+      {
         "id": "f_f80a6692",
         "ts": "2026-05-09T23:49:50Z",
         "hive": "default",
@@ -929,7 +969,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 70
+    "openrouter_calls_today": 72
   },
   "model_champions": {
     "text": null,
@@ -1150,7 +1190,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T01:19:42Z",
-    "completed_at": "2026-05-10T01:19:42Z"
+    "started_at": "2026-05-10T01:20:42Z",
+    "completed_at": "2026-05-10T01:20:42Z"
   }
 }
