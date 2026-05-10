@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T14:36:48Z",
+  "last_updated": "2026-05-10T14:37:52Z",
   "updated_by": "agent",
   "hives": {
     "default": {
@@ -1694,7 +1694,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 127
+    "openrouter_calls_today": 128
   },
   "model_champions": {
     "text": null,
@@ -1703,26 +1703,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_0172dda7",
-      "ts": "2026-05-10T12:06:12Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving critical resource bottlenecks and improving resilience of core services",
-      "summary": "The hive is currently in an error state with high CPU load, near\u2011full disk and memory pressure, causing the research_loop to be paused. Recent fixes restored Ollama and supervisor components, and the system invariant TS14 was auto\u2011fixed. Immediate work must focus on making LLM calls robust and exposing operational metrics to guide further remediation.",
-      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py, and added basic unit tests for the new logic.",
-      "next_steps": [
-        "Add detailed error handling and exponential backoff to call_llm() in orchestrator.py for HTTP 429 and 5xx responses",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, disk usage, and queue lengths",
-        "Write integration tests for the /api/metrics endpoint covering success and failure paths",
-        "Refactor research_loop() in research.py to periodically flush intermediate results to disk to lower memory footprint",
-        "Add health_check() in supervisor.py that reports current load, memory, and disk status and triggers auto\u2011restart of overloaded services"
-      ],
-      "decisions": [
-        "Prioritize exponential backoff on LLM calls to prevent cascading failures under rate limits",
-        "Expose real\u2011time operational metrics via /api/metrics to enable automated monitoring and scaling",
-        "Introduce periodic state flushing in research_loop to reduce peak memory usage"
-      ]
-    },
     {
       "id": "sess_1e22d147",
       "ts": "2026-05-10T12:21:23Z",
@@ -1902,6 +1882,26 @@
         "Expose operational metrics via an API to enable external dashboards and automated alerts",
         "Implement automated unit testing for new endpoints before deployment"
       ]
+    },
+    {
+      "id": "sess_d69d48f7",
+      "ts": "2026-05-10T14:37:31Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by addressing critical resource overloads and improving reliability of core services",
+      "summary": "The hive is currently suffering from high CPU load and near\u2011full disk usage, causing research loops to pause. Recent fixes restored Ollama and repaired several supervisor and orchestrator issues, but the underlying resource exhaustion remains unresolved.",
+      "progress": "Auto\u2011fixed invariant TS14 and restored the supervisor tmux session, allowing the orchestrator to restart.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and transient failures",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, and disk usage stats",
+        "Add disk usage monitoring and automatic log rotation in logger.py to keep /var/log/hive below 80% capacity",
+        "Create unit tests for the new backoff logic in orchestrator_test.py covering success, retry, and max\u2011retry failure cases",
+        "Instrument research_loop.py to record and report pause reasons to the new metrics endpoint"
+      ],
+      "decisions": [
+        "Prioritize fixing resource exhaustion before expanding research tasks",
+        "Enforce exponential backoff on all external LLM calls to reduce load spikes",
+        "Expose real\u2011time resource metrics via an API for automated monitoring and alerting"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1913,9 +1913,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-10T14:36:48Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-10T14:37:51Z",
+    "completed_at": "2026-05-10T14:37:52Z"
   }
 }
