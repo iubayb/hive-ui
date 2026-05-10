@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T12:05:50Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-10T12:06:53Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
       "health_score": 0.0,
-      "last_seen": "2026-05-10T12:04:19Z",
+      "last_seen": "2026-05-10T12:06:22Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -1694,7 +1694,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 117
+    "openrouter_calls_today": 118
   },
   "model_champions": {
     "text": null,
@@ -1703,26 +1703,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_f78ad73e",
-      "ts": "2026-05-10T09:35:33Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving critical self-test failures, preventing disk overflow, and improving reliability of LLM calls",
-      "summary": "The hive is currently in an error state due to high disk usage and failing self-tests TS20 and TS21. Recent fixes restored Ollama and addressed several supervisor issues, but urgent code changes are needed to prevent recurrence and add observability.",
-      "progress": "Auto-fixed invariant TS14 and created a supervisor tmux session to recover core services.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and transient network errors",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, disk, and job queue stats",
-        "Write unit tests for self-test TS20 in self_test.py covering edge cases of temporary disk latency",
-        "Enhance auto_fix_TS21 in auto_fixer.py to shrink log files and archive old data when disk usage exceeds 85%",
-        "Add a disk usage alert hook in monitor.py that triggers a warning and runs clean_up_disk() when usage > 90%"
-      ],
-      "decisions": [
-        "Prioritize fixing TS20 and TS21 failures before adding new features",
-        "Adopt exponential backoff as the default retry strategy for all external API calls",
-        "Expose real-time metrics via /api/metrics to enable automated monitoring and alerting"
-      ]
-    },
     {
       "id": "sess_00d4868d",
       "ts": "2026-05-10T09:50:22Z",
@@ -1902,6 +1882,26 @@
         "Expose detailed resource metrics via a new API endpoint for external alerting",
         "Integrate load-shedding checks into research_loop to prevent further pauses"
       ]
+    },
+    {
+      "id": "sess_0172dda7",
+      "ts": "2026-05-10T12:06:12Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by resolving critical resource bottlenecks and improving resilience of core services",
+      "summary": "The hive is currently in an error state with high CPU load, near\u2011full disk and memory pressure, causing the research_loop to be paused. Recent fixes restored Ollama and supervisor components, and the system invariant TS14 was auto\u2011fixed. Immediate work must focus on making LLM calls robust and exposing operational metrics to guide further remediation.",
+      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py, and added basic unit tests for the new logic.",
+      "next_steps": [
+        "Add detailed error handling and exponential backoff to call_llm() in orchestrator.py for HTTP 429 and 5xx responses",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, disk usage, and queue lengths",
+        "Write integration tests for the /api/metrics endpoint covering success and failure paths",
+        "Refactor research_loop() in research.py to periodically flush intermediate results to disk to lower memory footprint",
+        "Add health_check() in supervisor.py that reports current load, memory, and disk status and triggers auto\u2011restart of overloaded services"
+      ],
+      "decisions": [
+        "Prioritize exponential backoff on LLM calls to prevent cascading failures under rate limits",
+        "Expose real\u2011time operational metrics via /api/metrics to enable automated monitoring and scaling",
+        "Introduce periodic state flushing in research_loop to reduce peak memory usage"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1913,9 +1913,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-10T12:05:50Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-10T12:06:22Z",
+    "completed_at": "2026-05-10T12:06:23Z"
   }
 }
