@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T07:03:39Z",
+  "last_updated": "2026-05-10T07:04:46Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.45,
-      "last_seen": "2026-05-10T07:02:39Z",
+      "last_seen": "2026-05-10T07:04:46Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -860,7 +860,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 97
+    "openrouter_calls_today": 98
   },
   "model_champions": {
     "text": null,
@@ -869,26 +869,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_90be5e0f",
-      "ts": "2026-05-10T04:33:45Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by reducing CPU overload and improving reliability of LLM calls and metrics reporting",
-      "summary": "The hive is currently in an error state due to excessive CPU load per core and missing retry logic for LLM calls. Recent fixes restored Ollama and repaired supervisor scripts, but the high load persists and the metrics endpoint is incomplete.",
-      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py and created a basic /api/metrics endpoint stub in logstream.py.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and 5xx responses",
-        "Complete the /api/metrics endpoint in logstream.py to return JSON with session stats, CPU load, and request rates",
-        "Write unit tests for orchestrator.call_llm() covering retry scenarios in tests/test_orchestrator.py",
-        "Implement a CPU load guard in supervisor.sh that throttles hive workers when load/core > 2.0",
-        "Add a Prometheus exporter in metrics.py to expose hive health metrics on /metrics"
-      ],
-      "decisions": [
-        "Prioritize fixing the TS20 CPU load/core blocker before adding new features",
-        "Enforce exponential backoff as the standard error handling for all external API calls",
-        "Expose internal health data via a dedicated metrics endpoint for automated monitoring"
-      ]
-    },
     {
       "id": "sess_15d6ed78",
       "ts": "2026-05-10T04:48:40Z",
@@ -1068,6 +1048,26 @@
         "Expose internal resource usage via a dedicated metrics endpoint for real-time monitoring",
         "Validate new functionality with automated tests to prevent regressions under high load"
       ]
+    },
+    {
+      "id": "sess_820e794a",
+      "ts": "2026-05-10T07:04:36Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by reducing high load failures and improving observability",
+      "summary": "The hive is currently stalled with high CPU load and several invariant failures. Recent work restored Ollama, fixed supervisor issues, and auto\u2011repaired TS14, but load\u2011related blockers remain. Adding robust retry logic and metrics will help diagnose and mitigate these failures.",
+      "progress": "Implemented exponential backoff and retry logic in call_llm() and created a supervisor tmux session to recover core services.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py when HTTP 429 or network errors occur",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, and job queue stats",
+        "Write unit tests for the backoff implementation in orchestrator.py covering success, retry, and max\u2011retry scenarios",
+        "Add load\u2011monitoring middleware in orchestrator.py to log a warning when load/core exceeds 0.9 for more than 30 seconds",
+        "Create a cleanup script cleanup_highload.sh that automatically renices or pauses low\u2011priority jobs when load/core stays above 1.0"
+      ],
+      "decisions": [
+        "Use exponential backoff with jitter for all LLM calls to reduce rate\u2011limit errors",
+        "Expose real\u2011time metrics via /api/metrics to enable external monitoring dashboards",
+        "Prioritize automated mitigation of high load by adding load\u2011monitoring middleware and a cleanup script"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1079,9 +1079,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=9 health=45% blockers=16",
     "status": "completed",
-    "started_at": "2026-05-10T07:03:09Z",
-    "completed_at": "2026-05-10T07:03:09Z"
+    "started_at": "2026-05-10T07:04:46Z",
+    "completed_at": "2026-05-10T07:04:46Z"
   }
 }
