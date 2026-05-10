@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T08:04:25Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-10T08:05:44Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -860,7 +860,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 101
+    "openrouter_calls_today": 102
   },
   "model_champions": {
     "text": null,
@@ -869,26 +869,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_26ade9bb",
-      "ts": "2026-05-10T05:33:57Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving supervisor invariants, improving LLM call reliability, and exposing operational metrics.",
-      "summary": "The hive is currently stalled at 55% health due to high load and supervisor service failures. Recent work repaired Ollama, audited the system, and auto\u2011fixed TS14, but invariant violations in research-loop.service persist. Immediate coding actions are needed to reinforce reliability and visibility.",
-      "progress": "Auto\u2011fixed TS14 invariant and restored core services, bringing the system back from a full stall.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and 5xx responses.",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, job queue length, and retry stats.",
-        "Write unit tests for supervisor.py covering start, stop, and invariant checks of research-loop.service.",
-        "Add health check ping in health_monitor.py that flags supervisor invariant failures and triggers automatic restart of research-loop.service.",
-        "Introduce load shedding in job_scheduler.py: if core load > 1.0, pause non\u2011essential jobs and log the event."
-      ],
-      "decisions": [
-        "Prioritize fixing supervisor invariants before scaling new features.",
-        "Adopt exponential backoff as the standard retry strategy for all external API calls.",
-        "Expose operational metrics via /api/metrics to enable automated monitoring and alerting."
-      ]
-    },
     {
       "id": "sess_0c50ffb7",
       "ts": "2026-05-10T05:49:04Z",
@@ -1068,6 +1048,26 @@
         "Expose core system metrics via a JSON API for external monitoring tools",
         "Prioritize fixing supervisor invariants before adding new features"
       ]
+    },
+    {
+      "id": "sess_4e7eeb4e",
+      "ts": "2026-05-10T08:05:04Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive under high load and enhance observability and resilience of core services",
+      "summary": "The hive is currently stalled with high CPU load and memory usage across multiple sessions. Recent work has recovered Ollama and fixed several supervisor invariants, but load remains a blocker. Implementing retry logic and metrics endpoints is critical to restore full functionality.",
+      "progress": "Added exponential backoff and retry logic to call_llm() in orchestrator.py and created a supervisor tmux session to restart core services.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py when HTTP 429 or network errors occur",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, and job queue stats",
+        "Write unit tests for call_llm() in orchestrator.py covering success, rate-limit, and network-failure paths",
+        "Add load monitoring and auto\u2011throttling in supervisor.sh to pause non\u2011essential jobs when core>0.9",
+        "Create a Grafana dashboard script in monitoring/dashboard.py that visualizes the metrics from /api/metrics"
+      ],
+      "decisions": [
+        "Prioritize resilient LLM calls with exponential backoff before adding new features",
+        "Expose internal hive performance via a dedicated /api/metrics endpoint for real\u2011time monitoring",
+        "Integrate automated load\u2011based throttling in supervisor to prevent system stalls"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1079,9 +1079,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-10T08:04:25Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-10T08:05:14Z",
+    "completed_at": "2026-05-10T08:05:14Z"
   }
 }
