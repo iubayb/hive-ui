@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T22:25:46Z",
+  "last_updated": "2026-05-10T22:26:33Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.55,
-      "last_seen": "2026-05-10T22:24:06Z",
+      "last_seen": "2026-05-10T22:26:07Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -522,7 +522,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 30
+    "openrouter_calls_today": 31
   },
   "model_champions": {
     "text": null,
@@ -531,26 +531,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_790c3635",
-      "ts": "2026-05-10T19:55:18Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-test modules and stabilizing resource usage",
-      "summary": "The hive is currently stalled with multiple high-priority self-test failures (TS17\u2011TS21) and high disk usage. Automated fixes have been attempted but were insufficient, leaving the system vulnerable. Immediate code interventions are needed to add fallback logic, health wrappers, and missing repair routines.",
-      "progress": "No new fixes were successfully applied since the last checkpoint.",
-      "next_steps": [
-        "Add fallback handling to ts21_repair.py in orchestrator/self_fix/ts21_repair.py to gracefully handle missing dependencies",
-        "Implement a health check wrapper in health_monitor.py that retries and logs failures for all self-test modules",
-        "Create repair functions for TS17, TS18, and TS19 in orchestrator/self_fix/ (e.g., ts17_repair.py, ts18_repair.py, ts19_repair.py) with basic remediation steps",
-        "Add unit tests for each new repair function in tests/self_fix/ covering success and fallback paths",
-        "Introduce a disk usage alert in resource_monitor.py that triggers a cleanup routine when usage exceeds 90%"
-      ],
-      "decisions": [
-        "Prioritize coding fixes over scaling hardware until self-tests pass.",
-        "Use a unified retry decorator for all self-test calls to reduce duplicated logic.",
-        "Commit all new repair modules and tests to the main branch before deploying the health wrapper."
-      ]
-    },
     {
       "id": "sess_0394234e",
       "ts": "2026-05-10T20:10:27Z",
@@ -730,6 +710,26 @@
         "Introduce automatic load-shedding to prevent resource exhaustion",
         "Expose hive health metrics via a new API endpoint for external monitoring"
       ]
+    },
+    {
+      "id": "sess_588b856e",
+      "ts": "2026-05-10T22:26:23Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and improving resiliency",
+      "summary": "The hive is currently stalled with multiple critical self-test failures (TS17\u2011TS21) and high resource usage. Auto\u2011fix attempts have not resolved the issues, and a fallback for TS21 and a health\u2011check wrapper are pending. Immediate code work is needed to address these failures and prevent future stalls.",
+      "progress": "No new achievements were recorded since the last update.",
+      "next_steps": [
+        "Add fallback handling in orchestrator/self_fix/ts21_repair.py to gracefully handle unrecoverable TS21 errors",
+        "Implement a health check wrapper in health_monitor.py that retries and logs failures for self-test modules",
+        "Add retry logic with exponential backoff to call_self_test() in orchestrator/self_fix/ts_helper.py for HTTP 429 responses",
+        "Write unit tests for orchestrator/self_fix/ts17_repair.py and ts18_repair.py covering success, fallback, and retry paths",
+        "Create a disk usage alert in resource_monitor.py that triggers a safe shutdown when disk > 95%"
+      ],
+      "decisions": [
+        "Prioritize fixing TS21 fallback before addressing other self-test failures",
+        "Introduce a generic health\u2011check wrapper to centralize retry and logging logic for all TS modules",
+        "Allocate additional memory resources temporarily to allow auto\u2011fix scripts to run without OOM"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -741,9 +741,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-10T22:25:06Z",
-    "completed_at": "2026-05-10T22:25:06Z"
+    "started_at": "2026-05-10T22:26:07Z",
+    "completed_at": "2026-05-10T22:26:23Z"
   }
 }
