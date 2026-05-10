@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T19:06:01Z",
+  "last_updated": "2026-05-10T19:07:01Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.55,
-      "last_seen": "2026-05-10T19:04:39Z",
+      "last_seen": "2026-05-10T19:06:41Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -397,7 +397,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T19:05:51Z",
-    "completed_at": "2026-05-10T19:05:51Z"
+    "started_at": "2026-05-10T19:06:51Z",
+    "completed_at": "2026-05-10T19:06:51Z"
   }
 }
