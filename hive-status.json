@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T23:41:01Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-10T23:41:57Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 0.875,
-      "last_seen": "2026-05-10T23:41:01Z",
+      "status": "stalled",
+      "health_score": 0.45,
+      "last_seen": "2026-05-10T23:41:41Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -26,6 +26,32 @@
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_ab2a0798",
+      "ts": "2026-05-10T23:41:15Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The tmux session is in an error state, likely caused by a hung or unresponsive process in its primary window (no new heartbeats beyond the last logged line).",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "26d414c8c3ad5791994d97bcf04c27c5"
+    },
+    {
+      "id": "b_58f9d81c",
+      "ts": "2026-05-10T23:41:10Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive is stuck in a dead\u2011loop: only heartbeat info is printed and no tasks are completing (still 1 running, 59 pending, 1 inflight). This indicates the main tmux window is hung or unresponsive.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "724fef9cee1ccd2ca0960498f8bf3c23"
+    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -439,6 +465,34 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_f2df4da4",
+        "ts": "2026-05-10T23:41:17Z",
+        "hive": "default",
+        "summary": "Recover the hung ps5-hive tmux session by interrupting the stuck process, launching a recovery window, and removing the faulty window.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_6ff1d1c9",
+        "ts": "2026-05-10T23:41:17Z",
+        "hive": "default",
+        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
+        "source": "hive-doctor-rollback"
+      },
+      {
+        "id": "f_9001bcd8",
+        "ts": "2026-05-10T23:41:10Z",
+        "hive": "default",
+        "summary": "The ps5-hive session is stalled; sending an interrupt and launching a recovery window should restore progress.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_03c6a9f5",
+        "ts": "2026-05-10T23:41:10Z",
+        "hive": "default",
+        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive:C.0 C-c && sleep 2 && tmux new-window -t ps5-hive:2 '`",
+        "source": "hive-doctor-rollback"
+      },
+      {
         "id": "f_a106f3ed",
         "ts": "2026-05-10T23:11:06Z",
         "hive": "default",
@@ -630,7 +684,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 39
+    "openrouter_calls_today": 42
   },
   "model_champions": {
     "text": null,
@@ -639,26 +693,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_d24b75dc",
-      "ts": "2026-05-10T21:10:54Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by repairing failing self-tests and improving health monitoring to resume normal operation.",
-      "summary": "The hive is currently stalled with multiple critical self-test failures (TS17\u2011TS21) and high resource usage. Auto\u2011fix attempts have not resolved the issues, and health monitoring lacks automatic remediation. Immediate code fixes and health\u2011check enhancements are required to restore stability.",
-      "progress": "Attempted auto\u2011fix for TS21 was applied but did not fully resolve the failure.",
-      "next_steps": [
-        "Add fallback handling in ts21_repair.py within orchestrator/self_fix to catch unexpected exceptions and mark TS21 as repaired when possible.",
-        "Implement a health check wrapper in health_monitor.py that retries failing self\u2011tests up to three times before escalating.",
-        "Fix the root cause of TS19 failure by adding missing import statements in orchestrator/self_fix/ts19_check.py and updating the validation logic.",
-        "Update ts18_repair.py to include explicit resource cleanup (close file handles, release GPU memory) to prevent deadlocks.",
-        "Write unit tests for ts17_check.py covering all edge cases and integrate them into the CI pipeline."
-      ],
-      "decisions": [
-        "Prioritize self\u2011test repairs over new feature development until the hive health returns to green.",
-        "Introduce automatic retry logic in health_monitor.py to reduce manual intervention for transient failures.",
-        "Allocate additional temporary disk space (increase quota to 110%) to allow repair scripts to complete without hitting the 93% disk usage limit."
-      ]
-    },
     {
       "id": "sess_346a5fbb",
       "ts": "2026-05-10T21:25:59Z",
@@ -838,6 +872,26 @@
         "Integrate health_monitor wrapper into the main orchestrator loop to abort processing when any self\u2011test fails",
         "Allocate additional memory buffer by reducing log retention size to mitigate high memory usage"
       ]
+    },
+    {
+      "id": "sess_69ec747a",
+      "ts": "2026-05-10T23:41:57Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive operation by fixing critical self\u2011test failures and stabilizing the ps5\u2011hive session",
+      "summary": "The hive is currently stalled at 45% health with several high\u2011priority blockers: ts21 and ts19 self\u2011test failures, a hung ps5\u2011hive tmux session, and high load warnings. The only recent progress is the acquisition of a tmux\u2011recover capability. Immediate code fixes are needed to break the dead\u2011loop and re\u2011establish health monitoring.",
+      "progress": "Implemented a new tmux\u2011recover capability that can detach and restart hung tmux sessions.",
+      "next_steps": [
+        "Add fallback handling logic to ts21_repair.py in orchestrator/self_fix/ to gracefully skip unrecoverable steps and log detailed diagnostics",
+        "Implement a health check wrapper in health_monitor.py that calls run_self_test() and triggers auto\u2011fixes for TS21 and TS19 failures",
+        "Modify orchestrator.py to invoke the new health check wrapper on startup and after each heartbeat cycle",
+        "Write unit tests for ts21_repair.py covering both successful repair paths and fallback scenarios",
+        "Create a watchdog in ps5_hive_monitor.py that detects tmux dead\u2011loops and invokes the tmux\u2011recover routine automatically"
+      ],
+      "decisions": [
+        "Prioritize fixing TS21 fallback before addressing TS19, as TS21 blocks subsequent repairs",
+        "Integrate health monitoring directly into the orchestrator heartbeat to ensure continuous self\u2011healing",
+        "Leverage the newly added tmux\u2011recover capability as the primary recovery mechanism for the ps5\u2011hive session"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -849,9 +903,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-10T23:40:41Z",
-    "completed_at": "2026-05-10T23:40:41Z"
+    "started_at": "2026-05-10T23:41:41Z",
+    "completed_at": "2026-05-10T23:41:57Z"
   }
 }
