@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T07:18:58Z",
+  "last_updated": "2026-05-10T07:19:53Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -860,7 +860,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 98
+    "openrouter_calls_today": 99
   },
   "model_champions": {
     "text": null,
@@ -869,26 +869,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_15d6ed78",
-      "ts": "2026-05-10T04:48:40Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by reducing CPU overload and completing critical code improvements",
-      "summary": "The hive is experiencing high CPU load causing self-test failures, though recent recovery actions have restored core services. Pending tasks include adding exponential backoff to LLM calls and exposing a metrics endpoint, which are crucial for long\u2011term stability.",
-      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py and verified it reduces transient 429 errors.",
-      "next_steps": [
-        "Add configurable max-retry count and jitter to call_llm() in orchestrator.py",
-        "Implement /api/metrics endpoint in logstream.py returning JSON with CPU load, session counts, and error rates",
-        "Create unit tests for the new metrics endpoint in tests/test_logstream_metrics.py covering success and error paths",
-        "Profile and optimize the main event loop in supervisor.sh to lower CPU usage, adding sleep intervals where idle",
-        "Add a health check endpoint in health.py that aggregates self\u2011test results and exposes them for monitoring"
-      ],
-      "decisions": [
-        "Prioritize fixing CPU load overload before adding new features",
-        "Use exponential backoff with jitter for all external LLM calls to prevent hammering the model API",
-        "Expose internal performance metrics via a dedicated API to enable automated alerting"
-      ]
-    },
     {
       "id": "sess_0441c00e",
       "ts": "2026-05-10T05:03:54Z",
@@ -1068,6 +1048,26 @@
         "Expose real\u2011time metrics via /api/metrics to enable external monitoring dashboards",
         "Prioritize automated mitigation of high load by adding load\u2011monitoring middleware and a cleanup script"
       ]
+    },
+    {
+      "id": "sess_9819e304",
+      "ts": "2026-05-10T07:19:42Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by resolving high load issues and improving resilience of core services",
+      "summary": "The hive is currently stalled with high CPU load and several supervisor invariant failures. Recent recovery actions fixed major crashes and restored supervisor sessions, but load pressure and missing retry logic remain blockers.",
+      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py and added a basic /api/metrics endpoint in logstream.py.",
+      "next_steps": [
+        "Add circuit-breaker and fallback handling to call_llm() in orchestrator.py for repeated 429/503 responses",
+        "Expand /api/metrics endpoint in logstream.py to include per-service CPU, memory, and queue length statistics",
+        "Write unit tests for the new retry/backoff logic in orchestrator.py covering success, timeout, and rate\u2011limit scenarios",
+        "Implement load shedding in supervisor.sh: when load/core > 0.9, automatically pause non\u2011critical jobs and log actions",
+        "Create a health check script health_check.py that pings research-loop.service and restarts it if stopped, then schedule it via cron"
+      ],
+      "decisions": [
+        "Prioritize adding robust retry/circuit\u2011breaker to LLM calls before other performance optimizations",
+        "Expose detailed metrics via /api/metrics to enable automated monitoring and scaling decisions",
+        "Introduce automated load\u2011shedding to prevent system stalls under high core usage"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1079,9 +1079,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=45% blockers=16",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T07:18:58Z",
-    "completed_at": "2026-05-10T07:18:58Z"
+    "started_at": "2026-05-10T07:19:52Z",
+    "completed_at": "2026-05-10T07:19:53Z"
   }
 }
