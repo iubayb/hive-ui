@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T04:49:51Z",
+  "last_updated": "2026-05-10T04:50:59Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "error",
-      "health_score": 0.0,
-      "last_seen": "2026-05-10T04:49:41Z",
+      "status": "running",
+      "health_score": 1.0,
+      "last_seen": "2026-05-10T04:50:52Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 5,
+      "errors_last_hour": 6,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -1367,7 +1367,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T04:49:51Z",
-    "completed_at": "2026-05-10T04:49:51Z"
+    "started_at": "2026-05-10T04:50:59Z",
+    "completed_at": "2026-05-10T04:50:59Z"
   }
 }
