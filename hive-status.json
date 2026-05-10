@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T17:53:53Z",
+  "last_updated": "2026-05-10T17:54:43Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -183,7 +183,35 @@
       "_hash": "217dae28725ae72712be5a39a27334a8"
     }
   ],
-  "next_steps": [],
+  "next_steps": [
+    {
+      "id": "ns_df972ffc",
+      "priority": 1,
+      "description": "Update self_test_suite.py in /hive/tests to add missing mock data for TS17 and correct assertion logic",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-10T17:54:43Z"
+    },
+    {
+      "id": "ns_93295e6f",
+      "priority": 2,
+      "description": "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to retry the database reset when the first attempt fails",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-10T17:54:43Z"
+    },
+    {
+      "id": "ns_839c56ef",
+      "priority": 3,
+      "description": "Implement a health check wrapper in health_monitor.py to automatically restart services when disk usage exceeds 90%",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-10T17:54:43Z"
+    }
+  ],
   "capabilities": {
     "learned": []
   },
@@ -198,7 +226,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 0
+    "openrouter_calls_today": 1
   },
   "model_champions": {
     "text": null,
@@ -207,16 +235,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_a7e4686d",
-      "ts": "2026-05-10T17:44:10Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_4e452097",
       "ts": "2026-05-10T17:45:10Z",
@@ -306,6 +324,26 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_be02fd69",
+      "ts": "2026-05-10T17:54:43Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and reducing resource pressure",
+      "summary": "The hive is currently stalled with high memory usage and several critical self\u2011test failures (TS17\u2011TS21). No recent progress has been made and the system remains under heavy load. Immediate code fixes and resource adjustments are required to bring the hive back to a healthy state.",
+      "progress": "No new fixes have been applied since the last snapshot.",
+      "next_steps": [
+        "Update self_test_suite.py in /hive/tests to add missing mock data for TS17 and correct assertion logic",
+        "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to retry the database reset when the first attempt fails",
+        "Implement a health check wrapper in health_monitor.py to automatically restart services when disk usage exceeds 90%",
+        "Refactor memory\u2011intensive data loading in data_loader.py to use streaming generators instead of full list copies",
+        "Write unit tests in test_ts19.py covering edge cases for TS19 and integrate them into the CI pipeline"
+      ],
+      "decisions": [
+        "Prioritize fixing TS21 via improved retry logic before addressing TS17\u2011TS19",
+        "Allocate an additional 16\u202fGB RAM to the orchestrator container to mitigate memory pressure",
+        "Schedule a rolling restart of all active sessions after code changes are merged"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -319,7 +357,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T17:53:22Z",
-    "completed_at": "2026-05-10T17:53:22Z"
+    "started_at": "2026-05-10T17:54:25Z",
+    "completed_at": "2026-05-10T17:54:25Z"
   }
 }
