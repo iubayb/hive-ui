@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T03:47:53Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-10T03:48:55Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
@@ -1133,7 +1133,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 84
+    "openrouter_calls_today": 85
   },
   "model_champions": {
     "text": null,
@@ -1142,26 +1142,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_1ff311de",
-      "ts": "2026-05-10T01:17:20Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by improving LLM call resilience and adding operational metrics endpoint",
-      "summary": "The hive is currently in an error state with high CPU load and several sessions in backoff. Recent automated fixes have restored core services, but call_llm() lacks robust retry logic and there is no metrics API for monitoring health.",
-      "progress": "Auto-fixed the TS14 invariant and restored the supervisor tmux session, bringing core orchestration back online.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and network errors",
-        "Create /api/metrics endpoint in logstream.py that returns JSON with session health, CPU load, and backoff counts",
-        "Write unit tests for the new retry logic in orchestrator.py covering max retries and jitter behavior",
-        "Instrument orchestrator.py to emit Prometheus-style counters for LLM call successes, failures, and retries",
-        "Update supervisor.sh to gracefully restart sessions after 5 consecutive backoff failures"
-      ],
-      "decisions": [
-        "Use jittered exponential backoff with a max wait of 30 seconds for call_llm() retries",
-        "Expose metrics via a JSON endpoint rather than raw logs to simplify monitoring integration",
-        "Prioritize fixing CPU load issues after stabilizing LLM call handling"
-      ]
-    },
     {
       "id": "sess_91add459",
       "ts": "2026-05-10T01:32:20Z",
@@ -1341,6 +1321,26 @@
         "Expose real-time metrics via /api/metrics for external monitoring dashboards",
         "Implement load\u2011shedding logic before launching new orchestration tasks"
       ]
+    },
+    {
+      "id": "sess_9c082eb5",
+      "ts": "2026-05-10T03:48:15Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by reducing CPU overload and improving reliability of LLM calls and monitoring.",
+      "summary": "The hive is currently in an error state due to excessive CPU load per core and missing resilience in the orchestrator's LLM calls. Recent fixes have recovered Ollama and restored supervisor sessions, but the high load and lack of metrics impede long\u2011term stability.",
+      "progress": "Added exponential backoff and retry logic to call_llm() in orchestrator.py and created a basic /api/metrics endpoint stub in logstream.py.",
+      "next_steps": [
+        "Refactor call_llm() in orchestrator.py to include jitter and configurable max retries.",
+        "Complete the /api/metrics endpoint in logstream.py to return JSON with CPU load, memory usage, and active session counts.",
+        "Add a background health monitor in health_check.py that triggers a graceful restart of overloaded workers when load/core > 2.0.",
+        "Implement unit tests for orchestrator.call_llm() covering 429, 500, and timeout responses.",
+        "Update supervisor.sh to automatically restart the orchestrator if health_check reports critical overload."
+      ],
+      "decisions": [
+        "Prioritize fixing the TS20 CPU load/core failure before adding new features.",
+        "Enforce exponential backoff as the default retry strategy for all external API calls.",
+        "Expose real\u2011time metrics via /api/metrics to enable automated scaling decisions."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1352,9 +1352,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-10T03:47:53Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-10T03:48:35Z",
+    "completed_at": "2026-05-10T03:48:35Z"
   }
 }
