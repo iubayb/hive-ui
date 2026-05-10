@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T19:38:56Z",
+  "last_updated": "2026-05-10T19:39:56Z",
   "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.55,
-      "last_seen": "2026-05-10T19:37:03Z",
+      "status": "running",
+      "health_score": 0.875,
+      "last_seen": "2026-05-10T19:39:29Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -19,13 +19,26 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 3,
+      "errors_last_hour": 9,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_b77ae048",
+      "ts": "2026-05-10T19:39:39Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive has entered an error state after accumulating several failures (failed=1) and the heartbeat indicates tasks are still pending but no progress; likely a stalled worker or corrupted task queue.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "1c1e0d900b0b626a9529d4724b3ef42d"
+    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -144,6 +157,19 @@
       "_hash": "82ed62237b8e342301c173b1539d754e"
     },
     {
+      "id": "b_ab068206",
+      "ts": "2026-05-10T19:39:33Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive reports error status with 7 errors but logs show normal heartbeats and successful HTTP request; likely a non\u2011critical subsystem (e.g., task queue monitor) is repeatedly failing, causing the session to be marked error despite overall progress.",
+      "severity": "medium",
+      "status": "resolved",
+      "resolved_at": "2026-05-10T19:39:36Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "d296d73ece7dcba7388836dcd07f56ae"
+    },
+    {
       "id": "b_27f1100f",
       "ts": "2026-05-10T17:38:51Z",
       "hive": "default",
@@ -216,7 +242,22 @@
     "learned": []
   },
   "knowledge": {
-    "findings": [],
+    "findings": [
+      {
+        "id": "f_72ce934b",
+        "ts": "2026-05-10T19:39:39Z",
+        "hive": "default",
+        "summary": "ps5\u2011hive is stalled with a failed task; resetting and restarting the hive should clear the error state.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_d5a175a0",
+        "ts": "2026-05-10T19:39:33Z",
+        "hive": "default",
+        "summary": "A subsystem failure is tripping the error flag; sending a USR1 reload signal to hive workers should refresh the failing component without disrupting running tasks.",
+        "source": "doctor"
+      }
+    ],
     "patterns": [],
     "solutions": []
   },
@@ -226,7 +267,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 7
+    "openrouter_calls_today": 9
   },
   "model_champions": {
     "text": null,
@@ -415,9 +456,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: develop\u2192main promotion check + release draft",
-    "status": "completed",
-    "started_at": "2026-05-10T19:38:54Z",
-    "completed_at": "2026-05-10T19:38:56Z"
+    "task": "compaction: LLM summarising hive state",
+    "status": "running",
+    "started_at": "2026-05-10T19:39:56Z",
+    "completed_at": null
   }
 }
