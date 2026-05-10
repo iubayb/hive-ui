@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T10:13:00Z",
+  "last_updated": "2026-05-10T10:13:51Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "error",
-      "health_score": 0.25,
-      "last_seen": "2026-05-10T10:11:06Z",
+      "health_score": 0.15,
+      "last_seen": "2026-05-10T10:13:09Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -60,6 +60,58 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_82f853a4",
+      "ts": "2026-05-10T10:13:51Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=32.77 mem=40.1GB disk=92% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "4906a2981a01f5673a2ad0fbcaf5c42e"
+    },
+    {
+      "id": "b_14432643",
+      "ts": "2026-05-10T10:13:39Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=29.20 mem=40.0GB disk=92% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "c1b2431a9551ff73d3e3079b986e648a"
+    },
+    {
+      "id": "b_ba50490e",
+      "ts": "2026-05-10T10:13:26Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=22.64 mem=40.1GB disk=92% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "d33f10b5ebbae5d1d59f05d7ae4a4678"
+    },
+    {
+      "id": "b_7b377146",
+      "ts": "2026-05-10T10:13:13Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=17.50 mem=40.0GB disk=92% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "2cb6b6f869acd804ce9b89a12a93e34d"
+    },
     {
       "id": "b_509903df",
       "ts": "2026-05-10T10:13:00Z",
@@ -1174,7 +1226,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T10:12:47Z",
-    "completed_at": "2026-05-10T10:12:48Z"
+    "started_at": "2026-05-10T10:13:49Z",
+    "completed_at": "2026-05-10T10:13:51Z"
   }
 }
