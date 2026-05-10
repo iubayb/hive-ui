@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T15:06:56Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-10T15:07:52Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
@@ -1694,7 +1694,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 129
+    "openrouter_calls_today": 130
   },
   "model_champions": {
     "text": null,
@@ -1703,26 +1703,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_57e5742c",
-      "ts": "2026-05-10T12:36:17Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize hive performance by reducing load spikes and adding monitoring endpoints",
-      "summary": "The hive is currently experiencing critical load and memory pressure causing research loops to pause. Recent fixes have recovered Ollama and addressed several supervisor issues, but load remains high and disk usage is at 92%. Immediate code improvements are needed to add resilience to LLM calls and expose metrics for better observability.",
-      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py and verified it handles HTTP 429 without crashing.",
-      "next_steps": [
-        "Add detailed request latency logging to call_llm() in orchestrator.py and emit to prometheus_histogram",
-        "Implement /api/metrics endpoint in logstream.py returning JSON with cpu, memory, disk, and request rates",
-        "Introduce memory usage guard in research_loop.py that throttles new tasks when mem>38GB",
-        "Write unit tests for the new backoff logic in tests/test_orchestrator.py covering retry limits and jitter",
-        "Add cleanup of old log files in logstream.py to keep disk usage below 85% by deleting files older than 7 days"
-      ],
-      "decisions": [
-        "Prioritize exponential backoff over circuit breaker for LLM calls to maintain throughput",
-        "Expose internal hive health metrics via a dedicated API rather than relying on console logs",
-        "Enforce a hard memory ceiling in research_loop to prevent OOM crashes"
-      ]
-    },
     {
       "id": "sess_eead2037",
       "ts": "2026-05-10T12:51:53Z",
@@ -1902,6 +1882,26 @@
         "Expose internal health metrics via a dedicated /api/metrics HTTP GET endpoint",
         "Enforce a hard CPU usage ceiling of 2.0 cores for research loops, pausing them when exceeded"
       ]
+    },
+    {
+      "id": "sess_ae6fbbaf",
+      "ts": "2026-05-10T15:07:11Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by reducing critical load issues and completing pending backoff and metrics implementations",
+      "summary": "The hive is currently in an error state with high CPU load and disk usage, causing research loops to pause. Recent automated fixes have restored core services and cleared several system invariants, but critical resource pressure remains. Completing the exponential backoff for LLM calls and adding a metrics endpoint will improve resilience and observability.",
+      "progress": "Auto-fixed invariant TS14 and restored supervisor and orchestrator sessions, reducing immediate crashes.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and transient errors",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, and disk utilization",
+        "Add unit tests for the new backoff logic in tests/test_orchestrator_llm.py covering success, retry, and failure cases",
+        "Update logstream.py to emit metric counters (requests_total, errors_total) using Prometheus client library",
+        "Create a health check route in health.py that reports load/core and disk usage thresholds and returns HTTP 200/503 accordingly"
+      ],
+      "decisions": [
+        "Prioritize exponential backoff before adding new observability endpoints to prevent cascading failures",
+        "Use Prometheus format for metrics to align with existing monitoring stack",
+        "Set load/core alert threshold at 1.5 to trigger automatic scaling or throttling"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1913,9 +1913,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-10T15:06:56Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-10T15:07:41Z",
+    "completed_at": "2026-05-10T15:07:42Z"
   }
 }
