@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T21:39:32Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-10T21:40:53Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.55,
-      "last_seen": "2026-05-10T21:38:59Z",
+      "status": "running",
+      "health_score": 0.875,
+      "last_seen": "2026-05-10T21:40:25Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -19,13 +19,39 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 10,
+      "errors_last_hour": 9,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_230ca667",
+      "ts": "2026-05-10T21:40:33Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive process has entered an error state, likely due to a hung or unresponsive task (silent for 1\u202fs and 7 errors reported).",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "2c02712dc8b2ba40eb428fd51455771a"
+    },
+    {
+      "id": "b_fea8f878",
+      "ts": "2026-05-10T21:40:29Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The tmux window for this hive has entered an error state (status=error) and is no longer responding; the heartbeat shows only one running task and a growing pending queue, indicating the main process is likely hung.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "4b345338cbec6e588aada79c03d66e31"
+    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -324,15 +350,44 @@
         "source_hive": "default",
         "source_agent": "hive-doctor",
         "skill": "tmux-recover",
-        "description": "Gracefully recovers a hung hive by sending an interrupt, spawning a fresh window with a recovery flag, and closing the faulty window.",
+        "description": "Gracefully recovers a hung tmux session by sending an interrupt, spawning a recovery window, and killing the faulty one.",
         "example": "tmux send-keys -t <session> C-c && sleep 2 && tmux new-window -t <session>:2 'cd ~/hive && ./run_hive.sh --recover' && tmux kill-window -t <session>:1",
         "tags": [],
-        "applicable_to": "all"
+        "applicable_to": "all",
+        "last_updated": "2026-05-10T21:40:31Z"
       }
     ]
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_e29fdab4",
+        "ts": "2026-05-10T21:40:36Z",
+        "hive": "default",
+        "summary": "Recover the hung ps5-hive session by interrupting the faulty window, launching a recovery window, and closing the original.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_89cdac54",
+        "ts": "2026-05-10T21:40:36Z",
+        "hive": "default",
+        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
+        "source": "hive-doctor-rollback"
+      },
+      {
+        "id": "f_dd4f927d",
+        "ts": "2026-05-10T21:40:31Z",
+        "hive": "default",
+        "summary": "Recover the hung ps5-hive by interrupting the faulty window, launching a recovery instance, and then closing the stalled window.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_319dad66",
+        "ts": "2026-05-10T21:40:31Z",
+        "hive": "default",
+        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
+        "source": "hive-doctor-rollback"
+      },
       {
         "id": "f_fa3aaf9a",
         "ts": "2026-05-10T21:10:25Z",
@@ -420,7 +475,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 23
+    "openrouter_calls_today": 25
   },
   "model_champions": {
     "text": null,
@@ -639,9 +694,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
-    "status": "completed",
-    "started_at": "2026-05-10T21:39:22Z",
-    "completed_at": "2026-05-10T21:39:22Z"
+    "task": "compaction: LLM summarising hive state",
+    "status": "running",
+    "started_at": "2026-05-10T21:40:53Z",
+    "completed_at": null
   }
 }
