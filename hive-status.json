@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T20:08:48Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-10T20:09:49Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.55,
-      "last_seen": "2026-05-10T20:07:38Z",
+      "last_seen": "2026-05-10T20:09:39Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -19,13 +19,39 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 9,
+      "errors_last_hour": 10,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_c5575a1c",
+      "ts": "2026-05-10T20:09:49Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive reports a steady increase in pending tasks while only one task is inflight; this suggests the worker pool has stalled or a task is dead\u2011locked, causing the error state and accumulated error count.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "7268be46681869b2488b3aae9c4fe976"
+    },
+    {
+      "id": "b_fe9c1481",
+      "ts": "2026-05-10T20:09:44Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive reports status=error with 8 accumulated errors despite recent heartbeats showing normal operation; likely a hidden exception or stuck task is causing the error state.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "1d293b76bc20a9d5019785369e7d7789"
+    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -244,6 +270,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_9b9eee9d",
+        "ts": "2026-05-10T20:09:49Z",
+        "hive": "default",
+        "summary": "Stalled worker pool in ps5-hive; restart the hive process to clear the deadlock and resume task handling.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_01799f1d",
+        "ts": "2026-05-10T20:09:44Z",
+        "hive": "default",
+        "summary": "Session ps5-hive is in an error state due to hidden failures; sending a reset command via tmux should safely clear the error condition.",
+        "source": "doctor"
+      },
+      {
         "id": "f_72ce934b",
         "ts": "2026-05-10T19:39:39Z",
         "hive": "default",
@@ -267,7 +307,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 11
+    "openrouter_calls_today": 13
   },
   "model_champions": {
     "text": null,
@@ -476,9 +516,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=8 health=55% blockers=9",
     "status": "completed",
-    "started_at": "2026-05-10T20:08:08Z",
-    "completed_at": "2026-05-10T20:08:08Z"
+    "started_at": "2026-05-10T20:09:39Z",
+    "completed_at": "2026-05-10T20:09:39Z"
   }
 }
