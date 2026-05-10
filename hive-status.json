@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T17:35:56Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-10T17:36:47Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
@@ -1926,9 +1926,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=0% blockers=81",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T17:35:56Z",
-    "completed_at": "2026-05-10T17:35:56Z"
+    "started_at": "2026-05-10T17:36:16Z",
+    "completed_at": "2026-05-10T17:36:17Z"
   }
 }
