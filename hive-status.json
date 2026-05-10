@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T23:11:01Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-10T23:11:51Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 0.875,
-      "last_seen": "2026-05-10T23:10:55Z",
+      "status": "stalled",
+      "health_score": 0.5,
+      "last_seen": "2026-05-10T23:11:03Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -26,6 +26,19 @@
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_2daeebcb",
+      "ts": "2026-05-10T23:11:04Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive is stuck in a hung state \u2013 heartbeat logs show no change in task counts and errors have accumulated, indicating the main window is unresponsive.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "5fdc716c4a503caed8b0061518c4de50"
+    },
     {
       "id": "b_e7a12bc2",
       "ts": "2026-05-10T23:10:59Z",
@@ -426,6 +439,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_a106f3ed",
+        "ts": "2026-05-10T23:11:06Z",
+        "hive": "default",
+        "summary": "The 'ps5-hive' tmux session is hung; interrupt and spawn a recovery window to restore operation.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_adf85457",
+        "ts": "2026-05-10T23:11:06Z",
+        "hive": "default",
+        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
+        "source": "hive-doctor-rollback"
+      },
+      {
         "id": "f_3b08eebf",
         "ts": "2026-05-10T23:11:01Z",
         "hive": "default",
@@ -603,7 +630,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 36
+    "openrouter_calls_today": 38
   },
   "model_champions": {
     "text": null,
@@ -612,26 +639,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_72b11cff",
-      "ts": "2026-05-10T20:40:43Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests and improving fault tolerance",
-      "summary": "The hive is currently stalled with four critical self-tests (TS17\u2011TS21) failing, causing high load warnings. Recent attempts to auto\u2011fix TS21 fell short, and no fixes exist for TS17\u2011TS19. Immediate code improvements are needed to add fallback handling, health check wrappers, and retry mechanisms.",
-      "progress": "Implemented a preliminary fallback stub in ts21_repair.py but it does not yet handle all error paths.",
-      "next_steps": [
-        "Complete fallback handling in orchestrator/self_fix/ts21_repair.py to catch all exception types and log detailed diagnostics",
-        "Add a health check wrapper function in health_monitor.py that runs each self-test with timeout and automatic retry on transient failures",
-        "Implement retry logic with exponential backoff in orchestrator/self_test/runner.py for TS17\u2011TS19 when HTTP 429 or network errors occur",
-        "Write unit tests for ts17_repair.py, ts18_repair.py, and ts19_repair.py covering success, known failure modes, and fallback execution",
-        "Update hive-dev Dockerfile to increase memory limit to 64GB and add a health\u2011check command that queries /api/health for test status"
-      ],
-      "decisions": [
-        "Prioritize adding concrete fallback and retry mechanisms before expanding test coverage",
-        "Treat TS17\u2011TS19 as high\u2011priority bugs and allocate separate CI jobs for their unit tests",
-        "Raise the memory allocation for the orchestrator container to prevent out\u2011of\u2011memory stalls during self\u2011test runs"
-      ]
-    },
     {
       "id": "sess_b59dde16",
       "ts": "2026-05-10T20:55:49Z",
@@ -811,6 +818,26 @@
         "Introduce a unified health\u2011check wrapper to ensure any future self\u2011test failures are gracefully handled.",
         "Allocate additional memory monitoring to prevent disk saturation from interfering with self\u2011test runs."
       ]
+    },
+    {
+      "id": "sess_0b55c2fd",
+      "ts": "2026-05-10T23:11:41Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive operation by fixing self-test failures and unblocking the ps5-hive session",
+      "summary": "The hive is stalled with high\u2011priority blocks: the ps5\u2011hive tmux session is hung and self\u2011tests TS21 and TS19 are failing. A tmux\u2011recover capability is available, but code\u2011level fallbacks and health checks are still missing.",
+      "progress": "The tmux\u2011recover capability was added, enabling manual session reset.",
+      "next_steps": [
+        "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to catch and log repair failures and trigger a safe abort.",
+        "Implement a health check wrapper in health_monitor.py that pings each core service and restarts hung tmux sessions automatically.",
+        "Add retry logic with exponential backoff to the heartbeat loop in ps5_hive.py to handle transient errors and avoid permanent hangs.",
+        "Write unit tests for all functions in orchestrator/self_fix/ts21_repair.py and ts19_repair.py covering success, fallback, and exception paths.",
+        "Create a /api/health endpoint in orchestrator/api.py that returns JSON status of self\u2011tests, core load, and tmux session health."
+      ],
+      "decisions": [
+        "Prioritize fixing TS21 fallback before addressing TS19, as TS21 blocks the majority of core jobs.",
+        "Use the newly added tmux\u2011recover capability as the immediate remediation for the hung ps5\u2011hive session.",
+        "Defer non\u2011critical UI enhancements until health monitoring and self\u2011test repairs are stable."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -822,9 +849,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-10T23:10:03Z",
-    "completed_at": "2026-05-10T23:10:03Z"
+    "started_at": "2026-05-10T23:11:23Z",
+    "completed_at": "2026-05-10T23:11:41Z"
   }
 }
