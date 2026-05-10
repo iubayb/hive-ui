@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T10:04:57Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-10T10:05:42Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
@@ -927,7 +927,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 109
+    "openrouter_calls_today": 110
   },
   "model_champions": {
     "text": null,
@@ -936,26 +936,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_c26a77b2",
-      "ts": "2026-05-10T07:34:40Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize hive performance and add observability metrics",
-      "summary": "The hive is currently stalled with high CPU load and several supervisor invariants failing. Recent recovery actions have restored core services, but exponential backoff and metrics endpoints are still pending. Immediate coding work is needed to reduce load spikes and provide visibility into hive health.",
-      "progress": "Recovered Ollama, fixed supervisor TS-blocker dedup, and auto\u2011fixed invariant TS14.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 responses",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with session counts, CPU, and memory usage",
-        "Write unit tests for call_llm() in orchestrator.py covering success, rate\u2011limit, and network error scenarios",
-        "Add load\u2011shedding logic in supervisor.py to pause non\u2011critical jobs when load/core > 0.9",
-        "Create Prometheus exporter in metrics.py exposing hive health gauges for default, supervisor, and orchestrator"
-      ],
-      "decisions": [
-        "Prioritize exponential backoff in LLM calls to reduce 429 throttling",
-        "Expose real\u2011time metrics via /api/metrics before adding external monitoring",
-        "Add automated unit tests for critical retry pathways to prevent regressions"
-      ]
-    },
     {
       "id": "sess_028c257e",
       "ts": "2026-05-10T07:49:43Z",
@@ -1135,6 +1115,26 @@
         "Adopt exponential backoff as the standard retry strategy for all external API calls",
         "Expose internal health metrics via /api/metrics to enable automated alerting"
       ]
+    },
+    {
+      "id": "sess_b03f01d8",
+      "ts": "2026-05-10T10:05:29Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by resolving high\u2011severity self\u2011test failures and improving robustness of core services.",
+      "summary": "The hive is currently in an error state due to CPU overload on TS20 and disk usage on TS21. Recent auto\u2011fixes have restored Ollama and supervisor components, but the high\u2011load and disk\u2011space blockers remain. Immediate coding actions are needed to add resilience to LLM calls, expose health metrics, and automate disk management.",
+      "progress": "Auto\u2011fixed system invariant TS14 and restored supervisor and orchestrator sessions, bringing core services back online.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and network errors.",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, disk usage, and session health stats.",
+        "Add a disk\u2011space auto\u2011shrink routine to self_test.py that triggers when TS21 usage exceeds 90%, freeing temporary files.",
+        "Modify orchestrator.py to renice low\u2011priority jobs when CPU load/core exceeds 0.8 to mitigate TS20 overload.",
+        "Create unit tests in test_logstream.py covering the new /api/metrics endpoint and its error handling."
+      ],
+      "decisions": [
+        "Use exponential backoff starting at 1s, doubling up to 32s with a max of 5 retries for call_llm().",
+        "Expose metrics via /api/metrics without authentication for internal monitoring tools.",
+        "Prioritize automated disk cleanup for TS21 over manual intervention."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1146,9 +1146,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=25% blockers=20",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T10:04:57Z",
-    "completed_at": "2026-05-10T10:04:57Z"
+    "started_at": "2026-05-10T10:05:41Z",
+    "completed_at": "2026-05-10T10:05:42Z"
   }
 }
