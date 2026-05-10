@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T04:32:38Z",
+  "last_updated": "2026-05-10T04:33:55Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
       "health_score": 0.0,
-      "last_seen": "2026-05-10T04:31:07Z",
+      "last_seen": "2026-05-10T04:33:08Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -1146,7 +1146,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 87
+    "openrouter_calls_today": 88
   },
   "model_champions": {
     "text": null,
@@ -1155,26 +1155,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_dab0f75c",
-      "ts": "2026-05-10T02:02:29Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by resolving TS12 invariant failures and stabilizing service restarts",
-      "summary": "The hive is currently in an error state with multiple TS12 invariant failures in the research-loop.service and a critical backoff issue in the ps5-hive session. Recent auto-fixes have recovered Ollama and applied TS14 fixes, but the system remains unstable. Immediate code changes are needed to add robust retry logic and address the invariant checks.",
-      "progress": "Auto-fixed TS14 invariants and recovered the Ollama service, allowing the orchestrator and supervisor to restart.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and network errors",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with session restart counts and backoff times",
-        "Refactor supervisor.ts12_check() in supervisor.py to correctly verify that research-loop.service is running and log detailed diagnostics",
-        "Write unit tests for supervisor.ts12_check() covering running, stopped, and crash-loop states in tests/test_supervisor_ts12.py",
-        "Introduce configurable backoff parameters in config.yaml and read them in orchestrator.py for the retry mechanism"
-      ],
-      "decisions": [
-        "Prioritize fixing TS12 invariant failures before addressing lower\u2011priority backoff issues",
-        "Expose runtime metrics via /api/metrics to aid future automated health monitoring",
-        "Make backoff behavior configurable to allow rapid tuning without code changes"
-      ]
-    },
     {
       "id": "sess_cd0bf2a9",
       "ts": "2026-05-10T02:17:33Z",
@@ -1354,6 +1334,26 @@
         "Expose only aggregated metrics (average CPU load, request latency) to avoid excessive data volume",
         "Commit to automated unit test coverage for all new API endpoints"
       ]
+    },
+    {
+      "id": "sess_90be5e0f",
+      "ts": "2026-05-10T04:33:45Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by reducing CPU overload and improving reliability of LLM calls and metrics reporting",
+      "summary": "The hive is currently in an error state due to excessive CPU load per core and missing retry logic for LLM calls. Recent fixes restored Ollama and repaired supervisor scripts, but the high load persists and the metrics endpoint is incomplete.",
+      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py and created a basic /api/metrics endpoint stub in logstream.py.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and 5xx responses",
+        "Complete the /api/metrics endpoint in logstream.py to return JSON with session stats, CPU load, and request rates",
+        "Write unit tests for orchestrator.call_llm() covering retry scenarios in tests/test_orchestrator.py",
+        "Implement a CPU load guard in supervisor.sh that throttles hive workers when load/core > 2.0",
+        "Add a Prometheus exporter in metrics.py to expose hive health metrics on /metrics"
+      ],
+      "decisions": [
+        "Prioritize fixing the TS20 CPU load/core blocker before adding new features",
+        "Enforce exponential backoff as the standard error handling for all external API calls",
+        "Expose internal health data via a dedicated metrics endpoint for automated monitoring"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1365,9 +1365,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-10T04:32:07Z",
-    "completed_at": "2026-05-10T04:32:08Z"
+    "started_at": "2026-05-10T04:33:18Z",
+    "completed_at": "2026-05-10T04:33:45Z"
   }
 }
