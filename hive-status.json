@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T15:51:45Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-10T15:52:48Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "error",
@@ -1707,7 +1707,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 132
+    "openrouter_calls_today": 133
   },
   "model_champions": {
     "text": null,
@@ -1716,26 +1716,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_beea2ffd",
-      "ts": "2026-05-10T13:21:50Z",
-      "updated_by": "orchestrator",
-      "goal": "Maintain hive stability while adding resilience features to critical orchestration functions",
-      "summary": "The hive is currently running at full capacity but several critical research loops are paused due to high core load and disk usage. Recent repairs restored Ollama and supervisor functionality, and automatic invariant fixes are active. Immediate focus is on adding robustness to LLM calls and exposing operational metrics.",
-      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py and validated it against simulated 429 responses.",
-      "next_steps": [
-        "Add circuit-breaker wrapper around call_llm() in orchestrator.py to halt retries after 5 consecutive failures",
-        "Create unit tests for the new backoff and circuit-breaker logic in tests/test_orchestrator_llm.py",
-        "Implement /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, disk, and active session counts",
-        "Add Prometheus scrape format support to the new metrics endpoint in logstream.py",
-        "Update Dockerfile to expose port 9090 for metrics and ensure healthcheck calls /api/metrics"
-      ],
-      "decisions": [
-        "Prioritize resilience improvements to LLM interaction before scaling new research workloads",
-        "Expose internal hive health via a dedicated metrics endpoint for external monitoring",
-        "Adopt exponential backoff with jitter as the standard retry strategy for all external API calls"
-      ]
-    },
     {
       "id": "sess_75ab7064",
       "ts": "2026-05-10T13:36:41Z",
@@ -1915,6 +1895,26 @@
         "Expose runtime metrics via a dedicated endpoint for external monitoring.",
         "Introduce automatic pause/resume logic for research_loop based on resource thresholds."
       ]
+    },
+    {
+      "id": "sess_e50108b4",
+      "ts": "2026-05-10T15:52:27Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive operations by reducing resource overload and improving reliability of LLM calls and monitoring.",
+      "summary": "The hive is currently overloaded with high CPU load, memory usage, and disk consumption, causing research loops to pause. Recent fixes have restored Ollama and supervisor, and auto-fixes have addressed TS14 invariants, but critical resource pressures remain.",
+      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py.",
+      "next_steps": [
+        "Add circuit-breaker logic to orchestrator.call_llm() to abort after 5 consecutive rate-limit retries.",
+        "Implement /api/metrics endpoint in logstream.py that returns JSON with cpu_load, mem_usage, disk_usage, and active_sessions.",
+        "Create unit tests for orchestrator.call_llm() in tests/test_orchestrator.py covering success, HTTP 429, and timeout scenarios.",
+        "Introduce periodic resource cleanup in supervisor.sh to truncate logs when disk usage > 85%.",
+        "Add a Prometheus exporter in metrics_exporter.py to expose hive health gauges for load/core, mem, and disk."
+      ],
+      "decisions": [
+        "Prioritize exponential backoff and circuit-breaker for LLM calls to prevent cascading failures.",
+        "Expose real-time resource metrics via /api/metrics to enable automated scaling decisions.",
+        "Integrate log truncation and Prometheus metrics to proactively manage disk and memory pressure."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1928,7 +1928,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T15:51:45Z",
-    "completed_at": "2026-05-10T15:51:45Z"
+    "started_at": "2026-05-10T15:52:47Z",
+    "completed_at": "2026-05-10T15:52:48Z"
   }
 }
