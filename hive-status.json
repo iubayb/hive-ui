@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T02:16:48Z",
+  "last_updated": "2026-05-10T02:17:54Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
       "health_score": 0.0,
-      "last_seen": "2026-05-10T02:15:38Z",
+      "last_seen": "2026-05-10T02:17:43Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -1009,7 +1009,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 77
+    "openrouter_calls_today": 78
   },
   "model_champions": {
     "text": null,
@@ -1018,26 +1018,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_6e0c2eab",
-      "ts": "2026-05-09T23:46:45Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize hive performance under high CPU load and expose operational metrics via API",
-      "summary": "The hive is currently in an error state due to excessive CPU load per core, causing several self\u2011test failures. Recent fixes recovered Ollama and addressed supervisor script duplication, but the load issue remains and metrics are not yet exposed. Immediate code changes are needed to improve robustness of LLM calls and provide monitoring data.",
-      "progress": "Added exponential backoff and retry logic to call_llm() in orchestrator.py and verified it handles HTTP 429 without crashing.",
-      "next_steps": [
-        "Add load monitoring and alert in self_test.py to trigger a graceful throttle when CPU load/core exceeds 2.0",
-        "Implement /api/metrics endpoint in logstream.py returning JSON with cpu_load, active_sessions, and error_counts",
-        "Write unit tests for the new exponential backoff logic in orchestrator.py covering success, retry, and max\u2011retry failure cases",
-        "Rate\u2011limit concurrent LLM calls in orchestrator.py by introducing a semaphore around call_llm()",
-        "Update supervisor.sh to automatically restart orchestrator if self_test reports a high load condition"
-      ],
-      "decisions": [
-        "Prioritize exponential backoff for LLM calls before adding broader throttling mechanisms",
-        "Expose metrics via /api/metrics to enable external monitoring and alerting",
-        "Add unit tests for critical reliability changes to ensure regression protection"
-      ]
-    },
     {
       "id": "sess_8e4334eb",
       "ts": "2026-05-10T00:01:48Z",
@@ -1217,6 +1197,26 @@
         "Expose runtime metrics via /api/metrics to aid future automated health monitoring",
         "Make backoff behavior configurable to allow rapid tuning without code changes"
       ]
+    },
+    {
+      "id": "sess_cd0bf2a9",
+      "ts": "2026-05-10T02:17:33Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing critical service failures and improving reliability of LLM calls.",
+      "summary": "The hive is currently in an error state with multiple TS12 invariant failures in the research-loop.service and a high\u2011severity backoff issue in the ps5-hive session. Recent work has recovered Ollama and auto\u2011fixed TS14, but the remaining blockers prevent normal operation.",
+      "progress": "Auto\u2011fixed system invariant TS14 and restored the supervisor tmux session, allowing orchestrator restart.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and transient network errors",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with session restart counts, backoff timers, and error rates",
+        "Add unit tests for supervisor.ts12 invariant checks in supervisor_test.py covering research-loop.service states",
+        "Update research-loop.service startup script to include a watchdog that restarts the service if not running within 30 seconds, modifying research-loop.service file",
+        "Integrate a health check endpoint in orchestrator.py that reports TS12 and TS14 status, returning HTTP 200 only when all invariants pass"
+      ],
+      "decisions": [
+        "Prioritize fixing TS12 invariant failures before addressing backoff issues",
+        "Use exponential backoff with jitter for LLM calls to reduce thundering herd effects",
+        "Expose runtime metrics via /api/metrics to enable automated monitoring and alerting"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1230,7 +1230,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T02:16:48Z",
-    "completed_at": "2026-05-10T02:16:48Z"
+    "started_at": "2026-05-10T02:17:53Z",
+    "completed_at": "2026-05-10T02:17:54Z"
   }
 }
