@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T02:19:56Z",
+  "last_updated": "2026-05-10T02:20:56Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "error",
-      "health_score": 0.0,
-      "last_seen": "2026-05-10T02:19:46Z",
+      "status": "running",
+      "health_score": 0.889,
+      "last_seen": "2026-05-10T02:20:44Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 8,
+      "errors_last_hour": 10,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -60,6 +60,19 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_4b3af4e2",
+      "ts": "2026-05-10T02:20:52Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[supervisor] TS12 invariant failure: research-loop.service is not running, causing supervisor error state.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "977798165558f9601390091335b5dd9d"
+    },
     {
       "id": "b_b2e8ed65",
       "ts": "2026-05-10T01:50:44Z",
@@ -748,6 +761,13 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_c1cfadf1",
+        "ts": "2026-05-10T02:20:52Z",
+        "hive": "default",
+        "summary": "Research-loop service is down; restart it and verify status to clear the supervisor error.",
+        "source": "doctor"
+      },
+      {
         "id": "f_e6a4cb10",
         "ts": "2026-05-10T01:50:44Z",
         "hive": "default",
@@ -1009,7 +1029,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 78
+    "openrouter_calls_today": 79
   },
   "model_champions": {
     "text": null,
@@ -1230,7 +1250,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T02:19:56Z",
-    "completed_at": "2026-05-10T02:19:56Z"
+    "started_at": "2026-05-10T02:20:56Z",
+    "completed_at": "2026-05-10T02:20:56Z"
   }
 }
