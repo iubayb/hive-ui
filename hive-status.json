@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T00:31:01Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-10T00:31:56Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "error",
@@ -929,7 +929,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 66
+    "openrouter_calls_today": 67
   },
   "model_champions": {
     "text": null,
@@ -938,26 +938,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_6591c4a8",
-      "ts": "2026-05-09T22:00:53Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize hive operations by reducing load errors, improving LLM call reliability, and exposing runtime metrics.",
-      "summary": "The hive is currently suffering from high CPU load errors on TS20 and paused research loops. Recent work recovered Ollama and applied several audit fixes, but the system health remains in error state. Immediate code changes are needed to make LLM calls resilient and to surface metrics for better monitoring.",
-      "progress": "Added exponential backoff and retry logic to call_llm() in orchestrator.py.",
-      "next_steps": [
-        "Add circuit\u2011breaker logic to research_loop() in research.py to pause when load/core > 1.5 and automatically resume when below threshold.",
-        "Implement /api/metrics endpoint in logstream.py that returns JSON with CPU load, memory usage, disk usage, and active session counts.",
-        "Write unit tests for self_test_cpu_load() in self_test.py covering normal, warning, and critical load scenarios.",
-        "Refactor orchestrator.py to log retry attempts and backoff durations to metrics via the new /api/metrics endpoint.",
-        "Introduce a configuration flag in config.yaml (max_load_per_core) and enforce it in supervisor.sh startup script."
-      ],
-      "decisions": [
-        "Use exponential backoff with jitter for all LLM API calls.",
-        "Expose runtime health metrics via a dedicated HTTP endpoint for external monitoring.",
-        "Implement automatic throttling of research_loop based on real\u2011time load signals."
-      ]
-    },
     {
       "id": "sess_77bf48f5",
       "ts": "2026-05-09T22:16:18Z",
@@ -1137,6 +1117,26 @@
         "Expose internal metrics via /api/metrics to enable automated monitoring",
         "Introduce CPU\u2011load based throttling to prevent overload of TS20 nodes"
       ]
+    },
+    {
+      "id": "sess_10dd9f33",
+      "ts": "2026-05-10T00:31:56Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive infrastructure and expose operational metrics for monitoring",
+      "summary": "The hive is currently in an error state with high CPU load failures and a critical session in backoff. Recent fixes restored Ollama and supervisor functionality, but workload pressure remains and retry logic is missing. Immediate code actions are required to improve resilience and provide observable metrics.",
+      "progress": "Recovered Ollama and supervisor sessions, and auto-fixed TS14 invariant.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and network errors",
+        "Implement /api/metrics endpoint in logstream.py that returns JSON with CPU load, session backoff counts, and error rates",
+        "Introduce rate limiting in orchestrator.py to cap concurrent LLM calls based on current CPU core utilization",
+        "Write unit tests for the new backoff logic in orchestrator.py covering success, retry, and max\u2011retry failure paths",
+        "Add health check handler in health.py that reports TS20 CPU load/core ratio and triggers alerts when >2.0"
+      ],
+      "decisions": [
+        "Use exponential backoff with jitter for LLM calls to reduce thundering herd on rate limits",
+        "Expose runtime metrics via /api/metrics to enable external monitoring dashboards",
+        "Enforce a maximum concurrent LLM request limit tied to available CPU cores to prevent overload"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1148,9 +1148,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-10T00:30:51Z",
-    "completed_at": "2026-05-10T00:30:51Z"
+    "started_at": "2026-05-10T00:31:41Z",
+    "completed_at": "2026-05-10T00:31:56Z"
   }
 }
