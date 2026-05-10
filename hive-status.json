@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T00:15:38Z",
+  "last_updated": "2026-05-10T00:16:56Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -929,7 +929,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 65
+    "openrouter_calls_today": 66
   },
   "model_champions": {
     "text": null,
@@ -938,26 +938,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_10fa2e24",
-      "ts": "2026-05-09T21:45:38Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by reducing CPU load, handling LLM call failures, and exposing health metrics",
-      "summary": "The hive is currently in an error state with high CPU load and paused research loops. Recent fixes recovered Ollama and addressed several supervisor and TS blockers, but performance remains critical. Immediate work must focus on resilient LLM calls and visibility into system metrics.",
-      "progress": "Recovered Ollama, cleaned up supervisor scripts, and auto-fixed invariant TS14, allowing orchestrator restart.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and timeout errors",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, memory usage, and disk utilization",
-        "Add rate limiting and circuit breaker to research_loop() in research.py to prevent overload during high load conditions",
-        "Write unit tests for call_llm() in orchestrator.py covering success, rate limit, and network failure scenarios",
-        "Instrument orchestrator.py to emit Prometheus metrics for request latency and error counts"
-      ],
-      "decisions": [
-        "Prioritize resilience in LLM API calls before further feature development",
-        "Expose real\u2011time system health via /api/metrics for monitoring and auto\u2011scaling",
-        "Introduce rate limiting in research loops to keep load/core below 1.5"
-      ]
-    },
     {
       "id": "sess_6591c4a8",
       "ts": "2026-05-09T22:00:53Z",
@@ -1137,6 +1117,26 @@
         "Use exponential backoff with jitter for all LLM API calls to reduce hammering under load.",
         "Expose runtime metrics via /api/metrics to enable automated monitoring and alerting."
       ]
+    },
+    {
+      "id": "sess_3dc7ba16",
+      "ts": "2026-05-10T00:16:55Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by reducing critical errors and improving observability",
+      "summary": "The hive is currently in error state with high CPU load and several sessions in backoff. Recent fixes have restored Ollama and supervisor, but the call_llm() function still lacks robust retry logic and metrics are missing. Immediate code work is needed to prevent further restarts and to surface health data.",
+      "progress": "Recovered Ollama, fixed supervisor deduplication, and auto\u2011fixed invariant TS14.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and network errors",
+        "Create a new /api/metrics endpoint in logstream.py that returns JSON with session counts, error rates, and CPU load",
+        "Write unit tests for the new backoff logic in orchestrator_test.py covering success, retry, and max\u2011backoff scenarios",
+        "Implement a lightweight load\u2011shedding guard in orchestrator.py that pauses new LLM calls when cpu_load/core > 2.0",
+        "Add a health\u2011check endpoint in supervisor.sh that reports the status of all active sessions and triggers a graceful restart of ps5-hive if backoff exceeds 3 attempts"
+      ],
+      "decisions": [
+        "Prioritize robust retry handling for LLM calls to stop cascading failures",
+        "Expose internal metrics via /api/metrics to enable automated monitoring",
+        "Introduce CPU\u2011load based throttling to prevent overload of TS20 nodes"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1148,9 +1148,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=0% blockers=24",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-10T00:15:38Z",
-    "completed_at": "2026-05-10T00:15:38Z"
+    "started_at": "2026-05-10T00:16:55Z",
+    "completed_at": "2026-05-10T00:16:56Z"
   }
 }
