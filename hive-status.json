@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T18:09:53Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-10T18:10:33Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -365,9 +365,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T18:09:34Z",
-    "completed_at": "2026-05-10T18:09:53Z"
+    "started_at": "2026-05-10T18:10:03Z",
+    "completed_at": "2026-05-10T18:10:03Z"
   }
 }
