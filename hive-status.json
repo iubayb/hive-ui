@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T18:39:48Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-10T18:40:48Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-10T18:39:29Z",
+      "status": "stalled",
+      "health_score": 0.55,
+      "last_seen": "2026-05-10T18:40:18Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -226,7 +226,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 3
+    "openrouter_calls_today": 4
   },
   "model_champions": {
     "text": null,
@@ -235,16 +235,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_5aa3e3ce",
-      "ts": "2026-05-10T17:47:12Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_46d7859a",
       "ts": "2026-05-10T17:48:12Z",
@@ -364,6 +354,26 @@
         "Introduce a reusable health check decorator to standardize retry behavior across self-test modules.",
         "Allocate additional memory monitoring alerts to preempt disk pressure during repair runs."
       ]
+    },
+    {
+      "id": "sess_bffe59c1",
+      "ts": "2026-05-10T18:40:08Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore all self-test modules (TS17\u2011TS21) to passing state and improve system resilience",
+      "summary": "The hive is running but multiple critical self\u2011test modules are failing, preventing full operational health. Recent attempts to auto\u2011fix TS21 were insufficient, and no fixes exist for TS17\u2011TS19. Immediate code fixes and health\u2011check enhancements are required.",
+      "progress": "Attempted auto\u2011fix for TS21 was applied but the test still fails.",
+      "next_steps": [
+        "Implement fallback handling in ts21_repair.py: add try/except around the repair steps and log detailed diagnostics",
+        "Add a health check wrapper in health_monitor.py that runs TS17\u2011TS21 before each job dispatch and retries once on failure",
+        "Create unit tests for ts18_repair.py in tests/self_fix/ to validate expected file modifications and error paths",
+        "Introduce exponential backoff retry logic to call_self_test() in orchestrator.py for HTTP 429 responses",
+        "Update orchestrator/config.yaml to include a timeout of 30s for self\u2011test executions and enforce it in run_self_test()"
+      ],
+      "decisions": [
+        "Prioritize concrete code fixes for failing self\u2011tests before addressing lower\u2011priority load issues",
+        "Enforce automated health\u2011check wrappers to prevent jobs from running on a failing hive",
+        "Add comprehensive unit test coverage for all self\u2011fix modules to catch regressions early"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -375,9 +385,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-10T18:39:48Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-10T18:40:28Z",
+    "completed_at": "2026-05-10T18:40:28Z"
   }
 }
