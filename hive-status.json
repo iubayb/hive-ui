@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T23:09:33Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-10T23:11:01Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.55,
-      "last_seen": "2026-05-10T23:09:02Z",
+      "status": "running",
+      "health_score": 0.875,
+      "last_seen": "2026-05-10T23:10:55Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -26,6 +26,19 @@
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_e7a12bc2",
+      "ts": "2026-05-10T23:10:59Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The tmux session is stuck in an error state with repeated heartbeats but no progress; the single inflight task is likely hung, causing the hive to enter error status.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "6ab3f7e3816af481b563d1aee485a01c"
+    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -413,6 +426,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_3b08eebf",
+        "ts": "2026-05-10T23:11:01Z",
+        "hive": "default",
+        "summary": "Recover the hung ps5-hive tmux session by interrupting the stuck process, launching a recovery window, and cleaning up the faulty pane.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_859e1e9c",
+        "ts": "2026-05-10T23:11:01Z",
+        "hive": "default",
+        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
+        "source": "hive-doctor-rollback"
+      },
+      {
         "id": "f_c4295d56",
         "ts": "2026-05-10T22:40:55Z",
         "hive": "default",
@@ -576,7 +603,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 35
+    "openrouter_calls_today": 36
   },
   "model_champions": {
     "text": null,
@@ -797,7 +824,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T23:09:02Z",
-    "completed_at": "2026-05-10T23:09:03Z"
+    "started_at": "2026-05-10T23:10:03Z",
+    "completed_at": "2026-05-10T23:10:03Z"
   }
 }
