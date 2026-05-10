@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T00:46:45Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-10T00:47:47Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
@@ -929,7 +929,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 67
+    "openrouter_calls_today": 68
   },
   "model_champions": {
     "text": null,
@@ -938,26 +938,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_77bf48f5",
-      "ts": "2026-05-09T22:16:18Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving CPU load issues and completing pending reliability improvements",
-      "summary": "The hive is currently in an error state due to excessive CPU load per core, causing the research loop to pause. Recent fixes have recovered Ollama and addressed several supervisor and orchestrator problems, but the high load blockers remain. Immediate work must focus on reducing load and adding robustness to LLM calls and metrics reporting.",
-      "progress": "Recovered Ollama, audited and fixed supervisor TS-blocker deduplication, and auto-fixed invariant TS14.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and timeout errors",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, memory usage, and active session count",
-        "Profile orchestrator.py to identify hot loops and add async batching in process_tasks() to lower CPU usage",
-        "Introduce a background load throttler in hive-dev/session_manager.py that pauses non\u2011critical tasks when load/core > 2.0",
-        "Write unit tests for the new backoff logic in orchestrator.py and the /api/metrics endpoint in logstream.py"
-      ],
-      "decisions": [
-        "Prioritize CPU load reduction before expanding new features",
-        "Use exponential backoff with jitter for LLM retries to prevent cascade failures",
-        "Expose real\u2011time metrics via /api/metrics to enable automated monitoring and auto\u2011scaling"
-      ]
-    },
     {
       "id": "sess_a1b8ec15",
       "ts": "2026-05-09T22:31:03Z",
@@ -1137,6 +1117,26 @@
         "Expose runtime metrics via /api/metrics to enable external monitoring dashboards",
         "Enforce a maximum concurrent LLM request limit tied to available CPU cores to prevent overload"
       ]
+    },
+    {
+      "id": "sess_0906495b",
+      "ts": "2026-05-10T00:47:05Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by fixing critical backoff/retry issues and expose operational metrics via an API",
+      "summary": "The hive is currently in an error state with multiple high\u2011priority blockers, mainly CPU overload and a session stuck in long backoff. Recent fixes recovered Ollama and the supervisor, and auto\u2011fixed invariant TS14, but retry logic and observability are still missing.",
+      "progress": "Implemented exponential backoff stub in orchestrator and restored supervisor tmux session, bringing the system back to a runnable state.",
+      "next_steps": [
+        "Add full exponential backoff and retry logic to call_llm() in orchestrator.py, handling HTTP 429 and network timeouts",
+        "Implement a /api/metrics endpoint in logstream.py that returns JSON with CPU load, session restart counts, and backoff statistics",
+        "Write unit tests for orchestrator.call_llm() covering success, rate\u2011limit (429) retries, and permanent failures",
+        "Add logging of each backoff attempt (timestamp, delay, reason) in orchestrator.py and ensure logs are streamed to logstream",
+        "Create a health check in health_monitor.py that flags TS20 CPU load/core > 2.0 and triggers a graceful throttling routine"
+      ],
+      "decisions": [
+        "Prioritize fixing call_llm() retry logic before addressing other low\u2011priority blockers",
+        "Expose real\u2011time metrics via /api/metrics to aid automated monitoring and alerting",
+        "Introduce automated health\u2011check throttling to prevent CPU overload loops"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1148,9 +1148,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-10T00:46:45Z",
-    "completed_at": null
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "status": "completed",
+    "started_at": "2026-05-10T00:47:16Z",
+    "completed_at": "2026-05-10T00:47:17Z"
   }
 }
