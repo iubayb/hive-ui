@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T14:49:52Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-10T14:50:54Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
-      "status": "error",
-      "health_score": 0.0,
-      "last_seen": "2026-05-10T14:48:20Z",
+      "status": "running",
+      "health_score": 1.0,
+      "last_seen": "2026-05-10T14:50:54Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 5,
+      "errors_last_hour": 4,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -1913,9 +1913,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "heartbeat \u00b7 sessions=9 health=0% blockers=79",
     "status": "completed",
-    "started_at": "2026-05-10T14:49:51Z",
-    "completed_at": "2026-05-10T14:49:52Z"
+    "started_at": "2026-05-10T14:50:23Z",
+    "completed_at": "2026-05-10T14:50:23Z"
   }
 }
