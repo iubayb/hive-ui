@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T10:21:56Z",
+  "last_updated": "2026-05-10T10:22:55Z",
   "updated_by": "agent",
   "hives": {
     "default": {
@@ -60,6 +60,71 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_07a7d390",
+      "ts": "2026-05-10T10:22:55Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=6.35 mem=40.2GB disk=92% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "46ebe940bfd3115a41d3f5f033b0f7ff"
+    },
+    {
+      "id": "b_da92e998",
+      "ts": "2026-05-10T10:22:44Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=7.35 mem=40.2GB disk=92% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "01a40ee0999bcd112329d2970ec17e49"
+    },
+    {
+      "id": "b_4faafb72",
+      "ts": "2026-05-10T10:22:32Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=8.52 mem=40.1GB disk=92% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "ef490134eaa378b68a84cf9b7d20d781"
+    },
+    {
+      "id": "b_8268b40d",
+      "ts": "2026-05-10T10:22:20Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=10.69 mem=40.3GB disk=92% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "d6710e20d4d9f2db22e1dd30fa6e0103"
+    },
+    {
+      "id": "b_34cfe1cc",
+      "ts": "2026-05-10T10:22:08Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=12.44 mem=40.2GB disk=92% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "a96dad0db39f958229eb1a6b8cc7d996"
+    },
     {
       "id": "b_c92be2b2",
       "ts": "2026-05-10T10:21:56Z",
@@ -1705,9 +1770,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=0% blockers=60",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T10:21:26Z",
-    "completed_at": "2026-05-10T10:21:26Z"
+    "started_at": "2026-05-10T10:22:06Z",
+    "completed_at": "2026-05-10T10:22:07Z"
   }
 }
