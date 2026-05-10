@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T02:31:54Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-10T02:32:49Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "error",
@@ -1029,7 +1029,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 79
+    "openrouter_calls_today": 80
   },
   "model_champions": {
     "text": null,
@@ -1038,26 +1038,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_8e4334eb",
-      "ts": "2026-05-10T00:01:48Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by mitigating CPU overload and adding observability endpoints",
-      "summary": "The hive is currently suffering high CPU load errors on TS20, preventing normal operation. Recent work has recovered Ollama and fixed several supervisor issues, but the core overload problem remains. Implementing robust retry logic and a metrics endpoint will provide both resilience and visibility.",
-      "progress": "Added exponential backoff and retry logic to call_llm() in orchestrator.py and created a supervisor tmux session to recover the orchestrator.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py when HTTP 429 or network errors occur (P2).",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, session counts, and error rates (P3).",
-        "Create unit tests for the new /api/metrics endpoint in tests/test_logstream.py covering normal and error responses.",
-        "Introduce a lightweight load\u2011shedding middleware in request_handler.py that returns 503 when TS20 CPU load/core ratio exceeds 2.0.",
-        "Add a health\u2011check endpoint in health.py that reports the current TS20 load ratio and integrates with the existing self\u2011test framework."
-      ],
-      "decisions": [
-        "Prioritize fixing TS20 overload before adding new features.",
-        "Use exponential backoff with jitter for all LLM API calls to reduce hammering under load.",
-        "Expose runtime metrics via /api/metrics to enable automated monitoring and alerting."
-      ]
-    },
     {
       "id": "sess_3dc7ba16",
       "ts": "2026-05-10T00:16:55Z",
@@ -1237,6 +1217,26 @@
         "Use exponential backoff with jitter for LLM calls to reduce thundering herd effects",
         "Expose runtime metrics via /api/metrics to enable automated monitoring and alerting"
       ]
+    },
+    {
+      "id": "sess_5597c43e",
+      "ts": "2026-05-10T02:32:39Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by ensuring all services run and adding robustness to LLM calls and metrics reporting",
+      "summary": "The hive is currently in an error state due to the research-loop.service invariant failures. Recent fixes have recovered Ollama and auto\u2011fixed TS14, but the supervisor still reports critical service outages. Immediate work must add resilience to LLM calls and expose operational metrics.",
+      "progress": "Auto\u2011fixed system invariant TS14 and restarted the orchestrator, bringing most core services back online.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and network errors",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with service uptime, error counts, and request latency",
+        "Update supervisor.sh to include a watchdog that restarts research-loop.service if it stops, logging each restart to /var/log/hive_supervisor.log",
+        "Write unit tests for the new /api/metrics endpoint in tests/test_logstream.py covering success and error paths",
+        "Add monitoring of research-loop.service status in health_check.py and emit a Prometheus metric named hive_service_up"
+      ],
+      "decisions": [
+        "Use exponential backoff with jitter for LLM retries to avoid thundering herd effects",
+        "Expose metrics via a dedicated endpoint rather than embedding them in existing logs",
+        "Introduce automatic service restarts for research-loop.service as a permanent safety net"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1248,9 +1248,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=0% blockers=29",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-10T02:31:54Z",
-    "completed_at": "2026-05-10T02:31:54Z"
+    "started_at": "2026-05-10T02:32:25Z",
+    "completed_at": "2026-05-10T02:32:39Z"
   }
 }
