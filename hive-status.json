@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T20:39:02Z",
+  "last_updated": "2026-05-10T20:39:57Z",
   "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.55,
-      "last_seen": "2026-05-10T20:38:01Z",
+      "status": "running",
+      "health_score": 0.875,
+      "last_seen": "2026-05-10T20:39:49Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -26,6 +26,19 @@
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_b0b7afce",
+      "ts": "2026-05-10T20:39:57Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive process entered an error state after a successful heartbeat but is no longer making progress; the log shows no new tasks and the only recent activity is an HTTP request that completed successfully, indicating the main loop may be stalled.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "bd92e5f6fc6fd9a95911d6e1a33a980d"
+    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -270,6 +283,13 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_6ec4361d",
+        "ts": "2026-05-10T20:39:57Z",
+        "hive": "default",
+        "summary": "Restart the stalled hive process in the ps5-hive tmux session to recover from the error state.",
+        "source": "doctor"
+      },
+      {
         "id": "f_9b9eee9d",
         "ts": "2026-05-10T20:09:49Z",
         "hive": "default",
@@ -307,7 +327,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 15
+    "openrouter_calls_today": 16
   },
   "model_champions": {
     "text": null,
@@ -527,8 +547,8 @@
   "active_task": {
     "agent": "orchestrator",
     "task": "gitops: develop\u2192main promotion check + release draft",
-    "status": "running",
+    "status": "completed",
     "started_at": "2026-05-10T20:39:02Z",
-    "completed_at": null
+    "completed_at": "2026-05-10T20:39:04Z"
   }
 }
