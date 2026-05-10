@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T13:20:54Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-10T13:22:01Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -1694,7 +1694,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 122
+    "openrouter_calls_today": 123
   },
   "model_champions": {
     "text": null,
@@ -1703,26 +1703,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_c53c21ec",
-      "ts": "2026-05-10T10:50:46Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by improving LLM call reliability and exposing runtime metrics",
-      "summary": "The hive recovered from recent crashes and critical load issues, but the research_loop remains paused due to repeated high load errors. Recent work added exponential backoff to call_llm() and prepared a metrics endpoint, but they are not yet integrated and tested.",
-      "progress": "Implemented exponential backoff and retry logic in call_llm() within orchestrator.py and scaffolded a /api/metrics endpoint in logstream.py.",
-      "next_steps": [
-        "Complete the /api/metrics endpoint in logstream.py to return JSON with CPU, memory, disk usage, and active session counts",
-        "Write unit tests for the new backoff logic in orchestrator.py covering HTTP 429, 500, and timeout cases",
-        "Add integration tests that invoke the /api/metrics endpoint and verify correct JSON schema and values under load",
-        "Update orchestrator.py to log retry attempts and expose a counter metric via the new /api/metrics endpoint",
-        "Deploy the updated orchestrator and logstream services to the staging environment and monitor for resolution of the research_loop pause"
-      ],
-      "decisions": [
-        "Use exponential backoff with jitter for LLM calls to mitigate rate limiting",
-        "Expose runtime statistics via a dedicated /api/metrics endpoint instead of embedding them in logs",
-        "Prioritize automated testing of both backoff logic and metrics endpoint before unpausing the research_loop"
-      ]
-    },
     {
       "id": "sess_8f8c7ba3",
       "ts": "2026-05-10T11:05:51Z",
@@ -1902,6 +1882,26 @@
         "Expose internal metrics via /api/metrics to enable external dashboards and automated alerts.",
         "Include unit tests for any new reliability code to prevent regressions during future deployments."
       ]
+    },
+    {
+      "id": "sess_beea2ffd",
+      "ts": "2026-05-10T13:21:50Z",
+      "updated_by": "orchestrator",
+      "goal": "Maintain hive stability while adding resilience features to critical orchestration functions",
+      "summary": "The hive is currently running at full capacity but several critical research loops are paused due to high core load and disk usage. Recent repairs restored Ollama and supervisor functionality, and automatic invariant fixes are active. Immediate focus is on adding robustness to LLM calls and exposing operational metrics.",
+      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py and validated it against simulated 429 responses.",
+      "next_steps": [
+        "Add circuit-breaker wrapper around call_llm() in orchestrator.py to halt retries after 5 consecutive failures",
+        "Create unit tests for the new backoff and circuit-breaker logic in tests/test_orchestrator_llm.py",
+        "Implement /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, disk, and active session counts",
+        "Add Prometheus scrape format support to the new metrics endpoint in logstream.py",
+        "Update Dockerfile to expose port 9090 for metrics and ensure healthcheck calls /api/metrics"
+      ],
+      "decisions": [
+        "Prioritize resilience improvements to LLM interaction before scaling new research workloads",
+        "Expose internal hive health via a dedicated metrics endpoint for external monitoring",
+        "Adopt exponential backoff with jitter as the standard retry strategy for all external API calls"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1915,7 +1915,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T13:20:35Z",
-    "completed_at": "2026-05-10T13:20:35Z"
+    "started_at": "2026-05-10T13:22:00Z",
+    "completed_at": "2026-05-10T13:22:01Z"
   }
 }
