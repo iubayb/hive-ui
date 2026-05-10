@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T10:49:38Z",
+  "last_updated": "2026-05-10T10:50:57Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "error",
-      "health_score": 0.0,
-      "last_seen": "2026-05-10T10:48:07Z",
+      "status": "running",
+      "health_score": 1.0,
+      "last_seen": "2026-05-10T10:50:54Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,7 +20,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 7,
+      "errors_last_hour": 5,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -1694,7 +1694,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 112
+    "openrouter_calls_today": 113
   },
   "model_champions": {
     "text": null,
@@ -1703,26 +1703,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_371e9e7a",
-      "ts": "2026-05-10T08:19:41Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize hive performance and reliability under high load",
-      "summary": "The hive is operating under high CPU and memory load, causing several jobs to be reniced and supervisor invariants to fail. Recent fixes have recovered core services and auto\u2011fixed TS14, but retry logic and metrics reporting are still pending.",
-      "progress": "Implemented exponential backoff for LLM calls and added retry logic in orchestrator.py.",
-      "next_steps": [
-        "Add exponential backoff and jitter to call_llm() in orchestrator.py for HTTP 429 and 5xx responses",
-        "Create /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, disk, and job queue lengths",
-        "Write unit tests for the new backoff logic in tests/test_orchestrator.py covering success, rate\u2011limit, and permanent failure cases",
-        "Add health check handler in health.py that verifies supervisor.ts12 and supervisor.ts14 are running and returns 200/503",
-        "Instrument orchestrator.run_job() to emit Prometheus counters for job retries and failures"
-      ],
-      "decisions": [
-        "Prioritize exponential backoff implementation before expanding monitoring to keep API latency low",
-        "Expose internal hive metrics via a dedicated /api/metrics endpoint rather than embedding them in existing logs",
-        "Enforce unit test coverage >= 90% for all new retry and metric code before merging"
-      ]
-    },
     {
       "id": "sess_684c9824",
       "ts": "2026-05-10T08:34:52Z",
@@ -1902,6 +1882,26 @@
         "Expose internal health metrics via a dedicated API rather than logs",
         "Enforce automatic resource throttling in orchestrator to prevent overload"
       ]
+    },
+    {
+      "id": "sess_c53c21ec",
+      "ts": "2026-05-10T10:50:46Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by improving LLM call reliability and exposing runtime metrics",
+      "summary": "The hive recovered from recent crashes and critical load issues, but the research_loop remains paused due to repeated high load errors. Recent work added exponential backoff to call_llm() and prepared a metrics endpoint, but they are not yet integrated and tested.",
+      "progress": "Implemented exponential backoff and retry logic in call_llm() within orchestrator.py and scaffolded a /api/metrics endpoint in logstream.py.",
+      "next_steps": [
+        "Complete the /api/metrics endpoint in logstream.py to return JSON with CPU, memory, disk usage, and active session counts",
+        "Write unit tests for the new backoff logic in orchestrator.py covering HTTP 429, 500, and timeout cases",
+        "Add integration tests that invoke the /api/metrics endpoint and verify correct JSON schema and values under load",
+        "Update orchestrator.py to log retry attempts and expose a counter metric via the new /api/metrics endpoint",
+        "Deploy the updated orchestrator and logstream services to the staging environment and monitor for resolution of the research_loop pause"
+      ],
+      "decisions": [
+        "Use exponential backoff with jitter for LLM calls to mitigate rate limiting",
+        "Expose runtime statistics via a dedicated /api/metrics endpoint instead of embedding them in logs",
+        "Prioritize automated testing of both backoff logic and metrics endpoint before unpausing the research_loop"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1915,7 +1915,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T10:49:37Z",
-    "completed_at": "2026-05-10T10:49:38Z"
+    "started_at": "2026-05-10T10:50:56Z",
+    "completed_at": "2026-05-10T10:50:57Z"
   }
 }
