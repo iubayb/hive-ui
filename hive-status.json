@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T17:21:48Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-10T17:22:54Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "error",
@@ -1707,7 +1707,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 138
+    "openrouter_calls_today": 139
   },
   "model_champions": {
     "text": null,
@@ -1716,26 +1716,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_df0c8012",
-      "ts": "2026-05-10T14:52:14Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize hive performance under high load and improve observability",
-      "summary": "The hive is currently running but several research loops are paused due to critical high CPU and disk usage. Recent fixes restored core services and added auto\u2011repair capabilities, but load\u2011related failures persist. Immediate work must add resilience to LLM calls and expose runtime metrics.",
-      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py and created the /api/metrics endpoint stub in logstream.py.",
-      "next_steps": [
-        "Complete the /api/metrics endpoint in logstream.py to return JSON with CPU, memory, disk, and active session counts",
-        "Add unit tests for the new backoff logic in orchestrator.py covering HTTP 429 and 503 responses",
-        "Instrument orchestrator.py to log retry attempts and backoff durations to the metrics endpoint",
-        "Refactor research_loop() to respect a configurable max CPU usage threshold and pause/resume via a shared flag",
-        "Update supervisor.sh to monitor disk usage and automatically trigger cleanup when >90% utilization"
-      ],
-      "decisions": [
-        "Use exponential backoff with jitter for all LLM API calls to mitigate rate limits",
-        "Expose internal health metrics via a dedicated /api/metrics HTTP GET endpoint",
-        "Enforce a hard CPU usage ceiling of 2.0 cores for research loops, pausing them when exceeded"
-      ]
-    },
     {
       "id": "sess_ae6fbbaf",
       "ts": "2026-05-10T15:07:11Z",
@@ -1915,6 +1895,26 @@
         "Add real\u2011time metrics endpoint to aid in monitoring and auto\u2011scaling decisions",
         "Introduce automated log cleanup to free disk space and prevent future disk\u2011full failures"
       ]
+    },
+    {
+      "id": "sess_54dde781",
+      "ts": "2026-05-10T17:22:54Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive operations by reducing resource overload and improving resiliency of LLM calls",
+      "summary": "The hive is currently in an error state due to high CPU load and disk usage above 90%, causing research loops to be paused. Recent fixes restored Ollama and supervisor sessions, but resource pressure remains. Immediate code improvements are needed to add backoff, expose metrics, and mitigate overload.",
+      "progress": "Recovered Ollama and supervisor services and auto\u2011fixed invariant TS14, restoring basic functionality.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and 5xx responses",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, disk, and load/core ratios",
+        "Add a resource guard in research_loop.py to pause when load/core > 1.5 and automatically resume when below 1.2",
+        "Create a cleanup routine in maintenance.py to purge old log files when disk usage exceeds 85%",
+        "Write unit tests for the new backoff logic in orchestrator_test.py covering success, retry, and failure paths"
+      ],
+      "decisions": [
+        "Prioritize adding backoff to LLM calls before expanding other features",
+        "Expose real\u2011time resource metrics via /api/metrics for external monitoring",
+        "Introduce automatic pause/resume logic in research_loop to prevent overload"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1926,9 +1926,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-10T17:21:48Z",
-    "completed_at": "2026-05-10T17:21:48Z"
+    "started_at": "2026-05-10T17:22:40Z",
+    "completed_at": "2026-05-10T17:22:54Z"
   }
 }
