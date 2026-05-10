@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T11:34:58Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-10T11:35:53Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "error",
       "health_score": 0.0,
-      "last_seen": "2026-05-10T11:33:28Z",
+      "last_seen": "2026-05-10T11:35:29Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -1694,7 +1694,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 115
+    "openrouter_calls_today": 116
   },
   "model_champions": {
     "text": null,
@@ -1703,26 +1703,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_fbe2fb3f",
-      "ts": "2026-05-10T09:05:06Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving critical test failures, improving LLM call reliability, and exposing operational metrics.",
-      "summary": "The hive is currently stalled with high CPU load and several high\u2011priority blockers, most notably TS21 test failures and missing retry logic in orchestrator.llm calls. Recent fixes have recovered Ollama and restored supervisor processes, but the system remains unstable under load.",
-      "progress": "Auto\u2011fixed TS14 invariant and recreated the supervisor tmux session, bringing core services back online.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator/orchestrator.py, handling HTTP 429 and 5xx responses.",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, queue length, and job success rates.",
-        "Write unit tests in tests/test_ts21.py to cover all edge cases of TS21 and ensure auto\u2011fix scripts are triggered on failure.",
-        "Update supervisor.sh to include a health check loop that restarts research-loop.service if stopped, addressing TS12 invariant failure.",
-        "Add a resource\u2011limit configuration block in config/resource_limits.yaml and modify orchestrator/startup.py to read and enforce it, reducing peak load."
-      ],
-      "decisions": [
-        "Prioritize fixing TS21 before adding new features to ensure test suite stability.",
-        "Implement exponential backoff for LLM calls as the primary mitigation for rate\u2011limit errors.",
-        "Expose operational metrics via /api/metrics to enable automated monitoring and alerting."
-      ]
-    },
     {
       "id": "sess_799bdea5",
       "ts": "2026-05-10T09:20:23Z",
@@ -1902,6 +1882,26 @@
         "Expose metrics via /api/metrics before integrating external monitoring tools",
         "Enforce a hard disk usage threshold (90%) in health_check to automatically pause compute\u2011intensive loops"
       ]
+    },
+    {
+      "id": "sess_dbdb9a00",
+      "ts": "2026-05-10T11:35:53Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive performance by reducing critical load alerts and implementing pending reliability improvements",
+      "summary": "The hive is experiencing high core load and near\u2011full disk usage, causing research loops to pause. Recent fixes restored Ollama and supervisor, but core load remains critical. Implementing backoff for LLM calls and adding metrics reporting are priority actions to diagnose and mitigate load spikes.",
+      "progress": "Recovered Ollama and supervisor services, and auto\u2011fixed invariant TS14, restoring basic operation.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and 5xx responses",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with cpu, memory, and disk usage",
+        "Add unit tests for the new backoff logic in tests/test_orchestrator.py covering success and failure scenarios",
+        "Create a monitoring script in utils/load_monitor.py that logs core load and triggers alerts when load > 2.0",
+        "Update Dockerfile to increase disk space allocation and add a healthcheck that runs utils/load_monitor.py"
+      ],
+      "decisions": [
+        "Prioritize backoff implementation before expanding research workloads",
+        "Expose real\u2011time resource metrics via /api/metrics to enable automated scaling decisions",
+        "Introduce automated load monitoring to preemptively pause non\u2011critical loops when thresholds are exceeded"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1913,9 +1913,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-10T11:34:58Z",
-    "completed_at": "2026-05-10T11:34:58Z"
+    "started_at": "2026-05-10T11:35:39Z",
+    "completed_at": "2026-05-10T11:35:53Z"
   }
 }
