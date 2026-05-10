@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T15:42:33Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-10T15:43:44Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "error",
       "health_score": 0.0,
-      "last_seen": "2026-05-10T15:41:32Z",
+      "last_seen": "2026-05-10T15:43:33Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -60,6 +60,32 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_ddceaa8f",
+      "ts": "2026-05-10T15:43:44Z",
+      "hive": "default",
+      "agent": "supervisor",
+      "description": "self-test: FAIL: TS21 disk / usage < 90% \u2014 disk 93% >= 90%",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "3612afccebbb71099b49d7202d2913bc"
+    },
+    {
+      "id": "b_a0a509e0",
+      "ts": "2026-05-10T15:43:44Z",
+      "hive": "default",
+      "agent": "supervisor",
+      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=25.79 cores=8 ratio=3.22",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "fbc7524367a12766c0601c76c0414cc5"
+    },
     {
       "id": "b_f5e85b1f",
       "ts": "2026-05-10T10:25:01Z",
@@ -1333,19 +1359,6 @@
       "resolution": "Stale \u2014 root cause fixed: Ollama CPU-only mode (VULKAN=0 NUM_GPU=0), Modelfile num_ctx=32768, TS20 no-op, sessions restored",
       "github_issue": null,
       "_hash": "70b95af380bb338ef8031fb179457ee0"
-    },
-    {
-      "id": "b_dd1c77f6",
-      "ts": "2026-05-09T13:05:05Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-09T18:20:35Z",
-      "resolution": "Stale \u2014 root cause fixed: Ollama CPU-only mode (VULKAN=0 NUM_GPU=0), Modelfile num_ctx=32768, TS20 no-op, sessions restored",
-      "github_issue": null,
-      "_hash": "217dae28725ae72712be5a39a27334a8"
     }
   ],
   "next_steps": [
@@ -1915,7 +1928,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T15:42:33Z",
-    "completed_at": "2026-05-10T15:42:33Z"
+    "started_at": "2026-05-10T15:43:33Z",
+    "completed_at": "2026-05-10T15:43:34Z"
   }
 }
