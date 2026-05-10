@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T11:04:42Z",
+  "last_updated": "2026-05-10T11:06:01Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -1694,7 +1694,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 113
+    "openrouter_calls_today": 114
   },
   "model_champions": {
     "text": null,
@@ -1703,26 +1703,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_684c9824",
-      "ts": "2026-05-10T08:34:52Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize hive performance under high load and expose operational metrics",
-      "summary": "The hive is currently stalled at 45% health due to high CPU load and several supervisor invariant failures. Recent work recovered Ollama, fixed supervisor issues, and added auto-fix for TS14, but retry and observability gaps remain.",
-      "progress": "Implemented exponential backoff and retry logic for call_llm() in orchestrator.py and drafted a basic /api/metrics endpoint stub in logstream.py.",
-      "next_steps": [
-        "Complete the /api/metrics endpoint in logstream.py to return JSON with CPU, memory, queue length, and error counts",
-        "Add unit tests for the new backoff logic in orchestrator.py covering HTTP 429, 500, and network timeouts",
-        "Instrument orchestrator.call_llm() to emit Prometheus counters for retries, failures, and latency",
-        "Fix the TS12 invariant failure by adding a watchdog restart loop in supervisor.sh for research-loop.service",
-        "Create a healthcheck endpoint in hive-ui/server.py that returns overall hive status and recent error logs"
-      ],
-      "decisions": [
-        "Use exponential backoff with jitter for LLM calls to mitigate rate\u2011limit spikes",
-        "Expose metrics via a dedicated /api/metrics route rather than embedding in existing logs",
-        "Prioritize automated restart of critical services (e.g., research-loop.service) to reduce manual intervention"
-      ]
-    },
     {
       "id": "sess_6f92a044",
       "ts": "2026-05-10T08:50:03Z",
@@ -1902,6 +1882,26 @@
         "Expose runtime statistics via a dedicated /api/metrics endpoint instead of embedding them in logs",
         "Prioritize automated testing of both backoff logic and metrics endpoint before unpausing the research_loop"
       ]
+    },
+    {
+      "id": "sess_8f8c7ba3",
+      "ts": "2026-05-10T11:05:51Z",
+      "updated_by": "orchestrator",
+      "goal": "Maintain stable hive operation by resolving critical resource overloads and improving system resilience",
+      "summary": "The hive is currently in an error state due to high CPU load and near-full disk usage, causing research loops to pause. Recent fixes restored Ollama and supervisor services, and auto-fix mechanisms addressed TS14 invariants. Immediate work must focus on reducing load spikes and adding observability.",
+      "progress": "Implemented exponential backoff and retry logic for LLM calls in orchestrator.py, reducing immediate API throttling errors.",
+      "next_steps": [
+        "Add memory usage guard in orchestrator.py to pause research_loop when mem>38GB",
+        "Implement disk cleanup routine in logstream.py that deletes oldest log files when disk>90%",
+        "Create /api/metrics endpoint in logstream.py returning JSON with cpu, mem, disk, and active session counts",
+        "Add unit tests for the new backoff logic in orchestrator_test.py covering HTTP 429 and 500 responses",
+        "Integrate exponential backoff parameters into config.yaml and expose them via UI settings"
+      ],
+      "decisions": [
+        "Prioritize automated resource throttling over manual restarts",
+        "Expose core metrics via a new API endpoint for external monitoring",
+        "Standardize retry/backoff configuration in a shared config file"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1913,9 +1913,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=0% blockers=79",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-10T11:04:22Z",
-    "completed_at": "2026-05-10T11:04:22Z"
+    "started_at": "2026-05-10T11:05:33Z",
+    "completed_at": "2026-05-10T11:05:51Z"
   }
 }
