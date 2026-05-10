@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T11:20:54Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-10T11:21:45Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-10T11:20:54Z",
+      "status": "error",
+      "health_score": 0.0,
+      "last_seen": "2026-05-10T11:21:13Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -1694,7 +1694,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 114
+    "openrouter_calls_today": 115
   },
   "model_champions": {
     "text": null,
@@ -1703,26 +1703,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_6f92a044",
-      "ts": "2026-05-10T08:50:03Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by reducing load spikes, improving LLM call reliability, and adding observable metrics.",
-      "summary": "The hive is currently stalled with high CPU load and memory pressure across several nodes. Recent work restored Ollama, fixed supervisor invariants, and auto\u2011recovered TS14, but the system remains under stress. Immediate coding work is needed to make LLM calls resilient and expose health metrics.",
-      "progress": "Implemented exponential backoff and retry logic for call_llm() and restored key supervisor services.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and 5xx responses",
-        "Write unit tests for the new backoff logic in tests/test_orchestrator.py covering max retries and jitter",
-        "Implement a /api/metrics endpoint in logstream.py that returns JSON with cpu_load, mem_usage, and active_job_counts",
-        "Add health_check() function in supervisor.py that verifies research-loop.service is running and returns 200/500 status",
-        "Introduce rate limiting in orchestrator.py's request dispatcher to cap LLM calls at 20 per minute per session"
-      ],
-      "decisions": [
-        "Use exponential backoff with jitter for all LLM API calls",
-        "Expose runtime metrics via a new /api/metrics endpoint",
-        "Automate supervisor health verification through a dedicated health_check function"
-      ]
-    },
     {
       "id": "sess_fbe2fb3f",
       "ts": "2026-05-10T09:05:06Z",
@@ -1902,6 +1882,26 @@
         "Expose core metrics via a new API endpoint for external monitoring",
         "Standardize retry/backoff configuration in a shared config file"
       ]
+    },
+    {
+      "id": "sess_4423d21b",
+      "ts": "2026-05-10T11:21:03Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive operations by reducing LLM call failures and improving monitoring metrics",
+      "summary": "The hive has recovered critical components and cleared several system invariants, but high load and disk usage keep research loops paused. Immediate work focuses on making LLM calls resilient and exposing runtime metrics for better auto\u2011scaling decisions.",
+      "progress": "Implemented crash fixes for Ollama, supervisor deduplication, and auto\u2011fixed TS14 invariant.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and 5xx responses",
+        "Write unit tests for the new retry logic in orchestrator_test.py covering max retries and backoff timing",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU, memory, disk, and queue lengths",
+        "Update logstream.py to emit Prometheus\u2011compatible metrics on each request and on LLM call outcomes",
+        "Add a health check in health_check.py that aborts research_loop when disk usage > 90% and triggers a graceful pause"
+      ],
+      "decisions": [
+        "Prioritize exponential backoff over simple retry to avoid hammering LLM service under high load",
+        "Expose metrics via /api/metrics before integrating external monitoring tools",
+        "Enforce a hard disk usage threshold (90%) in health_check to automatically pause compute\u2011intensive loops"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1913,9 +1913,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-10T11:20:38Z",
-    "completed_at": null
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "status": "completed",
+    "started_at": "2026-05-10T11:21:44Z",
+    "completed_at": "2026-05-10T11:21:45Z"
   }
 }
