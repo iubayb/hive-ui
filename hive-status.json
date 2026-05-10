@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T05:17:46Z",
+  "last_updated": "2026-05-10T05:18:58Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "error",
       "health_score": 0.0,
-      "last_seen": "2026-05-10T05:16:35Z",
+      "last_seen": "2026-05-10T05:18:36Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -1146,7 +1146,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 90
+    "openrouter_calls_today": 91
   },
   "model_champions": {
     "text": null,
@@ -1155,26 +1155,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_6be98939",
-      "ts": "2026-05-10T02:47:53Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by fixing critical self\u2011test failures, reducing CPU load, and improving reliability of LLM calls and monitoring.",
-      "summary": "The hive is currently in an error state due to high CPU load and failing self\u2011tests (TS20, TS12). Recent auto\u2011fixes recovered Ollama and supervisor services, but load and invariant issues remain. Immediate code work is required to add resiliency to LLM calls and expose metrics for ongoing health monitoring.",
-      "progress": "Auto\u2011fixed TS14 invariant and restored supervisor and orchestrator sessions, bringing the system out of complete failure.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 and timeout errors",
-        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with CPU load, memory usage, job queue length, and error counts",
-        "Create unit tests for call_llm() in orchestrator.py covering success, rate\u2011limit, and network failure scenarios",
-        "Fix the TS12 invariant failure by adding a watchdog in supervisor.sh to ensure research-loop.service is auto\u2011restarted if stopped",
-        "Add a load\u2011balancing helper in orchestrator.py that renices or throttles low\u2011priority jobs when load/core exceeds 1.0"
-      ],
-      "decisions": [
-        "Prioritize exponential backoff for LLM calls to prevent cascading failures under rate limits",
-        "Expose real\u2011time metrics via /api/metrics to allow automated monitoring and alerting",
-        "Introduce unit tests for critical orchestration functions before further scaling actions"
-      ]
-    },
     {
       "id": "sess_eeb9f423",
       "ts": "2026-05-10T03:03:03Z",
@@ -1354,6 +1334,26 @@
         "Use exponential backoff parameters (base=1.5, max_delay=30s) for LLM retries",
         "Expose metrics via /api/metrics rather than separate service to simplify deployment"
       ]
+    },
+    {
+      "id": "sess_c8d7ecc4",
+      "ts": "2026-05-10T05:18:48Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive environment and add operational metrics endpoint",
+      "summary": "The hive is currently impaired by high CPU load failures, but recent self-recoveries and audits have restored core services. Immediate work focuses on making the orchestrator more resilient to LLM call failures and exposing runtime metrics via a new API.",
+      "progress": "Added exponential backoff and retry logic to call_llm() in orchestrator.py to mitigate transient HTTP errors.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to call_llm() in orchestrator.py for HTTP 429 responses",
+        "Implement a new /api/metrics endpoint in logstream.py that returns JSON with session stats and error counts",
+        "Write unit tests for orchestrator.call_llm() covering success, rate limit, and network failure scenarios",
+        "Add CPU load monitoring in health_check.py and emit a warning metric when load/core > 2.0",
+        "Update supervisor.sh to automatically restart orchestrator when health_check reports TS20 failures"
+      ],
+      "decisions": [
+        "Prioritize robust LLM call handling before adding new features",
+        "Expose runtime metrics via HTTP to enable external monitoring tools",
+        "Integrate automated health metrics into the existing supervisor supervision loop"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1367,7 +1367,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-10T05:17:45Z",
-    "completed_at": "2026-05-10T05:17:46Z"
+    "started_at": "2026-05-10T05:18:58Z",
+    "completed_at": "2026-05-10T05:18:58Z"
   }
 }
