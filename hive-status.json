@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-10T10:20:56Z",
+  "last_updated": "2026-05-10T10:21:56Z",
   "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-10T10:20:54Z",
+      "status": "error",
+      "health_score": 0.0,
+      "last_seen": "2026-05-10T10:21:26Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -60,6 +60,84 @@
     }
   ],
   "blockers": [
+    {
+      "id": "b_c92be2b2",
+      "ts": "2026-05-10T10:21:56Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=15.71 mem=40.2GB disk=92% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "a1078a238bbfbfb4e389ae2459157c12"
+    },
+    {
+      "id": "b_0ce61e35",
+      "ts": "2026-05-10T10:21:44Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=18.41 mem=40.2GB disk=92% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "1d08363c44d26f5e2aff7e954c4c51cd"
+    },
+    {
+      "id": "b_9615c865",
+      "ts": "2026-05-10T10:21:32Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=21.58 mem=40.2GB disk=92% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "1c599562b859a841f8c73508a4e4f2b4"
+    },
+    {
+      "id": "b_bb037970",
+      "ts": "2026-05-10T10:21:19Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=27.39 mem=40.2GB disk=92% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "fc79e23bbef3928b0289d309d1189e40"
+    },
+    {
+      "id": "b_63ee2f75",
+      "ts": "2026-05-10T10:21:08Z",
+      "hive": "default",
+      "agent": "supervisor",
+      "description": "self-test: FAIL: TS20 CPU load/core < 2.0 \u2014 load=643.28 cores=20 ratio=32.16",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "cfec39d6dd77679e1df9fcd3cdebee02"
+    },
+    {
+      "id": "b_8178c0d9",
+      "ts": "2026-05-10T10:21:08Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "CRITICAL: load/core=32.16 mem=40.3GB disk=92% \u2014 research_loop PAUSED",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "3b7c8db91a3a2258c2e1c6e01d6bcd0f"
+    },
     {
       "id": "b_04aa8763",
       "ts": "2026-05-10T10:20:56Z",
@@ -1627,9 +1705,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "heartbeat \u00b7 sessions=9 health=0% blockers=60",
     "status": "completed",
-    "started_at": "2026-05-10T10:20:41Z",
-    "completed_at": "2026-05-10T10:20:44Z"
+    "started_at": "2026-05-10T10:21:26Z",
+    "completed_at": "2026-05-10T10:21:26Z"
   }
 }
