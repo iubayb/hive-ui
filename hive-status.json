@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T21:31:19Z",
+  "last_updated": "2026-05-11T21:32:47Z",
   "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 0.889,
-      "last_seen": "2026-05-11T21:31:03Z",
+      "status": "stalled",
+      "health_score": 0.5,
+      "last_seen": "2026-05-11T21:32:20Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -27,19 +27,6 @@
   },
   "achievements": [],
   "blockers": [
-    {
-      "id": "b_5e1ebc12",
-      "ts": "2026-05-11T21:31:13Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[orchestrator] Self\u2011test TS21 continues to fail after the automated cleanup script ran, leaving the session in error state.",
-      "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "c4c079762bf0acba1f33e98f23a75fcf"
-    },
     {
       "id": "b_1e269edd",
       "ts": "2026-05-11T20:14:05Z",
@@ -667,7 +654,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 78
+    "openrouter_calls_today": 79
   },
   "model_champions": {
     "text": null,
@@ -676,26 +663,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_62ec0f37",
-      "ts": "2026-05-11T19:03:42Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests and stabilizing resource usage",
-      "summary": "The hive is stalled at 50% health due to multiple failing self-tests (TS18, TS19, TS21) and high resource pressure. Recent attempts to auto-fix have been insufficient, and a critical session is in backoff. Immediate code changes are needed to implement fallback cleanup and improve load management.",
-      "progress": "Implemented a basic retry wrapper for ts18_check() but it did not resolve the underlying failure.",
-      "next_steps": [
-        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py that deletes temporary files and resets state on failure",
-        "Implement detailed logging and alert in ts19_check() in self_tests/ts1/ts19_check.py to capture error context",
-        "Refactor ts21_check() in self_tests/ts1/ts21_check.py to include a secondary validation path when primary check fails",
-        "Update utils/load_manager.py: lower process priority threshold to 0.15 and add proactive memory cleanup hook",
-        "Create unit tests in tests/self_tests/test_ts18_cleanup.py covering the new fallback logic and resource cleanup"
-      ],
-      "decisions": [
-        "Prioritize fixing TS18 with a fallback before addressing TS19 and TS21",
-        "Reduce load_manager renice threshold to preemptively avoid high memory usage",
-        "Add comprehensive logging to self-tests to aid future auto-fix mechanisms"
-      ]
-    },
     {
       "id": "sess_190454ad",
       "ts": "2026-05-11T19:18:53Z",
@@ -875,6 +842,26 @@
         "Add explicit logging and alerting for resource thresholds to aid future auto-fix mechanisms",
         "Limit automatic session restarts to avoid endless backoff loops by introducing a manual intervention flag"
       ]
+    },
+    {
+      "id": "sess_aec4b5f5",
+      "ts": "2026-05-11T21:32:47Z",
+      "updated_by": "orchestrator",
+      "goal": "Resolve critical self-test failures (TS18, TS19, TS21) and stabilize hive health under high load",
+      "summary": "The hive is currently stalled with high memory usage and several self-test modules failing. Recent attempts to auto-fix TS18, TS19, and TS21 were insufficient, and a session is in long backoff. Immediate code fixes and monitoring improvements are needed to restore stability.",
+      "progress": "No new successful fixes were achieved since the last snapshot.",
+      "next_steps": [
+        "Implement a fallback cleanup routine in ts18_check() within self_tests/ts1/ts18_check.py to safely reset state on failure",
+        "Add retry with exponential backoff to the load_manager.update_metrics() function in utils/load_manager.py to reduce process priority under high load",
+        "Write a dedicated fix function for TS19 in self_tests/ts1/ts19_check.py and invoke it from the self-test runner",
+        "Create a new monitoring endpoint /api/selftest_status in api/status.py that returns JSON with the pass/fail status of TS18, TS19, and TS21",
+        "Add unit tests for the new fallback cleanup and retry logic in tests/self_tests/test_ts18_cleanup.py and tests/utils/test_load_manager_retry.py"
+      ],
+      "decisions": [
+        "Prioritize concrete code fixes for failing self-tests before addressing lower priority performance tweaks",
+        "Use exponential backoff for load manager adjustments to prevent repeated aggressive renicing",
+        "Expose self-test statuses via an API endpoint to aid external monitoring and alerting"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -886,9 +873,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
-    "status": "completed",
-    "started_at": "2026-05-11T21:31:04Z",
-    "completed_at": "2026-05-11T21:31:04Z"
+    "task": "self-test: running test_system.sh + auto-fix",
+    "status": "running",
+    "started_at": "2026-05-11T21:32:47Z",
+    "completed_at": null
   }
 }
