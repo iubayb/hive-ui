@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T14:45:43Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-11T14:46:43Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
@@ -631,7 +631,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 49
+    "openrouter_calls_today": 50
   },
   "model_champions": {
     "text": null,
@@ -640,26 +640,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_5cb88b31",
-      "ts": "2026-05-11T12:15:55Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore all self-test modules and eliminate session backoffs to bring hive health back to normal operation",
-      "summary": "The hive is currently stalled with multiple high-priority self-test failures (TS18, TS19, TS21) and a critical session in long backoff. Resource usage is high and automatic fixes have not succeeded, so immediate code fixes and monitoring improvements are needed.",
-      "progress": "Implemented a tmux_session_restart capability, which is now available for automatic session recovery.",
-      "next_steps": [
-        "Add robust fallback cleanup logic to ts18_check() in self_tests/ts1/ts18_check.py, ensuring it always resets state on failure",
-        "Implement detailed error handling and retry in ts19_check() in self_tests/ts1/ts19_check.py, logging the cause of failure",
-        "Create a new function run_self_test_suite() in self_tests/run_all.py that sequentially runs TS18, TS19, TS21 and reports aggregate status",
-        "Add a health check endpoint in api/health.py that returns JSON with self-test statuses and resource metrics",
-        "Write unit tests for ts18_check, ts19_check, and ts21_check in tests/self_tests/test_ts_checks.py covering success and failure paths"
-      ],
-      "decisions": [
-        "Prioritize fixing TS18 before TS19 and TS21 because it blocks subsequent tests",
-        "Introduce a consolidated self-test runner to simplify monitoring and debugging",
-        "Expose self-test results via an HTTP health endpoint for external watchdogs"
-      ]
-    },
     {
       "id": "sess_4635a87f",
       "ts": "2026-05-11T12:30:59Z",
@@ -839,6 +819,26 @@
         "Introduce exponential backoff for session restarts to prevent rapid restart loops.",
         "Adjust resource monitor thresholds to proactively throttle jobs before reaching critical memory/disk levels."
       ]
+    },
+    {
+      "id": "sess_a205a51f",
+      "ts": "2026-05-11T14:46:23Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by fixing failing self-tests and addressing high resource usage",
+      "summary": "The hive is currently stalled with several critical self-test failures (TS18, TS19, TS21) and high memory/disk usage. Session ps5-hive is in long backoff, and the resource monitor is overloaded. No recent achievements have been recorded, so immediate remediation is required.",
+      "progress": "Implemented a tmux session restart capability for automatic session recovery.",
+      "next_steps": [
+        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py to ensure resources are released on failure",
+        "Implement missing fix for TS19 in self_tests/ts1/ts19_check.py by adding proper exception handling and state reset",
+        "Create a remedial script in self_tests/ts1/ts21_fix.py that addresses the specific failure conditions identified in TS21",
+        "Update utils/load_manager.py to lower process priority for non\u2011critical jobs and introduce a memory\u2011threshold alert that triggers load shedding",
+        "Write unit tests for ts18_check(), ts19_check(), and ts21_check() covering both success and failure paths"
+      ],
+      "decisions": [
+        "Prioritize fixing TS18, TS19, and TS21 before addressing lower\u2011priority resource warnings",
+        "Use fallback cleanup as a temporary mitigation while a permanent fix is developed",
+        "Adjust load_manager to aggressively renice low\u2011priority jobs to prevent future stalls"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -852,7 +852,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T14:45:42Z",
-    "completed_at": "2026-05-11T14:45:43Z"
+    "started_at": "2026-05-11T14:46:43Z",
+    "completed_at": "2026-05-11T14:46:43Z"
   }
 }
