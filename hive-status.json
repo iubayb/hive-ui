@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T03:13:46Z",
+  "last_updated": "2026-05-11T03:14:46Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -26,32 +26,6 @@
   },
   "achievements": [],
   "blockers": [
-    {
-      "id": "b_4eda81dc",
-      "ts": "2026-05-11T03:13:23Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux session has entered an error state and is silent for >1\u202fs while background tasks are still pending; likely a hung process in the primary window is blocking heartbeats.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "d07616db3bb8d38ec9bcba7bef21b48c"
-    },
-    {
-      "id": "b_a562fa53",
-      "ts": "2026-05-11T03:13:16Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Tmux session has entered error state (silent for >1\u202fs, multiple errors) likely due to a hung foreground process in the main window.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "a4ac9c9fa8f67555096ee226376d67db"
-    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -1084,9 +1058,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=8 health=45% blockers=11",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T03:13:46Z",
-    "completed_at": "2026-05-11T03:13:46Z"
+    "started_at": "2026-05-11T03:14:06Z",
+    "completed_at": "2026-05-11T03:14:06Z"
   }
 }
