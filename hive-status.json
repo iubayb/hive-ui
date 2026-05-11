@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T01:42:48Z",
+  "last_updated": "2026-05-11T01:43:49Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -26,19 +26,6 @@
   },
   "achievements": [],
   "blockers": [
-    {
-      "id": "b_848fb8dc",
-      "ts": "2026-05-11T01:42:33Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux session has entered an error state after several heartbeats; likely a hung or crashed task is blocking progress, causing the hive orchestrator to mark the session as error.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "7915153038af507c5f538efb8623dbd6"
-    },
     {
       "id": "b_8d55372e",
       "ts": "2026-05-11T01:42:33Z",
@@ -1007,9 +994,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T01:42:22Z",
-    "completed_at": "2026-05-11T01:42:38Z"
+    "started_at": "2026-05-11T01:43:18Z",
+    "completed_at": "2026-05-11T01:43:19Z"
   }
 }
