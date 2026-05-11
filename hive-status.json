@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T17:01:53Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-11T17:02:45Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-11T17:01:03Z",
+      "status": "stalled",
+      "health_score": 0.5,
+      "last_seen": "2026-05-11T17:02:45Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -631,7 +631,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 58
+    "openrouter_calls_today": 59
   },
   "model_champions": {
     "text": null,
@@ -640,26 +640,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_b2368120",
-      "ts": "2026-05-11T14:31:23Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by fixing failing self-tests, resolving the ps5-hive session backoff, and improving resource monitoring.",
-      "summary": "The hive is operating but several critical self-tests (TS18, TS19, TS21) are failing, and the ps5-hive session is in prolonged backoff after multiple restarts. High memory usage and disk pressure are also observed, prompting a need for resource manager adjustments.",
-      "progress": "Implemented tmux_session_restart capability for automated session recovery.",
-      "next_steps": [
-        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py to ensure resources are released on failure.",
-        "Implement missing fix logic for TS19 in self_tests/ts1/ts19_check.py, including proper exception handling and state reset.",
-        "Create a new health check wrapper in self_tests/ts1/ts21_check.py that logs detailed diagnostics and triggers auto-restart on repeated failures.",
-        "Modify utils/load_manager.py to lower process priority for non-critical jobs when mem>80% or disk>90% using niceness and cgroup limits.",
-        "Add a retry mechanism with exponential backoff to orchestrator.py's restart_session() for the ps5-hive session, including logging of backoff attempts."
-      ],
-      "decisions": [
-        "Prioritize fixing TS18 and TS19 before addressing TS21 to reduce cascade failures.",
-        "Introduce exponential backoff for session restarts to prevent rapid restart loops.",
-        "Adjust resource monitor thresholds to proactively throttle jobs before reaching critical memory/disk levels."
-      ]
-    },
     {
       "id": "sess_a205a51f",
       "ts": "2026-05-11T14:46:23Z",
@@ -839,6 +819,26 @@
         "Introduce explicit fallback mechanisms in all failing self-test modules",
         "Adjust load manager thresholds to proactively prevent high memory/disk pressure"
       ]
+    },
+    {
+      "id": "sess_455e75e0",
+      "ts": "2026-05-11T17:02:35Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and stabilizing resource usage",
+      "summary": "The hive is currently running but several critical self-test failures (TS18, TS19, TS21) and a high-load condition are blocking stable operation. One session is in long backoff and resource usage is near capacity. Immediate code fixes are needed to implement fallback cleanup, improve load management, and address the failing self-tests.",
+      "progress": "Implemented tmux_session_restart capability for session recovery.",
+      "next_steps": [
+        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py to ensure resources are released on failure",
+        "Modify utils/load_manager.py to lower process priority when mem>80% and disk>90%, and add jitter to renice intervals",
+        "Write unit tests for ts19_check() in self_tests/ts1/ts19_check.py covering both success and failure paths",
+        "Implement exponential backoff and auto-retry in orchestrator.py for sessions entering long backoff, logging each attempt",
+        "Create a new endpoint /api/health in logstream.py that returns JSON with self-test statuses and resource metrics"
+      ],
+      "decisions": [
+        "Prioritize fixing TS18 before TS19 and TS21 to unblock fallback cleanup logic",
+        "Introduce aggressive load throttling in load_manager to prevent disk usage from exceeding 95%",
+        "Add automatic session restart logic to orchestrator to reduce manual intervention for backoff states"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -850,9 +850,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-11T17:01:53Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-11T17:02:45Z",
+    "completed_at": "2026-05-11T17:02:45Z"
   }
 }
