@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T10:29:53Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-11T10:30:54Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 0.875,
-      "last_seen": "2026-05-11T10:29:53Z",
+      "last_seen": "2026-05-11T10:30:07Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -142,6 +142,32 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "82ed62237b8e342301c173b1539d754e"
+    },
+    {
+      "id": "b_22ad9183",
+      "ts": "2026-05-11T10:30:05Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The session entered an error state after a short silent period, likely due to a hung or crashed worker process, as indicated by the sudden drop in pending tasks and no further heartbeat logs.",
+      "severity": "medium",
+      "status": "resolved",
+      "resolved_at": "2026-05-11T10:30:33Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "d029e02ff881ecd546feaa0958fa07eb"
+    },
+    {
+      "id": "b_f31d5187",
+      "ts": "2026-05-11T10:30:20Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive entered an error state after a brief silent period; likely a transient exception caused the main loop to stop while a task remained inflight.",
+      "severity": "medium",
+      "status": "resolved",
+      "resolved_at": "2026-05-11T10:30:33Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "a4affdc493a622e25f5d0d6b6bf8ae97"
     },
     {
       "id": "b_17fcfe27",
@@ -399,6 +425,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_c037f717",
+        "ts": "2026-05-11T10:30:20Z",
+        "hive": "default",
+        "summary": "Reset and restart the ps5-hive session to clear the error state and resume processing.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_dde76e1a",
+        "ts": "2026-05-11T10:30:05Z",
+        "hive": "default",
+        "summary": "The ps5-hive session appears stalled; a controlled reset via tmux will safely restart it.",
+        "source": "doctor"
+      },
+      {
         "id": "f_4311d3df",
         "ts": "2026-05-11T10:00:07Z",
         "hive": "default",
@@ -524,7 +564,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 26
+    "openrouter_calls_today": 29
   },
   "model_champions": {
     "text": null,
@@ -533,26 +573,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_87d8600f",
-      "ts": "2026-05-11T07:59:06Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by fixing self-test failures, improving resource monitoring, and resolving session errors",
-      "summary": "The hive is currently stalled with high memory usage and several self-test failures (TS19, TS21). Open blockers include tmux session errors in ps5-hive and resource exhaustion. No recent achievements were recorded.",
-      "progress": "Implemented preliminary cleanup routine placeholder in ts18_check() but not yet functional.",
-      "next_steps": [
-        "Add fallback cleanup logic to ts18_check() in self_tests/ts1/ts18_check.py to handle missing resources and reset state",
-        "Fix TS19 failure by updating validate_config() in self_tests/ts19.py to handle edge-case config files",
-        "Improve TS21 auto-fix in self_tests/ts21.py by adding additional checks and a retry loop",
-        "Update utils/load_manager.py to lower process priority when mem>50GB and add alert logging when disk>90%",
-        "Patch ps5-hive tmux session script in sessions/ps5_hive_tmux.sh to catch and restart on error codes"
-      ],
-      "decisions": [
-        "Prioritize self-test fixes (TS19, TS21) before broader resource throttling",
-        "Implement explicit fallback cleanup in ts18_check() as a safety net for future test failures",
-        "Add logging and auto-restart for tmux sessions to prevent long\u2011term stalls"
-      ]
-    },
     {
       "id": "sess_a7db0169",
       "ts": "2026-05-11T08:14:02Z",
@@ -732,6 +752,26 @@
         "Load manager thresholds will be tightened: CPU > 70% or disk > 85% triggers process renice and alert",
         "Health endpoint will be used by the orchestrator to auto\u2011restart stalled sessions"
       ]
+    },
+    {
+      "id": "sess_48e919bf",
+      "ts": "2026-05-11T10:30:11Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self-tests and improving resource monitoring",
+      "summary": "The hive is currently stalled with four critical self-test failures (TS17\u2011TS21) and high resource usage. Automatic fixes have not resolved the issues, and the load manager is near disk capacity. Recent work added a tmux session restart capability but no self-test fixes were applied.",
+      "progress": "Implemented tmux_session_restart capability for faster session recovery.",
+      "next_steps": [
+        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py to safely reset state on failure",
+        "Implement missing validation and recovery logic in ts17_check() in self_tests/ts1/ts17_check.py",
+        "Write unit tests for ts19_check() in self_tests/ts1/ts19_check.py covering expected failure modes",
+        "Refactor utils/load_manager.py to lower process priority when disk usage > 85% and add alert logging",
+        "Create /api/health endpoint in api/health.py that runs all self-tests and returns JSON status"
+      ],
+      "decisions": [
+        "Prioritize fixing TS17\u2011TS21 before addressing lower priority tests",
+        "Introduce explicit cleanup steps in each failing self-test to ensure idempotent retries",
+        "Add proactive disk\u2011usage monitoring in load_manager to prevent stalls"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -743,9 +783,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-11T10:29:45Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-11T10:30:33Z",
+    "completed_at": "2026-05-11T10:30:34Z"
   }
 }
