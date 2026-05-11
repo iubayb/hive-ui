@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T08:59:48Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-11T09:00:44Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -26,19 +26,6 @@
   },
   "achievements": [],
   "blockers": [
-    {
-      "id": "b_1f48dfaa",
-      "ts": "2026-05-11T08:59:48Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The session has entered an error state after several heartbeats; likely a stalled or crashed worker process caused the error flag while the main loop still appears alive.",
-      "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "2127bb1b40ef1756652942f32a674a0b"
-    },
     {
       "id": "b_e05b0aed",
       "ts": "2026-05-11T06:57:30Z",
@@ -155,6 +142,19 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "82ed62237b8e342301c173b1539d754e"
+    },
+    {
+      "id": "b_1f48dfaa",
+      "ts": "2026-05-11T08:59:48Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The session has entered an error state after several heartbeats; likely a stalled or crashed worker process caused the error flag while the main loop still appears alive.",
+      "severity": "medium",
+      "status": "resolved",
+      "resolved_at": "2026-05-11T09:00:44Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "2127bb1b40ef1756652942f32a674a0b"
     },
     {
       "id": "b_abc8b306",
@@ -630,7 +630,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T08:59:44Z",
-    "completed_at": "2026-05-11T08:59:44Z"
+    "started_at": "2026-05-11T09:00:44Z",
+    "completed_at": "2026-05-11T09:00:44Z"
   }
 }
