@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T12:00:59Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-11T12:01:51Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-11T12:00:59Z",
+      "status": "stalled",
+      "health_score": 0.5,
+      "last_seen": "2026-05-11T12:01:49Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -631,7 +631,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 38
+    "openrouter_calls_today": 39
   },
   "model_champions": {
     "text": null,
@@ -640,26 +640,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_e8ad12f4",
-      "ts": "2026-05-11T09:29:39Z",
-      "updated_by": "orchestrator",
-      "goal": "Resolve critical self-test failures (TS17-TS21) and stabilize hive health",
-      "summary": "The hive is currently stalled with high memory and disk usage, and four self-tests (TS17\u2011TS21) are failing. Immediate remediation requires code fixes and resource\u2011monitor adjustments to prevent further degradation. Recent actions have not yet produced measurable progress.",
-      "progress": "No new fixes have been applied since the last snapshot.",
-      "next_steps": [
-        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py to gracefully handle missing resources",
-        "Update utils/load_manager.py: lower process priority when mem>50GB and disk>90% and add logging of throttling events",
-        "Implement retry logic with exponential backoff in orchestrator.run_self_test() for TS17\u2011TS21 failures",
-        "Write unit tests for self_tests/ts1/ts17_check.py covering all error branches and expected cleanup behavior",
-        "Add a new endpoint /api/health in api/server.py that returns JSON with self-test statuses and resource metrics"
-      ],
-      "decisions": [
-        "Prioritize fixing TS17\u2011TS21 before addressing lower\u2011priority self-tests",
-        "Allocate additional temporary swap space via utils/load_manager.py to mitigate memory pressure",
-        "Use the learned tmux_session_restart capability to auto\u2011restart stalled sessions after each self-test run"
-      ]
-    },
     {
       "id": "sess_0460bf0f",
       "ts": "2026-05-11T09:45:07Z",
@@ -839,6 +819,26 @@
         "Integrate resource\u2011aware priority adjustments in load_manager to prevent future stalls",
         "Require comprehensive unit test coverage for all self\u2011test modules before marking them fixed"
       ]
+    },
+    {
+      "id": "sess_d3781092",
+      "ts": "2026-05-11T12:01:39Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by fixing failing self-tests, improving resource monitoring, and recovering stalled sessions.",
+      "summary": "The hive is currently stalled with multiple high\u2011severity self\u2011test failures (TS18, TS19, TS21) and a critical session in backoff. Recent attempts added a fallback cleanup for ts18_check but the issue persists, and the load manager is still causing high memory pressure. No new achievements have been recorded since the last snapshot.",
+      "progress": "Implemented a preliminary fallback cleanup routine in ts18_check() within self_tests/ts1.",
+      "next_steps": [
+        "Complete fallback cleanup in ts18_check() by adding file removal and state reset logic in self_tests/ts1/ts18.py",
+        "Add retry and exponential backoff to call_self_test() in orchestrator.py for TS19 and TS21 failures",
+        "Update utils/load_manager.py to lower process priority and add memory usage thresholds with alert logging",
+        "Write unit tests for ts19_check() and ts21_check() covering expected failure and recovery paths in tests/self_tests/",
+        "Create a recovery script in scripts/restart_ps5_hive.sh that uses tmux_session_restart and logs the outcome"
+      ],
+      "decisions": [
+        "Fallback cleanup will be mandatory for any self\u2011test that reaches a failure state to prevent resource leakage.",
+        "Load manager adjustments will include a hard limit of 80% RAM usage before throttling new jobs.",
+        "Automated retries will be limited to three attempts per self\u2011test before marking the test as failed and raising an alert."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -850,9 +850,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-11T12:00:18Z",
-    "completed_at": null
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "status": "completed",
+    "started_at": "2026-05-11T12:01:49Z",
+    "completed_at": "2026-05-11T12:01:51Z"
   }
 }
