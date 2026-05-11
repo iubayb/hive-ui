@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T03:27:32Z",
+  "last_updated": "2026-05-11T03:28:43Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.55,
-      "last_seen": "2026-05-11T03:25:54Z",
+      "last_seen": "2026-05-11T03:28:02Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -839,7 +839,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 70
+    "openrouter_calls_today": 71
   },
   "model_champions": {
     "text": null,
@@ -848,26 +848,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_e47861a9",
-      "ts": "2026-05-11T00:57:34Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests (TS17-TS21) and stabilizing load handling.",
-      "summary": "The hive is stalled at 55% health with high load and four critical self-test failures. Auto\u2011fix attempts have not resolved TS17\u2011TS21, and a fallback for TS21 is pending. Immediate code fixes and health wrappers are needed to bring the system back online.",
-      "progress": "An auto\u2011fix stub was added for TS21 in ts21_repair.py, but full fallback handling is still incomplete.",
-      "next_steps": [
-        "Add full fallback handling to orchestrator/self_fix/ts21_repair.py, including try/except and default remediation actions.",
-        "Implement a health check wrapper in health_monitor.py that runs self\u2011tests on startup and restarts modules on failure.",
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses.",
-        "Write unit tests for orchestrator/self_fix/ts17_repair.py and ts18_repair.py covering all error branches.",
-        "Update Dockerfile to set memory limits (e.g., --memory=48g) and add a disk\u2011usage alert script invoked from start.sh."
-      ],
-      "decisions": [
-        "Prioritize fixing TS17\u2011TS21 self\u2011tests before addressing any lower\u2011priority tasks.",
-        "Adopt exponential backoff for all external LLM calls to reduce throttling impact.",
-        "Postpone non\u2011critical feature development until the hive health metric returns to 'green'."
-      ]
-    },
     {
       "id": "sess_fb17381c",
       "ts": "2026-05-11T01:12:29Z",
@@ -1047,6 +1027,26 @@
         "Enforce explicit error handling and logging in all self\u2011test repair modules",
         "Add automated unit test coverage for self\u2011fix scripts to prevent future silent failures"
       ]
+    },
+    {
+      "id": "sess_903434b7",
+      "ts": "2026-05-11T03:28:32Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self-tests and improving health monitoring",
+      "summary": "The hive is stalled at 55% health with multiple high\u2011priority self\u2011test failures (TS17\u2011TS21) and high resource usage. Auto\u2011fix attempts have not resolved the issues, and fallback handling is pending. Immediate code changes are required to add robust repair logic and health\u2011check wrappers.",
+      "progress": "No successful fixes have been applied since the last snapshot.",
+      "next_steps": [
+        "Add fallback handling to ts21_repair.py in orchestrator/self_fix/ts21_repair.py for TS21 failures",
+        "Implement a health check wrapper in health_monitor.py that catches exceptions and reports status via /api/health endpoint",
+        "Add retry and exponential backoff logic to call_llm() in orchestrator.py for HTTP 429 responses",
+        "Write unit tests for TS17, TS18, and TS19 repair modules in tests/self_fix/ covering expected failure scenarios",
+        "Create a resource usage alert in monitor.py that triggers when disk > 90% or mem > 50GB and logs to alert.log"
+      ],
+      "decisions": [
+        "Prioritize fixing TS21 fallback before addressing TS17\u2011TS19 to reduce cascade failures",
+        "Introduce exponential backoff on LLM calls to mitigate high load and rate\u2011limit errors",
+        "Add automated unit test suite for self\u2011fix modules to catch regressions early"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1058,9 +1058,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T03:27:15Z",
-    "completed_at": "2026-05-11T03:27:22Z"
+    "started_at": "2026-05-11T03:28:42Z",
+    "completed_at": "2026-05-11T03:28:43Z"
   }
 }
