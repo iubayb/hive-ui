@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T11:14:43Z",
+  "last_updated": "2026-05-11T11:15:33Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -604,7 +604,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 33
+    "openrouter_calls_today": 34
   },
   "model_champions": {
     "text": null,
@@ -613,26 +613,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_c5d2201b",
-      "ts": "2026-05-11T08:44:13Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self\u2011tests and stabilizing resource monitoring",
-      "summary": "The hive is currently stalled with multiple high\u2011priority self\u2011test failures (TS17\u2011TS21) and high memory usage. No recent progress has been made, and the resource monitor needs adjustment to prevent overload. Immediate coding actions are required to implement fallbacks and improve load handling.",
-      "progress": "No new tasks were completed since the last snapshot.",
-      "next_steps": [
-        "Implement a fallback cleanup routine in ts18_check() in self_tests/ts1/ts18_check.py",
-        "Add retry and timeout handling to ts17_check() in self_tests/ts1/ts17_check.py to prevent hangs",
-        "Create a corrective script fix_ts19.py in self_tests/ts1 that resets state and logs detailed diagnostics for TS19",
-        "Update utils/load_manager.py: lower process memory threshold to 45% and add alert when disk > 85%",
-        "Write unit tests for the new fallback logic in ts18_check() and ts17_check() to ensure they return success on cleanup"
-      ],
-      "decisions": [
-        "Prioritize fixing TS17\u2011TS21 before addressing lower\u2011priority tasks",
-        "Introduce automated alerts for resource thresholds to pre\u2011empt future stalls",
-        "Commit all changes to a dedicated 'stability\u2011patch' branch for review before merging"
-      ]
-    },
     {
       "id": "sess_7637d6da",
       "ts": "2026-05-11T08:59:33Z",
@@ -812,6 +792,26 @@
         "Introduce exponential backoff retries for self-test execution to reduce transient failures",
         "Enhance the load manager to proactively lower priority rather than relying on external renicing"
       ]
+    },
+    {
+      "id": "sess_35aa94d3",
+      "ts": "2026-05-11T11:15:23Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and reducing resource pressure",
+      "summary": "The hive is currently stalled at 55% health with four critical self-test failures (TS17\u2011TS21) and high memory usage. Automatic fixes have not resolved the issues, and load monitoring needs adjustment to prevent further overload. Recent actions include identifying the need for a fallback cleanup in ts18_check and a lower\u2011process threshold in the load manager.",
+      "progress": "Identified high\u2011load condition, flagged failing self-tests, and proposed concrete remediation steps.",
+      "next_steps": [
+        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py that deletes temporary files and resets state on failure",
+        "Update utils/load_manager.py: lower process threshold to 0.12 and add hysteresis to prevent rapid toggling",
+        "Implement retry logic with exponential backoff in self_tests/runner.py for TS17\u2011TS21 when tests raise transient errors",
+        "Write unit tests in tests/self_tests/test_ts18_cleanup.py covering successful cleanup and exception paths",
+        "Add detailed logging to ts19_check() and ts20_check() in self_tests/ts1 to capture resource usage before failure"
+      ],
+      "decisions": [
+        "Prioritize fixing TS18 fallback before addressing TS17\u2011TS21 retries",
+        "Reduce load_manager process threshold to mitigate memory pressure",
+        "Deploy additional tmux_session_restart calls only after self-test stability is confirmed"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -825,7 +825,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T11:14:13Z",
-    "completed_at": "2026-05-11T11:14:13Z"
+    "started_at": "2026-05-11T11:15:33Z",
+    "completed_at": "2026-05-11T11:15:33Z"
   }
 }
