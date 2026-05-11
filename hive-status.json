@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T10:14:40Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-11T10:15:46Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.55,
-      "last_seen": "2026-05-11T10:13:00Z",
+      "last_seen": "2026-05-11T10:15:13Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -524,7 +524,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 25
+    "openrouter_calls_today": 26
   },
   "model_champions": {
     "text": null,
@@ -533,26 +533,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_3b4a7ecc",
-      "ts": "2026-05-11T07:44:03Z",
-      "updated_by": "orchestrator",
-      "goal": "Resolve failing self-test modules and stabilize hive resource usage",
-      "summary": "The hive is currently stalled with high memory usage and several critical self-test failures (TS17-TS21). Recent attempts to auto-fix have not succeeded, and the resource monitor needs tuning to prevent further overload.",
-      "progress": "Identified the failing self-test modules and documented the need for a fallback cleanup routine in ts18_check().",
-      "next_steps": [
-        "Implement fallback cleanup routine in ts18_check() within self_tests/ts1/ts18_check.py",
-        "Add detailed logging and error handling to ts17_check() in self_tests/ts1/ts17_check.py",
-        "Modify utils/load_manager.py to reduce process priority when mem>80% and add graceful degradation",
-        "Create unit tests for ts19_check() and ts20_check() in tests/self_tests/ to verify automatic fixes",
-        "Add a health check endpoint in orchestrator.py (/api/health) that reports self-test statuses and resource metrics"
-      ],
-      "decisions": [
-        "Prioritize fixing TS17-TS21 before addressing lower priority tests",
-        "Introduce explicit memory thresholds in load_manager to trigger process renicing",
-        "Expose self-test results via an API for easier monitoring and alerting"
-      ]
-    },
     {
       "id": "sess_87d8600f",
       "ts": "2026-05-11T07:59:06Z",
@@ -732,6 +712,26 @@
         "Introduce exponential backoff in load_manager to prevent cascading failures under high disk usage",
         "Expose self-test health via an API endpoint for external monitoring"
       ]
+    },
+    {
+      "id": "sess_ad9af101",
+      "ts": "2026-05-11T10:15:03Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing critical self-test failures and improving resource monitoring",
+      "summary": "The hive is currently stalled with multiple high-priority self-test failures (TS17\u2011TS21) and high resource usage. Recent attempts to auto-fix have been insufficient, and the load manager needs adjustment to reduce process load. Immediate coding actions are required to implement fallback cleanup and enhance load monitoring.",
+      "progress": "Implemented a prototype fallback cleanup routine for ts18_check() in self_tests/ts1.",
+      "next_steps": [
+        "Complete the fallback cleanup implementation in ts18_check() in self_tests/ts1, handling partial failures and logging outcomes",
+        "Add retry and exponential backoff logic to ts17_check() in self_tests/ts1 to mitigate transient errors",
+        "Refactor utils/load_manager.py: introduce a dynamic threshold to lower process priority when disk usage exceeds 85%",
+        "Create unit tests for ts17_check, ts18_check, and ts19_check covering success, fallback, and retry paths",
+        "Expose a new /api/health endpoint in api/monitor.py that returns JSON with self-test statuses and load metrics"
+      ],
+      "decisions": [
+        "Fallback cleanup will be mandatory for any self-test that reports a partial failure",
+        "Load manager thresholds will be tightened: CPU > 70% or disk > 85% triggers process renice and alert",
+        "Health endpoint will be used by the orchestrator to auto\u2011restart stalled sessions"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -743,9 +743,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-11T10:14:40Z",
-    "completed_at": null
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "status": "completed",
+    "started_at": "2026-05-11T10:15:14Z",
+    "completed_at": "2026-05-11T10:15:16Z"
   }
 }
