@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T06:45:45Z",
+  "last_updated": "2026-05-11T06:46:45Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 0.875,
-      "last_seen": "2026-05-11T06:44:56Z",
+      "status": "stalled",
+      "health_score": 0.55,
+      "last_seen": "2026-05-11T06:46:45Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -26,19 +26,6 @@
   },
   "achievements": [],
   "blockers": [
-    {
-      "id": "b_205f8c6b",
-      "ts": "2026-05-11T06:45:13Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux session has entered an error state (silent for 1\u202fs, 7 errors) likely due to a hung or blocked process in the primary window.",
-      "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "467d80a6e263d3f3ab85711ca3f28286"
-    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -1218,9 +1205,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "heartbeat \u00b7 sessions=8 health=55% blockers=9",
     "status": "completed",
-    "started_at": "2026-05-11T06:45:33Z",
-    "completed_at": "2026-05-11T06:45:35Z"
+    "started_at": "2026-05-11T06:46:45Z",
+    "completed_at": "2026-05-11T06:46:45Z"
   }
 }
