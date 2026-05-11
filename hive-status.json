@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T00:42:55Z",
+  "last_updated": "2026-05-11T00:43:55Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -26,32 +26,6 @@
   },
   "achievements": [],
   "blockers": [
-    {
-      "id": "b_5c664c5c",
-      "ts": "2026-05-11T00:41:36Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux session has entered an error state with repeated silent periods and accumulating errors, likely due to a hung window that is no longer responding to heartbeats.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "5a014d4c454d38487b5fc07fa4508d18"
-    },
-    {
-      "id": "b_c6697a5e",
-      "ts": "2026-05-11T00:41:33Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux session has entered an error state and appears to be hung; heartbeat logs stop updating after 04:40:47 despite ongoing tasks, indicating the main window is unresponsive.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "78d28ebac96fa65ae471581c5ed0f426"
-    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -960,7 +934,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T00:42:55Z",
-    "completed_at": "2026-05-11T00:42:55Z"
+    "started_at": "2026-05-11T00:43:55Z",
+    "completed_at": "2026-05-11T00:43:55Z"
   }
 }
