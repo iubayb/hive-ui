@@ -4677,13 +4677,3 @@ The audit reveals **Critical SQL Injection** vulnerabilities in core logic files
 
 ---
 *[Report trimmed to fit model context window. See audit log for full findings.]*
-
-
----
-## Run summary
-*Ended: 2026-05-11T22:51:01.855564+00:00*
-
-- Exit reason: **fatal: [Errno 28] No space left on device**
-- Tasks completed this run: 0
-- Elapsed: 0.17 hours
-- Queue final stats: {'done': 222, 'failed': 1095, 'pending': 74}
