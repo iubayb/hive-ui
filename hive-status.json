@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T01:26:50Z",
+  "last_updated": "2026-05-11T01:27:53Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.55,
-      "last_seen": "2026-05-11T01:25:27Z",
+      "last_seen": "2026-05-11T01:27:43Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -734,7 +734,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 54
+    "openrouter_calls_today": 55
   },
   "model_champions": {
     "text": null,
@@ -743,26 +743,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_4d3f0b8a",
-      "ts": "2026-05-10T22:56:43Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by repairing failing self\u2011test modules and stabilizing the health monitor.",
-      "summary": "The hive is currently stalled at 55% health due to four critical self\u2011test failures (TS17\u2011TS21) and high resource usage. Auto\u2011fix attempts have not resolved the issues, and only a fallback handler for TS21 has been queued. Immediate code fixes and health\u2011monitor enhancements are required.",
-      "progress": "The self\u2011test framework identified the failing modules and attempted auto\u2011fixes, flagging TS21 for a fallback implementation.",
-      "next_steps": [
-        "Add fallback handling in ts21_repair.py: implement a safe\u2011mode path that returns default health values when core checks fail.",
-        "Implement full repair logic in ts19_repair.py to address the missing resource cleanup causing TS19 failures.",
-        "Create a wrapper function in health_monitor.py named run_with_checks() that catches exceptions from each self\u2011test and logs a standardized error report.",
-        "Update orchestrator/self_fix/__init__.py to register the new run_with_checks() wrapper for all future self\u2011test executions.",
-        "Write unit tests in tests/self_fix/test_ts19_ts21.py covering the new fallback and repair functions, asserting that health status returns to 'green' after simulated failures."
-      ],
-      "decisions": [
-        "Prioritize concrete repair implementations over further auto\u2011fix heuristics for TS17\u2011TS21.",
-        "Introduce a unified health\u2011check wrapper to ensure any future self\u2011test failures are gracefully handled.",
-        "Allocate additional memory monitoring to prevent disk saturation from interfering with self\u2011test runs."
-      ]
-    },
     {
       "id": "sess_0b55c2fd",
       "ts": "2026-05-10T23:11:41Z",
@@ -942,6 +922,26 @@
         "Use a unified health_monitor wrapper to standardize test execution and auto-repair across all self-tests",
         "Add comprehensive unit tests before deploying any auto-fix changes to ensure no regression"
       ]
+    },
+    {
+      "id": "sess_9167c78b",
+      "ts": "2026-05-11T01:27:33Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-test modules and improving health monitoring",
+      "summary": "The hive is currently stalled at 55% health due to high load and multiple self-test failures (TS17\u2011TS21). No recent achievements have been recorded, and fallback handling for TS21 is pending. Immediate code fixes and health wrappers are needed to bring the system back to stable operation.",
+      "progress": "Auto\u2011fix attempts for TS21 were applied but did not resolve the failure.",
+      "next_steps": [
+        "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to catch exceptions and trigger a safe restart of the affected service",
+        "Implement a health check wrapper in health_monitor.py that periodically runs all self\u2011tests and logs results to a new /api/health endpoint",
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses",
+        "Write unit tests for ts18_repair.py covering error paths and ensure they pass in CI",
+        "Create a load shedding mechanism in resource_manager.py to temporarily pause non\u2011critical jobs when mem>80% or disk>90%"
+      ],
+      "decisions": [
+        "Prioritize fixing TS21 fallback before addressing other self\u2011test failures",
+        "Expose health metrics via a new /api/health endpoint for external monitoring",
+        "Introduce exponential backoff retries for LLM calls to mitigate rate\u2011limit issues"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -955,7 +955,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T01:26:49Z",
-    "completed_at": "2026-05-11T01:26:50Z"
+    "started_at": "2026-05-11T01:27:53Z",
+    "completed_at": "2026-05-11T01:27:53Z"
   }
 }
