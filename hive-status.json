@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T22:16:49Z",
+  "last_updated": "2026-05-11T22:17:57Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-11T22:15:18Z",
+      "last_seen": "2026-05-11T22:17:19Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -654,7 +654,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 81
+    "openrouter_calls_today": 82
   },
   "model_champions": {
     "text": null,
@@ -663,26 +663,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_43ecaeea",
-      "ts": "2026-05-11T19:49:23Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by fixing failing self-tests and stabilizing resource management.",
-      "summary": "The hive is stalled at 50% health with multiple high\u2011priority self\u2011test failures (TS18, TS19, TS21) and a critical backoff on the ps5\u2011hive session. Load is high, memory usage is near capacity, and disk is 93% full, prompting renicing of jobs. Immediate code fixes and monitoring enhancements are needed.",
-      "progress": "No new achievements were recorded since the last snapshot.",
-      "next_steps": [
-        "Implement a fallback cleanup routine in ts18_check() within self_tests/ts1/ts18.py to ensure resources are released on failure.",
-        "Add retry logic with exponential backoff to call_self_test('TS18') in orchestrator.py when it returns an error.",
-        "Update utils/load_manager.py to lower process priority for non\u2011critical jobs when core usage exceeds 0.15.",
-        "Create unit tests for ts18_check() in tests/self_tests/test_ts18.py covering success, failure, and cleanup paths.",
-        "Add a new /api/health/disk endpoint in logstream.py that returns JSON with current disk usage and triggers an alert if usage > 90%."
-      ],
-      "decisions": [
-        "Prioritize fixing TS18 before addressing TS19 and TS21 to unblock dependent components.",
-        "Introduce exponential backoff for self\u2011test calls to reduce cascade failures under load.",
-        "Deploy a disk usage alert endpoint to pre\u2011emptively handle high\u2011disk conditions."
-      ]
-    },
     {
       "id": "sess_df2d6b94",
       "ts": "2026-05-11T20:05:03Z",
@@ -862,6 +842,26 @@
         "Implement immediate resource throttling in load_manager to prevent disk saturation",
         "Include automated fallback cleanup in ts18_check to reduce manual intervention"
       ]
+    },
+    {
+      "id": "sess_04291c59",
+      "ts": "2026-05-11T22:17:47Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by fixing failing self-tests and addressing resource constraints",
+      "summary": "The hive is currently stalled with high load and multiple self-test failures (TS18, TS19, TS21). Session 'ps5-hive' is in prolonged backoff, and disk usage is critical. Recent work has only identified a new tmux restart capability.",
+      "progress": "Implemented tmux_session_restart capability for automated session recovery.",
+      "next_steps": [
+        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py to ensure resource release on failure",
+        "Implement missing fix for TS19 in self_tests/ts1/ts19_check.py, adding proper exception handling and retry logic",
+        "Create a corrective script for TS21 in self_tests/ts1/ts21_check.py that validates and repairs configuration files",
+        "Modify utils/load_manager.py to reduce process priority when CPU load > 0.15 and add alert logging",
+        "Add unit tests in tests/self_tests/test_ts18.py, test_ts19.py, and test_ts21.py covering success and failure paths"
+      ],
+      "decisions": [
+        "Prioritize fixing TS18 before addressing TS19 and TS21 to unblock fallback mechanisms",
+        "Introduce aggressive disk cleanup in utils/maintenance.py when disk usage exceeds 90%",
+        "Schedule a manual review of 'ps5-hive' backoff policy after automated fixes are applied"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -873,9 +873,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-11T22:16:19Z",
-    "completed_at": "2026-05-11T22:16:19Z"
+    "started_at": "2026-05-11T22:17:29Z",
+    "completed_at": "2026-05-11T22:17:47Z"
   }
 }
