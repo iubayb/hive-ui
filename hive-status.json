@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T11:29:44Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-11T11:31:55Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.55,
-      "last_seen": "2026-05-11T11:28:24Z",
+      "status": "running",
+      "health_score": 0.875,
+      "last_seen": "2026-05-11T11:30:53Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -19,7 +19,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 9,
+      "errors_last_hour": 10,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -451,6 +451,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_1456446d",
+        "ts": "2026-05-11T11:31:03Z",
+        "hive": "default",
+        "summary": "Resetting and restarting the ps5-hive session should clear the error condition and resume task processing.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_2502e0e7",
+        "ts": "2026-05-11T11:30:59Z",
+        "hive": "default",
+        "summary": "Restart the hung ps5-hive session to clear the error state and resume normal processing.",
+        "source": "doctor"
+      },
+      {
         "id": "f_72c0ddde",
         "ts": "2026-05-11T11:00:53Z",
         "hive": "default",
@@ -604,7 +618,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 34
+    "openrouter_calls_today": 37
   },
   "model_champions": {
     "text": null,
@@ -613,26 +627,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_7637d6da",
-      "ts": "2026-05-11T08:59:33Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full self-test compliance and stabilize resource usage across the hive",
-      "summary": "The hive is currently hampered by multiple high-priority self-test failures (TS17\u2011TS21) and high disk usage. Load is moderate but memory pressure is high, and auto\u2011fix attempts have not resolved the issues. Immediate code changes are needed to implement fallback cleanup and improve monitoring to prevent recurrence.",
-      "progress": "No new fixes were completed since the last snapshot.",
-      "next_steps": [
-        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py to safely delete temporary files on failure",
-        "Implement missing remediation in ts17_check() in self_tests/ts1/ts17_check.py to reset stale state files",
-        "Create a new function reduce_disk_usage() in utils/load_manager.py and invoke it when disk > 90% to purge old log files",
-        "Add unit tests for ts19_check() and ts20_check() in tests/self_tests/test_ts19_ts20.py covering both success and failure paths",
-        "Introduce a health metric endpoint /api/health/self_tests in api/health.py that returns JSON status of all TS checks"
-      ],
-      "decisions": [
-        "Prioritize fixing TS17\u2011TS21 before adding new features",
-        "Use a centralized cleanup helper in utils/cleanup.py for all self-test fallback routines",
-        "Fail fast on disk pressure: abort new jobs if disk > 95% and trigger reduce_disk_usage"
-      ]
-    },
     {
       "id": "sess_aec86307",
       "ts": "2026-05-11T09:14:52Z",
@@ -812,6 +806,26 @@
         "Reduce load_manager process threshold to mitigate memory pressure",
         "Deploy additional tmux_session_restart calls only after self-test stability is confirmed"
       ]
+    },
+    {
+      "id": "sess_57bd5e7d",
+      "ts": "2026-05-11T11:30:23Z",
+      "updated_by": "orchestrator",
+      "goal": "Resolve failing self-test modules and stabilize hive resource usage to restore full health",
+      "summary": "The hive is currently stalled with high memory usage and four critical self-test failures (TS17\u2011TS19). No recent achievements have been recorded, and the primary blockers are the failing self\u2011tests and high load. Immediate code changes are needed to add fallback cleanup, improve load monitoring, and address the failing tests.",
+      "progress": "Implemented a preliminary retry wrapper for ts18_check() but it did not fully resolve the failure.",
+      "next_steps": [
+        "Add a fallback cleanup routine to ts18_check() in self_tests/ts1/ts18.py that removes temporary files and resets state on failure",
+        "Modify utils/load_manager.py to include a configurable low\u2011memory threshold and automatically downscale non\u2011essential processes when mem>80%",
+        "Implement missing cleanup and reset logic in ts17_check() located in self_tests/ts1/ts17.py",
+        "Write unit tests for ts19_check() in self_tests/ts1/ts19_test.py to validate proper error handling and resource release",
+        "Add logging of memory usage spikes to hive.log in orchestrator.py within the main health loop"
+      ],
+      "decisions": [
+        "Prioritize fixing TS17\u2011TS19 before adding new features",
+        "Introduce a configurable memory threshold in load_manager.py rather than hard\u2011coded values",
+        "Enforce unit test coverage >90% for all self\u2011test modules before considering the hive healthy"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -825,7 +839,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T11:29:44Z",
-    "completed_at": "2026-05-11T11:29:44Z"
+    "started_at": "2026-05-11T11:31:55Z",
+    "completed_at": "2026-05-11T11:31:55Z"
   }
 }
