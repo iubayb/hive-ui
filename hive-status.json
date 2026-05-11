@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T16:46:48Z",
+  "last_updated": "2026-05-11T16:47:56Z",
   "updated_by": "agent",
   "hives": {
     "default": {
@@ -631,7 +631,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 57
+    "openrouter_calls_today": 58
   },
   "model_champions": {
     "text": null,
@@ -640,26 +640,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_d6e79df3",
-      "ts": "2026-05-11T14:16:16Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by fixing failing self-tests and stabilizing resource usage",
-      "summary": "The hive is stalled with several critical self-test failures (TS18, TS19, TS21) and high resource pressure. One session is in backoff and recent attempts to auto\u2011fix have not succeeded. Immediate coding work is required to implement fallback cleanup, improve load management, and add diagnostics.",
-      "progress": "Implemented a basic retry wrapper for ts18_check() but fallback cleanup remains incomplete.",
-      "next_steps": [
-        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py and ensure it is called on exception",
-        "Update utils/load_manager.py: introduce dynamic threshold lowering and process renice logic when disk > 85% or memory > 45GB",
-        "Write unit tests for ts19_check() in self_tests/ts1/test_ts19.py covering both success and failure paths",
-        "Add detailed logging to self_tests/ts21_check.py to capture failure reasons and expose them via /api/debug endpoint in api/debug.py",
-        "Implement automatic session restart for 'ps5-hive' in orchestrator.py using tmux_session_restart when backoff exceeds 120 seconds"
-      ],
-      "decisions": [
-        "Prioritize fixing TS18 fallback before addressing TS19 and TS21",
-        "Limit load manager adjustments to avoid over\u2011renicing critical jobs",
-        "Expose debug logs via an API endpoint to aid rapid diagnosis of self-test failures"
-      ]
-    },
     {
       "id": "sess_b2368120",
       "ts": "2026-05-11T14:31:23Z",
@@ -839,6 +819,26 @@
         "Limit new process creation when memory exceeds 50\u202fGB or disk usage exceeds 90\u202f% to prevent further stalls.",
         "Commit all test\u2011fix changes to a separate 'selftest-fix' branch and trigger a full hive self\u2011test suite after each commit."
       ]
+    },
+    {
+      "id": "sess_bde56db1",
+      "ts": "2026-05-11T16:47:25Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by resolving failing self-tests and reducing resource pressure",
+      "summary": "The hive is currently stalled with several critical self-test failures (TS18, TS19, TS21) and high resource usage. A long backoff session and auto-fix attempts have not resolved the issues. Immediate code fixes and monitoring improvements are needed to bring the system back to green.",
+      "progress": "No new achievements were recorded since the last snapshot.",
+      "next_steps": [
+        "Implement a fallback cleanup routine in ts18_check() within self_tests/ts1/ts18_check.py to ensure graceful recovery on failure",
+        "Add comprehensive error handling and retry logic to ts19_check() in self_tests/ts1/ts19_check.py, including logging of failure details",
+        "Create a new function 'reset_ts21_state()' in self_tests/ts1/ts21_check.py and invoke it from ts21_check() when the self-test fails",
+        "Update utils/load_manager.py: lower the process threshold to 0.15, add hysteresis, and emit a warning log when memory exceeds 85%",
+        "Write unit tests for the updated self-test modules (ts18_check.py, ts19_check.py, ts21_check.py) covering success, fallback, and retry paths"
+      ],
+      "decisions": [
+        "Prioritize fixing self-test failures before scaling resources",
+        "Introduce explicit fallback mechanisms in all failing self-test modules",
+        "Adjust load manager thresholds to proactively prevent high memory/disk pressure"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -850,9 +850,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-11T16:46:48Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-11T16:47:55Z",
+    "completed_at": "2026-05-11T16:47:56Z"
   }
 }
