@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T17:16:55Z",
+  "last_updated": "2026-05-11T17:18:00Z",
   "updated_by": "agent",
   "hives": {
     "default": {
@@ -631,7 +631,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 59
+    "openrouter_calls_today": 60
   },
   "model_champions": {
     "text": null,
@@ -640,26 +640,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_a205a51f",
-      "ts": "2026-05-11T14:46:23Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by fixing failing self-tests and addressing high resource usage",
-      "summary": "The hive is currently stalled with several critical self-test failures (TS18, TS19, TS21) and high memory/disk usage. Session ps5-hive is in long backoff, and the resource monitor is overloaded. No recent achievements have been recorded, so immediate remediation is required.",
-      "progress": "Implemented a tmux session restart capability for automatic session recovery.",
-      "next_steps": [
-        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py to ensure resources are released on failure",
-        "Implement missing fix for TS19 in self_tests/ts1/ts19_check.py by adding proper exception handling and state reset",
-        "Create a remedial script in self_tests/ts1/ts21_fix.py that addresses the specific failure conditions identified in TS21",
-        "Update utils/load_manager.py to lower process priority for non\u2011critical jobs and introduce a memory\u2011threshold alert that triggers load shedding",
-        "Write unit tests for ts18_check(), ts19_check(), and ts21_check() covering both success and failure paths"
-      ],
-      "decisions": [
-        "Prioritize fixing TS18, TS19, and TS21 before addressing lower\u2011priority resource warnings",
-        "Use fallback cleanup as a temporary mitigation while a permanent fix is developed",
-        "Adjust load_manager to aggressively renice low\u2011priority jobs to prevent future stalls"
-      ]
-    },
     {
       "id": "sess_9e878b9a",
       "ts": "2026-05-11T15:01:51Z",
@@ -839,6 +819,26 @@
         "Introduce aggressive load throttling in load_manager to prevent disk usage from exceeding 95%",
         "Add automatic session restart logic to orchestrator to reduce manual intervention for backoff states"
       ]
+    },
+    {
+      "id": "sess_cbd09563",
+      "ts": "2026-05-11T17:17:30Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests, stabilizing sessions, and clearing resource pressure",
+      "summary": "The hive is stalled at 50% health with several high\u2011severity blockers: multiple failing self\u2011tests (TS18, TS19, TS21) and a critical session in backoff. Recent attempts to auto\u2011fix TS21 have not succeeded, and no progress has been recorded today. Immediate code changes are required to implement fallback cleanup, improve resource monitoring, and add diagnostics for the backoff session.",
+      "progress": "Implemented a placeholder fallback call in ts18_check(), but it currently never executes due to missing error handling.",
+      "next_steps": [
+        "Add proper exception handling and fallback cleanup logic to ts18_check() in self_tests/ts1/ts18_check.py",
+        "Implement a retry wrapper for self_test_runner.run_test() in utils/self_test_runner.py to handle transient failures for TS18, TS19, and TS21",
+        "Update utils/load_manager.py: add a function reduce_process_priority() that lowers niceness when memory > 85% and disk > 90%",
+        "Create a health check endpoint in api/health.py that returns JSON with self-test statuses and resource metrics",
+        "Write unit tests in tests/self_tests/test_ts18_cleanup.py to verify fallback execution and resource release"
+      ],
+      "decisions": [
+        "Fallback cleanup will be prioritized over full test rerun to quickly release resources",
+        "Resource monitor will proactively lower process priority before disk usage reaches 95%",
+        "Add a health endpoint to expose real\u2011time status for external monitoring tools"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -850,9 +850,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-11T17:16:55Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-11T17:18:00Z",
+    "completed_at": "2026-05-11T17:18:00Z"
   }
 }
