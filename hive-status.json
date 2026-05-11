@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T07:43:44Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-11T07:44:53Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.55,
-      "last_seen": "2026-05-11T07:42:01Z",
+      "last_seen": "2026-05-11T07:44:13Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -300,7 +300,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 5
+    "openrouter_calls_today": 6
   },
   "model_champions": {
     "text": null,
@@ -378,6 +378,26 @@
         "Limit maximum disk usage to 90% by adding a throttling guard in utils/load_manager.py.",
         "Integrate health endpoint monitoring to provide real\u2011time visibility into test failures and resource health."
       ]
+    },
+    {
+      "id": "sess_3b4a7ecc",
+      "ts": "2026-05-11T07:44:03Z",
+      "updated_by": "orchestrator",
+      "goal": "Resolve failing self-test modules and stabilize hive resource usage",
+      "summary": "The hive is currently stalled with high memory usage and several critical self-test failures (TS17-TS21). Recent attempts to auto-fix have not succeeded, and the resource monitor needs tuning to prevent further overload.",
+      "progress": "Identified the failing self-test modules and documented the need for a fallback cleanup routine in ts18_check().",
+      "next_steps": [
+        "Implement fallback cleanup routine in ts18_check() within self_tests/ts1/ts18_check.py",
+        "Add detailed logging and error handling to ts17_check() in self_tests/ts1/ts17_check.py",
+        "Modify utils/load_manager.py to reduce process priority when mem>80% and add graceful degradation",
+        "Create unit tests for ts19_check() and ts20_check() in tests/self_tests/ to verify automatic fixes",
+        "Add a health check endpoint in orchestrator.py (/api/health) that reports self-test statuses and resource metrics"
+      ],
+      "decisions": [
+        "Prioritize fixing TS17-TS21 before addressing lower priority tests",
+        "Introduce explicit memory thresholds in load_manager to trigger process renicing",
+        "Expose self-test results via an API for easier monitoring and alerting"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -389,9 +409,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-11T07:43:44Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-11T07:44:43Z",
+    "completed_at": "2026-05-11T07:44:43Z"
   }
 }
