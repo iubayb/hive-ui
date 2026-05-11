@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T07:28:01Z",
+  "last_updated": "2026-05-11T07:28:53Z",
   "updated_by": "agent",
   "hives": {
     "default": {
@@ -27,6 +27,19 @@
   "achievements": [],
   "blockers": [
     {
+      "id": "b_e5af3a26",
+      "ts": "2026-05-11T07:28:05Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The ps5\u2011hive session shows error status after a spike in task failures (2 failed) and may have hit an unhandled exception in the auto\u2011enqueue logic.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "baf5d33a02ac137190d311598d1acd45"
+    },
+    {
       "id": "b_e8a59a57",
       "ts": "2026-05-11T07:28:01Z",
       "hive": "default",
@@ -38,19 +51,6 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "d68366e0065227ac271c9e0eeaa0525c"
-    },
-    {
-      "id": "b_640a2e41",
-      "ts": "2026-05-11T07:28:01Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[build_monitor] The monitor is stuck in idle mode because no new kernel runs are being detected; repeated 'No new kernel run' messages indicate the upstream task queue is empty or the polling interval is too long.",
-      "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "47160bdce2879aa15b4366e4fb604c2b"
     },
     {
       "id": "b_e05b0aed",
@@ -170,6 +170,32 @@
       "_hash": "82ed62237b8e342301c173b1539d754e"
     },
     {
+      "id": "b_640a2e41",
+      "ts": "2026-05-11T07:28:01Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[build_monitor] The monitor is stuck in idle mode because no new kernel runs are being detected; repeated 'No new kernel run' messages indicate the upstream task queue is empty or the polling interval is too long.",
+      "severity": "medium",
+      "status": "resolved",
+      "resolved_at": "2026-05-11T07:28:15Z",
+      "resolution": "auto-pruned: build_monitor is now alive",
+      "github_issue": null,
+      "_hash": "47160bdce2879aa15b4366e4fb604c2b"
+    },
+    {
+      "id": "b_3f862350",
+      "ts": "2026-05-11T07:28:05Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[build_monitor] The build_monitor session repeatedly reports \"No new kernel run\" and has accumulated 5 errors, likely due to a stalled monitoring loop or missing kernel execution trigger.",
+      "severity": "medium",
+      "status": "resolved",
+      "resolved_at": "2026-05-11T07:28:15Z",
+      "resolution": "auto-pruned: build_monitor is now alive",
+      "github_issue": null,
+      "_hash": "a3de17fbf502fa26d7c47d53c5331ec5"
+    },
+    {
       "id": "b_0b4f0c7f",
       "ts": "2026-05-11T06:57:16Z",
       "hive": "default",
@@ -244,6 +270,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_6b5a24a7",
+        "ts": "2026-05-11T07:28:05Z",
+        "hive": "default",
+        "summary": "Both sessions are stalled; reset the monitoring loop for build_monitor and restart/recover ps5\u2011hive to clear the error states.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_ec2187a6",
+        "ts": "2026-05-11T07:28:05Z",
+        "hive": "default",
+        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c 'pkill -f \"ps5-hive\"' ENTER && tmux new-session -`",
+        "source": "hive-doctor-rollback"
+      },
+      {
         "id": "f_780cfa19",
         "ts": "2026-05-11T07:28:01Z",
         "hive": "default",
@@ -260,7 +300,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 3
+    "openrouter_calls_today": 5
   },
   "model_champions": {
     "text": null,
@@ -318,6 +358,26 @@
         "Enhance load_manager to proactively prevent resource saturation rather than only renicing processes",
         "Add comprehensive unit test coverage for self\u2011test modules to catch regressions early"
       ]
+    },
+    {
+      "id": "sess_5a9dad92",
+      "ts": "2026-05-11T07:28:53Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by resolving critical self-test failures and high\u2011load issues, then improve monitoring and cleanup routines.",
+      "summary": "The hive is currently experiencing multiple high\u2011severity blockers, notably failing self\u2011tests TS19 and TS21 and a spike in task failures in the ps5\u2011hive session. Resource usage is near critical limits, and pending fixes for ts18_check and load_manager remain undone.",
+      "progress": "The auto\u2011fix attempt for TS21 was executed, but the test continues to fail.",
+      "next_steps": [
+        "Implement fallback cleanup logic in ts18_check() within self_tests/ts1/ts18_check.py to guarantee resource release on error.",
+        "Reduce process priority thresholds in utils/load_manager.py by adjusting the renice policy to limit CPU usage when load_core > 0.15.",
+        "Add detailed logging and retry handling to self_tests/ts19_runner.py to capture failure diagnostics and attempt a second run on intermittent errors.",
+        "Create unit tests for utils/load_manager.py covering load spikes and disk usage edge cases.",
+        "Expose a new /api/health endpoint in api/health.py that reports self-test statuses (TS19, TS21) and current resource metrics in JSON."
+      ],
+      "decisions": [
+        "Prioritize fixing TS19 and TS21 before addressing lower\u2011priority ps5\u2011hive errors.",
+        "Limit maximum disk usage to 90% by adding a throttling guard in utils/load_manager.py.",
+        "Integrate health endpoint monitoring to provide real\u2011time visibility into test failures and resource health."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -329,9 +389,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-11T07:27:44Z",
-    "completed_at": "2026-05-11T07:27:45Z"
+    "started_at": "2026-05-11T07:28:35Z",
+    "completed_at": "2026-05-11T07:28:53Z"
   }
 }
