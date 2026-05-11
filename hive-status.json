@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T12:14:58Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-11T12:15:55Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
@@ -631,7 +631,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 39
+    "openrouter_calls_today": 40
   },
   "model_champions": {
     "text": null,
@@ -640,26 +640,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_0460bf0f",
-      "ts": "2026-05-11T09:45:07Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests and reducing resource pressure",
-      "summary": "The hive is currently stalled with high load and several critical self-test failures (TS17\u2011TS21). Recent attempts to auto\u2011fix were insufficient, and the resource monitor is still aggressive. Immediate coding work is needed to add fallback cleanup, improve load management, and enhance test diagnostics.",
-      "progress": "Implemented tmux_session_restart capability and attempted auto\u2011fixes for TS21\u2011TS17.",
-      "next_steps": [
-        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py that safely removes temporary files and resets state on failure",
-        "Refactor utils/load_manager.py: introduce adaptive throttling in monitor_load() to scale down processes when disk > 90% or mem > 50GB",
-        "Write unit tests for ts17_check() in self_tests/ts1/ts17_check.py covering both success and forced-failure paths",
-        "Implement detailed logging in ts19_check() (self_tests/ts1/ts19_check.py) to capture stack traces and write to logs/self_test_debug.log",
-        "Create a health watchdog endpoint in orchestrator.py (/api/health_check) that returns JSON of self-test statuses and resource metrics"
-      ],
-      "decisions": [
-        "Prioritize fixing TS18 fallback before addressing TS17\u2011TS21 to unblock dependent tests",
-        "Use adaptive throttling rather than static thresholds for load management",
-        "Expose a health_check API to simplify external monitoring and alerting"
-      ]
-    },
     {
       "id": "sess_38108749",
       "ts": "2026-05-11T09:59:49Z",
@@ -839,6 +819,26 @@
         "Load manager adjustments will include a hard limit of 80% RAM usage before throttling new jobs.",
         "Automated retries will be limited to three attempts per self\u2011test before marking the test as failed and raising an alert."
       ]
+    },
+    {
+      "id": "sess_5cb88b31",
+      "ts": "2026-05-11T12:15:55Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore all self-test modules and eliminate session backoffs to bring hive health back to normal operation",
+      "summary": "The hive is currently stalled with multiple high-priority self-test failures (TS18, TS19, TS21) and a critical session in long backoff. Resource usage is high and automatic fixes have not succeeded, so immediate code fixes and monitoring improvements are needed.",
+      "progress": "Implemented a tmux_session_restart capability, which is now available for automatic session recovery.",
+      "next_steps": [
+        "Add robust fallback cleanup logic to ts18_check() in self_tests/ts1/ts18_check.py, ensuring it always resets state on failure",
+        "Implement detailed error handling and retry in ts19_check() in self_tests/ts1/ts19_check.py, logging the cause of failure",
+        "Create a new function run_self_test_suite() in self_tests/run_all.py that sequentially runs TS18, TS19, TS21 and reports aggregate status",
+        "Add a health check endpoint in api/health.py that returns JSON with self-test statuses and resource metrics",
+        "Write unit tests for ts18_check, ts19_check, and ts21_check in tests/self_tests/test_ts_checks.py covering success and failure paths"
+      ],
+      "decisions": [
+        "Prioritize fixing TS18 before TS19 and TS21 because it blocks subsequent tests",
+        "Introduce a consolidated self-test runner to simplify monitoring and debugging",
+        "Expose self-test results via an HTTP health endpoint for external watchdogs"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -850,9 +850,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-11T12:14:58Z",
-    "completed_at": "2026-05-11T12:14:58Z"
+    "started_at": "2026-05-11T12:15:18Z",
+    "completed_at": "2026-05-11T12:15:55Z"
   }
 }
