@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T16:01:31Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-11T16:02:45Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -631,7 +631,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 54
+    "openrouter_calls_today": 55
   },
   "model_champions": {
     "text": null,
@@ -640,26 +640,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_27ed0846",
-      "ts": "2026-05-11T13:31:08Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by fixing failing self-tests and reducing resource pressure",
-      "summary": "The hive is currently stalled with multiple critical self-test failures (TS18, TS19, TS21) and high memory usage causing process renicing. No recent achievements have been recorded, and a session is in backoff. Immediate code changes are needed to implement fallback cleanup, improve test robustness, and lower resource consumption.",
-      "progress": "No new fixes were completed since the last snapshot.",
-      "next_steps": [
-        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py to ensure resources are released on failure",
-        "Implement retry and alternative verification logic in ts19_check() in self_tests/ts1/ts19_check.py to handle transient failures",
-        "Create a fallback cleanup step in ts21_check() in self_tests/ts1/ts21_check.py similar to ts18 implementation",
-        "Refactor utils/load_manager.py to add dynamic threshold lowering when mem>50GB and disk>90%, and emit a warning log",
-        "Add unit tests for the new fallback logic in ts18_check.py, ts19_check.py, and ts21_check.py covering both success and cleanup paths"
-      ],
-      "decisions": [
-        "Prioritize implementing fallback cleanup for failing self-tests before adding new features",
-        "Limit load_manager adjustments to memory and disk thresholds to avoid over\u2011throttling",
-        "Schedule a manual restart of the ps5-hive session after code changes are deployed"
-      ]
-    },
     {
       "id": "sess_21bc3432",
       "ts": "2026-05-11T13:46:23Z",
@@ -839,6 +819,26 @@
         "Introduce automatic backoff reset logic in orchestrator.py once health checks report all self-tests passing.",
         "Limit the number of concurrent restarts for high\u2011memory sessions to avoid further memory pressure."
       ]
+    },
+    {
+      "id": "sess_097508fc",
+      "ts": "2026-05-11T16:02:05Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and stabilizing resource monitoring",
+      "summary": "The hive is currently stalled with several high\u2011priority self\u2011test failures (TS18, TS19, TS21) and a critical session in backoff. Resource usage is high and recent attempts to auto\u2011fix have not succeeded. Immediate code changes are required to add fallback cleanup, improve load monitoring, and add diagnostics for failing tests.",
+      "progress": "Implemented a basic fallback cleanup stub for ts18_check() in self_tests/ts1.",
+      "next_steps": [
+        "Complete fallback cleanup logic in ts18_check() within self_tests/ts1/ts18_check.py to safely roll back partial state",
+        "Add detailed error logging and alerting in ts19_check() in self_tests/ts1/ts19_check.py",
+        "Implement retry and backoff handling in ts21_check() in self_tests/ts1/ts21_check.py",
+        "Enhance utils/load_manager.py: lower process priority when mem>50GB and disk>90%, and emit a warning metric",
+        "Create unit tests for the new fallback and retry mechanisms in tests/self_tests/test_ts18_ts19_ts21.py"
+      ],
+      "decisions": [
+        "Prioritize fixing self\u2011test failures before addressing the backoff session",
+        "Introduce aggressive resource throttling in load_manager to prevent future stalls",
+        "Log all self\u2011test errors to a new /api/selftest endpoint for real\u2011time monitoring"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -850,9 +850,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-11T16:01:31Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-11T16:02:25Z",
+    "completed_at": "2026-05-11T16:02:25Z"
   }
 }
