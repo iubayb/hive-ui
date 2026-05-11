@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T03:57:56Z",
+  "last_updated": "2026-05-11T03:58:47Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.55,
-      "last_seen": "2026-05-11T03:56:24Z",
+      "last_seen": "2026-05-11T03:58:47Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -860,7 +860,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 74
+    "openrouter_calls_today": 75
   },
   "model_champions": {
     "text": null,
@@ -869,26 +869,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_9167c78b",
-      "ts": "2026-05-11T01:27:33Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-test modules and improving health monitoring",
-      "summary": "The hive is currently stalled at 55% health due to high load and multiple self-test failures (TS17\u2011TS21). No recent achievements have been recorded, and fallback handling for TS21 is pending. Immediate code fixes and health wrappers are needed to bring the system back to stable operation.",
-      "progress": "Auto\u2011fix attempts for TS21 were applied but did not resolve the failure.",
-      "next_steps": [
-        "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to catch exceptions and trigger a safe restart of the affected service",
-        "Implement a health check wrapper in health_monitor.py that periodically runs all self\u2011tests and logs results to a new /api/health endpoint",
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses",
-        "Write unit tests for ts18_repair.py covering error paths and ensure they pass in CI",
-        "Create a load shedding mechanism in resource_manager.py to temporarily pause non\u2011critical jobs when mem>80% or disk>90%"
-      ],
-      "decisions": [
-        "Prioritize fixing TS21 fallback before addressing other self\u2011test failures",
-        "Expose health metrics via a new /api/health endpoint for external monitoring",
-        "Introduce exponential backoff retries for LLM calls to mitigate rate\u2011limit issues"
-      ]
-    },
     {
       "id": "sess_85bfd46d",
       "ts": "2026-05-11T01:42:38Z",
@@ -1068,6 +1048,26 @@
         "Treat TS17\u2011TS20 failures as auto\u2011recoverable; only raise alerts after two consecutive retries.",
         "Allocate disk cleanup scripts to run nightly to keep disk usage below 85%."
       ]
+    },
+    {
+      "id": "sess_d0651cdc",
+      "ts": "2026-05-11T03:58:37Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self-tests and improving health monitoring.",
+      "summary": "The hive is currently stalled at 55% health due to multiple failing self-tests (TS17-TS21) and high resource usage. Auto-fix attempts have not resolved the issues, and a fallback mechanism is pending for TS21. Immediate code improvements are needed to enhance self-repair and health monitoring.",
+      "progress": "Attempted automated self-fix for TS21, TS19, TS18, and TS17, but the fixes were insufficient.",
+      "next_steps": [
+        "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to invoke a secondary repair routine when primary fix fails.",
+        "Implement a health check wrapper in health_monitor.py to automatically restart failing self-test modules and log retry attempts.",
+        "Add retry logic with exponential backoff to call_self_test() in orchestrator.py for TS17-TS19 failures.",
+        "Create unit tests for ts21_repair.py covering both primary and fallback paths in tests/self_fix/test_ts21_repair.py.",
+        "Introduce a resource usage guard in resource_manager.py to throttle jobs when mem>50GB or disk>90%."
+      ],
+      "decisions": [
+        "Prioritize fixing TS21 fallback before addressing TS17-TS19 to unblock health monitor integration.",
+        "Enable exponential backoff retries for self-test calls to reduce hammering under high load.",
+        "Add unit test coverage for self-fix modules to prevent future regressions."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1079,9 +1079,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "heartbeat \u00b7 sessions=8 health=55% blockers=9",
     "status": "completed",
-    "started_at": "2026-05-11T03:57:45Z",
-    "completed_at": "2026-05-11T03:57:46Z"
+    "started_at": "2026-05-11T03:58:47Z",
+    "completed_at": "2026-05-11T03:58:47Z"
   }
 }
