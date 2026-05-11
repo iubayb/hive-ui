@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T13:00:59Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-11T13:01:37Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-11T13:00:59Z",
+      "status": "stalled",
+      "health_score": 0.5,
+      "last_seen": "2026-05-11T13:01:37Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -631,7 +631,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 42
+    "openrouter_calls_today": 43
   },
   "model_champions": {
     "text": null,
@@ -640,26 +640,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_48e919bf",
-      "ts": "2026-05-11T10:30:11Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by fixing failing self-tests and improving resource monitoring",
-      "summary": "The hive is currently stalled with four critical self-test failures (TS17\u2011TS21) and high resource usage. Automatic fixes have not resolved the issues, and the load manager is near disk capacity. Recent work added a tmux session restart capability but no self-test fixes were applied.",
-      "progress": "Implemented tmux_session_restart capability for faster session recovery.",
-      "next_steps": [
-        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py to safely reset state on failure",
-        "Implement missing validation and recovery logic in ts17_check() in self_tests/ts1/ts17_check.py",
-        "Write unit tests for ts19_check() in self_tests/ts1/ts19_check.py covering expected failure modes",
-        "Refactor utils/load_manager.py to lower process priority when disk usage > 85% and add alert logging",
-        "Create /api/health endpoint in api/health.py that runs all self-tests and returns JSON status"
-      ],
-      "decisions": [
-        "Prioritize fixing TS17\u2011TS21 before addressing lower priority tests",
-        "Introduce explicit cleanup steps in each failing self-test to ensure idempotent retries",
-        "Add proactive disk\u2011usage monitoring in load_manager to prevent stalls"
-      ]
-    },
     {
       "id": "sess_81a795d2",
       "ts": "2026-05-11T10:45:16Z",
@@ -839,6 +819,26 @@
         "Reduce memory threshold in load_manager to prevent future stalls",
         "Schedule a manual restart of the ps5-hive session after code changes are deployed"
       ]
+    },
+    {
+      "id": "sess_0ac2f512",
+      "ts": "2026-05-11T13:01:26Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self\u2011tests and stabilizing resource management",
+      "summary": "The hive is currently stalled with several high\u2011priority self\u2011test failures (TS18, TS19, TS21) and a critical session in backoff. Load is high and disk usage is near capacity, prompting renicing of jobs. No recent achievements have been recorded.",
+      "progress": "Implemented a tmux_session_restart capability for session recovery.",
+      "next_steps": [
+        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py and ensure it returns a success status on exception.",
+        "Implement missing fix for TS19 by adding validate_config() in self_tests/ts1/ts19_check.py and unit tests covering edge cases.",
+        "Create a retry wrapper for ts21_check() in self_tests/ts1/ts21_check.py that attempts the check up to 3 times with exponential backoff.",
+        "Refactor utils/load_manager.py: lower process priority for non\u2011critical jobs when load.core > 0.15 and add logging of priority changes.",
+        "Add automatic disk cleanup trigger in utils/disk_monitor.py that deletes oldest log files when disk usage exceeds 90%."
+      ],
+      "decisions": [
+        "Prioritize fixing TS18, TS19, and TS21 before addressing session backoff issues.",
+        "Introduce exponential backoff and retry logic for flaky self\u2011test checks.",
+        "Implement proactive disk space management to prevent future stalls."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -850,9 +850,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-11T13:00:35Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-11T13:01:37Z",
+    "completed_at": "2026-05-11T13:01:37Z"
   }
 }
