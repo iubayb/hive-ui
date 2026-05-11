@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T18:31:55Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-11T18:32:57Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-11T18:31:03Z",
+      "status": "stalled",
+      "health_score": 0.5,
+      "last_seen": "2026-05-11T18:32:25Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -631,7 +631,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 64
+    "openrouter_calls_today": 65
   },
   "model_champions": {
     "text": null,
@@ -640,26 +640,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_097508fc",
-      "ts": "2026-05-11T16:02:05Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests and stabilizing resource monitoring",
-      "summary": "The hive is currently stalled with several high\u2011priority self\u2011test failures (TS18, TS19, TS21) and a critical session in backoff. Resource usage is high and recent attempts to auto\u2011fix have not succeeded. Immediate code changes are required to add fallback cleanup, improve load monitoring, and add diagnostics for failing tests.",
-      "progress": "Implemented a basic fallback cleanup stub for ts18_check() in self_tests/ts1.",
-      "next_steps": [
-        "Complete fallback cleanup logic in ts18_check() within self_tests/ts1/ts18_check.py to safely roll back partial state",
-        "Add detailed error logging and alerting in ts19_check() in self_tests/ts1/ts19_check.py",
-        "Implement retry and backoff handling in ts21_check() in self_tests/ts1/ts21_check.py",
-        "Enhance utils/load_manager.py: lower process priority when mem>50GB and disk>90%, and emit a warning metric",
-        "Create unit tests for the new fallback and retry mechanisms in tests/self_tests/test_ts18_ts19_ts21.py"
-      ],
-      "decisions": [
-        "Prioritize fixing self\u2011test failures before addressing the backoff session",
-        "Introduce aggressive resource throttling in load_manager to prevent future stalls",
-        "Log all self\u2011test errors to a new /api/selftest endpoint for real\u2011time monitoring"
-      ]
-    },
     {
       "id": "sess_f2eb6f78",
       "ts": "2026-05-11T16:16:54Z",
@@ -839,6 +819,26 @@
         "Adopt a configurable threshold system for load_manager to auto\u2011renice processes when disk usage exceeds 90%",
         "Introduce per\u2011session restart backoff policies to prevent endless rapid restarts"
       ]
+    },
+    {
+      "id": "sess_ce3fd53b",
+      "ts": "2026-05-11T18:32:47Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and stabilizing critical sessions",
+      "summary": "The hive is stalled at 50% health due to multiple high\u2011severity self\u2011test failures (TS18, TS19, TS21) and a critical backoff loop in the ps5-hive session. Resource pressure is high, with disk at 93% and memory at 54.5\u202fGB, prompting renicing of jobs. No recent achievements have been recorded.",
+      "progress": "Implemented a fallback cleanup routine stub in ts18_check() (P2) and added logging for the cleanup path.",
+      "next_steps": [
+        "Complete fallback cleanup logic in ts18_check() in self_tests/ts1/ts18_check.py and ensure it resets state on failure",
+        "Implement corrective fix for TS19 in self_tests/ts1/ts19_check.py, adding missing configuration validation",
+        "Add detailed failure handling and auto\u2011retry in TS21 within self_tests/ts1/ts21_check.py",
+        "Modify ps5_hive_restart() in sessions/ps5_hive.py to break long backoff loops after 5 retries and trigger manual alert",
+        "Add disk usage guard in utils/load_manager.py to trigger cleanup when disk >90% and log to /var/log/hive/disk_guard.log"
+      ],
+      "decisions": [
+        "Prioritize completing TS18\u2013TS21 fixes before addressing resource scaling",
+        "Introduce a hard backoff cap for any session restart to prevent infinite restart loops",
+        "Enable automatic disk\u2011cleanup tasks as part of load_manager to relieve 93% disk usage"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -850,9 +850,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-11T18:31:53Z",
-    "completed_at": "2026-05-11T18:31:55Z"
+    "started_at": "2026-05-11T18:32:25Z",
+    "completed_at": "2026-05-11T18:32:47Z"
   }
 }
