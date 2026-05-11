@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T11:44:44Z",
+  "last_updated": "2026-05-11T11:45:45Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -618,7 +618,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 37
+    "openrouter_calls_today": 38
   },
   "model_champions": {
     "text": null,
@@ -627,26 +627,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_aec86307",
-      "ts": "2026-05-11T09:14:52Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by fixing failing self-tests and stabilizing resource monitoring",
-      "summary": "The hive is currently stalled with multiple high-priority self-test failures (TS17-TS21) and high resource usage. Automatic fixes have not resolved the issues, and the load manager needs adjustment to reduce process pressure. Immediate code changes are required to implement fallback cleanup and improve load monitoring.",
-      "progress": "Implemented a fallback cleanup routine placeholder in ts18_check() but it remains incomplete.",
-      "next_steps": [
-        "Complete fallback cleanup logic in ts18_check() within self_tests/ts1/ts18_check.py, ensuring it resets test state on failure",
-        "Add retry and backoff handling to ts17_check() in self_tests/ts1/ts17_check.py for transient resource errors",
-        "Refactor utils/load_manager.py: lower process threshold and add hysteresis to prevent frequent renicing",
-        "Add unit tests for ts18_check() and ts17_check() in tests/self_tests/test_ts1.py covering success, failure, and fallback paths",
-        "Create a health endpoint in api/health.py that reports self-test statuses and load manager metrics in JSON"
-      ],
-      "decisions": [
-        "Prioritize fixing TS17-TS21 before addressing lower-priority tests",
-        "Introduce exponential backoff in self-test checks to mitigate transient load spikes",
-        "Expose internal health metrics via an API endpoint for easier monitoring"
-      ]
-    },
     {
       "id": "sess_e8ad12f4",
       "ts": "2026-05-11T09:29:39Z",
@@ -826,6 +806,26 @@
         "Introduce a configurable memory threshold in load_manager.py rather than hard\u2011coded values",
         "Enforce unit test coverage >90% for all self\u2011test modules before considering the hive healthy"
       ]
+    },
+    {
+      "id": "sess_e5637943",
+      "ts": "2026-05-11T11:45:35Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self-tests and stabilizing resource monitoring",
+      "summary": "The hive is stalled at 55% health with multiple high\u2011priority self\u2011test failures (TS17\u2013TS21) and high load/memory usage. Recent attempts to auto\u2011fix TS21 succeeded, but TS17\u2011TS19 still fail and TS18 lacks a cleanup fallback. Resource monitoring is also overloaded, risking further stalls.",
+      "progress": "Implemented a fallback cleanup routine placeholder for ts18_check() in self_tests/ts1.",
+      "next_steps": [
+        "Complete the fallback cleanup logic in ts18_check() in self_tests/ts1/ts18_check.py, ensuring it releases allocated resources on failure",
+        "Add detailed logging and error handling to ts17_check() in self_tests/ts1/ts17_check.py to capture failure reasons",
+        "Implement retry and backoff in ts19_check() in self_tests/ts1/ts19_check.py for transient errors",
+        "Refactor utils/load_manager.py to lower process priority dynamically when mem>50GB and disk>90%",
+        "Write unit tests for ts17_check, ts18_check, and ts19_check covering success, failure, and recovery paths"
+      ],
+      "decisions": [
+        "Prioritize fixing TS17\u2011TS19 before addressing lower\u2011priority tests",
+        "Integrate resource\u2011aware priority adjustments in load_manager to prevent future stalls",
+        "Require comprehensive unit test coverage for all self\u2011test modules before marking them fixed"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -837,9 +837,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=8 health=55% blockers=9",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-11T11:44:44Z",
-    "completed_at": "2026-05-11T11:44:44Z"
+    "started_at": "2026-05-11T11:45:14Z",
+    "completed_at": "2026-05-11T11:45:35Z"
   }
 }
