@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T08:12:55Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-11T08:14:02Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
@@ -340,7 +340,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 9
+    "openrouter_calls_today": 10
   },
   "model_champions": {
     "text": null,
@@ -458,6 +458,26 @@
         "Implement explicit fallback cleanup in ts18_check() as a safety net for future test failures",
         "Add logging and auto-restart for tmux sessions to prevent long\u2011term stalls"
       ]
+    },
+    {
+      "id": "sess_a7db0169",
+      "ts": "2026-05-11T08:14:02Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and stabilizing resource usage",
+      "summary": "The hive is currently stalled with multiple high-priority self-test failures (TS17\u2011TS21) and high memory usage. No recent progress has been made, and the load manager is under heavy load. Immediate code fixes and monitoring enhancements are needed to bring the system back to operational status.",
+      "progress": "No new fixes were completed since the last snapshot.",
+      "next_steps": [
+        "Implement fallback cleanup routine in ts18_check() within self_tests/ts1/ts18_check.py",
+        "Add retry and exponential backoff logic to call_llm() in orchestrator/orchestrator.py for HTTP 429 responses",
+        "Update utils/load_manager.py to dynamically lower process priority when disk usage > 90% and memory > 50GB",
+        "Write unit tests for self_tests/ts1/ts17_check.py covering all edge cases and expected failure paths",
+        "Create /api/health endpoint in api/health.py that returns JSON with self-test statuses and resource metrics"
+      ],
+      "decisions": [
+        "Prioritize fixing TS18 fallback before tackling TS17\u2011TS21 as they share common cleanup code",
+        "Introduce exponential backoff in LLM calls to mitigate high load spikes",
+        "Expose health metrics via an API endpoint to enable external monitoring dashboards"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -469,9 +489,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=8 health=55% blockers=9",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-11T08:12:35Z",
-    "completed_at": "2026-05-11T08:12:35Z"
+    "started_at": "2026-05-11T08:13:47Z",
+    "completed_at": "2026-05-11T08:14:02Z"
   }
 }
