@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T23:32:58Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-11T23:33:33Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-11T23:31:29Z",
+      "status": "stalled",
+      "health_score": 0.5,
+      "last_seen": "2026-05-11T23:33:33Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -684,7 +684,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 88
+    "openrouter_calls_today": 89
   },
   "model_champions": {
     "text": null,
@@ -693,26 +693,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_b2a5a1f9",
-      "ts": "2026-05-11T21:06:14Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests and reducing resource pressure",
-      "summary": "The hive is currently stalled at 50% health with multiple high-priority failures in self-tests TS18, TS19, and TS21, and a severe resource load. No recent achievements have been recorded, and several sessions are in backoff or high load. Immediate code fixes and monitor adjustments are required to bring the system back online.",
-      "progress": "No new fixes have been completed since the last snapshot.",
-      "next_steps": [
-        "Implement a fallback cleanup routine in ts18_check() within self_tests/ts1/ts18_check.py",
-        "Add missing validation and auto-fix logic to ts19_check() in self_tests/ts1/ts19_check.py",
-        "Create a retry wrapper for ts21_check() in self_tests/ts1/ts21_check.py to handle transient failures",
-        "Update utils/load_manager.py to lower process priority when mem>80% and disk>90%",
-        "Add exponential backoff and restart logic to ps5-hive session handling in sessions/ps5_hive_manager.py"
-      ],
-      "decisions": [
-        "Prioritize fixing self-test failures before addressing the stalled health flag",
-        "Adjust resource monitor thresholds to trigger early throttling at 75% memory usage",
-        "Implement automated session restart with backoff limits for any session entering long backoff"
-      ]
-    },
     {
       "id": "sess_125945f9",
       "ts": "2026-05-11T21:21:17Z",
@@ -892,6 +872,26 @@
         "All self\u2011test runners will now include a maximum of 3 retry attempts before aborting",
         "Resource\u2011intensive jobs will be reniced to -10 when system memory exceeds 70% or disk usage exceeds 85%"
       ]
+    },
+    {
+      "id": "sess_bde8a234",
+      "ts": "2026-05-11T23:33:23Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore all self-test suites (TS18, TS19, TS21) to passing status and stabilize the hive under high load",
+      "summary": "The hive is experiencing multiple self-test failures (TS18, TS19, TS21) and a session in long backoff, while system load is high and disk usage is near capacity. Recent attempts to auto-fix have not succeeded, and a fallback cleanup routine is pending for TS18. Immediate code actions are required to implement fixes and improve resource monitoring.",
+      "progress": "Implemented a temporary backoff reset for the 'ps5-hive' session using tmux_session_restart.",
+      "next_steps": [
+        "Add fallback cleanup routine to ts18_check() in self_tests/ts18_check.py to safely reset state on failure",
+        "Implement missing validation logic in ts19_check() within self_tests/ts19_check.py to address failing conditions",
+        "Create a detailed error report in ts21_check() in self_tests/ts21_check.py and add auto-recovery steps",
+        "Update utils/load_manager.py to lower process priority when mem>50GB and disk>90% and add logging of throttling actions",
+        "Add unit tests for ts18_check(), ts19_check(), and ts21_check() in tests/self_tests_test.py covering success and failure paths"
+      ],
+      "decisions": [
+        "Prioritize fixing TS18 before TS19 and TS21 to unblock the fallback cleanup implementation",
+        "Introduce aggressive resource throttling in load_manager.py as a safeguard against high memory and disk usage",
+        "Commit new unit tests alongside functional fixes to prevent regression of self-test suites"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -903,9 +903,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-11T23:32:58Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-11T23:33:33Z",
+    "completed_at": "2026-05-11T23:33:33Z"
   }
 }
