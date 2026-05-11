@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T06:44:56Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-11T06:45:45Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -26,6 +26,19 @@
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_205f8c6b",
+      "ts": "2026-05-11T06:45:13Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The tmux session has entered an error state (silent for 1\u202fs, 7 errors) likely due to a hung or blocked process in the primary window.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "467d80a6e263d3f3ab85711ca3f28286"
+    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -451,6 +464,20 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_00ace232",
+        "ts": "2026-05-11T06:45:13Z",
+        "hive": "default",
+        "summary": "Recover the hung primary window of the 'ps5-hive' tmux session using a graceful interrupt and a recovery script.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_35423038",
+        "ts": "2026-05-11T06:45:03Z",
+        "hive": "default",
+        "summary": "Session ps5-hive is hung; send interrupt, spawn a recovery window, then remove the faulty window.",
+        "source": "doctor"
+      },
       {
         "id": "f_7b190e39",
         "ts": "2026-05-11T06:14:56Z",
@@ -972,7 +999,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 96
+    "openrouter_calls_today": 98
   },
   "model_champions": {
     "text": null,
@@ -1191,9 +1218,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=8 health=55% blockers=9",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-11T06:44:43Z",
-    "completed_at": "2026-05-11T06:44:43Z"
+    "started_at": "2026-05-11T06:45:33Z",
+    "completed_at": "2026-05-11T06:45:35Z"
   }
 }
