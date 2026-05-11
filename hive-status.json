@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T08:43:55Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-11T08:44:53Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -379,7 +379,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 13
+    "openrouter_calls_today": 14
   },
   "model_champions": {
     "text": null,
@@ -537,6 +537,26 @@
         "Adjust memory usage alerts to a more conservative threshold to preemptively avoid high\u2011load stalls",
         "Introduce explicit logging and metrics for each self\u2011test auto\u2011fix attempt to aid future debugging"
       ]
+    },
+    {
+      "id": "sess_c5d2201b",
+      "ts": "2026-05-11T08:44:13Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self\u2011tests and stabilizing resource monitoring",
+      "summary": "The hive is currently stalled with multiple high\u2011priority self\u2011test failures (TS17\u2011TS21) and high memory usage. No recent progress has been made, and the resource monitor needs adjustment to prevent overload. Immediate coding actions are required to implement fallbacks and improve load handling.",
+      "progress": "No new tasks were completed since the last snapshot.",
+      "next_steps": [
+        "Implement a fallback cleanup routine in ts18_check() in self_tests/ts1/ts18_check.py",
+        "Add retry and timeout handling to ts17_check() in self_tests/ts1/ts17_check.py to prevent hangs",
+        "Create a corrective script fix_ts19.py in self_tests/ts1 that resets state and logs detailed diagnostics for TS19",
+        "Update utils/load_manager.py: lower process memory threshold to 45% and add alert when disk > 85%",
+        "Write unit tests for the new fallback logic in ts18_check() and ts17_check() to ensure they return success on cleanup"
+      ],
+      "decisions": [
+        "Prioritize fixing TS17\u2011TS21 before addressing lower\u2011priority tasks",
+        "Introduce automated alerts for resource thresholds to pre\u2011empt future stalls",
+        "Commit all changes to a dedicated 'stability\u2011patch' branch for review before merging"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -549,8 +569,8 @@
   "active_task": {
     "agent": "orchestrator",
     "task": "compaction: LLM summarising hive state",
-    "status": "running",
+    "status": "completed",
     "started_at": "2026-05-11T08:43:55Z",
-    "completed_at": null
+    "completed_at": "2026-05-11T08:44:13Z"
   }
 }
