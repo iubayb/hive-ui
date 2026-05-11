@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T04:27:53Z",
+  "last_updated": "2026-05-11T04:29:01Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -881,7 +881,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 78
+    "openrouter_calls_today": 79
   },
   "model_champions": {
     "text": null,
@@ -890,26 +890,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_c8e85c50",
-      "ts": "2026-05-11T01:58:01Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by fixing failing self-tests and improving health monitoring",
-      "summary": "The hive is currently stalled with multiple critical self-test failures (TS17\u2011TS21) and high resource usage. Auto\u2011fix attempts have not resolved the issues, and health monitoring lacks robust fallback handling. Immediate code changes are required to add fallback logic, enhance health checks, and reduce load impact.",
-      "progress": "Auto\u2011fix routines were attempted for TS21\u2011TS17 but were insufficient, exposing gaps in fallback handling and health monitoring.",
-      "next_steps": [
-        "Add fallback handling to ts21_repair.py in orchestrator/self_fix/ to safely reset core state when repair fails",
-        "Implement a health check wrapper in health_monitor.py that retries failed checks and logs detailed diagnostics",
-        "Create a load throttling decorator in utils/load_manager.py to limit memory usage when core load exceeds 0.1",
-        "Write unit tests for TS17\u2011TS21 self\u2011test functions in tests/self_test_suite.py covering success, failure, and fallback paths",
-        "Add a new endpoint /api/health in api_server.py that returns JSON with current self\u2011test statuses and resource metrics"
-      ],
-      "decisions": [
-        "Prioritize fixing self\u2011test failures before addressing lower\u2011priority performance tweaks",
-        "Introduce automatic retry/fallback mechanisms for self\u2011test repairs to reduce manual intervention",
-        "Expose health metrics via an API endpoint to enable external monitoring dashboards"
-      ]
-    },
     {
       "id": "sess_7af439f6",
       "ts": "2026-05-11T02:12:48Z",
@@ -1089,6 +1069,26 @@
         "Limit automatic repair retries to three attempts to avoid resource exhaustion",
         "Expose health metrics via an API endpoint to enable external monitoring and alerting"
       ]
+    },
+    {
+      "id": "sess_765fac70",
+      "ts": "2026-05-11T04:28:41Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore all self-test modules (TS17\u2011TS21) and bring hive health to green",
+      "summary": "The hive is currently stalled at 55% health due to multiple high\u2011priority self\u2011test failures (TS17\u2011TS21). Auto\u2011fix attempts have not resolved the issues, and the system is under heavy load. Immediate code\u2011level remediation and health\u2011check reinforcement are required.",
+      "progress": "Attempted automatic repairs for TS21, TS19, TS18, and TS17, but failures remain.",
+      "next_steps": [
+        "Add fallback handling in ts21_repair.py to catch unexpected exceptions and write a safe state file",
+        "Implement a retry loop with exponential backoff in ts19_repair.py for external resource calls",
+        "Create unit tests for ts18_repair.py covering all error branches in tests/test_ts18_repair.py",
+        "Add a health check wrapper in health_monitor.py that validates TS17\u2011TS21 status and reports JSON via /api/healthcheck",
+        "Refactor orchestrator/self_fix/__init__.py to log detailed diagnostics when any TS self\u2011test fails"
+      ],
+      "decisions": [
+        "Prioritize concrete fallback and retry logic over further auto\u2011fix attempts",
+        "Introduce automated unit test coverage for self\u2011repair modules before deploying fixes",
+        "Expose a dedicated health\u2011check endpoint to enable external monitoring of self\u2011test status"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1102,7 +1102,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T04:27:32Z",
-    "completed_at": "2026-05-11T04:27:33Z"
+    "started_at": "2026-05-11T04:28:51Z",
+    "completed_at": "2026-05-11T04:28:51Z"
   }
 }
