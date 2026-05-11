@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T06:57:56Z",
+  "last_updated": "2026-05-11T06:58:43Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -144,17 +144,17 @@
       "_hash": "82ed62237b8e342301c173b1539d754e"
     },
     {
-      "id": "b_bc1a5fd6",
+      "id": "b_0b4f0c7f",
       "ts": "2026-05-11T06:57:16Z",
       "hive": "default",
       "agent": "orchestrator",
-      "description": "tmux session 'hive-watch' missing entirely",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-11T06:58:26Z",
+      "resolution": "Session 'hive-dev' is healthy again",
       "github_issue": null,
-      "_hash": "70b95af380bb338ef8031fb179457ee0"
+      "_hash": "217dae28725ae72712be5a39a27334a8"
     },
     {
       "id": "b_99149f0a",
@@ -163,27 +163,55 @@
       "agent": "orchestrator",
       "description": "tmux session 'hive-live' missing entirely",
       "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-11T06:58:26Z",
+      "resolution": "Session 'hive-live' is healthy again",
       "github_issue": null,
       "_hash": "5e7ea63d56407f4c12743a4f09c67392"
     },
     {
-      "id": "b_0b4f0c7f",
+      "id": "b_bc1a5fd6",
       "ts": "2026-05-11T06:57:16Z",
       "hive": "default",
       "agent": "orchestrator",
-      "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "description": "tmux session 'hive-watch' missing entirely",
+      "severity": "critical",
+      "status": "resolved",
+      "resolved_at": "2026-05-11T06:58:26Z",
+      "resolution": "Session 'hive-watch' is healthy again",
       "github_issue": null,
-      "_hash": "217dae28725ae72712be5a39a27334a8"
+      "_hash": "70b95af380bb338ef8031fb179457ee0"
     }
   ],
-  "next_steps": [],
+  "next_steps": [
+    {
+      "id": "ns_76f661b2",
+      "priority": 1,
+      "description": "Add detailed error logging to ts17_check() in self_tests/ts17.py to capture stack traces and input state.",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-11T06:58:43Z"
+    },
+    {
+      "id": "ns_f8b25126",
+      "priority": 2,
+      "description": "Implement a fallback cleanup routine in ts18_check() in self_tests/ts18.py that frees temporary files when disk usage > 90%.",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-11T06:58:43Z"
+    },
+    {
+      "id": "ns_78b4cd85",
+      "priority": 3,
+      "description": "Update the resource monitor in utils/load_manager.py to lower process niceness when core usage exceeds 0.15 and add alert logging.",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-11T06:58:43Z"
+    }
+  ],
   "capabilities": {
     "learned": []
   },
@@ -198,7 +226,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 0
+    "openrouter_calls_today": 1
   },
   "model_champions": {
     "text": null,
@@ -216,6 +244,26 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_b3e1d13c",
+      "ts": "2026-05-11T06:58:43Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full functionality by fixing failing self-tests TS17\u2011TS21 and stabilizing system load",
+      "summary": "The hive is currently running but several critical self\u2011tests (TS17\u2011TS21) are failing, and system load is high with disk near capacity. Auto\u2011fix attempts have not resolved the issues, so manual code changes and resource cleanup are required.",
+      "progress": "Identified the failing test modules and logged high\u2011load metrics during the latest health check.",
+      "next_steps": [
+        "Add detailed error logging to ts17_check() in self_tests/ts17.py to capture stack traces and input state.",
+        "Implement a fallback cleanup routine in ts18_check() in self_tests/ts18.py that frees temporary files when disk usage > 90%.",
+        "Update the resource monitor in utils/load_manager.py to lower process niceness when core usage exceeds 0.15 and add alert logging.",
+        "Write unit tests for ts19_check() in self_tests/ts19.py covering edge cases of missing configuration files.",
+        "Create a disk space reclamation script in maintenance/cleanup_disk.py and schedule it via cron in orchestrator.py."
+      ],
+      "decisions": [
+        "Prioritize fixing TS17\u2011TS21 before adding new features.",
+        "Introduce explicit logging for all failing self\u2011test paths to aid future auto\u2011fixes.",
+        "Allocate a dedicated maintenance window to run the new disk cleanup script daily."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -227,9 +275,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: develop\u2192main promotion check + release draft",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T06:57:23Z",
-    "completed_at": "2026-05-11T06:57:26Z"
+    "started_at": "2026-05-11T06:58:26Z",
+    "completed_at": "2026-05-11T06:58:27Z"
   }
 }
