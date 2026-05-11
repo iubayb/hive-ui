@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T11:57:57Z",
+  "last_updated": "2026-05-11T11:58:57Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-11T11:56:54Z",
+      "last_seen": "2026-05-11T11:58:57Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -850,9 +850,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: develop\u2192main promotion check + release draft",
+    "task": "heartbeat \u00b7 sessions=8 health=50% blockers=10",
     "status": "completed",
-    "started_at": "2026-05-11T11:57:54Z",
-    "completed_at": "2026-05-11T11:57:57Z"
+    "started_at": "2026-05-11T11:58:57Z",
+    "completed_at": "2026-05-11T11:58:57Z"
   }
 }
