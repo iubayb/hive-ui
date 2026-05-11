@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T14:00:59Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-11T14:01:40Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 1.0,
-      "last_seen": "2026-05-11T14:00:59Z",
+      "last_seen": "2026-05-11T14:01:03Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -631,7 +631,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 46
+    "openrouter_calls_today": 47
   },
   "model_champions": {
     "text": null,
@@ -640,26 +640,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_57bd5e7d",
-      "ts": "2026-05-11T11:30:23Z",
-      "updated_by": "orchestrator",
-      "goal": "Resolve failing self-test modules and stabilize hive resource usage to restore full health",
-      "summary": "The hive is currently stalled with high memory usage and four critical self-test failures (TS17\u2011TS19). No recent achievements have been recorded, and the primary blockers are the failing self\u2011tests and high load. Immediate code changes are needed to add fallback cleanup, improve load monitoring, and address the failing tests.",
-      "progress": "Implemented a preliminary retry wrapper for ts18_check() but it did not fully resolve the failure.",
-      "next_steps": [
-        "Add a fallback cleanup routine to ts18_check() in self_tests/ts1/ts18.py that removes temporary files and resets state on failure",
-        "Modify utils/load_manager.py to include a configurable low\u2011memory threshold and automatically downscale non\u2011essential processes when mem>80%",
-        "Implement missing cleanup and reset logic in ts17_check() located in self_tests/ts1/ts17.py",
-        "Write unit tests for ts19_check() in self_tests/ts1/ts19_test.py to validate proper error handling and resource release",
-        "Add logging of memory usage spikes to hive.log in orchestrator.py within the main health loop"
-      ],
-      "decisions": [
-        "Prioritize fixing TS17\u2011TS19 before adding new features",
-        "Introduce a configurable memory threshold in load_manager.py rather than hard\u2011coded values",
-        "Enforce unit test coverage >90% for all self\u2011test modules before considering the hive healthy"
-      ]
-    },
     {
       "id": "sess_e5637943",
       "ts": "2026-05-11T11:45:35Z",
@@ -839,6 +819,26 @@
         "Introduce exponential backoff with jitter for session restarts in orchestrator.py to reduce backoff overload",
         "Add automated health-report endpoint /api/health in logstream.py to expose self-test statuses"
       ]
+    },
+    {
+      "id": "sess_54967640",
+      "ts": "2026-05-11T14:01:30Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and stabilizing resource usage",
+      "summary": "The hive is currently stalled with multiple high\u2011severity self\u2011test failures (TS18, TS19, TS21) and elevated resource pressure. A session (ps5-hive) is in long back\u2011off, and load manager settings are causing high memory usage. No recent achievements have been recorded.",
+      "progress": "Implemented a fallback cleanup routine stub for ts18_check() in self_tests/ts1.",
+      "next_steps": [
+        "Complete fallback cleanup logic in ts18_check() in self_tests/ts1/ts18_check.py and add unit tests.",
+        "Implement missing fix for TS19 in self_tests/ts1/ts19_check.py, including error handling and logging.",
+        "Add corrective actions for TS21 in self_tests/ts1/ts21_check.py and create regression tests.",
+        "Update utils/load_manager.py to dynamically lower process priority when mem>80% and add alerts when disk>90%.",
+        "Add exponential backoff and retry logic to restart_session() in orchestrator.py for the 'ps5-hive' session when backoff exceeds 120s."
+      ],
+      "decisions": [
+        "Prioritize fixing TS18, TS19, and TS21 before addressing load manager tweaks.",
+        "Introduce automated unit test generation for all self\u2011test modules after code fixes.",
+        "Raise alert severity for resource thresholds to trigger proactive scaling."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -850,9 +850,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-11T14:00:55Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-11T14:01:40Z",
+    "completed_at": "2026-05-11T14:01:40Z"
   }
 }
