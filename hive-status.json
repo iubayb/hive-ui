@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T04:44:02Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-11T04:44:42Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -452,6 +452,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_c0776ae9",
+        "ts": "2026-05-11T04:44:06Z",
+        "hive": "default",
+        "summary": "Recover the hung ps5-hive session by interrupting the faulty window, launching a recovery window, and cleaning up.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_a9fd59d4",
+        "ts": "2026-05-11T04:44:03Z",
+        "hive": "default",
+        "summary": "Recover the hung ps5-hive tmux session by interrupting the stalled process and launching a recovery window.",
+        "source": "doctor"
+      },
+      {
         "id": "f_2b61a8bb",
         "ts": "2026-05-11T04:13:56Z",
         "hive": "default",
@@ -881,7 +895,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 80
+    "openrouter_calls_today": 82
   },
   "model_champions": {
     "text": null,
@@ -1100,9 +1114,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T04:43:34Z",
-    "completed_at": "2026-05-11T04:44:02Z"
+    "started_at": "2026-05-11T04:44:12Z",
+    "completed_at": "2026-05-11T04:44:12Z"
   }
 }
