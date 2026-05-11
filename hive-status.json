@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T06:43:54Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-11T06:44:56Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.55,
-      "last_seen": "2026-05-11T06:42:33Z",
+      "status": "running",
+      "health_score": 0.875,
+      "last_seen": "2026-05-11T06:44:56Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -972,7 +972,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 95
+    "openrouter_calls_today": 96
   },
   "model_champions": {
     "text": null,
@@ -981,26 +981,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_b1288018",
-      "ts": "2026-05-11T04:13:34Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests and improving resilience",
-      "summary": "The hive is currently stalled at 55% health due to multiple failing self-tests (TS17\u2011TS21) and high resource usage. Auto\u2011fix attempts have not resolved the issues, and fallback mechanisms are pending. Immediate code changes are needed to add robust error handling and health\u2011check wrappers.",
-      "progress": "Auto\u2011fix attempts were made for TS21\u2011TS17 but were insufficient, revealing the need for explicit fallback logic.",
-      "next_steps": [
-        "Add fallback handling in ts21_repair.py to gracefully handle repair failures and log detailed diagnostics",
-        "Implement a health check wrapper in health_monitor.py that retries failed self-tests up to three times before marking them as failed",
-        "Introduce rate\u2011limiting and back\u2011off in orchestrator/self_fix/ts19_repair.py to prevent overload during repeated fix attempts",
-        "Create unit tests in tests/self_fix/test_ts21.py covering success, fallback, and retry paths for ts21_repair",
-        "Add a new endpoint /api/health in api_server.py that returns JSON with current self\u2011test statuses and resource metrics"
-      ],
-      "decisions": [
-        "Prioritize adding explicit fallback logic for TS21 before addressing other test failures",
-        "Limit automatic repair retries to three attempts to avoid resource exhaustion",
-        "Expose health metrics via an API endpoint to enable external monitoring and alerting"
-      ]
-    },
     {
       "id": "sess_765fac70",
       "ts": "2026-05-11T04:28:41Z",
@@ -1180,6 +1160,26 @@
         "Introduce automated retry and fallback mechanisms to reduce manual intervention.",
         "Expand test coverage to prevent regressions in self-test repair modules."
       ]
+    },
+    {
+      "id": "sess_58fa347a",
+      "ts": "2026-05-11T06:44:33Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-test modules and improving automated recovery mechanisms",
+      "summary": "The hive is currently stalled with several critical self-test failures (TS17\u2011TS21) and high resource usage. No recent achievements have been recorded, and the primary blockers are failing self\u2011test repairs. Immediate coding work is needed to add fallback handling and health check wrappers to stabilize the system.",
+      "progress": "No new fixes have been completed since the last snapshot.",
+      "next_steps": [
+        "Add fallback handling in ts21_repair.py within orchestrator/self_fix/ to gracefully handle unrecoverable errors",
+        "Implement a health check wrapper in health_monitor.py that retries failed self\u2011tests and reports status via /api/health",
+        "Add retry logic with exponential backoff to call_self_test() in orchestrator/self_fix/__init__.py for HTTP 429 responses",
+        "Write unit tests for ts18_repair.py, ts19_repair.py, and ts17_repair.py covering success and failure paths",
+        "Create a resource throttling guard in load_manager.py to prevent disk usage from exceeding 90% and log warnings"
+      ],
+      "decisions": [
+        "Prioritize adding fallback mechanisms over full auto\u2011fix for TS21 due to time constraints",
+        "Introduce a generic health\u2011check decorator to wrap all self\u2011test functions",
+        "Enforce unit test coverage >=80% for all self\u2011fix modules before deploying further changes"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1191,9 +1191,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=8 health=55% blockers=9",
     "status": "completed",
-    "started_at": "2026-05-11T06:43:53Z",
-    "completed_at": "2026-05-11T06:43:54Z"
+    "started_at": "2026-05-11T06:44:43Z",
+    "completed_at": "2026-05-11T06:44:43Z"
   }
 }
