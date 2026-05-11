@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T07:29:53Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-11T07:30:34Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -26,32 +26,6 @@
   },
   "achievements": [],
   "blockers": [
-    {
-      "id": "b_e5af3a26",
-      "ts": "2026-05-11T07:28:05Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The ps5\u2011hive session shows error status after a spike in task failures (2 failed) and may have hit an unhandled exception in the auto\u2011enqueue logic.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "baf5d33a02ac137190d311598d1acd45"
-    },
-    {
-      "id": "b_e8a59a57",
-      "ts": "2026-05-11T07:28:01Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] Hive reports errors despite recent successful heartbeats; likely a transient communication failure with the task scheduler causing error count to rise.",
-      "severity": "low",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "d68366e0065227ac271c9e0eeaa0525c"
-    },
     {
       "id": "b_e05b0aed",
       "ts": "2026-05-11T06:57:30Z",
@@ -168,6 +142,32 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "82ed62237b8e342301c173b1539d754e"
+    },
+    {
+      "id": "b_e8a59a57",
+      "ts": "2026-05-11T07:28:01Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Hive reports errors despite recent successful heartbeats; likely a transient communication failure with the task scheduler causing error count to rise.",
+      "severity": "low",
+      "status": "resolved",
+      "resolved_at": "2026-05-11T07:30:24Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "d68366e0065227ac271c9e0eeaa0525c"
+    },
+    {
+      "id": "b_e5af3a26",
+      "ts": "2026-05-11T07:28:05Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The ps5\u2011hive session shows error status after a spike in task failures (2 failed) and may have hit an unhandled exception in the auto\u2011enqueue logic.",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-11T07:30:24Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "baf5d33a02ac137190d311598d1acd45"
     },
     {
       "id": "b_640a2e41",
@@ -389,9 +389,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=8 health=50% blockers=11",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T07:29:53Z",
-    "completed_at": "2026-05-11T07:29:53Z"
+    "started_at": "2026-05-11T07:30:23Z",
+    "completed_at": "2026-05-11T07:30:24Z"
   }
 }
