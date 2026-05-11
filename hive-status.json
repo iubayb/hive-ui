@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T01:15:42Z",
+  "last_updated": "2026-05-11T01:16:42Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -26,32 +26,6 @@
   },
   "achievements": [],
   "blockers": [
-    {
-      "id": "b_7d64e280",
-      "ts": "2026-05-11T01:11:50Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux session is in an error state with repeated heartbeats but no progress; likely a hung worker window is blocking task execution.",
-      "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "4f20521d4f53d504960ef4487d589475"
-    },
-    {
-      "id": "b_0672a755",
-      "ts": "2026-05-11T01:11:50Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux session is in an error state with repeated heartbeats but no progress (silent for 1\u202fs, 8 errors), indicating the main window is likely hung or crashed.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "fd8f73381aaaf6641aa5afb9ae2453bc"
-    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -981,7 +955,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T01:15:42Z",
-    "completed_at": "2026-05-11T01:15:42Z"
+    "started_at": "2026-05-11T01:16:42Z",
+    "completed_at": "2026-05-11T01:16:42Z"
   }
 }
