@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T07:26:43Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-11T07:28:01Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.55,
-      "last_seen": "2026-05-11T07:25:43Z",
+      "status": "running",
+      "health_score": 0.75,
+      "last_seen": "2026-05-11T07:27:54Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -19,13 +19,39 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 5,
+      "errors_last_hour": 15,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_e8a59a57",
+      "ts": "2026-05-11T07:28:01Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Hive reports errors despite recent successful heartbeats; likely a transient communication failure with the task scheduler causing error count to rise.",
+      "severity": "low",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "d68366e0065227ac271c9e0eeaa0525c"
+    },
+    {
+      "id": "b_640a2e41",
+      "ts": "2026-05-11T07:28:01Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[build_monitor] The monitor is stuck in idle mode because no new kernel runs are being detected; repeated 'No new kernel run' messages indicate the upstream task queue is empty or the polling interval is too long.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "47160bdce2879aa15b4366e4fb604c2b"
+    },
     {
       "id": "b_e05b0aed",
       "ts": "2026-05-11T06:57:30Z",
@@ -216,7 +242,15 @@
     "learned": []
   },
   "knowledge": {
-    "findings": [],
+    "findings": [
+      {
+        "id": "f_780cfa19",
+        "ts": "2026-05-11T07:28:01Z",
+        "hive": "default",
+        "summary": "Both sessions show transient stalls; restarting their watchdog/scheduler processes should clear the errors.",
+        "source": "doctor"
+      }
+    ],
     "patterns": [],
     "solutions": []
   },
@@ -226,7 +260,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 2
+    "openrouter_calls_today": 3
   },
   "model_champions": {
     "text": null,
@@ -295,9 +329,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-11T07:26:13Z",
-    "completed_at": "2026-05-11T07:26:13Z"
+    "started_at": "2026-05-11T07:27:44Z",
+    "completed_at": "2026-05-11T07:27:45Z"
   }
 }
