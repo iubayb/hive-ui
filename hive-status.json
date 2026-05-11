@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T06:28:50Z",
+  "last_updated": "2026-05-11T06:29:41Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -972,7 +972,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 94
+    "openrouter_calls_today": 95
   },
   "model_champions": {
     "text": null,
@@ -981,26 +981,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_d0651cdc",
-      "ts": "2026-05-11T03:58:37Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by fixing failing self-tests and improving health monitoring.",
-      "summary": "The hive is currently stalled at 55% health due to multiple failing self-tests (TS17-TS21) and high resource usage. Auto-fix attempts have not resolved the issues, and a fallback mechanism is pending for TS21. Immediate code improvements are needed to enhance self-repair and health monitoring.",
-      "progress": "Attempted automated self-fix for TS21, TS19, TS18, and TS17, but the fixes were insufficient.",
-      "next_steps": [
-        "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to invoke a secondary repair routine when primary fix fails.",
-        "Implement a health check wrapper in health_monitor.py to automatically restart failing self-test modules and log retry attempts.",
-        "Add retry logic with exponential backoff to call_self_test() in orchestrator.py for TS17-TS19 failures.",
-        "Create unit tests for ts21_repair.py covering both primary and fallback paths in tests/self_fix/test_ts21_repair.py.",
-        "Introduce a resource usage guard in resource_manager.py to throttle jobs when mem>50GB or disk>90%."
-      ],
-      "decisions": [
-        "Prioritize fixing TS21 fallback before addressing TS17-TS19 to unblock health monitor integration.",
-        "Enable exponential backoff retries for self-test calls to reduce hammering under high load.",
-        "Add unit test coverage for self-fix modules to prevent future regressions."
-      ]
-    },
     {
       "id": "sess_b1288018",
       "ts": "2026-05-11T04:13:34Z",
@@ -1180,6 +1160,26 @@
         "Treat disk usage cleanup as a secondary but urgent task to prevent further stalls",
         "Defer non\u2011critical enhancements (e.g., UI theming) until self\u2011tests are green"
       ]
+    },
+    {
+      "id": "sess_d1cb33fe",
+      "ts": "2026-05-11T06:29:31Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and improving health monitoring.",
+      "summary": "The hive is currently stalled with four critical self-test failures (TS17\u2011TS21) and high resource usage. Automated fixes have not resolved the issues, so manual code updates are required. Recent activity shows no new achievements, so immediate concrete fixes are needed.",
+      "progress": "No successful fixes have been applied since the last snapshot.",
+      "next_steps": [
+        "Add fallback handling in ts21_repair.py within orchestrator/self_fix/ts21_repair.py to safely skip unrecoverable nodes.",
+        "Implement a health check wrapper in health_monitor.py that retries failing self-tests up to 3 times and logs outcomes.",
+        "Add retry logic with exponential backoff to call_self_test() in orchestrator/self_fix/ts19_repair.py for TS19 failures.",
+        "Write unit tests for ts17_repair.py, ts18_repair.py, and ts19_repair.py covering success, failure, and fallback paths.",
+        "Add detailed metric emission in health_monitor.py to report self-test pass/fail rates to /api/metrics endpoint."
+      ],
+      "decisions": [
+        "Prioritize concrete code fixes for TS17\u2011TS21 before addressing resource throttling.",
+        "Introduce automated retry and fallback mechanisms to reduce manual intervention.",
+        "Expand test coverage to prevent regressions in self-test repair modules."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1193,7 +1193,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T06:28:20Z",
-    "completed_at": "2026-05-11T06:28:20Z"
+    "started_at": "2026-05-11T06:29:41Z",
+    "completed_at": "2026-05-11T06:29:41Z"
   }
 }
