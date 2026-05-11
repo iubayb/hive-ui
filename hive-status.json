@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T21:20:51Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-11T21:21:58Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-11T21:19:49Z",
+      "last_seen": "2026-05-11T21:21:57Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -632,7 +632,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 75
+    "openrouter_calls_today": 76
   },
   "model_champions": {
     "text": null,
@@ -641,26 +641,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_63382b7f",
-      "ts": "2026-05-11T18:48:36Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by fixing failing self-tests and addressing high resource load and session backoff issues",
-      "summary": "The hive is stalled at 50% health with multiple high\u2011severity blockers: several self\u2011tests (TS18, TS19, TS21) are failing, resource usage is critical, and the 'ps5-hive' session is in a long backoff loop. No recent achievements have been recorded, so immediate corrective code changes are required.",
-      "progress": "No new fixes have been completed since the last snapshot.",
-      "next_steps": [
-        "Implement a fallback cleanup routine in ts18_check() within self_tests/ts1/ts18_check.py to ensure resources are released on failure",
-        "Add retry and exponential backoff logic to ts19_check() in self_tests/ts1/ts19_check.py to handle transient errors",
-        "Create a corrective patch in self_tests/ts21.py to address the specific assertion failure identified by the auto\u2011fix logs",
-        "Update utils/load_manager.py: lower the process priority threshold and add a proactive memory\u2011pressure callback that throttles non\u2011essential jobs",
-        "Add automatic session restart with exponential backoff in orchestrator.py for sessions like 'ps5-hive' when HTTP 429 or connection errors occur"
-      ],
-      "decisions": [
-        "Prioritize fixing self\u2011test failures before scaling back resources",
-        "Introduce exponential backoff for both self\u2011test checks and session restarts to prevent cascading overload",
-        "Limit job renicing to a maximum of 2 levels and log any further attempts for manual review"
-      ]
-    },
     {
       "id": "sess_62ec0f37",
       "ts": "2026-05-11T19:03:42Z",
@@ -840,6 +820,26 @@
         "Adjust resource monitor thresholds to trigger early throttling at 75% memory usage",
         "Implement automated session restart with backoff limits for any session entering long backoff"
       ]
+    },
+    {
+      "id": "sess_125945f9",
+      "ts": "2026-05-11T21:21:17Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and stabilizing high-load resource management",
+      "summary": "The hive is stalled at 50% health with multiple high-priority self-test failures (TS18, TS19, TS21) and a critical session backoff. Load is high and disk usage is near capacity, while automatic fixes have not resolved the issues. Immediate code interventions are needed to implement fallback cleanup, improve test robustness, and adjust resource monitoring.",
+      "progress": "No recent achievements; previous auto-fix attempts for TS18, TS19, and TS21 were unsuccessful.",
+      "next_steps": [
+        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py and ensure it returns a safe state on failure",
+        "Implement robust error handling and retry logic in ts19_check() in self_tests/ts1/ts19_check.py to handle missing dependencies",
+        "Refactor ts21_check() in self_tests/ts1/ts21_check.py to include a timeout wrapper and detailed logging for failure diagnosis",
+        "Update utils/load_manager.py to lower process priority when mem>50GB and disk>90%, and add alert logging for critical thresholds",
+        "Create a watchdog script watchdog_ps5_restart.sh that monitors the 'ps5-hive' session and forces a graceful restart after 3 consecutive backoff failures"
+      ],
+      "decisions": [
+        "Prioritize fixing self-test failures before addressing lower-priority performance optimizations",
+        "Add explicit logging and alerting for resource thresholds to aid future auto-fix mechanisms",
+        "Limit automatic session restarts to avoid endless backoff loops by introducing a manual intervention flag"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -851,9 +851,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-11T21:20:51Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-11T21:21:57Z",
+    "completed_at": "2026-05-11T21:21:58Z"
   }
 }
