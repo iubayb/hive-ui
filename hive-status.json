@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T06:13:38Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-11T06:14:56Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.55,
-      "last_seen": "2026-05-11T06:12:07Z",
+      "status": "running",
+      "health_score": 0.875,
+      "last_seen": "2026-05-11T06:14:40Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -26,6 +26,32 @@
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_0411517b",
+      "ts": "2026-05-11T06:14:56Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The tmux session has entered an error state and is silent; likely a hung process in the primary window is preventing further heartbeat logging.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "30582a35577d447b45ed5fa6b3a3265b"
+    },
+    {
+      "id": "b_5401c389",
+      "ts": "2026-05-11T06:14:51Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The tmux window running the hive is stuck in a silent error state; heartbeat logs show no progress and error count has risen, indicating a hung process.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "b6ee8eb64e35ca676b3d60fc7e216e16"
+    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -451,6 +477,27 @@
   },
   "knowledge": {
     "findings": [
+      {
+        "id": "f_7b190e39",
+        "ts": "2026-05-11T06:14:56Z",
+        "hive": "default",
+        "summary": "Recovered the hung ps5-hive tmux session by interrupting the faulty window, launching a recovery window, and removing the stuck window.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_74056197",
+        "ts": "2026-05-11T06:14:53Z",
+        "hive": "default",
+        "summary": "The hive session is hung; recover it by interrupting the current pane, launching a recovery window, and removing the faulty pane.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_59df9d81",
+        "ts": "2026-05-11T06:14:53Z",
+        "hive": "default",
+        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
+        "source": "hive-doctor-rollback"
+      },
       {
         "id": "f_6c75fd31",
         "ts": "2026-05-11T05:44:40Z",
@@ -951,7 +998,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 91
+    "openrouter_calls_today": 94
   },
   "model_champions": {
     "text": null,
@@ -960,26 +1007,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_afbb6f3c",
-      "ts": "2026-05-11T03:43:36Z",
-      "updated_by": "orchestrator",
-      "goal": "Resolve critical self-test failures (TS17\u2011TS21) and stabilize hive health",
-      "summary": "The hive is currently stalled at 55% health with four high\u2011priority self\u2011test failures. Load is low but memory usage is high and disk is near capacity. No recent progress has been made, so immediate code fixes are required.",
-      "progress": "No new fixes have been applied since the last snapshot.",
-      "next_steps": [
-        "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to gracefully skip TS21 when repair fails.",
-        "Implement a health check wrapper in health_monitor.py that runs each self\u2011test with timeout and logs success/failure metrics.",
-        "Add retry logic with exponential backoff to run_self_test() in self_test_runner.py for TS17\u2011TS20 failures.",
-        "Write unit tests for ts18_repair.py and ts19_repair.py covering success, failure, and fallback paths.",
-        "Create a new metric in metrics.py and expose it via /api/metrics in logstream.py to report current self\u2011test failure counts."
-      ],
-      "decisions": [
-        "Prioritize implementing fallback and retry mechanisms before adding new features.",
-        "Treat TS17\u2011TS20 failures as auto\u2011recoverable; only raise alerts after two consecutive retries.",
-        "Allocate disk cleanup scripts to run nightly to keep disk usage below 85%."
-      ]
-    },
     {
       "id": "sess_d0651cdc",
       "ts": "2026-05-11T03:58:37Z",
@@ -1159,6 +1186,26 @@
         "Enforce resource throttling to prevent further stalls during recovery",
         "Expose health metrics via an API for external monitoring and alerting"
       ]
+    },
+    {
+      "id": "sess_9fdb8d42",
+      "ts": "2026-05-11T06:14:30Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore all self-test suites (TS17\u2011TS21) and stabilize hive health to green",
+      "summary": "The hive is currently stalled at 55% health due to multiple failing self\u2011tests (TS17\u2011TS21) despite auto\u2011fix attempts. High load and disk usage are also pressing issues, but the immediate blocker is the missing fallback logic for TS21 repair. No recent fixes have succeeded.",
+      "progress": "No self\u2011test failures have been resolved since the last snapshot.",
+      "next_steps": [
+        "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to safely abort and log when primary repair steps fail",
+        "Implement a health check wrapper in health_monitor.py that retries failed self\u2011tests up to three times before marking them critical",
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses",
+        "Write unit tests for org_guard.py covering all forbidden path patterns and integrate them into the CI pipeline",
+        "Create a cleanup script in utils/maintenance.py to purge old log files when disk usage exceeds 90%"
+      ],
+      "decisions": [
+        "Prioritize fixing TS21 fallback before addressing TS17\u2011TS20",
+        "Treat disk usage cleanup as a secondary but urgent task to prevent further stalls",
+        "Defer non\u2011critical enhancements (e.g., UI theming) until self\u2011tests are green"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1170,9 +1217,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-11T06:13:07Z",
-    "completed_at": "2026-05-11T06:13:08Z"
+    "started_at": "2026-05-11T06:14:08Z",
+    "completed_at": "2026-05-11T06:14:30Z"
   }
 }
