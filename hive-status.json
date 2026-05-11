@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T02:41:56Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-11T02:42:57Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.55,
-      "last_seen": "2026-05-11T02:41:04Z",
+      "status": "running",
+      "health_score": 0.875,
+      "last_seen": "2026-05-11T02:42:49Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -26,6 +26,19 @@
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_f43315c4",
+      "ts": "2026-05-11T02:42:55Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The tmux session is in an error state after a series of rapid task spawns; it is likely hung inside a long\u2011running HTTP request or blocked Python thread, causing the hive to stop processing new work.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "5109a9e0e96931d89ac779fe9878a334"
+    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -452,6 +465,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_d03d6549",
+        "ts": "2026-05-11T02:42:57Z",
+        "hive": "default",
+        "summary": "Recover the hung ps5-hive tmux session by interrupting the faulty pane, launching a recovery window, and closing the stuck pane.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_1298f80b",
+        "ts": "2026-05-11T02:42:57Z",
+        "hive": "default",
+        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
+        "source": "hive-doctor-rollback"
+      },
+      {
         "id": "f_2e96316b",
         "ts": "2026-05-11T02:12:49Z",
         "hive": "default",
@@ -783,7 +810,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 63
+    "openrouter_calls_today": 64
   },
   "model_champions": {
     "text": null,
@@ -1002,9 +1029,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
-    "status": "completed",
-    "started_at": "2026-05-11T02:41:44Z",
-    "completed_at": "2026-05-11T02:41:46Z"
+    "task": "compaction: LLM summarising hive state",
+    "status": "running",
+    "started_at": "2026-05-11T02:42:46Z",
+    "completed_at": null
   }
 }
