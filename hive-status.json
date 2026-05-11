@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T00:26:53Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-11T00:27:53Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -685,7 +685,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 46
+    "openrouter_calls_today": 47
   },
   "model_champions": {
     "text": null,
@@ -694,26 +694,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_b65adb88",
-      "ts": "2026-05-10T21:56:07Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore hive health by fixing failing self-tests and stabilizing core resource usage",
-      "summary": "The hive is currently stalled with four critical self-test failures (TS17\u2011TS21) and high memory/disk usage. Auto-fix attempts have not resolved the issues, and the default health status remains stalled at 55%. Immediate code interventions are needed to add fallback handling and health monitoring.",
-      "progress": "No self-test failures have been resolved since the last snapshot.",
-      "next_steps": [
-        "Add fallback handling to ts21_repair.py in orchestrator/self_fix/ts21_repair.py to gracefully handle repair failures",
-        "Implement a health check wrapper in health_monitor.py that retries and logs failures for TS17\u2011TS20 self-tests",
-        "Add exponential backoff and retry logic to call_self_fix() in orchestrator/self_fix/__init__.py for HTTP 429 responses",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and integrate them into the CI pipeline",
-        "Create /api/metrics endpoint in logstream.py to return JSON with current memory, disk, and load percentages"
-      ],
-      "decisions": [
-        "Prioritize implementing fallback handling for TS21 before addressing other self-test failures",
-        "Defer non\u2011critical UI enhancements until core health monitoring is stable",
-        "Allocate additional temporary memory resources by adjusting job renice settings to reduce load pressure"
-      ]
-    },
     {
       "id": "sess_3f74f266",
       "ts": "2026-05-10T22:11:16Z",
@@ -893,6 +873,26 @@
         "Limit retry attempts in health_monitor.py to three to avoid infinite loops under persistent failure",
         "Expose health\u2011check metrics via a new /api/metrics endpoint for external dashboarding"
       ]
+    },
+    {
+      "id": "sess_8c4854e8",
+      "ts": "2026-05-11T00:27:13Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self-test modules and stabilizing health monitoring",
+      "summary": "The hive is currently stalled with several critical self-test failures (TS17\u2011TS21) and high resource usage. Recent attempts to auto\u2011fix TS21 were insufficient, and no fixes exist for TS17\u2011TS19. Immediate code changes are required to add fallback handling and robust health checks to bring the system back online.",
+      "progress": "Attempted auto\u2011fix for TS21 in ts21_repair.py, but fallback logic remains incomplete.",
+      "next_steps": [
+        "Add comprehensive fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) for all error branches and log detailed diagnostics",
+        "Implement a health check wrapper in health_monitor.py that retries failed checks up to 3 times and reports status via a new /api/health endpoint",
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 and 5xx responses",
+        "Write unit tests for self_fix/ts17_repair.py, ts18_repair.py, and ts19_repair.py covering expected failure paths and fallback behavior",
+        "Introduce memory usage throttling in resource_manager.py to prevent >90% disk usage alerts by limiting log file sizes"
+      ],
+      "decisions": [
+        "Prioritize fixing TS21 fallback before addressing TS17\u2011TS19 to unlock downstream health checks",
+        "Deploy health_monitor wrapper as a separate microservice to isolate failures",
+        "Enforce unit test coverage \u226580% for all self_fix modules before next release"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -904,9 +904,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-11T00:26:53Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-11T00:27:33Z",
+    "completed_at": "2026-05-11T00:27:33Z"
   }
 }
