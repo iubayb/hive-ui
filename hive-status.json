@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T19:02:20Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-11T19:03:52Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-11T19:01:19Z",
+      "last_seen": "2026-05-11T19:03:22Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -15,7 +15,8 @@
         "nextjs-prod",
         "opencode",
         "orchestrator",
-        "ps5-hive"
+        "ps5-hive",
+        "supervisor"
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
@@ -631,7 +632,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 66
+    "openrouter_calls_today": 67
   },
   "model_champions": {
     "text": null,
@@ -640,26 +641,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_fa901ed0",
-      "ts": "2026-05-11T16:32:27Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by fixing failing self-tests and stabilizing resource usage",
-      "summary": "The hive is currently stalled with several high\u2011priority self\u2011test failures (TS18, TS19, TS21) and a critical session in backoff. Resource pressure is high, with memory at 54.5\u202fGB and disk at 93%, prompting renicing of jobs. Recent work added a tmux session restart capability but no test fixes have succeeded yet.",
-      "progress": "Implemented a tmux_session_restart capability for automated session recovery.",
-      "next_steps": [
-        "Add robust fallback cleanup in ts18_check() in self_tests/ts1/ts18_check.py to handle partial failures and ensure resource release",
-        "Implement missing fix for TS19 in self_tests/ts1/ts19_check.py, adding proper exception handling and state reset",
-        "Create a corrective routine for TS21 in self_tests/ts1/ts21_check.py that validates and repairs corrupted test artifacts",
-        "Enhance utils/load_manager.py: add dynamic throttling logic to lower process spawn rate when mem>50GB or disk>90%",
-        "Write unit tests for the new fallback cleanup in ts18_check() and for the throttling logic in load_manager.py"
-      ],
-      "decisions": [
-        "Prioritize self\u2011test fixes before addressing session backoff, as passing tests unlocks automated recovery.",
-        "Limit new process creation when memory exceeds 50\u202fGB or disk usage exceeds 90\u202f% to prevent further stalls.",
-        "Commit all test\u2011fix changes to a separate 'selftest-fix' branch and trigger a full hive self\u2011test suite after each commit."
-      ]
-    },
     {
       "id": "sess_bde56db1",
       "ts": "2026-05-11T16:47:25Z",
@@ -839,6 +820,26 @@
         "Introduce exponential backoff for both self\u2011test checks and session restarts to prevent cascading overload",
         "Limit job renicing to a maximum of 2 levels and log any further attempts for manual review"
       ]
+    },
+    {
+      "id": "sess_62ec0f37",
+      "ts": "2026-05-11T19:03:42Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and stabilizing resource usage",
+      "summary": "The hive is stalled at 50% health due to multiple failing self-tests (TS18, TS19, TS21) and high resource pressure. Recent attempts to auto-fix have been insufficient, and a critical session is in backoff. Immediate code changes are needed to implement fallback cleanup and improve load management.",
+      "progress": "Implemented a basic retry wrapper for ts18_check() but it did not resolve the underlying failure.",
+      "next_steps": [
+        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py that deletes temporary files and resets state on failure",
+        "Implement detailed logging and alert in ts19_check() in self_tests/ts1/ts19_check.py to capture error context",
+        "Refactor ts21_check() in self_tests/ts1/ts21_check.py to include a secondary validation path when primary check fails",
+        "Update utils/load_manager.py: lower process priority threshold to 0.15 and add proactive memory cleanup hook",
+        "Create unit tests in tests/self_tests/test_ts18_cleanup.py covering the new fallback logic and resource cleanup"
+      ],
+      "decisions": [
+        "Prioritize fixing TS18 with a fallback before addressing TS19 and TS21",
+        "Reduce load_manager renice threshold to preemptively avoid high memory usage",
+        "Add comprehensive logging to self-tests to aid future auto-fix mechanisms"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -850,9 +851,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "self-test: running test_system.sh + auto-fix",
-    "status": "running",
-    "started_at": "2026-05-11T19:02:20Z",
-    "completed_at": null
+    "task": "compaction: LLM summarising hive state",
+    "status": "completed",
+    "started_at": "2026-05-11T19:03:22Z",
+    "completed_at": "2026-05-11T19:03:42Z"
   }
 }
