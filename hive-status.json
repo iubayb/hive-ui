@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T07:58:46Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-11T07:59:47Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -26,32 +26,6 @@
   },
   "achievements": [],
   "blockers": [
-    {
-      "id": "b_676403b9",
-      "ts": "2026-05-11T07:58:30Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux session has entered an error state with six recorded errors; recent logs show rapid spawning of large GitHub RAG analyses, which can exhaust resources and cause the session to fail.",
-      "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "6fc7305423acde4b212a9b5d85f5547a"
-    },
-    {
-      "id": "b_c2cc30b6",
-      "ts": "2026-05-11T07:58:23Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The session entered an error state after processing several large GitHub repositories, accumulating six errors and no recent output; likely a resource\u2011exhaustion or hung subprocess within the hive's analysis pipeline.",
-      "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "66a039713711fd91a4bb95a0eb38704a"
-    },
     {
       "id": "b_e05b0aed",
       "ts": "2026-05-11T06:57:30Z",
@@ -168,6 +142,32 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "82ed62237b8e342301c173b1539d754e"
+    },
+    {
+      "id": "b_c2cc30b6",
+      "ts": "2026-05-11T07:58:23Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The session entered an error state after processing several large GitHub repositories, accumulating six errors and no recent output; likely a resource\u2011exhaustion or hung subprocess within the hive's analysis pipeline.",
+      "severity": "medium",
+      "status": "resolved",
+      "resolved_at": "2026-05-11T07:59:17Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "66a039713711fd91a4bb95a0eb38704a"
+    },
+    {
+      "id": "b_676403b9",
+      "ts": "2026-05-11T07:58:30Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The tmux session has entered an error state with six recorded errors; recent logs show rapid spawning of large GitHub RAG analyses, which can exhaust resources and cause the session to fail.",
+      "severity": "medium",
+      "status": "resolved",
+      "resolved_at": "2026-05-11T07:59:16Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "6fc7305423acde4b212a9b5d85f5547a"
     },
     {
       "id": "b_e8a59a57",
@@ -340,7 +340,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 8
+    "openrouter_calls_today": 9
   },
   "model_champions": {
     "text": null,
@@ -438,6 +438,26 @@
         "Introduce explicit memory thresholds in load_manager to trigger process renicing",
         "Expose self-test results via an API for easier monitoring and alerting"
       ]
+    },
+    {
+      "id": "sess_87d8600f",
+      "ts": "2026-05-11T07:59:06Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by fixing self-test failures, improving resource monitoring, and resolving session errors",
+      "summary": "The hive is currently stalled with high memory usage and several self-test failures (TS19, TS21). Open blockers include tmux session errors in ps5-hive and resource exhaustion. No recent achievements were recorded.",
+      "progress": "Implemented preliminary cleanup routine placeholder in ts18_check() but not yet functional.",
+      "next_steps": [
+        "Add fallback cleanup logic to ts18_check() in self_tests/ts1/ts18_check.py to handle missing resources and reset state",
+        "Fix TS19 failure by updating validate_config() in self_tests/ts19.py to handle edge-case config files",
+        "Improve TS21 auto-fix in self_tests/ts21.py by adding additional checks and a retry loop",
+        "Update utils/load_manager.py to lower process priority when mem>50GB and add alert logging when disk>90%",
+        "Patch ps5-hive tmux session script in sessions/ps5_hive_tmux.sh to catch and restart on error codes"
+      ],
+      "decisions": [
+        "Prioritize self-test fixes (TS19, TS21) before broader resource throttling",
+        "Implement explicit fallback cleanup in ts18_check() as a safety net for future test failures",
+        "Add logging and auto-restart for tmux sessions to prevent long\u2011term stalls"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -449,9 +469,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-11T07:58:46Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-11T07:59:16Z",
+    "completed_at": "2026-05-11T07:59:17Z"
   }
 }
