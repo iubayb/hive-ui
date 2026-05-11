@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T21:47:00Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-11T21:47:52Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
@@ -654,7 +654,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 79
+    "openrouter_calls_today": 80
   },
   "model_champions": {
     "text": null,
@@ -663,26 +663,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_190454ad",
-      "ts": "2026-05-11T19:18:53Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by fixing failing self-tests, stabilizing the ps5-hive session, and improving resource monitoring.",
-      "summary": "The hive is stalled with multiple high\u2011severity self\u2011test failures (TS18, TS19, TS21) and a critical ps5-hive session in long backoff. System load is high and disk usage is near capacity, prompting renicing of jobs. No recent successes have been recorded.",
-      "progress": "No new fixes were applied since the last snapshot.",
-      "next_steps": [
-        "Implement fallback cleanup in ts18_check() within self_tests/ts1/ts18_check.py and ensure it returns a success flag.",
-        "Add a retry wrapper to ts19_check() in self_tests/ts1/ts19_check.py that attempts the original check up to 3 times before marking failure.",
-        "Create a new function fallback_cleanup_ts21() in self_tests/ts1/ts21_check.py and call it from ts21_check() when the primary validation fails.",
-        "Update utils/load_manager.py: add a dynamic throttling mechanism that reduces process priority when mem>50GB or disk>90% and logs the adjustment.",
-        "Add a watchdog in orchestrator.py: monitor ps5-hive session state and automatically invoke tmux_session_restart('ps5-hive') after 3 consecutive backoff intervals."
-      ],
-      "decisions": [
-        "Use fallback cleanup routines as the primary mitigation for TS18 and TS21 failures.",
-        "Introduce retry logic for TS19 to handle transient errors before escalating.",
-        "Implement automated session restart for ps5-hive to reduce manual intervention."
-      ]
-    },
     {
       "id": "sess_69057c85",
       "ts": "2026-05-11T19:34:41Z",
@@ -862,6 +842,26 @@
         "Use exponential backoff for load manager adjustments to prevent repeated aggressive renicing",
         "Expose self-test statuses via an API endpoint to aid external monitoring and alerting"
       ]
+    },
+    {
+      "id": "sess_95a4e59b",
+      "ts": "2026-05-11T21:47:42Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self-tests and stabilizing high-load resources",
+      "summary": "The hive is stalled with multiple high-priority self-test failures (TS18, TS19, TS21) and a critical resource overload (54.5\u202fGB RAM, 93% disk). Session ps5-hive is in prolonged backoff, indicating systemic instability. Immediate code fixes and monitoring improvements are needed to clear the failures and prevent future stalls.",
+      "progress": "Implemented tmux_session_restart capability for automated session recovery.",
+      "next_steps": [
+        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py to ensure resources are released on failure",
+        "Implement missing validation and error handling in ts19_check() in self_tests/ts1/ts19_check.py to allow auto-fix to succeed",
+        "Create detailed retry logic in ts21_check() in self_tests/ts1/ts21_check.py with exponential backoff and logging",
+        "Update utils/load_manager.py to lower process priority for non\u2011critical jobs and add alert when RAM > 50\u202fGB or disk > 90%",
+        "Write unit tests for the new fallback and retry logic in tests/self_tests/test_ts18_ts19_ts21.py"
+      ],
+      "decisions": [
+        "Prioritize fixing self-test TS18 before addressing TS19 and TS21, as it blocks subsequent checks",
+        "Introduce explicit resource alerts in load_manager to trigger automated job throttling",
+        "Deploy new unit tests to CI pipeline to catch future self-test regressions early"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -873,9 +873,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
-    "status": "completed",
-    "started_at": "2026-05-11T21:46:30Z",
-    "completed_at": "2026-05-11T21:46:30Z"
+    "task": "self-test: running test_system.sh + auto-fix",
+    "status": "running",
+    "started_at": "2026-05-11T21:47:52Z",
+    "completed_at": null
   }
 }
