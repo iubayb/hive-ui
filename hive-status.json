@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T10:00:01Z",
+  "last_updated": "2026-05-11T10:01:01Z",
   "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 0.875,
-      "last_seen": "2026-05-11T09:59:56Z",
+      "status": "stalled",
+      "health_score": 0.55,
+      "last_seen": "2026-05-11T10:00:51Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -142,6 +142,19 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "82ed62237b8e342301c173b1539d754e"
+    },
+    {
+      "id": "b_17fcfe27",
+      "ts": "2026-05-11T10:00:07Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive is stuck in an error state; heartbeat shows no progress (pending tasks remain, no new completions) and error count has risen to 6, indicating a likely deadlocked or crashed worker.",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-11T10:00:07Z",
+      "resolution": "Auto-applied: tmux send-keys -t ps5-hive:0 C-c \"hive reset --session ps5-hive && hive start --session ps5-hive\" Enter",
+      "github_issue": null,
+      "_hash": "60dd8d7d73e52ad75696748e2f73a855"
     },
     {
       "id": "b_026f464c",
@@ -386,6 +399,13 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_4311d3df",
+        "ts": "2026-05-11T10:00:07Z",
+        "hive": "default",
+        "summary": "A stalled hive with accumulated errors is reset and restarted to restore normal operation.",
+        "source": "doctor"
+      },
+      {
         "id": "f_592adb62",
         "ts": "2026-05-11T09:59:53Z",
         "hive": "default",
@@ -473,6 +493,14 @@
     "patterns": [],
     "solutions": [
       {
+        "id": "sol_1519930a",
+        "ts": "2026-05-11T10:00:07Z",
+        "problem": "The hive is stuck in an error state; heartbeat shows no progress (pending tasks remain, no new completions) and error count has risen to 6, indicating a likely deadlocked or crashed worker.",
+        "solution": "tmux send-keys -t ps5-hive:0 C-c \"hive reset --session ps5-hive && hive start --session ps5-hive\" Enter",
+        "hive": "default",
+        "verified": true
+      },
+      {
         "id": "sol_9240a9d4",
         "ts": "2026-05-11T09:29:56Z",
         "problem": "The session is stuck in an error state after a repeated failure; the heartbeat shows tasks are still pending and the last line indicates a manual interrupt (Ctrl\u2011C) was issued, likely leaving the process halted.",
@@ -496,7 +524,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 24
+    "openrouter_calls_today": 25
   },
   "model_champions": {
     "text": null,
@@ -715,9 +743,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T09:59:59Z",
-    "completed_at": "2026-05-11T10:00:01Z"
+    "started_at": "2026-05-11T10:01:01Z",
+    "completed_at": "2026-05-11T10:01:01Z"
   }
 }
