@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T20:18:43Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-11T20:20:02Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-11T20:17:42Z",
+      "last_seen": "2026-05-11T20:19:45Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -632,7 +632,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 71
+    "openrouter_calls_today": 72
   },
   "model_champions": {
     "text": null,
@@ -641,26 +641,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_0f58ab24",
-      "ts": "2026-05-11T17:47:59Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests and stabilizing high-load resources",
-      "summary": "The hive is stalled at 50% health with several critical self-test failures (TS18, TS19, TS21) and a high-load situation causing process renicing. Session 'ps5-hive' is in prolonged backoff, and resource usage is near capacity. Immediate code fixes are needed to bring the self-tests back to green and improve load management.",
-      "progress": "No recent achievements have been recorded since the last health check.",
-      "next_steps": [
-        "Implement a fallback cleanup routine in ts18_check() inside self_tests/ts1/ts18_check.py to ensure resources are released on failure",
-        "Add detailed error handling and auto-repair logic to ts19_check() in self_tests/ts1/ts19_check.py",
-        "Create a retry wrapper for ts21_check() in self_tests/ts1/ts21_check.py that logs diagnostics and attempts recovery up to three times",
-        "Update utils/load_manager.py to add dynamic throttling based on memory pressure and to lower process priority when disk usage exceeds 90%",
-        "Add exponential backoff and retry logic to the ps5-hive session restart function in orchestrator.py when HTTP 429 or connection errors occur"
-      ],
-      "decisions": [
-        "Prioritize fixing TS18 before TS19 and TS21 to unblock dependent cleanup steps",
-        "Apply load manager throttling changes immediately to prevent further resource exhaustion",
-        "Implement robust retry mechanisms for both self-test checks and session restarts to reduce manual intervention"
-      ]
-    },
     {
       "id": "sess_e6a33eb6",
       "ts": "2026-05-11T18:03:51Z",
@@ -840,6 +820,26 @@
         "Introduce automatic session restart for any session entering backoff > 120\u202fs",
         "Log detailed resource usage per job to aid future scaling decisions"
       ]
+    },
+    {
+      "id": "sess_aa020f91",
+      "ts": "2026-05-11T20:20:02Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore hive health by fixing failing self-tests and stabilizing high-load resources",
+      "summary": "The hive is stalled at 50% health with multiple critical self-test failures (TS18, TS19, TS21) and a high memory/disk usage situation. Recent attempts to auto-fix have been insufficient, and a key session is in backoff. Immediate code changes are needed to implement fallback cleanup and improve load monitoring.",
+      "progress": "Implemented a basic retry wrapper for ts21_check(), but it did not resolve the failure.",
+      "next_steps": [
+        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py to delete temporary files and reset state on failure",
+        "Write comprehensive unit tests for ts18_check() covering both success and fallback paths in tests/self_tests/test_ts18.py",
+        "Refactor utils/load_manager.py: lower process priority for non-critical jobs and add hysteresis thresholds for memory >80% and disk >90%",
+        "Create a new function log_resource_pressure() in utils/monitoring.py and call it from load_manager when thresholds are crossed",
+        "Add a health check endpoint /api/health in hive-ui/api.py that returns JSON with self-test status and resource metrics"
+      ],
+      "decisions": [
+        "Prioritize fixing TS18 with a cleanup fallback before addressing TS19 and TS21",
+        "Adjust load manager thresholds to preemptively renice jobs when memory exceeds 75% or disk exceeds 85%",
+        "Expose internal health metrics via a new API endpoint for external monitoring"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -851,9 +851,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "self-test: running test_system.sh + auto-fix",
-    "status": "running",
-    "started_at": "2026-05-11T20:18:43Z",
-    "completed_at": null
+    "task": "compaction: LLM summarising hive state",
+    "status": "completed",
+    "started_at": "2026-05-11T20:19:45Z",
+    "completed_at": "2026-05-11T20:20:02Z"
   }
 }
