@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T18:02:11Z",
+  "last_updated": "2026-05-11T18:03:52Z",
   "updated_by": "agent",
   "hives": {
     "default": {
@@ -631,7 +631,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 62
+    "openrouter_calls_today": 63
   },
   "model_champions": {
     "text": null,
@@ -640,26 +640,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_05e77936",
-      "ts": "2026-05-11T15:31:42Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by fixing failing self-tests, stabilizing the ps5-hive session, and improving resource monitoring.",
-      "summary": "The hive is experiencing multiple high-priority blockers: several self-test modules (TS18, TS19, TS21) are failing, the ps5-hive session is stuck in long backoff, and system resources are near capacity. Recent attempts to auto-fix self-tests have not succeeded, and no new achievements have been recorded.",
-      "progress": "Implemented a basic retry wrapper for ts18_check() but the fallback cleanup routine remains incomplete.",
-      "next_steps": [
-        "Complete fallback cleanup routine in ts18_check() within self_tests/ts1/ts18_check.py.",
-        "Add detailed error handling and auto-recovery in ts19_check() in self_tests/ts1/ts19_check.py.",
-        "Implement a diagnostic reset function for ps5-hive in sessions/ps5_hive_manager.py to break long backoff loops.",
-        "Refactor utils/load_manager.py to dynamically lower process priority when mem>50GB or disk>90% and log actions.",
-        "Create /api/health endpoint in api/monitor.py that returns JSON status of all self-tests and session backoff states."
-      ],
-      "decisions": [
-        "Prioritize fixing TS18 before TS19 and TS21 to unblock dependent tests.",
-        "Introduce automated session reset for any session entering >120s backoff.",
-        "Enhance load_manager to proactively throttle processes rather than solely renice after overload."
-      ]
-    },
     {
       "id": "sess_d71b3617",
       "ts": "2026-05-11T15:46:43Z",
@@ -839,6 +819,26 @@
         "Apply load manager throttling changes immediately to prevent further resource exhaustion",
         "Implement robust retry mechanisms for both self-test checks and session restarts to reduce manual intervention"
       ]
+    },
+    {
+      "id": "sess_e6a33eb6",
+      "ts": "2026-05-11T18:03:51Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests, stabilizing the ps5-hive session, and improving resource monitoring",
+      "summary": "The hive is running but several high\u2011severity blockers remain: the ps5-hive session is in prolonged backoff, load is high, and self\u2011tests TS18, TS19, and TS21 are failing. No recent achievements have been logged, and only two pending next steps are identified. Immediate concrete code changes are needed to address these issues.",
+      "progress": "No new fixes were applied since the last snapshot.",
+      "next_steps": [
+        "Implement a fallback cleanup routine in ts18_check() within self_tests/ts1/ts18_check.py to ensure resources are released on failure",
+        "Add retry and exponential backoff logic to orchestrator.py's restart_session() for the 'ps5-hive' session when backoff exceeds 120 seconds",
+        "Update utils/load_manager.py: lower the process renice threshold from 0.2 to 0.1 and add a hysteresis band to prevent thrashing under high memory pressure",
+        "Write unit tests for self_tests/ts19_check.py covering both pass and fail paths, and integrate them into the CI pipeline",
+        "Create a new endpoint /api/health in logstream.py that returns JSON with self\u2011test statuses and current resource metrics for external monitoring"
+      ],
+      "decisions": [
+        "Prioritize implementing the fallback in ts18_check before tackling TS19 and TS21 failures",
+        "Introduce automatic session restart with backoff handling for ps5-hive to reduce manual intervention",
+        "Adjust load manager thresholds now to mitigate current high memory usage while longer\u2011term optimizations are planned"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -851,8 +851,8 @@
   "active_task": {
     "agent": "orchestrator",
     "task": "compaction: LLM summarising hive state",
-    "status": "running",
+    "status": "completed",
     "started_at": "2026-05-11T18:02:11Z",
-    "completed_at": null
+    "completed_at": "2026-05-11T18:03:52Z"
   }
 }
