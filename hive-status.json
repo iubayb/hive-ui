@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T01:11:54Z",
+  "last_updated": "2026-05-11T01:12:39Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -760,7 +760,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 53
+    "openrouter_calls_today": 54
   },
   "model_champions": {
     "text": null,
@@ -769,26 +769,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_2c58238e",
-      "ts": "2026-05-10T22:41:28Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by resolving critical self-test failures and tmux session errors",
-      "summary": "The hive is currently operating at high load with two critical self-test failures (TS21 and TS19) and multiple tmux sessions stuck in error states. No recent achievements have been recorded, but the tmux-recover capability is now available. Immediate code fixes and health monitoring enhancements are required to stabilize the system.",
-      "progress": "No new fixes have been completed since the last snapshot.",
-      "next_steps": [
-        "Implement fallback handling in ts21_repair.py within orchestrator/self_fix/ to handle unexpected exceptions during TS21 auto-fix",
-        "Add detailed logging and retry logic to ts19_repair.py in orchestrator/self_fix/ to attempt alternative remediation steps for TS19 failures",
-        "Create a health_check_wrapper() function in health_monitor.py that wraps each self-test and returns a standardized status object",
-        "Integrate the new health_check_wrapper into the main self-test runner in self_test_manager.py to auto\u2011restart failing tests",
-        "Write unit tests for ts21_repair.py and ts19_repair.py covering success, fallback, and failure paths"
-      ],
-      "decisions": [
-        "Prioritize fixing TS21 and TS19 self-test failures before addressing lower\u2011priority tmux errors",
-        "Adopt a wrapper\u2011based health check approach to standardize error handling across all self\u2011tests",
-        "Leverage the newly learned tmux-recover capability only after core self\u2011test stability is achieved"
-      ]
-    },
     {
       "id": "sess_4d3f0b8a",
       "ts": "2026-05-10T22:56:43Z",
@@ -968,6 +948,26 @@
         "Adopt exponential backoff for all external LLM calls to reduce throttling impact.",
         "Postpone non\u2011critical feature development until the hive health metric returns to 'green'."
       ]
+    },
+    {
+      "id": "sess_fb17381c",
+      "ts": "2026-05-11T01:12:29Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing self-test failures and improving resilience of monitoring scripts",
+      "summary": "The hive is experiencing multiple high-priority blockers, notably failing self-tests TS21 and TS19, and a tmux session error in ps5-hive. No recent achievements have been recorded, but the tmux-recover capability is now available.",
+      "progress": "Implemented a fallback handler stub in ts21_repair.py but it has not been integrated or tested.",
+      "next_steps": [
+        "Complete fallback handling in ts21_repair.py: add error handling, retry logic, and state rollback for TS21 failures",
+        "Implement a health check wrapper in health_monitor.py: create function check_self_test(name) that runs the test and triggers auto-fix or fallback",
+        "Add unit tests for ts21_repair.py covering success, retry, and fallback paths in tests/test_ts21_repair.py",
+        "Integrate TS19 auto-fix by creating ts19_repair.py with similar fallback logic and import it into orchestrator/self_fix/__init__.py",
+        "Update orchestrator.py to invoke health_monitor.check_self_test for TS21 and TS19 during each heartbeat cycle"
+      ],
+      "decisions": [
+        "Prioritize fixing self-test failures over tmux session errors, as they block core functionality",
+        "Use a unified health_monitor wrapper to standardize test execution and auto-repair across all self-tests",
+        "Add comprehensive unit tests before deploying any auto-fix changes to ensure no regression"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -981,7 +981,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T01:11:24Z",
-    "completed_at": "2026-05-11T01:11:24Z"
+    "started_at": "2026-05-11T01:12:39Z",
+    "completed_at": "2026-05-11T01:12:39Z"
   }
 }
