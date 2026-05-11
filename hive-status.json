@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T04:14:45Z",
+  "last_updated": "2026-05-11T04:15:45Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 0.875,
-      "last_seen": "2026-05-11T04:13:48Z",
+      "status": "stalled",
+      "health_score": 0.5,
+      "last_seen": "2026-05-11T04:15:05Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -26,32 +26,6 @@
   },
   "achievements": [],
   "blockers": [
-    {
-      "id": "b_e7b10d22",
-      "ts": "2026-05-11T04:13:56Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive is stuck with only one running task and no progress for several minutes, indicating a hung or deadlocked process.",
-      "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "e9350d1062be1053f56e2f8f630fcad7"
-    },
-    {
-      "id": "b_fe8eb1c1",
-      "ts": "2026-05-11T04:13:53Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux session is stuck in an error state with no progress (heartbeat unchanged, running tasks stagnant) indicating a hung process in the primary window.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "cb678552032dadbbaedfb6392f09f769"
-    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -1128,7 +1102,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T04:14:24Z",
-    "completed_at": "2026-05-11T04:14:25Z"
+    "started_at": "2026-05-11T04:15:25Z",
+    "completed_at": "2026-05-11T04:15:25Z"
   }
 }
