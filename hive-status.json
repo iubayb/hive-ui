@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T01:57:29Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-11T01:58:42Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.55,
-      "last_seen": "2026-05-11T01:56:18Z",
+      "last_seen": "2026-05-11T01:58:22Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -762,7 +762,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 58
+    "openrouter_calls_today": 59
   },
   "model_champions": {
     "text": null,
@@ -771,26 +771,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_c8910a48",
-      "ts": "2026-05-10T23:26:48Z",
-      "updated_by": "orchestrator",
-      "goal": "Repair failing self-test modules (TS17\u2011TS21) and restore full hive health",
-      "summary": "The hive is currently stalled at 55% health due to multiple high\u2011priority self\u2011test failures (TS17\u2011TS21). Auto\u2011fix attempts have been insufficient, and the system is under high load with limited memory headroom. Immediate code fixes and health\u2011check enhancements are required to bring the hive back to stable operation.",
-      "progress": "Added renicing of jobs to lower core usage and initiated auto\u2011fix for TS21.",
-      "next_steps": [
-        "Implement fallback handling in ts21_repair.py: add try/except block and alternative repair path for TS21 failures",
-        "Add missing repair logic for TS19 in ts19_repair.py: detect error codes and invoke corrective script",
-        "Create full repair implementation for TS18 in ts18_repair.py with detailed logging and state rollback",
-        "Develop health check wrapper in health_monitor.py that calls each self\u2011test module and reports pass/fail in JSON",
-        "Write unit tests for ts17_repair.py, ts18_repair.py, ts19_repair.py, ts20_repair.py, and ts21_repair.py covering success and failure scenarios"
-      ],
-      "decisions": [
-        "Prioritize concrete repair implementations over further auto\u2011fix attempts for TS17\u2011TS21",
-        "Integrate health_monitor wrapper into the main orchestrator loop to abort processing when any self\u2011test fails",
-        "Allocate additional memory buffer by reducing log retention size to mitigate high memory usage"
-      ]
-    },
     {
       "id": "sess_69ec747a",
       "ts": "2026-05-10T23:41:57Z",
@@ -970,6 +950,26 @@
         "Standardize health monitoring via a single wrapper to simplify future test additions",
         "Introduce unit test coverage for self\u2011repair modules to prevent silent regressions"
       ]
+    },
+    {
+      "id": "sess_c8e85c50",
+      "ts": "2026-05-11T01:58:01Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self-tests and improving health monitoring",
+      "summary": "The hive is currently stalled with multiple critical self-test failures (TS17\u2011TS21) and high resource usage. Auto\u2011fix attempts have not resolved the issues, and health monitoring lacks robust fallback handling. Immediate code changes are required to add fallback logic, enhance health checks, and reduce load impact.",
+      "progress": "Auto\u2011fix routines were attempted for TS21\u2011TS17 but were insufficient, exposing gaps in fallback handling and health monitoring.",
+      "next_steps": [
+        "Add fallback handling to ts21_repair.py in orchestrator/self_fix/ to safely reset core state when repair fails",
+        "Implement a health check wrapper in health_monitor.py that retries failed checks and logs detailed diagnostics",
+        "Create a load throttling decorator in utils/load_manager.py to limit memory usage when core load exceeds 0.1",
+        "Write unit tests for TS17\u2011TS21 self\u2011test functions in tests/self_test_suite.py covering success, failure, and fallback paths",
+        "Add a new endpoint /api/health in api_server.py that returns JSON with current self\u2011test statuses and resource metrics"
+      ],
+      "decisions": [
+        "Prioritize fixing self\u2011test failures before addressing lower\u2011priority performance tweaks",
+        "Introduce automatic retry/fallback mechanisms for self\u2011test repairs to reduce manual intervention",
+        "Expose health metrics via an API endpoint to enable external monitoring dashboards"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -981,9 +981,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-11T01:57:29Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-11T01:58:32Z",
+    "completed_at": "2026-05-11T01:58:32Z"
   }
 }
