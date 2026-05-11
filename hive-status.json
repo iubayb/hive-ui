@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T16:31:44Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-11T16:32:37Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -631,7 +631,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 56
+    "openrouter_calls_today": 57
   },
   "model_champions": {
     "text": null,
@@ -640,26 +640,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_54967640",
-      "ts": "2026-05-11T14:01:30Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests and stabilizing resource usage",
-      "summary": "The hive is currently stalled with multiple high\u2011severity self\u2011test failures (TS18, TS19, TS21) and elevated resource pressure. A session (ps5-hive) is in long back\u2011off, and load manager settings are causing high memory usage. No recent achievements have been recorded.",
-      "progress": "Implemented a fallback cleanup routine stub for ts18_check() in self_tests/ts1.",
-      "next_steps": [
-        "Complete fallback cleanup logic in ts18_check() in self_tests/ts1/ts18_check.py and add unit tests.",
-        "Implement missing fix for TS19 in self_tests/ts1/ts19_check.py, including error handling and logging.",
-        "Add corrective actions for TS21 in self_tests/ts1/ts21_check.py and create regression tests.",
-        "Update utils/load_manager.py to dynamically lower process priority when mem>80% and add alerts when disk>90%.",
-        "Add exponential backoff and retry logic to restart_session() in orchestrator.py for the 'ps5-hive' session when backoff exceeds 120s."
-      ],
-      "decisions": [
-        "Prioritize fixing TS18, TS19, and TS21 before addressing load manager tweaks.",
-        "Introduce automated unit test generation for all self\u2011test modules after code fixes.",
-        "Raise alert severity for resource thresholds to trigger proactive scaling."
-      ]
-    },
     {
       "id": "sess_d6e79df3",
       "ts": "2026-05-11T14:16:16Z",
@@ -839,6 +819,26 @@
         "Introduce automated retries for self\u2011test checks to reduce manual intervention",
         "Enhance load manager to automatically renice processes based on real\u2011time memory and disk usage thresholds"
       ]
+    },
+    {
+      "id": "sess_fa901ed0",
+      "ts": "2026-05-11T16:32:27Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self-tests and stabilizing resource usage",
+      "summary": "The hive is currently stalled with several high\u2011priority self\u2011test failures (TS18, TS19, TS21) and a critical session in backoff. Resource pressure is high, with memory at 54.5\u202fGB and disk at 93%, prompting renicing of jobs. Recent work added a tmux session restart capability but no test fixes have succeeded yet.",
+      "progress": "Implemented a tmux_session_restart capability for automated session recovery.",
+      "next_steps": [
+        "Add robust fallback cleanup in ts18_check() in self_tests/ts1/ts18_check.py to handle partial failures and ensure resource release",
+        "Implement missing fix for TS19 in self_tests/ts1/ts19_check.py, adding proper exception handling and state reset",
+        "Create a corrective routine for TS21 in self_tests/ts1/ts21_check.py that validates and repairs corrupted test artifacts",
+        "Enhance utils/load_manager.py: add dynamic throttling logic to lower process spawn rate when mem>50GB or disk>90%",
+        "Write unit tests for the new fallback cleanup in ts18_check() and for the throttling logic in load_manager.py"
+      ],
+      "decisions": [
+        "Prioritize self\u2011test fixes before addressing session backoff, as passing tests unlocks automated recovery.",
+        "Limit new process creation when memory exceeds 50\u202fGB or disk usage exceeds 90\u202f% to prevent further stalls.",
+        "Commit all test\u2011fix changes to a separate 'selftest-fix' branch and trigger a full hive self\u2011test suite after each commit."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -850,9 +850,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-11T16:31:44Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-11T16:32:37Z",
+    "completed_at": "2026-05-11T16:32:37Z"
   }
 }
