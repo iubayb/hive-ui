@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T20:48:37Z",
+  "last_updated": "2026-05-11T20:50:44Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-11T20:47:07Z",
+      "last_seen": "2026-05-11T20:49:07Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -632,7 +632,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 73
+    "openrouter_calls_today": 74
   },
   "model_champions": {
     "text": null,
@@ -641,26 +641,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_91671894",
-      "ts": "2026-05-11T18:17:55Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving failing self-tests and resource overloads",
-      "summary": "The hive is currently stalled with multiple high-priority blockers, including failing self-tests TS18, TS19, and TS21, and a heavily loaded system. Recent attempts to auto-fix have been insufficient, and the ps5-hive session is in long backoff. Immediate code changes are needed to improve test robustness and resource management.",
-      "progress": "Implemented a temporary fallback cleanup routine for ts18_check() but it did not fully resolve the failure.",
-      "next_steps": [
-        "Complete the fallback cleanup routine in ts18_check() within self_tests/ts1/ts18.py to ensure proper resource release on error",
-        "Add explicit error handling and retry logic to ts19_check() in self_tests/ts1/ts19.py, including logging of failure reasons",
-        "Create a new diagnostic wrapper in self_tests/ts1/ts21.py that captures system state before the test and restores it on failure",
-        "Refactor utils/load_manager.py to lower the process priority of non-critical jobs and add a configurable CPU/memory threshold alert",
-        "Implement exponential backoff with jitter in orchestrator.py for the ps5-hive session restart logic"
-      ],
-      "decisions": [
-        "Prioritize fixing self-test failures before scaling new workloads",
-        "Adopt a configurable threshold system for load_manager to auto\u2011renice processes when disk usage exceeds 90%",
-        "Introduce per\u2011session restart backoff policies to prevent endless rapid restarts"
-      ]
-    },
     {
       "id": "sess_ce3fd53b",
       "ts": "2026-05-11T18:32:47Z",
@@ -840,6 +820,26 @@
         "Introduce automatic alerting for resource thresholds to prevent future job renicing.",
         "Implement a manual intervention flag for sessions that exceed 250 backoff attempts."
       ]
+    },
+    {
+      "id": "sess_25c54ab9",
+      "ts": "2026-05-11T20:50:34Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by fixing failing self-tests and reducing resource pressure",
+      "summary": "The hive is currently stalled with high memory usage and multiple critical self-test failures (TS18, TS19, TS21). Recent attempts to auto-fix have not succeeded, and one session is in a long backoff loop. Immediate code changes are required to add fallback cleanup, improve resource monitoring, and enhance test robustness.",
+      "progress": "Implemented a retry wrapper for ts21_check() in self_tests/ts21 to mitigate transient failures.",
+      "next_steps": [
+        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py that deletes temporary files and resets state on failure",
+        "Implement a retry and exponential backoff mechanism in ts19_check() in self_tests/ts1/ts19_check.py for database connection errors",
+        "Update utils/load_manager.py to lower process priority when mem>80% and add alert logging when disk>90%",
+        "Create unit tests in tests/self_tests/test_ts18.py covering normal and failure paths for ts18_check()",
+        "Add a watchdog thread in orchestrator.py that restarts any session in backoff >200s after logging diagnostic info"
+      ],
+      "decisions": [
+        "Prioritize fixing TS18 and TS19 before addressing TS21 further",
+        "Introduce exponential backoff for self-test retries to avoid rapid restarts",
+        "Enforce stricter resource thresholds in load_manager to prevent future stalls"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -851,9 +851,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-11T20:48:07Z",
-    "completed_at": "2026-05-11T20:48:07Z"
+    "started_at": "2026-05-11T20:50:11Z",
+    "completed_at": "2026-05-11T20:50:34Z"
   }
 }
