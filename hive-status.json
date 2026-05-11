@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T01:10:54Z",
+  "last_updated": "2026-05-11T01:11:54Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.55,
-      "last_seen": "2026-05-11T01:09:11Z",
+      "status": "running",
+      "health_score": 0.875,
+      "last_seen": "2026-05-11T01:11:38Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -19,13 +19,39 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 10,
+      "errors_last_hour": 9,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_7d64e280",
+      "ts": "2026-05-11T01:11:50Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The tmux session is in an error state with repeated heartbeats but no progress; likely a hung worker window is blocking task execution.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "4f20521d4f53d504960ef4487d589475"
+    },
+    {
+      "id": "b_0672a755",
+      "ts": "2026-05-11T01:11:50Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The tmux session is in an error state with repeated heartbeats but no progress (silent for 1\u202fs, 8 errors), indicating the main window is likely hung or crashed.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "fd8f73381aaaf6641aa5afb9ae2453bc"
+    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -452,6 +478,27 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_ded92b93",
+        "ts": "2026-05-11T01:11:52Z",
+        "hive": "default",
+        "summary": "Session ps5-hive appears hung; recover by interrupting the faulty window, launching a recovery window, and killing the stalled one.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_2e6f2c82",
+        "ts": "2026-05-11T01:11:52Z",
+        "hive": "default",
+        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
+        "source": "hive-doctor-rollback"
+      },
+      {
+        "id": "f_44543f14",
+        "ts": "2026-05-11T01:11:50Z",
+        "hive": "default",
+        "summary": "Recover the hung ps5-hive tmux session by interrupting the faulty window, launching a recovery window, and removing the blocked window.",
+        "source": "doctor"
+      },
+      {
         "id": "f_5957358d",
         "ts": "2026-05-11T00:41:38Z",
         "hive": "default",
@@ -713,7 +760,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 51
+    "openrouter_calls_today": 53
   },
   "model_champions": {
     "text": null,
@@ -934,7 +981,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T01:10:23Z",
-    "completed_at": "2026-05-11T01:10:24Z"
+    "started_at": "2026-05-11T01:11:24Z",
+    "completed_at": "2026-05-11T01:11:24Z"
   }
 }
