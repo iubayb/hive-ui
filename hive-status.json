@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T22:47:47Z",
+  "last_updated": "2026-05-11T22:48:52Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-11T22:46:47Z",
+      "last_seen": "2026-05-11T22:48:52Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -654,7 +654,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 83
+    "openrouter_calls_today": 84
   },
   "model_champions": {
     "text": null,
@@ -663,26 +663,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_aa020f91",
-      "ts": "2026-05-11T20:20:02Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore hive health by fixing failing self-tests and stabilizing high-load resources",
-      "summary": "The hive is stalled at 50% health with multiple critical self-test failures (TS18, TS19, TS21) and a high memory/disk usage situation. Recent attempts to auto-fix have been insufficient, and a key session is in backoff. Immediate code changes are needed to implement fallback cleanup and improve load monitoring.",
-      "progress": "Implemented a basic retry wrapper for ts21_check(), but it did not resolve the failure.",
-      "next_steps": [
-        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py to delete temporary files and reset state on failure",
-        "Write comprehensive unit tests for ts18_check() covering both success and fallback paths in tests/self_tests/test_ts18.py",
-        "Refactor utils/load_manager.py: lower process priority for non-critical jobs and add hysteresis thresholds for memory >80% and disk >90%",
-        "Create a new function log_resource_pressure() in utils/monitoring.py and call it from load_manager when thresholds are crossed",
-        "Add a health check endpoint /api/health in hive-ui/api.py that returns JSON with self-test status and resource metrics"
-      ],
-      "decisions": [
-        "Prioritize fixing TS18 with a cleanup fallback before addressing TS19 and TS21",
-        "Adjust load manager thresholds to preemptively renice jobs when memory exceeds 75% or disk exceeds 85%",
-        "Expose internal health metrics via a new API endpoint for external monitoring"
-      ]
-    },
     {
       "id": "sess_bb9e6ec9",
       "ts": "2026-05-11T20:35:14Z",
@@ -862,6 +842,26 @@
         "Introduce automatic resource throttling in load_manager.py to prevent future high\u2011load stalls",
         "Deploy a monitoring hook in orchestrator.py to automatically restart sessions that enter long backoff"
       ]
+    },
+    {
+      "id": "sess_ff82cf28",
+      "ts": "2026-05-11T22:48:42Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self-tests and stabilizing resource management.",
+      "summary": "The hive is currently stalled at 50% health with multiple high\u2011priority blockers: several self\u2011tests (TS18, TS19, TS21) are failing, a critical session is in backoff, and system resources are under pressure. Recent attempts to auto\u2011fix TS21 were insufficient and no progress has been logged.",
+      "progress": "Implemented a fallback cleanup routine placeholder for ts18_check() but it has not yet been activated.",
+      "next_steps": [
+        "Complete the fallback cleanup routine in ts18_check() within self_tests/ts1/ts18.py and add error handling to ensure graceful recovery.",
+        "Add comprehensive unit tests for ts18_check() covering success, cleanup, and failure paths in tests/self_tests/test_ts18.py.",
+        "Implement a fix for TS19 by updating the validation logic in self_tests/ts19.py to handle the new edge\u2011case inputs.",
+        "Refactor utils/load_manager.py to dynamically adjust process renicing thresholds based on current CPU load and memory usage.",
+        "Create a health check endpoint in orchestrator.py (/api/health) that returns JSON status of all self\u2011tests and resource metrics."
+      ],
+      "decisions": [
+        "Prioritize completing TS18 fallback before addressing TS19 to unblock dependent components.",
+        "Introduce automated alerting for any self\u2011test that remains failing after three auto\u2011fix attempts.",
+        "Limit resource\u2011intensive jobs to 70% of total memory until disk usage drops below 85%."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -873,9 +873,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
+    "task": "self-test: running test_system.sh + auto-fix",
     "status": "running",
-    "started_at": "2026-05-11T22:47:47Z",
+    "started_at": "2026-05-11T22:48:52Z",
     "completed_at": null
   }
 }
