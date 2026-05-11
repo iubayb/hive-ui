@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T08:20:46Z",
+  "last_updated": "2026-05-11T08:21:46Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -489,9 +489,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=8 health=55% blockers=9",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T08:20:46Z",
-    "completed_at": "2026-05-11T08:20:46Z"
+    "started_at": "2026-05-11T08:21:36Z",
+    "completed_at": "2026-05-11T08:21:36Z"
   }
 }
