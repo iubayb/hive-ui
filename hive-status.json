@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T03:12:57Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-11T03:13:46Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 0.875,
-      "last_seen": "2026-05-11T03:12:57Z",
+      "status": "stalled",
+      "health_score": 0.45,
+      "last_seen": "2026-05-11T03:13:46Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -26,6 +26,32 @@
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_4eda81dc",
+      "ts": "2026-05-11T03:13:23Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The tmux session has entered an error state and is silent for >1\u202fs while background tasks are still pending; likely a hung process in the primary window is blocking heartbeats.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "d07616db3bb8d38ec9bcba7bef21b48c"
+    },
+    {
+      "id": "b_a562fa53",
+      "ts": "2026-05-11T03:13:16Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] Tmux session has entered error state (silent for >1\u202fs, multiple errors) likely due to a hung foreground process in the main window.",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "a4ac9c9fa8f67555096ee226376d67db"
+    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -452,6 +478,34 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_00487668",
+        "ts": "2026-05-11T03:13:25Z",
+        "hive": "default",
+        "summary": "Recover the hung primary window in session\u202fps5\u2011hive by interrupting it, launching a recovery window, and removing the faulty window.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_f71372d5",
+        "ts": "2026-05-11T03:13:25Z",
+        "hive": "default",
+        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
+        "source": "hive-doctor-rollback"
+      },
+      {
+        "id": "f_30a58794",
+        "ts": "2026-05-11T03:13:18Z",
+        "hive": "default",
+        "summary": "The ps5-hive tmux session is stalled; interrupting the hung process, spawning a recovery window, and cleaning up the faulty window should restore normal operation.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_4456278a",
+        "ts": "2026-05-11T03:13:18Z",
+        "hive": "default",
+        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
+        "source": "hive-doctor-rollback"
+      },
+      {
         "id": "f_566aca3d",
         "ts": "2026-05-11T02:43:07Z",
         "hive": "default",
@@ -811,7 +865,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 67
+    "openrouter_calls_today": 70
   },
   "model_champions": {
     "text": null,
@@ -820,26 +874,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_1d75f934",
-      "ts": "2026-05-11T00:42:15Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by fixing critical self-test failures and improving health monitoring",
-      "summary": "The hive is currently running with high resource usage and multiple critical blockers, including failing self-tests TS21 and TS19 and hung tmux sessions. No recent achievements have been recorded, but a tmux-recover capability has been learned. Immediate code changes are needed to add fallback handling and health check wrappers.",
-      "progress": "Implemented a tmux-recover capability to automatically restart hung tmux sessions.",
-      "next_steps": [
-        "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to handle cases where auto-fix is insufficient",
-        "Implement a health check wrapper in health_monitor.py that retries and logs failures for critical services",
-        "Create unit tests for ts21_repair.py covering both successful and fallback paths",
-        "Add a new function monitor_ts19() in self_test.py that detects TS19 failures and triggers a predefined remediation script",
-        "Update orchestrator.py to invoke the new health check wrapper before starting new jobs and log results to hive.log"
-      ],
-      "decisions": [
-        "Prioritize fixing TS21 and TS19 self-test failures before addressing lower priority blockers",
-        "Introduce automated fallback mechanisms rather than manual intervention for self-fix scripts",
-        "Integrate health monitoring directly into the orchestrator startup sequence to catch issues early"
-      ]
-    },
     {
       "id": "sess_e47861a9",
       "ts": "2026-05-11T00:57:34Z",
@@ -1019,6 +1053,26 @@
         "Implement a generic health check wrapper to centralize retry and reporting for all failing self\u2011tests",
         "Introduce automated unit testing for self\u2011repair modules to prevent regressions"
       ]
+    },
+    {
+      "id": "sess_0f6ab549",
+      "ts": "2026-05-11T03:13:36Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full self-test health checks (TS17\u2011TS21) and stabilize hive resource usage",
+      "summary": "The hive is currently running with high load and several self\u2011test failures (TS17\u2011TS21). Auto\u2011fix attempts have not resolved the issues, and resource usage is near limits. Immediate code\u2011level remediation is required to bring the health checks back online and add protective wrappers.",
+      "progress": "No recent successful fixes; auto\u2011fix attempts for TS21 were applied but did not resolve the failure.",
+      "next_steps": [
+        "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to gracefully handle missing dependencies and retry logic",
+        "Implement a health check wrapper in health_monitor.py (orchestrator/health_monitor.py) that catches exceptions from TS17\u2011TS21 and reports fallback status",
+        "Refactor TS18, TS19, and TS17 repair scripts to return explicit error codes and log detailed diagnostics in logs/repair.log",
+        "Add unit tests for ts21_repair.py, ts18_repair.py, and ts17_repair.py in tests/self_fix/ covering success, retry, and fallback paths",
+        "Introduce resource throttling in orchestrator/resource_manager.py to limit memory usage when disk >=90% and trigger graceful job renice"
+      ],
+      "decisions": [
+        "Prioritize implementing fallback logic for TS21 before tackling TS17\u2011TS19 to gain quick health check recovery",
+        "Enforce explicit error handling and logging in all self\u2011test repair modules",
+        "Add automated unit test coverage for self\u2011fix scripts to prevent future silent failures"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1030,9 +1084,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "heartbeat \u00b7 sessions=8 health=45% blockers=11",
     "status": "completed",
-    "started_at": "2026-05-11T03:12:02Z",
-    "completed_at": "2026-05-11T03:12:03Z"
+    "started_at": "2026-05-11T03:13:46Z",
+    "completed_at": "2026-05-11T03:13:46Z"
   }
 }
