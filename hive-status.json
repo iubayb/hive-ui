@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T09:13:53Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-11T09:15:02Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
@@ -419,7 +419,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 17
+    "openrouter_calls_today": 18
   },
   "model_champions": {
     "text": null,
@@ -428,16 +428,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_4162372b",
-      "ts": "2026-05-11T06:57:17Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_b3e1d13c",
       "ts": "2026-05-11T06:58:43Z",
@@ -617,6 +607,26 @@
         "Use a centralized cleanup helper in utils/cleanup.py for all self-test fallback routines",
         "Fail fast on disk pressure: abort new jobs if disk > 95% and trigger reduce_disk_usage"
       ]
+    },
+    {
+      "id": "sess_aec86307",
+      "ts": "2026-05-11T09:14:52Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self-tests and stabilizing resource monitoring",
+      "summary": "The hive is currently stalled with multiple high-priority self-test failures (TS17-TS21) and high resource usage. Automatic fixes have not resolved the issues, and the load manager needs adjustment to reduce process pressure. Immediate code changes are required to implement fallback cleanup and improve load monitoring.",
+      "progress": "Implemented a fallback cleanup routine placeholder in ts18_check() but it remains incomplete.",
+      "next_steps": [
+        "Complete fallback cleanup logic in ts18_check() within self_tests/ts1/ts18_check.py, ensuring it resets test state on failure",
+        "Add retry and backoff handling to ts17_check() in self_tests/ts1/ts17_check.py for transient resource errors",
+        "Refactor utils/load_manager.py: lower process threshold and add hysteresis to prevent frequent renicing",
+        "Add unit tests for ts18_check() and ts17_check() in tests/self_tests/test_ts1.py covering success, failure, and fallback paths",
+        "Create a health endpoint in api/health.py that reports self-test statuses and load manager metrics in JSON"
+      ],
+      "decisions": [
+        "Prioritize fixing TS17-TS21 before addressing lower-priority tests",
+        "Introduce exponential backoff in self-test checks to mitigate transient load spikes",
+        "Expose internal health metrics via an API endpoint for easier monitoring"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -629,8 +639,8 @@
   "active_task": {
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
-    "status": "completed",
-    "started_at": "2026-05-11T09:13:52Z",
-    "completed_at": "2026-05-11T09:13:53Z"
+    "status": "running",
+    "started_at": "2026-05-11T09:15:02Z",
+    "completed_at": null
   }
 }
