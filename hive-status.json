@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T08:58:56Z",
+  "last_updated": "2026-05-11T08:59:48Z",
   "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 0.875,
-      "last_seen": "2026-05-11T08:58:49Z",
+      "status": "stalled",
+      "health_score": 0.55,
+      "last_seen": "2026-05-11T08:59:44Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -26,6 +26,19 @@
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_1f48dfaa",
+      "ts": "2026-05-11T08:59:48Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The session has entered an error state after several heartbeats; likely a stalled or crashed worker process caused the error flag while the main loop still appears alive.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "2127bb1b40ef1756652942f32a674a0b"
+    },
     {
       "id": "b_e05b0aed",
       "ts": "2026-05-11T06:57:30Z",
@@ -142,6 +155,19 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "82ed62237b8e342301c173b1539d754e"
+    },
+    {
+      "id": "b_abc8b306",
+      "ts": "2026-05-11T08:59:32Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive entered an error state after a series of heartbeats; likely a stalled worker or unhandled exception caused the session to stop processing tasks despite recent successful activity.",
+      "severity": "medium",
+      "status": "resolved",
+      "resolved_at": "2026-05-11T08:59:44Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "ddb5239a883feaeaf8b32261b69907ea"
     },
     {
       "id": "b_0e534b83",
@@ -321,6 +347,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_978dc6d5",
+        "ts": "2026-05-11T08:59:48Z",
+        "hive": "default",
+        "summary": "Restart the ps5\u2011hive session to clear the error flag and re\u2011initialize its workers.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_746aef1f",
+        "ts": "2026-05-11T08:59:32Z",
+        "hive": "default",
+        "summary": "Session ps5-hive is error\u2011locked; a graceful interrupt and restart via tmux should recover it.",
+        "source": "doctor"
+      },
+      {
         "id": "f_b5886f82",
         "ts": "2026-05-11T08:28:49Z",
         "hive": "default",
@@ -379,7 +419,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 14
+    "openrouter_calls_today": 17
   },
   "model_champions": {
     "text": null,
@@ -557,6 +597,26 @@
         "Introduce automated alerts for resource thresholds to pre\u2011empt future stalls",
         "Commit all changes to a dedicated 'stability\u2011patch' branch for review before merging"
       ]
+    },
+    {
+      "id": "sess_7637d6da",
+      "ts": "2026-05-11T08:59:33Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full self-test compliance and stabilize resource usage across the hive",
+      "summary": "The hive is currently hampered by multiple high-priority self-test failures (TS17\u2011TS21) and high disk usage. Load is moderate but memory pressure is high, and auto\u2011fix attempts have not resolved the issues. Immediate code changes are needed to implement fallback cleanup and improve monitoring to prevent recurrence.",
+      "progress": "No new fixes were completed since the last snapshot.",
+      "next_steps": [
+        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py to safely delete temporary files on failure",
+        "Implement missing remediation in ts17_check() in self_tests/ts1/ts17_check.py to reset stale state files",
+        "Create a new function reduce_disk_usage() in utils/load_manager.py and invoke it when disk > 90% to purge old log files",
+        "Add unit tests for ts19_check() and ts20_check() in tests/self_tests/test_ts19_ts20.py covering both success and failure paths",
+        "Introduce a health metric endpoint /api/health/self_tests in api/health.py that returns JSON status of all TS checks"
+      ],
+      "decisions": [
+        "Prioritize fixing TS17\u2011TS21 before adding new features",
+        "Use a centralized cleanup helper in utils/cleanup.py for all self-test fallback routines",
+        "Fail fast on disk pressure: abort new jobs if disk > 95% and trigger reduce_disk_usage"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -568,9 +628,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T08:58:54Z",
-    "completed_at": "2026-05-11T08:58:56Z"
+    "started_at": "2026-05-11T08:59:44Z",
+    "completed_at": "2026-05-11T08:59:44Z"
   }
 }
