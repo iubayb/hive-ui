@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T23:01:01Z",
+  "last_updated": "2026-05-11T23:02:01Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.5,
-      "last_seen": "2026-05-11T23:01:01Z",
+      "status": "running",
+      "health_score": 0.889,
+      "last_seen": "2026-05-11T23:01:19Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -20,13 +20,26 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 3,
+      "errors_last_hour": 6,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_7389303e",
+      "ts": "2026-05-11T23:02:01Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "Session 'hive-watch' dead \u2014 supervisor should restart it",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "2a3546c77f6e42ffbaab919a15dbf210"
+    },
     {
       "id": "b_1e269edd",
       "ts": "2026-05-11T20:14:05Z",
@@ -465,6 +478,20 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_b47b2bc4",
+        "ts": "2026-05-11T23:01:29Z",
+        "hive": "default",
+        "summary": "The hive-watch session\u2019s research-loop service failed; restarting the session via tmux should recover it.",
+        "source": "doctor"
+      },
+      {
+        "id": "f_a13b43c1",
+        "ts": "2026-05-11T23:01:24Z",
+        "hive": "default",
+        "summary": "The hive-watch session's research-loop has failed; restarting it via tmux safe interrupt should recover operation.",
+        "source": "doctor"
+      },
+      {
         "id": "f_c9ae6d9d",
         "ts": "2026-05-11T21:31:19Z",
         "hive": "default",
@@ -615,6 +642,22 @@
     "patterns": [],
     "solutions": [
       {
+        "id": "sol_e9928f1e",
+        "ts": "2026-05-11T23:01:29Z",
+        "problem": "The research-loop service inside the hive-watch session exited with status 120, causing the tmux pane to enter an error state and become silent.",
+        "solution": "tmux send-keys -t hive-watch:0 C-c \"hive reset --session hive-watch && hive start --session hive-watch\" Enter",
+        "hive": "default",
+        "verified": true
+      },
+      {
+        "id": "sol_1bdac9b6",
+        "ts": "2026-05-11T23:01:24Z",
+        "problem": "The research-loop service crashed (exit code 120) causing the tmux pane to enter an error state; likely the underlying process terminated unexpectedly.",
+        "solution": "tmux send-keys -t hive-watch:0 C-c \"hive reset --session hive-watch && hive start --session hive-watch\" Enter",
+        "hive": "default",
+        "verified": true
+      },
+      {
         "id": "sol_a9375486",
         "ts": "2026-05-11T21:31:19Z",
         "problem": "Self\u2011test TS21 fix ran but the test still fails, leaving the orchestrator in an error state.",
@@ -654,7 +697,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 84
+    "openrouter_calls_today": 86
   },
   "model_champions": {
     "text": null,
@@ -875,7 +918,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-11T23:01:01Z",
-    "completed_at": "2026-05-11T23:01:01Z"
+    "started_at": "2026-05-11T23:02:01Z",
+    "completed_at": "2026-05-11T23:02:01Z"
   }
 }
