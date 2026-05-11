@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T15:15:42Z",
+  "last_updated": "2026-05-11T15:16:51Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-11T15:14:09Z",
+      "last_seen": "2026-05-11T15:16:12Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -631,7 +631,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 51
+    "openrouter_calls_today": 52
   },
   "model_champions": {
     "text": null,
@@ -640,26 +640,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_36d43323",
-      "ts": "2026-05-11T12:46:13Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests and stabilizing resource usage",
-      "summary": "The hive is stalled with several high\u2011priority self\u2011test failures (TS18, TS19, TS21) and resource pressure (high memory and disk usage). No recent progress has been recorded, and a critical session is in long backoff. Immediate code fixes are needed to unblock the system.",
-      "progress": "Implemented tmux_session_restart capability, but no self\u2011test fixes have succeeded yet.",
-      "next_steps": [
-        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py to safely terminate orphaned processes on failure",
-        "Implement missing fix logic in ts19_check() in self_tests/ts1/ts19_check.py to handle permission errors and restore expected file states",
-        "Create corrective actions in ts21_check() in self_tests/ts1/ts21_check.py to reset corrupted config files and log detailed diagnostics",
-        "Update utils/load_manager.py: lower process memory threshold to 45GB and add proactive eviction of idle workers when disk > 85%",
-        "Add unit tests for ts18_check, ts19_check, and ts21_check covering success, fallback, and error paths"
-      ],
-      "decisions": [
-        "Prioritize fixing TS18 fallback before addressing TS19 and TS21",
-        "Reduce memory threshold in load_manager to prevent future stalls",
-        "Schedule a manual restart of the ps5-hive session after code changes are deployed"
-      ]
-    },
     {
       "id": "sess_0ac2f512",
       "ts": "2026-05-11T13:01:26Z",
@@ -839,6 +819,26 @@
         "Introduce a configurable retry policy for self\u2011test checks to avoid indefinite hangs",
         "Deploy the new watchdog for ps5-hive to automatically recover from persistent backoff conditions"
       ]
+    },
+    {
+      "id": "sess_daa58d30",
+      "ts": "2026-05-11T15:16:41Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests, stabilizing session backoffs, and improving resource monitoring",
+      "summary": "The hive is stalled with several high\u2011priority blockers: four self\u2011tests (TS18, TS19, TS21) are failing, the ps5-hive session is in long backoff, and system load is near capacity. No recent achievements have been recorded, and only two pending steps remain. Immediate coding work is required to unblock the system.",
+      "progress": "No new tasks have been completed since the last snapshot.",
+      "next_steps": [
+        "Implement a fallback cleanup routine in ts18_check() located at self_tests/ts1/ts18_check.py",
+        "Add automatic retry and alert logic to ts19_check() in self_tests/ts1/ts19_check.py to handle persistent failures",
+        "Create a corrective patch for ts21_check() in self_tests/ts1/ts21_check.py that resets dependent resources on failure",
+        "Add a watchdog in utils/load_manager.py to dynamically throttle non\u2011essential jobs when mem>50GB or disk>90%",
+        "Write a script reset_ps5_hive.sh that force\u2011restarts the ps5-hive tmux session and logs the outcome"
+      ],
+      "decisions": [
+        "Prioritize implementing fallback and retry mechanisms for the failing self\u2011tests before addressing load management.",
+        "Introduce a dynamic resource throttling policy in load_manager.py to prevent future high\u2011load stalls.",
+        "Automate the ps5-hive session recovery via a dedicated reset script to reduce manual intervention."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -850,9 +850,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-11T15:15:11Z",
-    "completed_at": "2026-05-11T15:15:12Z"
+    "started_at": "2026-05-11T15:16:12Z",
+    "completed_at": "2026-05-11T15:16:41Z"
   }
 }
