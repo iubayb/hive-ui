@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T04:42:42Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-11T04:44:02Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.55,
-      "last_seen": "2026-05-11T04:41:32Z",
+      "status": "running",
+      "health_score": 0.875,
+      "last_seen": "2026-05-11T04:43:56Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -19,7 +19,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 9,
+      "errors_last_hour": 8,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -881,7 +881,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 79
+    "openrouter_calls_today": 80
   },
   "model_champions": {
     "text": null,
@@ -890,26 +890,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_7af439f6",
-      "ts": "2026-05-11T02:12:48Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-test modules and improving fallback mechanisms",
-      "summary": "The hive is currently stalled with multiple high-priority self-test failures (TS17\u2011TS21) and high resource usage. No recent progress has been made, and fallback handling is pending. Immediate code fixes and health monitoring enhancements are needed to resume normal operation.",
-      "progress": "No new fixes have been completed since the last snapshot.",
-      "next_steps": [
-        "Add fallback handling logic to ts21_repair.py in orchestrator/self_fix/ to gracefully handle unrecoverable errors",
-        "Implement a health check wrapper in health_monitor.py that retries and logs failures for TS17\u2011TS20 modules",
-        "Reduce memory pressure by adding memory usage guard to orchestrator/main.py that limits concurrent job slots when mem>50GB",
-        "Create unit tests for ts18_repair.py and ts19_repair.py in tests/self_fix/ covering both success and fallback paths",
-        "Add a metrics endpoint in logstream.py (/api/health) that returns JSON with current self-test statuses and resource usage"
-      ],
-      "decisions": [
-        "Prioritize fixing TS21 fallback before addressing TS17\u2011TS20 to unblock the self-test pipeline",
-        "Enforce a hard memory limit of 48GB for new jobs to prevent disk saturation during repairs",
-        "Integrate health_monitor wrapper as a decorator on all self-test entry points for automatic retry and alerting"
-      ]
-    },
     {
       "id": "sess_2e085105",
       "ts": "2026-05-11T02:27:53Z",
@@ -1089,6 +1069,26 @@
         "Introduce automated unit test coverage for self\u2011repair modules before deploying fixes",
         "Expose a dedicated health\u2011check endpoint to enable external monitoring of self\u2011test status"
       ]
+    },
+    {
+      "id": "sess_90e12b2b",
+      "ts": "2026-05-11T04:44:01Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and improving resilience",
+      "summary": "The hive is currently stalled with four critical self-test failures (TS17\u2011TS21) and high resource usage. Auto\u2011fix attempts have not resolved the issues, and a fallback for TS21 is pending. Immediate code changes are needed to add robust error handling and health monitoring.",
+      "progress": "No successful fixes have been applied since the last snapshot.",
+      "next_steps": [
+        "Add fallback handling in ts21_repair.py: implement a safe default path and log detailed diagnostics when primary repair fails",
+        "Implement a health check wrapper in health_monitor.py: create a function health_check_wrapper(func) that catches exceptions, logs failures, and retries with exponential backoff",
+        "Add missing remediation for TS19 in ts19_repair.py: detect the specific failure condition and apply the corrective command sequence",
+        "Create unit tests for ts17_repair.py, ts18_repair.py, and ts19_repair.py covering success, fallback, and unrecoverable scenarios",
+        "Introduce a resource guard in orchestrator.py: add a function limit_resource_usage() that throttles new jobs when disk > 90% or memory > 50GB"
+      ],
+      "decisions": [
+        "Prioritize coding fixes for TS19\u2011TS21 before addressing lower\u2011priority health metrics",
+        "Use exponential backoff retry logic for all self\u2011repair functions to avoid rapid repeated failures",
+        "Enforce unit test coverage > 80% for all self\u2011test repair modules before redeploying"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -1100,9 +1100,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-11T04:42:02Z",
-    "completed_at": "2026-05-11T04:42:02Z"
+    "started_at": "2026-05-11T04:43:34Z",
+    "completed_at": "2026-05-11T04:44:02Z"
   }
 }
