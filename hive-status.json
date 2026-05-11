@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T02:45:46Z",
+  "last_updated": "2026-05-11T02:46:48Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -26,32 +26,6 @@
   },
   "achievements": [],
   "blockers": [
-    {
-      "id": "b_db54ee2b",
-      "ts": "2026-05-11T02:43:05Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux session entered an error state after a series of task spawns; the hanging window likely contains a runaway or blocked process (e.g., a stuck HTTP request or deadlocked task loop).",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "ed1d28d8c70b7231b9a844aa7007f684"
-    },
-    {
-      "id": "b_f43315c4",
-      "ts": "2026-05-11T02:42:55Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux session is in an error state after a series of rapid task spawns; it is likely hung inside a long\u2011running HTTP request or blocked Python thread, causing the hive to stop processing new work.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "5109a9e0e96931d89ac779fe9878a334"
-    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -1056,9 +1030,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-11T02:45:36Z",
-    "completed_at": "2026-05-11T02:45:36Z"
+    "started_at": "2026-05-11T02:46:46Z",
+    "completed_at": "2026-05-11T02:46:48Z"
   }
 }
