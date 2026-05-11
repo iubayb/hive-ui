@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T06:50:48Z",
+  "last_updated": "2026-05-11T06:57:56Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.55,
-      "last_seen": "2026-05-11T06:50:48Z",
+      "status": "running",
+      "health_score": 1.0,
+      "last_seen": "2026-05-11T06:57:54Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -19,7 +19,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 8,
+      "errors_last_hour": 5,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -27,21 +27,21 @@
   "achievements": [],
   "blockers": [
     {
-      "id": "b_c67e9ab8",
-      "ts": "2026-05-10T17:39:04Z",
+      "id": "b_e05b0aed",
+      "ts": "2026-05-11T06:57:30Z",
       "hive": "desktop",
       "agent": "resource-guardian",
-      "description": "HIGH load/core=0.07 mem=54.4GB disk=93% \u2014 jobs reniced",
+      "description": "HIGH load/core=0.18 mem=54.5GB disk=93% \u2014 jobs reniced",
       "severity": "high",
       "status": "open",
       "resolved_at": null,
       "resolution": null,
       "github_issue": null,
-      "_hash": "98c410c1bfd11ee925655694d96cc1ba"
+      "_hash": "170d1029afba637a0c9742e177d83689"
     },
     {
-      "id": "b_7628c7ec",
-      "ts": "2026-05-10T17:38:52Z",
+      "id": "b_b218cb54",
+      "ts": "2026-05-11T06:57:17Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS21 failing \u2014 auto-fix attempted but not sufficient",
@@ -53,8 +53,8 @@
       "_hash": "a3a483f5373c25d5e811d82c159a9ebd"
     },
     {
-      "id": "b_4cc96bb5",
-      "ts": "2026-05-10T17:38:51Z",
+      "id": "b_e7876401",
+      "ts": "2026-05-11T06:57:17Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS19 failing \u2014 no auto-fix available or fix failed",
@@ -66,8 +66,8 @@
       "_hash": "abc92bdaab9c773ac4617a356f0b6604"
     },
     {
-      "id": "b_34b9cf89",
-      "ts": "2026-05-10T17:38:51Z",
+      "id": "b_4cb44946",
+      "ts": "2026-05-11T06:57:17Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS18 failing \u2014 no auto-fix available or fix failed",
@@ -79,8 +79,8 @@
       "_hash": "8db53c687b62ebcd9459cbccdbbf588f"
     },
     {
-      "id": "b_1703d5c8",
-      "ts": "2026-05-10T17:38:51Z",
+      "id": "b_4bfaa26f",
+      "ts": "2026-05-11T06:57:17Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS17 failing \u2014 no auto-fix available or fix failed",
@@ -92,8 +92,8 @@
       "_hash": "6897daf3e3724c9f078fc0b16f4fe428"
     },
     {
-      "id": "b_6cfda239",
-      "ts": "2026-05-10T17:38:51Z",
+      "id": "b_4bcd3b0d",
+      "ts": "2026-05-11T06:57:17Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS14 failing \u2014 no auto-fix available or fix failed",
@@ -105,8 +105,8 @@
       "_hash": "b4c2ed2d4f13f2fecf6ce6f41e3eac7c"
     },
     {
-      "id": "b_3f0604b1",
-      "ts": "2026-05-10T17:38:51Z",
+      "id": "b_5333dbf3",
+      "ts": "2026-05-11T06:57:17Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS13 failing \u2014 no auto-fix available or fix failed",
@@ -118,8 +118,8 @@
       "_hash": "5c48d095f67370a5d63a500a67d76844"
     },
     {
-      "id": "b_2b7be0e9",
-      "ts": "2026-05-10T17:38:51Z",
+      "id": "b_cbf3aa8b",
+      "ts": "2026-05-11T06:57:17Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS5 failing \u2014 auto-fix attempted but not sufficient",
@@ -131,8 +131,8 @@
       "_hash": "36e8de1c6320cf5f4eececa2d548aefd"
     },
     {
-      "id": "b_de8fa080",
-      "ts": "2026-05-10T17:38:51Z",
+      "id": "b_67804e1d",
+      "ts": "2026-05-11T06:57:16Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "Live UI verification failed: curl failed: [Errno 111] Connection refused",
@@ -144,839 +144,51 @@
       "_hash": "82ed62237b8e342301c173b1539d754e"
     },
     {
-      "id": "b_ab2a0798",
-      "ts": "2026-05-10T23:41:15Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux session is in an error state, likely caused by a hung or unresponsive process in its primary window (no new heartbeats beyond the last logged line).",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T23:45:50Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "26d414c8c3ad5791994d97bcf04c27c5"
-    },
-    {
-      "id": "b_e7a12bc2",
-      "ts": "2026-05-10T23:10:59Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux session is stuck in an error state with repeated heartbeats but no progress; the single inflight task is likely hung, causing the hive to enter error status.",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T23:13:12Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "6ab3f7e3816af481b563d1aee485a01c"
-    },
-    {
-      "id": "b_2daeebcb",
-      "ts": "2026-05-10T23:11:04Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive is stuck in a hung state \u2013 heartbeat logs show no change in task counts and errors have accumulated, indicating the main window is unresponsive.",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T23:13:12Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "5fdc716c4a503caed8b0061518c4de50"
-    },
-    {
-      "id": "b_0a104891",
-      "ts": "2026-05-10T22:40:48Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux session is stuck in an error state with no progress (heartbeat shows unchanged stats) and accumulating errors, indicating a hung main window.",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T22:44:41Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "d4c45139518c2f745022c78486bd1b64"
-    },
-    {
-      "id": "b_1a17ab6d",
-      "ts": "2026-05-10T22:40:53Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux session is in an error state with no progress; the single inflight task appears hung, causing repeated heartbeats without state change.",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T22:44:41Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "85300c5aa7370085be9b010793eeeb78"
-    },
-    {
-      "id": "b_fa0ce6c9",
-      "ts": "2026-05-10T22:10:40Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive is stuck with only one running task while the pending queue continues to grow; likely the primary tmux window is hung or the worker process is blocked.",
-      "severity": "medium",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T22:11:56Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "695de8966ecab1004918ae3d3feedc3d"
-    },
-    {
-      "id": "b_141fea9d",
-      "ts": "2026-05-10T22:10:42Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux session is in an error state with repeated heartbeats but no progress; likely a hung worker process is blocking the main loop.",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T22:11:56Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "cc0d0353ea44aa6b016f659b79d61893"
-    },
-    {
-      "id": "b_fea8f878",
-      "ts": "2026-05-10T21:40:29Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux window for this hive has entered an error state (status=error) and is no longer responding; the heartbeat shows only one running task and a growing pending queue, indicating the main process is likely hung.",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T21:43:25Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "4b345338cbec6e588aada79c03d66e31"
-    },
-    {
-      "id": "b_230ca667",
-      "ts": "2026-05-10T21:40:33Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive process has entered an error state, likely due to a hung or unresponsive task (silent for 1\u202fs and 7 errors reported).",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T21:43:25Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "2c02712dc8b2ba40eb428fd51455771a"
-    },
-    {
-      "id": "b_8001f721",
-      "ts": "2026-05-10T21:10:10Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive session is in error state with repeated heartbeats but no progress; likely a hung task or unresponsive subprocess.",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T21:10:40Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "9024be183d19deb4c452a0723cb3f6eb"
-    },
-    {
-      "id": "b_565889a4",
-      "ts": "2026-05-10T21:10:23Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive window is stuck in an error state with repeated heartbeats but no progress; likely a hung process causing the 'error' status.",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T21:10:40Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "63e6a71a39f7497db47a4bf9f255e0b8"
-    },
-    {
-      "id": "b_b0b7afce",
-      "ts": "2026-05-10T20:39:57Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive process entered an error state after a successful heartbeat but is no longer making progress; the log shows no new tasks and the only recent activity is an HTTP request that completed successfully, indicating the main loop may be stalled.",
-      "severity": "medium",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T20:40:05Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "bd92e5f6fc6fd9a95911d6e1a33a980d"
-    },
-    {
-      "id": "b_ad9b6636",
-      "ts": "2026-05-10T20:40:04Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive process entered an error state after a series of successful heartbeats; the recent HTTP request succeeded but subsequent tasks are not progressing, indicating a stalled task runner or corrupted internal queue.",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T20:40:05Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "79601ad0897c4c03acf3631c9fff9092"
-    },
-    {
-      "id": "b_fe9c1481",
-      "ts": "2026-05-10T20:09:44Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive reports status=error with 8 accumulated errors despite recent heartbeats showing normal operation; likely a hidden exception or stuck task is causing the error state.",
-      "severity": "medium",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T20:10:09Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "1d293b76bc20a9d5019785369e7d7789"
-    },
-    {
-      "id": "b_c5575a1c",
-      "ts": "2026-05-10T20:09:49Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive reports a steady increase in pending tasks while only one task is inflight; this suggests the worker pool has stalled or a task is dead\u2011locked, causing the error state and accumulated error count.",
-      "severity": "medium",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T20:10:09Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "7268be46681869b2488b3aae9c4fe976"
-    },
-    {
-      "id": "b_b77ae048",
-      "ts": "2026-05-10T19:39:39Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive has entered an error state after accumulating several failures (failed=1) and the heartbeat indicates tasks are still pending but no progress; likely a stalled worker or corrupted task queue.",
-      "severity": "medium",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T19:40:39Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "1c1e0d900b0b626a9529d4724b3ef42d"
-    },
-    {
-      "id": "b_ab068206",
-      "ts": "2026-05-10T19:39:33Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The hive reports error status with 7 errors but logs show normal heartbeats and successful HTTP request; likely a non\u2011critical subsystem (e.g., task queue monitor) is repeatedly failing, causing the session to be marked error despite overall progress.",
-      "severity": "medium",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T19:39:36Z",
-      "resolution": "auto-pruned: ps5-hive is now alive",
-      "github_issue": null,
-      "_hash": "d296d73ece7dcba7388836dcd07f56ae"
-    },
-    {
-      "id": "b_27f1100f",
-      "ts": "2026-05-10T17:38:51Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "tmux session 'hive-live' missing entirely",
-      "severity": "critical",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T17:40:00Z",
-      "resolution": "Session 'hive-live' is healthy again",
-      "github_issue": null,
-      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
-    },
-    {
-      "id": "b_d67397d0",
-      "ts": "2026-05-10T17:38:51Z",
+      "id": "b_bc1a5fd6",
+      "ts": "2026-05-11T06:57:16Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "tmux session 'hive-watch' missing entirely",
       "severity": "critical",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T17:40:00Z",
-      "resolution": "Session 'hive-watch' is healthy again",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
       "github_issue": null,
       "_hash": "70b95af380bb338ef8031fb179457ee0"
     },
     {
-      "id": "b_94b105b3",
-      "ts": "2026-05-10T17:38:51Z",
+      "id": "b_99149f0a",
+      "ts": "2026-05-11T06:57:16Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "tmux session 'hive-live' missing entirely",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
+    },
+    {
+      "id": "b_0b4f0c7f",
+      "ts": "2026-05-11T06:57:16Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
       "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-10T17:40:00Z",
-      "resolution": "Session 'hive-dev' is healthy again",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
       "github_issue": null,
       "_hash": "217dae28725ae72712be5a39a27334a8"
     }
   ],
-  "next_steps": [
-    {
-      "id": "ns_df972ffc",
-      "priority": 1,
-      "description": "Update self_test_suite.py in /hive/tests to add missing mock data for TS17 and correct assertion logic",
-      "assigned_to": "opencode",
-      "status": "in_progress",
-      "source": "orchestrator",
-      "ts": "2026-05-10T17:54:43Z"
-    },
-    {
-      "id": "ns_93295e6f",
-      "priority": 2,
-      "description": "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to retry the database reset when the first attempt fails",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-10T17:54:43Z"
-    },
-    {
-      "id": "ns_839c56ef",
-      "priority": 3,
-      "description": "Implement a health check wrapper in health_monitor.py to automatically restart services when disk usage exceeds 90%",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-10T17:54:43Z"
-    }
-  ],
+  "next_steps": [],
   "capabilities": {
-    "learned": [
-      {
-        "id": "cap_065a4e5b",
-        "ts": "2026-05-10T20:40:06Z",
-        "source_hive": "default",
-        "source_agent": "hive-doctor",
-        "skill": "tmux-recover",
-        "description": "Gracefully recovers a hung tmux session by sending an interrupt, spawning a recovery window, and killing the faulty one.",
-        "example": "tmux send-keys -t <session> C-c && sleep 2 && tmux new-window -t <session>:2 'cd ~/hive && ./run_hive.sh --recover' && tmux kill-window -t <session>:1",
-        "tags": [],
-        "applicable_to": "all",
-        "last_updated": "2026-05-10T21:40:31Z"
-      }
-    ]
+    "learned": []
   },
   "knowledge": {
-    "findings": [
-      {
-        "id": "f_00ace232",
-        "ts": "2026-05-11T06:45:13Z",
-        "hive": "default",
-        "summary": "Recover the hung primary window of the 'ps5-hive' tmux session using a graceful interrupt and a recovery script.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_35423038",
-        "ts": "2026-05-11T06:45:03Z",
-        "hive": "default",
-        "summary": "Session ps5-hive is hung; send interrupt, spawn a recovery window, then remove the faulty window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_7b190e39",
-        "ts": "2026-05-11T06:14:56Z",
-        "hive": "default",
-        "summary": "Recovered the hung ps5-hive tmux session by interrupting the faulty window, launching a recovery window, and removing the stuck window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_74056197",
-        "ts": "2026-05-11T06:14:53Z",
-        "hive": "default",
-        "summary": "The hive session is hung; recover it by interrupting the current pane, launching a recovery window, and removing the faulty pane.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_59df9d81",
-        "ts": "2026-05-11T06:14:53Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_6c75fd31",
-        "ts": "2026-05-11T05:44:40Z",
-        "hive": "default",
-        "summary": "Recover the hung 'ps5-hive' tmux session by interrupting the current pane, launching a recovery window, and terminating the faulty pane.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_f5091b0e",
-        "ts": "2026-05-11T05:44:40Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_7764fcdb",
-        "ts": "2026-05-11T05:44:36Z",
-        "hive": "default",
-        "summary": "Recover the hung 'ps5-hive' tmux session by interrupting the faulty pane, launching a recovery window, and removing the problematic pane.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_0e0c2600",
-        "ts": "2026-05-11T05:44:36Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_dd53ae9f",
-        "ts": "2026-05-11T05:14:25Z",
-        "hive": "default",
-        "summary": "Recover the hung ps5\u2011hive tmux session by interrupting the main window, launching a recovery window, and cleaning up the faulty window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_4582dc7b",
-        "ts": "2026-05-11T05:14:25Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_f4fede16",
-        "ts": "2026-05-11T05:14:24Z",
-        "hive": "default",
-        "summary": "Session ps5\u2011hive is hung; recover by interrupting, launching a recovery window, and killing the faulty window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_a3e207b6",
-        "ts": "2026-05-11T05:14:24Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_c0776ae9",
-        "ts": "2026-05-11T04:44:06Z",
-        "hive": "default",
-        "summary": "Recover the hung ps5-hive session by interrupting the faulty window, launching a recovery window, and cleaning up.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_a9fd59d4",
-        "ts": "2026-05-11T04:44:03Z",
-        "hive": "default",
-        "summary": "Recover the hung ps5-hive tmux session by interrupting the stalled process and launching a recovery window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_2b61a8bb",
-        "ts": "2026-05-11T04:13:56Z",
-        "hive": "default",
-        "summary": "Session ps5-hive appears hung; interrupting, spawning a recovery window, and cleaning the faulty window should restore activity.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_fff43433",
-        "ts": "2026-05-11T04:13:56Z",
-        "hive": "default",
-        "summary": "Session ps5-hive is hung; interrupt and launch a recovery window before killing the stuck window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_92fdc974",
-        "ts": "2026-05-11T04:13:56Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_7208c1ad",
-        "ts": "2026-05-11T03:43:48Z",
-        "hive": "default",
-        "summary": "Recover the hung 'ps5-hive' session by interrupting the faulty window, launching a recovery window, and removing the stuck window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_e5faa693",
-        "ts": "2026-05-11T03:43:38Z",
-        "hive": "default",
-        "summary": "Recover the hung ps5-hive tmux session by interrupting the faulty window, launching a recovery window, and removing the broken one.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_593685ba",
-        "ts": "2026-05-11T03:43:38Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_00487668",
-        "ts": "2026-05-11T03:13:25Z",
-        "hive": "default",
-        "summary": "Recover the hung primary window in session\u202fps5\u2011hive by interrupting it, launching a recovery window, and removing the faulty window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_f71372d5",
-        "ts": "2026-05-11T03:13:25Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_30a58794",
-        "ts": "2026-05-11T03:13:18Z",
-        "hive": "default",
-        "summary": "The ps5-hive tmux session is stalled; interrupting the hung process, spawning a recovery window, and cleaning up the faulty window should restore normal operation.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_4456278a",
-        "ts": "2026-05-11T03:13:18Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_566aca3d",
-        "ts": "2026-05-11T02:43:07Z",
-        "hive": "default",
-        "summary": "Interrupt the faulty window, start a lightweight recovery script in a new window, then clean up the hung window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_aa8a5063",
-        "ts": "2026-05-11T02:43:07Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_d03d6549",
-        "ts": "2026-05-11T02:42:57Z",
-        "hive": "default",
-        "summary": "Recover the hung ps5-hive tmux session by interrupting the faulty pane, launching a recovery window, and closing the stuck pane.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_1298f80b",
-        "ts": "2026-05-11T02:42:57Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_2e96316b",
-        "ts": "2026-05-11T02:12:49Z",
-        "hive": "default",
-        "summary": "Recover the hung main window of ps5\u2011hive by interrupting, launching a recovery window, and cleaning up the faulty window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_8ab4e61d",
-        "ts": "2026-05-11T02:12:49Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_0ea5273a",
-        "ts": "2026-05-11T02:12:45Z",
-        "hive": "default",
-        "summary": "Recover the hung ps5-hive tmux session by interrupting it, launching a recovery window, and removing the faulty window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_5b64c2d8",
-        "ts": "2026-05-11T01:42:35Z",
-        "hive": "default",
-        "summary": "The ps5-hive session appears hung; sending an interrupt and launching a recovery window should restore normal operation.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_939c435a",
-        "ts": "2026-05-11T01:42:35Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_a200c315",
-        "ts": "2026-05-11T01:42:35Z",
-        "hive": "default",
-        "summary": "Recover the hung hive by interrupting the faulty window, launching a recovery window, and cleaning up the broken one.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_3734f936",
-        "ts": "2026-05-11T01:42:35Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_ded92b93",
-        "ts": "2026-05-11T01:11:52Z",
-        "hive": "default",
-        "summary": "Session ps5-hive appears hung; recover by interrupting the faulty window, launching a recovery window, and killing the stalled one.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_2e6f2c82",
-        "ts": "2026-05-11T01:11:52Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_44543f14",
-        "ts": "2026-05-11T01:11:50Z",
-        "hive": "default",
-        "summary": "Recover the hung ps5-hive tmux session by interrupting the faulty window, launching a recovery window, and removing the blocked window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_5957358d",
-        "ts": "2026-05-11T00:41:38Z",
-        "hive": "default",
-        "summary": "Recover the hung window in the 'ps5-hive' tmux session using a graceful interrupt and a recovery start\u2011up window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_c834bdb7",
-        "ts": "2026-05-11T00:41:38Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_1b6f520a",
-        "ts": "2026-05-11T00:41:35Z",
-        "hive": "default",
-        "summary": "Recover the hung ps5-hive tmux session by interrupting the faulty window, launching a recovery process, and cleaning up the stalled window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_d6f760ba",
-        "ts": "2026-05-11T00:41:35Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_26572ef2",
-        "ts": "2026-05-11T00:11:26Z",
-        "hive": "default",
-        "summary": "Recover the hung primary window of session 'ps5-hive' using a safe interrupt and recovery window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_a2adb81b",
-        "ts": "2026-05-11T00:11:21Z",
-        "hive": "default",
-        "summary": "Recover the hung window in the 'ps5-hive' tmux session using a graceful interrupt and a recovery script.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_f2df4da4",
-        "ts": "2026-05-10T23:41:17Z",
-        "hive": "default",
-        "summary": "Recover the hung ps5-hive tmux session by interrupting the stuck process, launching a recovery window, and removing the faulty window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_6ff1d1c9",
-        "ts": "2026-05-10T23:41:17Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_9001bcd8",
-        "ts": "2026-05-10T23:41:10Z",
-        "hive": "default",
-        "summary": "The ps5-hive session is stalled; sending an interrupt and launching a recovery window should restore progress.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_03c6a9f5",
-        "ts": "2026-05-10T23:41:10Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive:C.0 C-c && sleep 2 && tmux new-window -t ps5-hive:2 '`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_a106f3ed",
-        "ts": "2026-05-10T23:11:06Z",
-        "hive": "default",
-        "summary": "The 'ps5-hive' tmux session is hung; interrupt and spawn a recovery window to restore operation.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_adf85457",
-        "ts": "2026-05-10T23:11:06Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_3b08eebf",
-        "ts": "2026-05-10T23:11:01Z",
-        "hive": "default",
-        "summary": "Recover the hung ps5-hive tmux session by interrupting the stuck process, launching a recovery window, and cleaning up the faulty pane.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_859e1e9c",
-        "ts": "2026-05-10T23:11:01Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_c4295d56",
-        "ts": "2026-05-10T22:40:55Z",
-        "hive": "default",
-        "summary": "Recover the hung hive session by interrupting the stuck window, launching a recovery helper, and cleaning up the faulty window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_6e14c9aa",
-        "ts": "2026-05-10T22:40:55Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_f41065b1",
-        "ts": "2026-05-10T22:40:50Z",
-        "hive": "default",
-        "summary": "Recover the hung ps5-hive tmux session by interrupting the faulty window, launching a recovery window, and cleaning up the dead pane.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_1d8c959e",
-        "ts": "2026-05-10T22:40:50Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_3fa3e557",
-        "ts": "2026-05-10T22:10:45Z",
-        "hive": "default",
-        "summary": "The ps5-hive tmux session is hung; interrupting, launching a recovery window, and cleaning the faulty window should restore operation.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_c4549f25",
-        "ts": "2026-05-10T22:10:45Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_24a0dbae",
-        "ts": "2026-05-10T22:10:40Z",
-        "hive": "default",
-        "summary": "Session ps5-hive appears hung on a single task; recover by interrupting the stale window and launching a recovery window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_e29fdab4",
-        "ts": "2026-05-10T21:40:36Z",
-        "hive": "default",
-        "summary": "Recover the hung ps5-hive session by interrupting the faulty window, launching a recovery window, and closing the original.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_89cdac54",
-        "ts": "2026-05-10T21:40:36Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_dd4f927d",
-        "ts": "2026-05-10T21:40:31Z",
-        "hive": "default",
-        "summary": "Recover the hung ps5-hive by interrupting the faulty window, launching a recovery instance, and then closing the stalled window.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_319dad66",
-        "ts": "2026-05-10T21:40:31Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_fa3aaf9a",
-        "ts": "2026-05-10T21:10:25Z",
-        "hive": "default",
-        "summary": "Session ps5-hive appears hung; recover by interrupting and relaunching with the recovery flag.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_27a2c5c1",
-        "ts": "2026-05-10T21:10:25Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_f7a4a736",
-        "ts": "2026-05-10T21:10:12Z",
-        "hive": "default",
-        "summary": "Session ps5-hive is hung; recover by interrupting the faulty window and launching a recovery process.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_ff78860f",
-        "ts": "2026-05-10T21:10:12Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_ae3eb8d0",
-        "ts": "2026-05-10T20:40:06Z",
-        "hive": "default",
-        "summary": "ps5-hive is stuck in an error state; restarting the hive within its tmux session and invoking recovery mode should clear the stalled queue and resume work.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_02e06942",
-        "ts": "2026-05-10T20:40:06Z",
-        "hive": "default",
-        "summary": "Auto-fix failed (exit 1): `tmux send-keys -t ps5-hive C-c && sleep 2 && tmux new-window -t ps5-hive:2 'cd ~`",
-        "source": "hive-doctor-rollback"
-      },
-      {
-        "id": "f_6ec4361d",
-        "ts": "2026-05-10T20:39:57Z",
-        "hive": "default",
-        "summary": "Restart the stalled hive process in the ps5-hive tmux session to recover from the error state.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_9b9eee9d",
-        "ts": "2026-05-10T20:09:49Z",
-        "hive": "default",
-        "summary": "Stalled worker pool in ps5-hive; restart the hive process to clear the deadlock and resume task handling.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_01799f1d",
-        "ts": "2026-05-10T20:09:44Z",
-        "hive": "default",
-        "summary": "Session ps5-hive is in an error state due to hidden failures; sending a reset command via tmux should safely clear the error condition.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_72ce934b",
-        "ts": "2026-05-10T19:39:39Z",
-        "hive": "default",
-        "summary": "ps5\u2011hive is stalled with a failed task; resetting and restarting the hive should clear the error state.",
-        "source": "doctor"
-      },
-      {
-        "id": "f_d5a175a0",
-        "ts": "2026-05-10T19:39:33Z",
-        "hive": "default",
-        "summary": "A subsystem failure is tripping the error flag; sending a USR1 reload signal to hive workers should refresh the failing component without disrupting running tasks.",
-        "source": "doctor"
-      }
-    ],
+    "findings": [],
     "patterns": [],
     "solutions": []
   },
@@ -986,7 +198,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 98
+    "openrouter_calls_today": 0
   },
   "model_champions": {
     "text": null,
@@ -996,204 +208,14 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_765fac70",
-      "ts": "2026-05-11T04:28:41Z",
+      "id": "sess_4162372b",
+      "ts": "2026-05-11T06:57:17Z",
       "updated_by": "orchestrator",
-      "goal": "Restore all self-test modules (TS17\u2011TS21) and bring hive health to green",
-      "summary": "The hive is currently stalled at 55% health due to multiple high\u2011priority self\u2011test failures (TS17\u2011TS21). Auto\u2011fix attempts have not resolved the issues, and the system is under heavy load. Immediate code\u2011level remediation and health\u2011check reinforcement are required.",
-      "progress": "Attempted automatic repairs for TS21, TS19, TS18, and TS17, but failures remain.",
-      "next_steps": [
-        "Add fallback handling in ts21_repair.py to catch unexpected exceptions and write a safe state file",
-        "Implement a retry loop with exponential backoff in ts19_repair.py for external resource calls",
-        "Create unit tests for ts18_repair.py covering all error branches in tests/test_ts18_repair.py",
-        "Add a health check wrapper in health_monitor.py that validates TS17\u2011TS21 status and reports JSON via /api/healthcheck",
-        "Refactor orchestrator/self_fix/__init__.py to log detailed diagnostics when any TS self\u2011test fails"
-      ],
-      "decisions": [
-        "Prioritize concrete fallback and retry logic over further auto\u2011fix attempts",
-        "Introduce automated unit test coverage for self\u2011repair modules before deploying fixes",
-        "Expose a dedicated health\u2011check endpoint to enable external monitoring of self\u2011test status"
-      ]
-    },
-    {
-      "id": "sess_90e12b2b",
-      "ts": "2026-05-11T04:44:01Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests and improving resilience",
-      "summary": "The hive is currently stalled with four critical self-test failures (TS17\u2011TS21) and high resource usage. Auto\u2011fix attempts have not resolved the issues, and a fallback for TS21 is pending. Immediate code changes are needed to add robust error handling and health monitoring.",
-      "progress": "No successful fixes have been applied since the last snapshot.",
-      "next_steps": [
-        "Add fallback handling in ts21_repair.py: implement a safe default path and log detailed diagnostics when primary repair fails",
-        "Implement a health check wrapper in health_monitor.py: create a function health_check_wrapper(func) that catches exceptions, logs failures, and retries with exponential backoff",
-        "Add missing remediation for TS19 in ts19_repair.py: detect the specific failure condition and apply the corrective command sequence",
-        "Create unit tests for ts17_repair.py, ts18_repair.py, and ts19_repair.py covering success, fallback, and unrecoverable scenarios",
-        "Introduce a resource guard in orchestrator.py: add a function limit_resource_usage() that throttles new jobs when disk > 90% or memory > 50GB"
-      ],
-      "decisions": [
-        "Prioritize coding fixes for TS19\u2011TS21 before addressing lower\u2011priority health metrics",
-        "Use exponential backoff retry logic for all self\u2011repair functions to avoid rapid repeated failures",
-        "Enforce unit test coverage > 80% for all self\u2011test repair modules before redeploying"
-      ]
-    },
-    {
-      "id": "sess_b7b3e032",
-      "ts": "2026-05-11T04:59:08Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by fixing failing self-test modules and improving health monitoring",
-      "summary": "The hive is currently stalled with four critical self-test failures (TS17, TS18, TS19, TS21) and a high memory usage alert. No recent achievements have been recorded, and fallback handling for TS21 is pending. Immediate code fixes and health-check enhancements are required to bring the system back to stable operation.",
-      "progress": "Attempted auto-fix for TS21 self-test was applied but did not resolve the failure.",
-      "next_steps": [
-        "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to gracefully recover when primary fix fails",
-        "Implement a health check wrapper in health_monitor.py that runs self-test modules and reports detailed status via /api/health endpoint",
-        "Write unit tests for TS17, TS18, TS19 repair functions in orchestrator/self_fix/ts17_repair.py, ts18_repair.py, ts19_repair.py",
-        "Add memory usage alert throttling in load_manager.py to prevent repeated high-memory warnings",
-        "Create a retry mechanism in orchestrator.py for self-test execution that retries up to 3 times on transient failures"
-      ],
-      "decisions": [
-        "Prioritize concrete fallback logic for TS21 before addressing other self-test modules",
-        "Introduce a unified health-check API to centralize monitoring of self-test statuses",
-        "Add automated unit-test coverage for all self-fix modules to catch future regressions"
-      ]
-    },
-    {
-      "id": "sess_ac978a71",
-      "ts": "2026-05-11T05:14:18Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests and stabilizing resource usage",
-      "summary": "The hive is currently stalled with multiple high-priority self-test failures (TS17\u2011TS21) and high disk usage. Recent attempts to auto\u2011fix TS21 have been insufficient, and no fixes exist for TS17\u2011TS19. Immediate coding work is needed to add robust fallback handling and health\u2011check wrappers.",
-      "progress": "Attempted auto\u2011fix for TS21 was applied but did not resolve the failure.",
-      "next_steps": [
-        "Add fallback handling in ts21_repair.py to revert to a safe state when primary fix fails",
-        "Implement a health check wrapper in health_monitor.py that restarts failed self\u2011tests and logs detailed diagnostics",
-        "Write unit tests for ts17_repair.py, ts18_repair.py, and ts19_repair.py covering success and fallback paths",
-        "Add disk usage alert in resource_monitor.py to trigger cleanup when usage exceeds 90%",
-        "Create a retry mechanism in orchestrator/self_fix/__init__.py for self\u2011test repairs on transient errors"
-      ],
-      "decisions": [
-        "Prioritize implementing fallback logic for TS21 before addressing older test failures",
-        "Introduce automated health\u2011check wrappers to reduce manual intervention on self\u2011test regressions",
-        "Allocate additional temporary disk space by enabling log rotation in logger.py to mitigate disk saturation"
-      ]
-    },
-    {
-      "id": "sess_3f6fc438",
-      "ts": "2026-05-11T05:29:12Z",
-      "updated_by": "orchestrator",
-      "goal": "Resolve failing self-test modules (TS17-TS21) and stabilize hive health monitoring",
-      "summary": "The hive is currently stalled at 55% health due to multiple high-priority self-test failures (TS17\u2011TS21). Load is moderate and disk usage is high, but the immediate blocker is the failing self-tests. No recent achievements have been recorded, but a tmux-recover capability has been learned.",
-      "progress": "Attempted auto-fix for TS21 was applied, but the issue remains unresolved.",
-      "next_steps": [
-        "Add fallback handling in ts21_repair.py within orchestrator/self_fix/ts21_repair.py to catch and log unexpected repair errors",
-        "Implement a health check wrapper in health_monitor.py to automatically retry and mark TS21 as recovered on successful fallback",
-        "Write unit tests for ts17_repair.py, ts18_repair.py, ts19_repair.py, and ts20_repair.py covering error paths and successful repair scenarios",
-        "Introduce a disk usage alert in resource_monitor.py that triggers a cleanup routine when usage exceeds 90%",
-        "Create a status endpoint in api/health.py that returns JSON with current self-test statuses and overall health percentage"
-      ],
-      "decisions": [
-        "Prioritize concrete fallback logic for TS21 before tackling other self-test modules",
-        "Add automated health check wrappers to reduce manual intervention for self-test recoveries",
-        "Implement proactive disk cleanup to prevent resource exhaustion affecting future self-test runs"
-      ]
-    },
-    {
-      "id": "sess_e15265e9",
-      "ts": "2026-05-11T05:44:09Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-test modules and improving automatic recovery mechanisms",
-      "summary": "The hive is currently stalled with multiple high-priority self-test failures (TS17\u2011TS21) and high resource usage. No recent progress has been made, and the only learned capability is tmux-recover. Immediate code changes are needed to add fallback handling and health check wrappers to prevent future stalls.",
-      "progress": "No new fixes were applied since the last snapshot.",
-      "next_steps": [
-        "Add fallback handling to ts21_repair.py in orchestrator/self_fix/ts21_repair.py to catch exceptions and trigger a safe rollback",
-        "Implement a health check wrapper in health_monitor.py that runs self-test modules and retries failed checks up to 3 times",
-        "Create unit tests for ts18_repair.py, ts19_repair.py, and ts17_repair.py covering success, failure, and fallback paths",
-        "Add resource usage throttling in orchestrator/resource_manager.py to limit memory use when disk > 90% and schedule renice actions",
-        "Integrate a status endpoint in api/health.py that returns JSON of all self-test results and current resource metrics"
-      ],
-      "decisions": [
-        "Prioritize concrete fallback logic for TS21 before addressing TS17\u2011TS20 failures",
-        "Introduce automated retry logic for self-test modules to reduce manual intervention",
-        "Expose health metrics via an API endpoint to enable external monitoring and alerting"
-      ]
-    },
-    {
-      "id": "sess_58a1fe3d",
-      "ts": "2026-05-11T05:59:47Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests and improving automatic recovery mechanisms",
-      "summary": "The hive is currently stalled with critical self-test failures for TS17-TS21 and high resource usage. No recent achievements have been recorded, and only a fallback for TS21 has been partially planned. Immediate code fixes and health monitoring enhancements are needed to bring the system back to operational status.",
-      "progress": "No new fixes have been completed since the last snapshot.",
-      "next_steps": [
-        "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to handle unfixable TS21 errors and raise a clear alert",
-        "Implement a health check wrapper in health_monitor.py that runs each self-test and auto-retries failed TS17-TS20 with exponential backoff",
-        "Create unit tests for ts17_repair.py, ts18_repair.py, ts19_repair.py, and ts20_repair.py covering success and failure paths",
-        "Add a resource usage guard in orchestrator.py to throttle new jobs when mem>50GB or disk>90%",
-        "Introduce a logging endpoint in logstream.py (/api/health) that returns JSON with current self-test statuses and resource metrics"
-      ],
-      "decisions": [
-        "Prioritize automated fixes for TS17-TS20 before manual intervention",
-        "Enforce resource throttling to prevent further stalls during recovery",
-        "Expose health metrics via an API for external monitoring and alerting"
-      ]
-    },
-    {
-      "id": "sess_9fdb8d42",
-      "ts": "2026-05-11T06:14:30Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore all self-test suites (TS17\u2011TS21) and stabilize hive health to green",
-      "summary": "The hive is currently stalled at 55% health due to multiple failing self\u2011tests (TS17\u2011TS21) despite auto\u2011fix attempts. High load and disk usage are also pressing issues, but the immediate blocker is the missing fallback logic for TS21 repair. No recent fixes have succeeded.",
-      "progress": "No self\u2011test failures have been resolved since the last snapshot.",
-      "next_steps": [
-        "Add fallback handling in ts21_repair.py (orchestrator/self_fix/ts21_repair.py) to safely abort and log when primary repair steps fail",
-        "Implement a health check wrapper in health_monitor.py that retries failed self\u2011tests up to three times before marking them critical",
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and integrate them into the CI pipeline",
-        "Create a cleanup script in utils/maintenance.py to purge old log files when disk usage exceeds 90%"
-      ],
-      "decisions": [
-        "Prioritize fixing TS21 fallback before addressing TS17\u2011TS20",
-        "Treat disk usage cleanup as a secondary but urgent task to prevent further stalls",
-        "Defer non\u2011critical enhancements (e.g., UI theming) until self\u2011tests are green"
-      ]
-    },
-    {
-      "id": "sess_d1cb33fe",
-      "ts": "2026-05-11T06:29:31Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests and improving health monitoring.",
-      "summary": "The hive is currently stalled with four critical self-test failures (TS17\u2011TS21) and high resource usage. Automated fixes have not resolved the issues, so manual code updates are required. Recent activity shows no new achievements, so immediate concrete fixes are needed.",
-      "progress": "No successful fixes have been applied since the last snapshot.",
-      "next_steps": [
-        "Add fallback handling in ts21_repair.py within orchestrator/self_fix/ts21_repair.py to safely skip unrecoverable nodes.",
-        "Implement a health check wrapper in health_monitor.py that retries failing self-tests up to 3 times and logs outcomes.",
-        "Add retry logic with exponential backoff to call_self_test() in orchestrator/self_fix/ts19_repair.py for TS19 failures.",
-        "Write unit tests for ts17_repair.py, ts18_repair.py, and ts19_repair.py covering success, failure, and fallback paths.",
-        "Add detailed metric emission in health_monitor.py to report self-test pass/fail rates to /api/metrics endpoint."
-      ],
-      "decisions": [
-        "Prioritize concrete code fixes for TS17\u2011TS21 before addressing resource throttling.",
-        "Introduce automated retry and fallback mechanisms to reduce manual intervention.",
-        "Expand test coverage to prevent regressions in self-test repair modules."
-      ]
-    },
-    {
-      "id": "sess_58fa347a",
-      "ts": "2026-05-11T06:44:33Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-test modules and improving automated recovery mechanisms",
-      "summary": "The hive is currently stalled with several critical self-test failures (TS17\u2011TS21) and high resource usage. No recent achievements have been recorded, and the primary blockers are failing self\u2011test repairs. Immediate coding work is needed to add fallback handling and health check wrappers to stabilize the system.",
-      "progress": "No new fixes have been completed since the last snapshot.",
-      "next_steps": [
-        "Add fallback handling in ts21_repair.py within orchestrator/self_fix/ to gracefully handle unrecoverable errors",
-        "Implement a health check wrapper in health_monitor.py that retries failed self\u2011tests and reports status via /api/health",
-        "Add retry logic with exponential backoff to call_self_test() in orchestrator/self_fix/__init__.py for HTTP 429 responses",
-        "Write unit tests for ts18_repair.py, ts19_repair.py, and ts17_repair.py covering success and failure paths",
-        "Create a resource throttling guard in load_manager.py to prevent disk usage from exceeding 90% and log warnings"
-      ],
-      "decisions": [
-        "Prioritize adding fallback mechanisms over full auto\u2011fix for TS21 due to time constraints",
-        "Introduce a generic health\u2011check decorator to wrap all self\u2011test functions",
-        "Enforce unit test coverage >=80% for all self\u2011fix modules before deploying further changes"
-      ]
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -1205,9 +227,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=8 health=55% blockers=9",
+    "task": "gitops: develop\u2192main promotion check + release draft",
     "status": "completed",
-    "started_at": "2026-05-11T06:50:48Z",
-    "completed_at": "2026-05-11T06:50:48Z"
+    "started_at": "2026-05-11T06:57:23Z",
+    "completed_at": "2026-05-11T06:57:26Z"
   }
 }
