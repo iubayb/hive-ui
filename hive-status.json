@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T05:38:59Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-11T05:39:54Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
@@ -1142,9 +1142,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: develop\u2192main promotion check + release draft",
     "status": "completed",
-    "started_at": "2026-05-11T05:38:59Z",
-    "completed_at": "2026-05-11T05:38:59Z"
+    "started_at": "2026-05-11T05:39:51Z",
+    "completed_at": "2026-05-11T05:39:54Z"
   }
 }
