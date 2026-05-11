@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T05:18:01Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-11T05:18:53Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.45,
-      "last_seen": "2026-05-11T05:16:31Z",
+      "last_seen": "2026-05-11T05:18:31Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -26,32 +26,6 @@
   },
   "achievements": [],
   "blockers": [
-    {
-      "id": "b_ade9141f",
-      "ts": "2026-05-11T05:14:23Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux session entered an error state after repeated heartbeats; a task (ID 173) likely hung, causing the main process to become unresponsive.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "04d4c727f41160083bbde66881cb1c0b"
-    },
-    {
-      "id": "b_76584f88",
-      "ts": "2026-05-11T05:14:22Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux session is stuck in an error state with only heartbeat logs and no task progress, indicating a hung main process.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "3df4b65b053834e87496dd6d28868806"
-    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -1168,9 +1142,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-11T05:17:41Z",
-    "completed_at": "2026-05-11T05:17:41Z"
+    "started_at": "2026-05-11T05:18:52Z",
+    "completed_at": "2026-05-11T05:18:53Z"
   }
 }
