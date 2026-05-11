@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T09:58:42Z",
+  "last_updated": "2026-05-11T10:00:01Z",
   "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.55,
-      "last_seen": "2026-05-11T09:58:41Z",
+      "status": "running",
+      "health_score": 0.875,
+      "last_seen": "2026-05-11T09:59:56Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -19,7 +19,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 10,
+      "errors_last_hour": 8,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -142,6 +142,19 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "82ed62237b8e342301c173b1539d754e"
+    },
+    {
+      "id": "b_026f464c",
+      "ts": "2026-05-11T09:59:53Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[ps5-hive] The hive is in an error state and appears to be stuck with no progress (heartbeat shows same stats for minutes). Likely a hung process or unresponsive task causing the session to error.",
+      "severity": "medium",
+      "status": "resolved",
+      "resolved_at": "2026-05-11T09:59:59Z",
+      "resolution": "auto-pruned: ps5-hive is now alive",
+      "github_issue": null,
+      "_hash": "4b744c40f0b15688b2de88ef7a73ff54"
     },
     {
       "id": "b_b071ede7",
@@ -373,6 +386,13 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_592adb62",
+        "ts": "2026-05-11T09:59:53Z",
+        "hive": "default",
+        "summary": "Session ps5-hive is hung in error; restarting it via tmux should clear the fault.",
+        "source": "doctor"
+      },
+      {
         "id": "f_980270d9",
         "ts": "2026-05-11T09:29:56Z",
         "hive": "default",
@@ -476,7 +496,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 22
+    "openrouter_calls_today": 24
   },
   "model_champions": {
     "text": null,
@@ -485,26 +505,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_5a9dad92",
-      "ts": "2026-05-11T07:28:53Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving critical self-test failures and high\u2011load issues, then improve monitoring and cleanup routines.",
-      "summary": "The hive is currently experiencing multiple high\u2011severity blockers, notably failing self\u2011tests TS19 and TS21 and a spike in task failures in the ps5\u2011hive session. Resource usage is near critical limits, and pending fixes for ts18_check and load_manager remain undone.",
-      "progress": "The auto\u2011fix attempt for TS21 was executed, but the test continues to fail.",
-      "next_steps": [
-        "Implement fallback cleanup logic in ts18_check() within self_tests/ts1/ts18_check.py to guarantee resource release on error.",
-        "Reduce process priority thresholds in utils/load_manager.py by adjusting the renice policy to limit CPU usage when load_core > 0.15.",
-        "Add detailed logging and retry handling to self_tests/ts19_runner.py to capture failure diagnostics and attempt a second run on intermittent errors.",
-        "Create unit tests for utils/load_manager.py covering load spikes and disk usage edge cases.",
-        "Expose a new /api/health endpoint in api/health.py that reports self-test statuses (TS19, TS21) and current resource metrics in JSON."
-      ],
-      "decisions": [
-        "Prioritize fixing TS19 and TS21 before addressing lower\u2011priority ps5\u2011hive errors.",
-        "Limit maximum disk usage to 90% by adding a throttling guard in utils/load_manager.py.",
-        "Integrate health endpoint monitoring to provide real\u2011time visibility into test failures and resource health."
-      ]
-    },
     {
       "id": "sess_3b4a7ecc",
       "ts": "2026-05-11T07:44:03Z",
@@ -684,6 +684,26 @@
         "Use adaptive throttling rather than static thresholds for load management",
         "Expose a health_check API to simplify external monitoring and alerting"
       ]
+    },
+    {
+      "id": "sess_38108749",
+      "ts": "2026-05-11T09:59:49Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore hive health by fixing failing self-tests and improving resource monitoring",
+      "summary": "The hive is stalled with several critical self-test failures (TS17-TS21) and high resource usage. Auto-fix attempts have not resolved the issues, and the load manager needs adjustment to reduce process load. Immediate code changes are required to implement fallback cleanup and refine monitoring thresholds.",
+      "progress": "Auto-fix scripts were executed for TS21, TS19, TS18, and TS17 but did not resolve the failures.",
+      "next_steps": [
+        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py that deletes temporary files and resets state on failure",
+        "Implement detailed error logging in ts17_check() in self_tests/ts1/ts17_check.py to capture stack traces and trigger a retry on transient errors",
+        "Modify utils/load_manager.py to lower process priority threshold to 0.10 when disk usage exceeds 85% and add exponential backoff for load spikes",
+        "Create unit tests in tests/self_tests/test_ts18.py to verify cleanup routine executes when ts18_check() returns an error",
+        "Add a health check endpoint in api/health.py that reports current self-test statuses and load manager metrics as JSON"
+      ],
+      "decisions": [
+        "Prioritize fixing TS17-TS21 before addressing lower priority self-tests",
+        "Introduce exponential backoff in load_manager to prevent cascading failures under high disk usage",
+        "Expose self-test health via an API endpoint for external monitoring"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -695,9 +715,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-11T09:58:41Z",
-    "completed_at": "2026-05-11T09:58:42Z"
+    "started_at": "2026-05-11T09:59:59Z",
+    "completed_at": "2026-05-11T10:00:01Z"
   }
 }
