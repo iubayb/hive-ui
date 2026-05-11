@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-11T01:44:49Z",
+  "last_updated": "2026-05-11T01:45:51Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -26,19 +26,6 @@
   },
   "achievements": [],
   "blockers": [
-    {
-      "id": "b_8d55372e",
-      "ts": "2026-05-11T01:42:33Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[ps5-hive] The tmux session has entered an error state (silent for 1\u202fs, 8 errors) likely due to a hung or unresponsive task in the active window.",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "461913cf01fe0108667c007e7cd4df86"
-    },
     {
       "id": "b_c67e9ab8",
       "ts": "2026-05-10T17:39:04Z",
@@ -994,9 +981,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-11T01:44:19Z",
-    "completed_at": "2026-05-11T01:44:19Z"
+    "started_at": "2026-05-11T01:45:49Z",
+    "completed_at": "2026-05-11T01:45:51Z"
   }
 }
