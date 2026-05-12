@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T15:18:28Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-12T15:19:44Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -240,7 +240,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 21
+    "openrouter_calls_today": 22
   },
   "model_champions": {
     "text": null,
@@ -249,26 +249,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_8617807b",
-      "ts": "2026-05-12T12:47:55Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by resolving critical self-test failures and resource constraints.",
-      "summary": "The hive is currently stalled with high load, full disk usage, and several self-test failures (TS18, TS19, TS21). Sessions are in backoff and auto\u2011fixes have not succeeded, requiring targeted code repairs and cleanup actions.",
-      "progress": "Identified key failure points and listed pending tasks for disk cleanup and LLM retry logic.",
-      "next_steps": [
-        "Implement prune_old_sessions() in orchestrator.py to delete logs and temp files older than 30 days and integrate it into the shutdown routine.",
-        "Add exponential backoff with jitter to call_llm() in orchestrator.py for HTTP 429 and 5xx responses, updating the retry decorator.",
-        "Create unit tests in tests/test_selftest.py to simulate TS18, TS19, and TS21 failures and verify auto\u2011fix pathways.",
-        "Modify self_test_runner.py to log detailed diagnostics for TS18, TS19, and TS21 and raise a custom RecoverableError for auto\u2011fix handling.",
-        "Add a health check endpoint /api/health in logstream.py that returns JSON including disk usage, memory pressure, and self\u2011test status."
-      ],
-      "decisions": [
-        "Prioritize disk\u2011space cleanup before adding new retry logic to ensure resources for subsequent fixes.",
-        "Introduce explicit unit tests for failing self\u2011tests to prevent silent regressions.",
-        "Expose health metrics via an API endpoint to allow external monitoring and faster detection of future stalls."
-      ]
-    },
     {
       "id": "sess_4d9a6511",
       "ts": "2026-05-12T13:03:03Z",
@@ -448,6 +428,26 @@
         "Limit retry attempts for call_llm() to avoid cascading load during high\u2011traffic periods.",
         "Add unit tests for all changed self-test functions to ensure future regressions are caught early."
       ]
+    },
+    {
+      "id": "sess_5037bc1a",
+      "ts": "2026-05-12T15:19:44Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by resolving critical self-test failures, improving orchestrator resilience, and freeing disk space.",
+      "summary": "The hive is currently stalled with high memory usage and a full disk, causing multiple self-test failures (TS18, TS19, TS21). Immediate remediation requires adding disk cleanup logic, implementing exponential backoff retries for LLM calls, and patching the failing self\u2011test modules.",
+      "progress": "Identified the primary failure points and drafted pending next steps for disk cleanup and retry logic.",
+      "next_steps": [
+        "Add prune_old_sessions() in orchestrator.py to delete session logs older than 30 days and call it at startup.",
+        "Integrate exponential backoff retry in call_llm() within orchestrator.py for HTTP 429 and 5xx responses.",
+        "Patch self_test/ts18.py to handle missing config files by adding default fallback values.",
+        "Patch self_test/ts19.py to correct path validation logic and add unit tests for edge cases.",
+        "Create a new endpoint /api/cleanup in logstream.py that triggers disk-space cleanup and returns JSON status."
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before addressing self-test failures to prevent further resource exhaustion.",
+        "Implement exponential backoff as a reusable decorator in utils/retry.py for future API calls.",
+        "Add unit tests for the new cleanup and retry functionality to ensure reliability before deployment."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -459,9 +459,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "self-test: running test_system.sh + auto-fix",
-    "status": "running",
-    "started_at": "2026-05-12T15:18:28Z",
-    "completed_at": null
+    "task": "compaction: LLM summarising hive state",
+    "status": "completed",
+    "started_at": "2026-05-12T15:19:31Z",
+    "completed_at": "2026-05-12T15:19:44Z"
   }
 }
