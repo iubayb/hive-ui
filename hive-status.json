@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T21:07:37Z",
+  "last_updated": "2026-05-12T21:08:55Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 11
+    "openrouter_calls_today": 12
   },
   "model_champions": {
     "text": null,
@@ -248,26 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_66166993",
-      "ts": "2026-05-12T18:38:08Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving critical blockers and improving system resilience",
-      "summary": "The hive is currently stalled with high resource usage and several self-test failures (TS18, TS19, TS21). Critical sessions are in backoff and disk usage is near capacity. Immediate code changes are needed to address disk cleanup, session backoff monitoring, and failing self-test mechanisms.",
-      "progress": "No recent achievements were recorded.",
-      "next_steps": [
-        "Implement disk cleanup utility in maintenance.py to purge /tmp and old log files when disk usage > 90%",
-        "Add watchdog in session_manager.py that monitors ps5-hive backoff state and triggers forced restart after 3 consecutive backoffs",
-        "Refactor self_test_runner.py to include retry logic for TS18, TS19, and TS21 with exponential backoff and detailed error logging",
-        "Create unit tests in tests/self_test_runner_test.py covering the new retry logic and failure handling for TS18-21",
-        "Add resource usage alert in metrics.py to emit a warning when memory > 55GB or disk > 95%"
-      ],
-      "decisions": [
-        "Prioritize disk cleanup and backoff watchdog to unblock stalled sessions",
-        "Enhance self-test framework with retry and logging before considering manual fixes",
-        "Allocate incremental resources to reduce load pressure while fixes are deployed"
-      ]
-    },
     {
       "id": "sess_c7e6a7ff",
       "ts": "2026-05-12T18:53:18Z",
@@ -447,6 +427,26 @@
         "Implement automated restart logic for ps5-hive after three backoff attempts to break the stalled state.",
         "Allocate a dedicated maintenance window to run the new cleanup and watchdog tasks, then re\u2011run all self\u2011tests."
       ]
+    },
+    {
+      "id": "sess_6e38ada8",
+      "ts": "2026-05-12T21:08:55Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by resolving critical self-test failures, clearing disk space, and stabilizing the ps5-hive session backoff.",
+      "summary": "The hive is currently stalled with high memory usage and a near\u2011full disk. Critical self\u2011tests TS18, TS19, and TS21 are failing, and the ps5-hive session is in a long backoff loop. Immediate remediation requires disk cleanup, backoff watchdoging, and targeted fixes for the failing self\u2011tests.",
+      "progress": "No new achievements were recorded since the last snapshot.",
+      "next_steps": [
+        "Implement a disk cleanup utility in maintenance.py that deletes temporary files older than 48h and logs reclaimed space.",
+        "Add a watchdog in session_manager.py that monitors ps5-hive backoff state and triggers an immediate restart after 3 consecutive backoffs.",
+        "Create unit tests in tests/self_test.py for TS18, TS19, and TS21 to capture current failure conditions.",
+        "Patch ts18_check() in self_test.py to handle edge\u2011case inputs causing the failure, and add detailed logging.",
+        "Add a health\u2011check endpoint in api/health.py that reports disk usage, memory pressure, and self\u2011test status in JSON."
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before attempting self\u2011test repairs to prevent out\u2011of\u2011space errors.",
+        "Automate ps5-hive backoff recovery via a watchdog rather than manual restarts.",
+        "Lock the failing self\u2011tests until patches are verified, then re\u2011enable them in the regular test suite."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -458,9 +458,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-12T21:07:17Z",
-    "completed_at": "2026-05-12T21:07:17Z"
+    "started_at": "2026-05-12T21:08:37Z",
+    "completed_at": "2026-05-12T21:08:55Z"
   }
 }
