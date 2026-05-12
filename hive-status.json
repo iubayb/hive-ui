@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T18:04:54Z",
+  "last_updated": "2026-05-12T18:05:34Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-12T18:04:06Z",
+      "status": "stalled",
+      "health_score": 0.55,
+      "last_seen": "2026-05-12T18:05:34Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -188,8 +188,8 @@
       "id": "ns_4f3062d7",
       "priority": 1,
       "description": "Add memory usage guard in orchestrator.py: implement limit_memory_usage() to cap process memory at 48GB and log warnings",
-      "assigned_to": "default",
-      "status": "pending",
+      "assigned_to": "opencode",
+      "status": "in_progress",
       "source": "orchestrator",
       "ts": "2026-05-12T18:04:54Z"
     },
@@ -277,7 +277,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-12T18:04:32Z",
-    "completed_at": "2026-05-12T18:04:32Z"
+    "started_at": "2026-05-12T18:05:34Z",
+    "completed_at": "2026-05-12T18:05:34Z"
   }
 }
