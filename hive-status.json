@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T00:48:01Z",
+  "last_updated": "2026-05-12T00:48:57Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-12T00:46:30Z",
+      "last_seen": "2026-05-12T00:48:57Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -684,7 +684,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 93
+    "openrouter_calls_today": 94
   },
   "model_champions": {
     "text": null,
@@ -693,26 +693,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_04291c59",
-      "ts": "2026-05-11T22:17:47Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by fixing failing self-tests and addressing resource constraints",
-      "summary": "The hive is currently stalled with high load and multiple self-test failures (TS18, TS19, TS21). Session 'ps5-hive' is in prolonged backoff, and disk usage is critical. Recent work has only identified a new tmux restart capability.",
-      "progress": "Implemented tmux_session_restart capability for automated session recovery.",
-      "next_steps": [
-        "Add fallback cleanup routine to ts18_check() in self_tests/ts1/ts18_check.py to ensure resource release on failure",
-        "Implement missing fix for TS19 in self_tests/ts1/ts19_check.py, adding proper exception handling and retry logic",
-        "Create a corrective script for TS21 in self_tests/ts1/ts21_check.py that validates and repairs configuration files",
-        "Modify utils/load_manager.py to reduce process priority when CPU load > 0.15 and add alert logging",
-        "Add unit tests in tests/self_tests/test_ts18.py, test_ts19.py, and test_ts21.py covering success and failure paths"
-      ],
-      "decisions": [
-        "Prioritize fixing TS18 before addressing TS19 and TS21 to unblock fallback mechanisms",
-        "Introduce aggressive disk cleanup in utils/maintenance.py when disk usage exceeds 90%",
-        "Schedule a manual review of 'ps5-hive' backoff policy after automated fixes are applied"
-      ]
-    },
     {
       "id": "sess_d22ec75b",
       "ts": "2026-05-11T22:33:13Z",
@@ -892,6 +872,26 @@
         "Modify load_manager to proactively throttle processes under high resource usage.",
         "Introduce auto\u2011restart logic for backoff\u2011stuck sessions to reduce manual intervention."
       ]
+    },
+    {
+      "id": "sess_7ea183ea",
+      "ts": "2026-05-12T00:48:47Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and stabilizing resource monitoring",
+      "summary": "The hive is currently stalled with multiple high\u2011priority self\u2011test failures (TS18, TS19, TS21) and a critical backoff issue in the ps5-hive session. Load is high and disk usage is near capacity, causing jobs to be reniced. Recent attempts to auto\u2011fix tests have not succeeded.",
+      "progress": "Implemented a fallback cleanup routine for ts18_check() in self_tests/ts1.",
+      "next_steps": [
+        "Complete the fallback cleanup implementation in ts18_check() within self_tests/ts1/ts18.py and add logging for each cleanup step",
+        "Add missing validation and error handling in ts19_check() in self_tests/ts1/ts19.py to prevent silent failures",
+        "Create unit tests for ts18_check(), ts19_check(), and ts21_check() in tests/self_tests/test_ts1.py covering success and failure paths",
+        "Refactor utils/load_manager.py to lower process priority when memory > 80% and disk > 85%, and emit a warning metric",
+        "Introduce a watchdog in orchestrator.py that monitors session backoff counters and triggers a manual restart for sessions exceeding 100 restarts"
+      ],
+      "decisions": [
+        "Prioritize fixing TS18 before addressing TS19 and TS21, as TS18 cleanup is already partially in place",
+        "Add explicit metric emission for load_manager adjustments to enable future alerting",
+        "Implement an automated backoff escalation policy to limit restarts and alert operators when thresholds are hit"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -905,7 +905,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-12T00:47:30Z",
-    "completed_at": "2026-05-12T00:47:31Z"
+    "started_at": "2026-05-12T00:48:57Z",
+    "completed_at": "2026-05-12T00:48:57Z"
   }
 }
