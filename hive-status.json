@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T14:48:13Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-12T14:49:54Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -240,7 +240,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 19
+    "openrouter_calls_today": 20
   },
   "model_champions": {
     "text": null,
@@ -249,26 +249,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_ccd1a753",
-      "ts": "2026-05-12T12:18:01Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by resolving critical failures, freeing disk space, and improving LLM call reliability.",
-      "summary": "The hive is stalled at 50% health with high load, full disk, and several self\u2011test failures. Critical sessions are in backoff and automatic fixes have not succeeded. Immediate remediation of disk usage and retry logic is required to unblock other components.",
-      "progress": "Identified the need for disk\u2011space cleanup and exponential backoff for LLM calls; pending tasks were recorded.",
-      "next_steps": [
-        "Implement prune_old_sessions() in orchestrator.py to delete files older than 30 days and integrate it into the shutdown routine.",
-        "Add exponential backoff with jitter to call_llm() in orchestrator.py for HTTP 429/500 responses, logging each retry.",
-        "Create unit tests for the new prune_old_sessions() function in tests/test_orchestrator_cleanup.py.",
-        "Patch self_test_T18() in self_test.py to skip non\u2011essential checks when disk usage >90% and log a warning.",
-        "Restart the 'ps5-hive' session programmatically after applying the above fixes, with a forced reset flag."
-      ],
-      "decisions": [
-        "Prioritize disk cleanup over other self\u2011test fixes to free immediate resources.",
-        "Introduce retry logic before attempting manual intervention on LLM call failures.",
-        "Defer extensive rewriting of TS19/TS18 until disk space is stabilised."
-      ]
-    },
     {
       "id": "sess_d66d4610",
       "ts": "2026-05-12T12:33:19Z",
@@ -448,6 +428,26 @@
         "Use exponential backoff with jitter as the default retry strategy for all external API calls",
         "Limit automatic restarts for failing sessions to three attempts to avoid endless backoff loops"
       ]
+    },
+    {
+      "id": "sess_920426b0",
+      "ts": "2026-05-12T14:49:34Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by fixing failing self-tests, reducing disk usage, and improving LLM call reliability",
+      "summary": "The hive is currently stalled with high memory usage and a full disk, causing multiple sessions to back off. Several self-tests (TS18, TS19, TS21) are failing, and the orchestrator lacks proper disk cleanup and retry logic for LLM calls. Immediate code changes are needed to restore health and prevent future stalls.",
+      "progress": "Identified critical blockers and listed pending code tasks for disk cleanup and exponential backoff.",
+      "next_steps": [
+        "Implement prune_old_logs() in orchestrator.py to delete log files older than 30 days and free at least 20GB of disk space",
+        "Add exponential backoff with jitter to call_llm() in orchestrator.py for handling HTTP 429 and network timeouts",
+        "Create unit tests in tests/orchestrator_test.py for prune_old_logs() covering edge cases of empty directories and permission errors",
+        "Write integration test in tests/selftest_integration.py that simulates TS18, TS19, and TS21 failures and verifies auto-fix routines trigger correctly",
+        "Update hive_config.yaml to lower default job renice values and add a max_memory_threshold parameter of 55GB"
+      ],
+      "decisions": [
+        "Prioritize disk-space cleanup before addressing self-test failures to avoid further resource exhaustion",
+        "Implement exponential backoff as the default LLM call strategy across all sessions",
+        "Introduce automated test coverage for critical self-test fix paths to catch regressions early"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -459,9 +459,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "self-test: running test_system.sh + auto-fix",
-    "status": "running",
-    "started_at": "2026-05-12T14:48:13Z",
-    "completed_at": null
+    "task": "compaction: LLM summarising hive state",
+    "status": "completed",
+    "started_at": "2026-05-12T14:49:15Z",
+    "completed_at": "2026-05-12T14:49:34Z"
   }
 }
