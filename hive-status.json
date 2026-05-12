@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T10:01:53Z",
+  "last_updated": "2026-05-12T10:02:34Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -188,8 +188,8 @@
       "id": "ns_5f994a15",
       "priority": 1,
       "description": "Fix the validation logic in self_test.py for TS17, TS18, and TS19 and add detailed error messages",
-      "assigned_to": "default",
-      "status": "pending",
+      "assigned_to": "opencode",
+      "status": "in_progress",
       "source": "orchestrator",
       "ts": "2026-05-12T10:01:53Z"
     },
@@ -277,7 +277,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-12T10:01:28Z",
-    "completed_at": "2026-05-12T10:01:28Z"
+    "started_at": "2026-05-12T10:02:33Z",
+    "completed_at": "2026-05-12T10:02:34Z"
   }
 }
