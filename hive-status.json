@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T04:48:55Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-12T04:50:01Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-12T04:47:13Z",
+      "last_seen": "2026-05-12T04:49:15Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -83,19 +83,6 @@
     }
   ],
   "blockers": [
-    {
-      "id": "b_fba6540d",
-      "ts": "2026-05-12T04:46:24Z",
-      "hive": "desktop",
-      "agent": "supervisor",
-      "description": "Session 'ps5-hive' in long backoff (160s) \u2014 53 restart(s), may need manual intervention",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "81b90867b2819d4e5f835d96ac94ff07"
-    },
     {
       "id": "b_2315ea91",
       "ts": "2026-05-12T01:44:07Z",
@@ -227,6 +214,19 @@
       "_hash": "82ed62237b8e342301c173b1539d754e"
     },
     {
+      "id": "b_fba6540d",
+      "ts": "2026-05-12T04:46:24Z",
+      "hive": "desktop",
+      "agent": "supervisor",
+      "description": "Session 'ps5-hive' in long backoff (160s) \u2014 53 restart(s), may need manual intervention",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-12T04:49:25Z",
+      "resolution": "auto-pruned: ps5-hive recovered from backoff",
+      "github_issue": null,
+      "_hash": "81b90867b2819d4e5f835d96ac94ff07"
+    },
+    {
       "id": "b_a352c0a0",
       "ts": "2026-05-12T03:56:39Z",
       "hive": "desktop",
@@ -339,7 +339,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 7
+    "openrouter_calls_today": 8
   },
   "model_champions": {
     "text": null,
@@ -348,16 +348,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_4c232dbd",
-      "ts": "2026-05-12T03:00:55Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_214c9b39",
       "ts": "2026-05-12T03:02:02Z",
@@ -517,6 +507,26 @@
         "Introduce explicit error codes for each self-test to simplify automated remediation",
         "Add unit test suite for self_test.py to prevent regression after patches"
       ]
+    },
+    {
+      "id": "sess_6da29bc0",
+      "ts": "2026-05-12T04:50:01Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-test checks and resolving high disk usage",
+      "summary": "The hive is currently stalled with multiple high-priority self-test failures (TS18, TS19, TS21) and disk at 100% capacity. Recent auto-fixes have addressed TS12 repeatedly, but core issues remain. Immediate code changes and system tweaks are needed to pass self-tests and free disk space.",
+      "progress": "Auto-fix logic successfully resolved TS12 invariant across several attempts.",
+      "next_steps": [
+        "Complete implementation of detailed validation for TS18 in self_test.py within function validate_ts18()",
+        "Patch ts19_check() in self_test.py to correctly handle missing config file edge case",
+        "Add disk cleanup routine in maintenance.py: create free_disk_space() that removes log files older than 30 days and logs reclaimed space",
+        "Update orchestrator.py to retry LLM diagnosis calls with exponential backoff when a temporary DNS failure occurs",
+        "Write unit tests in test_self_test.py covering TS18, TS19, and TS21 scenarios"
+      ],
+      "decisions": [
+        "Prioritize fixing self-test failures before addressing lower priority blockers",
+        "Implement a safe automatic log rotation/cleanup to prevent disk from reaching 100% again",
+        "Introduce retry logic for external LLM calls to reduce impact of transient network errors"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -528,9 +538,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-12T04:48:25Z",
-    "completed_at": "2026-05-12T04:48:25Z"
+    "started_at": "2026-05-12T04:49:45Z",
+    "completed_at": "2026-05-12T04:50:01Z"
   }
 }
