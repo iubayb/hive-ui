@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T20:08:01Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-12T20:08:49Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 7
+    "openrouter_calls_today": 8
   },
   "model_champions": {
     "text": null,
@@ -248,16 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_653624a9",
-      "ts": "2026-05-12T18:19:30Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_6d849613",
       "ts": "2026-05-12T18:20:31Z",
@@ -417,6 +407,26 @@
         "Introduce automated watchdog for ps5-hive to reduce manual intervention time.",
         "Enhance self\u2011test robustness with retries and detailed logging to aid future auto\u2011fixes."
       ]
+    },
+    {
+      "id": "sess_eaa8b0eb",
+      "ts": "2026-05-12T20:08:29Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by clearing disk space, fixing failing self-tests, and restoring the ps5-hive session",
+      "summary": "The hive is stalled with high memory and disk usage, multiple self-test failures, and the ps5-hive session in prolonged backoff. Immediate remediation requires freeing disk space, adding a watchdog to auto\u2011restart ps5-hive, and addressing the failing self-tests. No recent progress has been recorded.",
+      "progress": "No new achievements were recorded since the last snapshot.",
+      "next_steps": [
+        "Implement disk cleanup utility in maintenance.py: function clean_temp_dirs() that removes files older than 7 days in /tmp and logs reclaimed space",
+        "Add unit tests for clean_temp_dirs() in tests/test_maintenance.py covering edge cases and dry-run mode",
+        "Create watchdog in session_manager.py: class Ps5HiveWatchdog with method monitor_backoff() that restarts ps5-hive after 3 consecutive backoff intervals",
+        "Add logging statements to Ps5HiveWatchdog to record restart attempts and outcomes in hive.log",
+        "Write a fix script in selftest_fixer.py that re-runs TS18, TS19, and TS21 after cleanup and restarts affected services, then update orchestrator.py to call this script on self-test failure"
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before attempting self-test fixes to ensure sufficient resources",
+        "Automate ps5-hive recovery via watchdog to reduce manual intervention",
+        "Integrate self-test remediation into orchestrator's error handling loop"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -428,9 +438,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
-    "status": "running",
-    "started_at": "2026-05-12T20:08:01Z",
-    "completed_at": null
+    "task": "compaction: LLM summarising hive state",
+    "status": "completed",
+    "started_at": "2026-05-12T20:08:12Z",
+    "completed_at": "2026-05-12T20:08:29Z"
   }
 }
