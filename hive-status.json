@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T16:56:35Z",
+  "last_updated": "2026-05-12T16:57:42Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -240,7 +240,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 4
+    "openrouter_calls_today": 5
   },
   "model_champions": {
     "text": null,
@@ -368,6 +368,26 @@
         "Use jittered exponential backoff to avoid thundering herd on session restarts",
         "Log all automatic fix attempts and surface persistent failures to the operator dashboard"
       ]
+    },
+    {
+      "id": "sess_6687af1a",
+      "ts": "2026-05-12T16:57:31Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by resolving critical self-test failures and resource constraints.",
+      "summary": "The hive is currently stalled with high load, full disk, and several self-test failures (TS18, TS19, TS21). Sessions are backing off and the system lacks automated disk cleanup and robust session restart logic.",
+      "progress": "Identified the most urgent blockers and listed pending coding tasks to address disk space and session backoff.",
+      "next_steps": [
+        "Implement automatic disk\u2011space cleanup routine in monitor.py that deletes old log files and rotates metrics when usage > 80%.",
+        "Add exponential backoff with jitter to start_session() in session_manager.py to replace the fixed 160s backoff for failing sessions.",
+        "Create unit tests for TS18 and TS19 in self_test_suite.py to reproduce failures and verify fixes.",
+        "Patch ts21_check() in self_test_suite.py to correctly handle edge\u2011case file permissions and add a retry loop.",
+        "Add a health\u2011check endpoint in health.py that reports disk usage, memory pressure, and self\u2011test status as JSON for external monitoring."
+      ],
+      "decisions": [
+        "Prioritize automated resource mitigation (disk cleanup and backoff) before deeper test fixes.",
+        "Commit fixes to the main branch only after unit tests for TS18/TS19 pass.",
+        "Enable temporary job renicing to keep core usage below 0.1 while fixes are applied."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -381,7 +401,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-12T16:56:15Z",
-    "completed_at": "2026-05-12T16:56:15Z"
+    "started_at": "2026-05-12T16:57:41Z",
+    "completed_at": "2026-05-12T16:57:42Z"
   }
 }
