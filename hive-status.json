@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T19:07:48Z",
+  "last_updated": "2026-05-12T19:08:43Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-12T19:06:37Z",
+      "last_seen": "2026-05-12T19:08:43Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 3
+    "openrouter_calls_today": 4
   },
   "model_champions": {
     "text": null,
@@ -248,16 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_ee672a1b",
-      "ts": "2026-05-12T18:15:28Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_bc3d9459",
       "ts": "2026-05-12T18:16:28Z",
@@ -377,6 +367,26 @@
         "Implement an automated restart policy for ps5-hive rather than manual intervention.",
         "Enhance self-test reporting to include actionable hints for each failing test case."
       ]
+    },
+    {
+      "id": "sess_b0ffd7a8",
+      "ts": "2026-05-12T19:08:22Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by resolving failing self-tests, clearing disk space, and stabilizing the ps5-hive session",
+      "summary": "The hive is currently stalled at 50% health with multiple high-priority blockers: a backoff\u2011stuck ps5-hive session, near\u2011full disk, and three failing self\u2011tests (TS18, TS19, TS21). No recent achievements have been logged, and the system is under heavy memory pressure.",
+      "progress": "No new tasks completed since the last snapshot.",
+      "next_steps": [
+        "Implement disk_cleanup() in maintenance.py to delete temp files older than 7 days and free at least 10\u202fGB of space",
+        "Add a watchdog thread in session_manager.py that monitors ps5-hive backoff counters and triggers a forced restart after three consecutive backoffs",
+        "Write fix_self_test_ts21() in self_test_fixer.py to apply the missing configuration patch and add unit tests",
+        "Create resolve_ts19() in self_test_fixer.py that reinstalls the TS19 dependency and logs verification output",
+        "Develop handle_ts18_failure() in self_test_fixer.py to revert to a known\u2011good model version and record the rollback"
+      ],
+      "decisions": [
+        "Prioritize disk cleanup and ps5-hive watchdog to unblock further self\u2011test repairs",
+        "Allocate additional memory to core processes by lowering non\u2011essential job niceness",
+        "Defer non\u2011critical feature work until all high\u2011priority blockers are cleared"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -388,9 +398,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-12T19:07:48Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-12T19:08:43Z",
+    "completed_at": "2026-05-12T19:08:43Z"
   }
 }
