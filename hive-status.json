@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T21:37:53Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-12T21:39:01Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 13
+    "openrouter_calls_today": 14
   },
   "model_champions": {
     "text": null,
@@ -248,26 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_b0ffd7a8",
-      "ts": "2026-05-12T19:08:22Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by resolving failing self-tests, clearing disk space, and stabilizing the ps5-hive session",
-      "summary": "The hive is currently stalled at 50% health with multiple high-priority blockers: a backoff\u2011stuck ps5-hive session, near\u2011full disk, and three failing self\u2011tests (TS18, TS19, TS21). No recent achievements have been logged, and the system is under heavy memory pressure.",
-      "progress": "No new tasks completed since the last snapshot.",
-      "next_steps": [
-        "Implement disk_cleanup() in maintenance.py to delete temp files older than 7 days and free at least 10\u202fGB of space",
-        "Add a watchdog thread in session_manager.py that monitors ps5-hive backoff counters and triggers a forced restart after three consecutive backoffs",
-        "Write fix_self_test_ts21() in self_test_fixer.py to apply the missing configuration patch and add unit tests",
-        "Create resolve_ts19() in self_test_fixer.py that reinstalls the TS19 dependency and logs verification output",
-        "Develop handle_ts18_failure() in self_test_fixer.py to revert to a known\u2011good model version and record the rollback"
-      ],
-      "decisions": [
-        "Prioritize disk cleanup and ps5-hive watchdog to unblock further self\u2011test repairs",
-        "Allocate additional memory to core processes by lowering non\u2011essential job niceness",
-        "Defer non\u2011critical feature work until all high\u2011priority blockers are cleared"
-      ]
-    },
     {
       "id": "sess_1b27e596",
       "ts": "2026-05-12T19:23:04Z",
@@ -447,6 +427,26 @@
         "Deploy a watchdog for ps5-hive to automatically recover from prolonged backoff",
         "Enhance self\u2011test auto\u2011fix mechanisms to reduce manual intervention on failing tests"
       ]
+    },
+    {
+      "id": "sess_3c05abac",
+      "ts": "2026-05-12T21:39:01Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by fixing critical self-test failures, clearing disk space, and eliminating backoff issues in ps5-hive.",
+      "summary": "The hive is currently stalled with high memory usage and disk nearing capacity. Several self\u2011test suites (TS18, TS19, TS21) are failing, and the ps5\u2011hive session is in a long backoff state. Immediate code fixes and cleanup are required to restore health.",
+      "progress": "No recent achievements were recorded.",
+      "next_steps": [
+        "Implement disk_cleanup() in maintenance.py to delete temporary files and logs older than 7 days and free at least 10\u202fGB.",
+        "Add a watchdog thread in session_manager.py that watches ps5-hive backoff counters and triggers a graceful restart after three consecutive backoffs.",
+        "Fix TS21 failure by updating validate_config_schema() in selftest/ts21.py to handle missing optional keys.",
+        "Patch TS19 in selftest/ts19.py to correctly handle Unicode filenames on Windows platforms.",
+        "Create unit tests for the new disk_cleanup() function in tests/test_maintenance.py covering edge cases."
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before addressing self-test failures to prevent out\u2011of\u2011space crashes.",
+        "Treat the ps5-hive backoff watchdog as a high\u2011priority stability feature.",
+        "Allocate a temporary resource cap (max 60\u202fGB) for the hive until disk cleanup is verified."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -458,9 +458,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-12T21:37:53Z",
-    "completed_at": "2026-05-12T21:37:53Z"
+    "started_at": "2026-05-12T21:38:43Z",
+    "completed_at": "2026-05-12T21:39:01Z"
   }
 }
