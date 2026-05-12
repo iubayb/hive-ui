@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T09:59:59Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-12T10:00:58Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
       "health_score": 1.0,
-      "last_seen": "2026-05-12T09:59:59Z",
+      "last_seen": "2026-05-12T10:00:06Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -144,17 +144,17 @@
       "_hash": "82ed62237b8e342301c173b1539d754e"
     },
     {
-      "id": "b_0a594651",
+      "id": "b_4967b1ec",
       "ts": "2026-05-12T09:59:28Z",
       "hive": "default",
       "agent": "orchestrator",
-      "description": "tmux session 'hive-live' missing entirely",
+      "description": "tmux session 'hive-watch' missing entirely",
       "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-12T10:00:28Z",
+      "resolution": "Session 'hive-watch' is healthy again",
       "github_issue": null,
-      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
+      "_hash": "70b95af380bb338ef8031fb179457ee0"
     },
     {
       "id": "b_cd014f81",
@@ -163,24 +163,24 @@
       "agent": "orchestrator",
       "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-12T10:00:28Z",
+      "resolution": "Session 'hive-dev' is healthy again",
       "github_issue": null,
       "_hash": "217dae28725ae72712be5a39a27334a8"
     },
     {
-      "id": "b_4967b1ec",
+      "id": "b_0a594651",
       "ts": "2026-05-12T09:59:28Z",
       "hive": "default",
       "agent": "orchestrator",
-      "description": "tmux session 'hive-watch' missing entirely",
+      "description": "tmux session 'hive-live' missing entirely",
       "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-12T10:00:28Z",
+      "resolution": "Session 'hive-live' is healthy again",
       "github_issue": null,
-      "_hash": "70b95af380bb338ef8031fb179457ee0"
+      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
     }
   ],
   "next_steps": [],
@@ -227,9 +227,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: develop\u2192main promotion check + release draft",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-12T09:59:35Z",
-    "completed_at": "2026-05-12T09:59:38Z"
+    "started_at": "2026-05-12T10:00:28Z",
+    "completed_at": "2026-05-12T10:00:28Z"
   }
 }
