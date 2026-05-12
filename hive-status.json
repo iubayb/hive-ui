@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T22:39:58Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-12T22:40:53Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -460,7 +460,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-12T22:39:53Z",
-    "completed_at": "2026-05-12T22:39:53Z"
+    "started_at": "2026-05-12T22:40:53Z",
+    "completed_at": "2026-05-12T22:40:53Z"
   }
 }
