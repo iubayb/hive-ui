@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T16:41:53Z",
+  "last_updated": "2026-05-12T16:42:53Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -240,7 +240,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 3
+    "openrouter_calls_today": 4
   },
   "model_champions": {
     "text": null,
@@ -348,6 +348,26 @@
         "Apply exponential backoff with jitter universally to all session restart logic to reduce thundering\u2011herd effects.",
         "Allocate a dedicated maintenance window to run the self\u2011test fixes and verify stability before resuming normal workload."
       ]
+    },
+    {
+      "id": "sess_fbdf67e1",
+      "ts": "2026-05-12T16:42:43Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests, disk space exhaustion, and session backoff issues",
+      "summary": "The hive is currently stalled with high resource pressure: disk is full, several self-tests are failing, and the ps5-hive session is in long backoff. Automatic fixes have not resolved the issues, and manual intervention is required. Immediate code interventions are needed to add disk cleanup, improve backoff handling, and address failing self-tests.",
+      "progress": "Identified the critical failures and queued pending tasks for disk cleanup and exponential backoff implementation.",
+      "next_steps": [
+        "Implement cleanup_disk_space() in monitor.py to delete files older than 30 days in /var/hive/logs and trigger when free disk < 10%",
+        "Add exponential_backoff_with_jitter() in session_manager.py and invoke it in start_session() for failed restarts",
+        "Write unit tests for cleanup_disk_space() in tests/test_monitor.py covering edge cases",
+        "Create self_test_fix_TS18() in self_test.py to reinstall missing dependencies and log results",
+        "Add alert via alert_manager.py to notify when self-test TS19 fails after auto-fix attempts"
+      ],
+      "decisions": [
+        "Prioritize disk space cleanup before retrying failed self-tests",
+        "Use jittered exponential backoff to avoid thundering herd on session restarts",
+        "Log all automatic fix attempts and surface persistent failures to the operator dashboard"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -359,9 +379,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=50% blockers=10",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-12T16:41:53Z",
-    "completed_at": "2026-05-12T16:41:53Z"
+    "started_at": "2026-05-12T16:42:03Z",
+    "completed_at": "2026-05-12T16:42:43Z"
   }
 }
