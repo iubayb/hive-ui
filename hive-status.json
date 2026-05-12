@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T18:22:32Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-12T18:23:54Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-12T18:21:31Z",
+      "last_seen": "2026-05-12T18:23:34Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -196,7 +196,35 @@
       "_hash": "5e7ea63d56407f4c12743a4f09c67392"
     }
   ],
-  "next_steps": [],
+  "next_steps": [
+    {
+      "id": "ns_d72a9c05",
+      "priority": 1,
+      "description": "Add detailed exception handling and retry logic to run_self_test() in self_test.py for TS18, TS19, and TS21, including fallback to safe defaults on repeated failures",
+      "assigned_to": "opencode",
+      "status": "in_progress",
+      "source": "orchestrator",
+      "ts": "2026-05-12T18:23:14Z"
+    },
+    {
+      "id": "ns_62661bba",
+      "priority": 2,
+      "description": "Implement a disk cleanup utility in maintenance.py that deletes temp files older than 7 days and logs freed space, then call it from the start-up sequence",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-12T18:23:14Z"
+    },
+    {
+      "id": "ns_12f44f39",
+      "priority": 3,
+      "description": "Create a watchdog in session_manager.py that monitors ps5-hive backoff counters and triggers an immediate forced restart after 3 consecutive backoffs",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-12T18:23:14Z"
+    }
+  ],
   "capabilities": {
     "learned": []
   },
@@ -211,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 0
+    "openrouter_calls_today": 1
   },
   "model_champions": {
     "text": null,
@@ -220,16 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_48c35e50",
-      "ts": "2026-05-12T18:12:26Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_706680a0",
       "ts": "2026-05-12T18:13:27Z",
@@ -319,6 +337,26 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_c71727be",
+      "ts": "2026-05-12T18:23:14Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests, resolving ps5-hive backoff, and preventing disk overload",
+      "summary": "The hive is currently stalled with multiple high\u2011severity blockers: a ps5-hive session stuck in backoff, critical self\u2011test failures (TS18, TS19, TS21), and disk usage at 97%. No recent progress has been recorded, and immediate coding actions are required to unblock the system.",
+      "progress": "The orchestrator attempted an auto\u2011fix for TS21 but it remained failing.",
+      "next_steps": [
+        "Add detailed exception handling and retry logic to run_self_test() in self_test.py for TS18, TS19, and TS21, including fallback to safe defaults on repeated failures",
+        "Implement a disk cleanup utility in maintenance.py that deletes temp files older than 7 days and logs freed space, then call it from the start-up sequence",
+        "Create a watchdog in session_manager.py that monitors ps5-hive backoff counters and triggers an immediate forced restart after 3 consecutive backoffs",
+        "Introduce resource throttling in job_scheduler.py to lower core usage when mem>55GB and disk>90%, with configurable thresholds",
+        "Write unit tests in tests/test_self_test.py covering all TS18\u2011TS21 scenarios and validate that run_self_test() returns success after auto\u2011fix"
+      ],
+      "decisions": [
+        "Prioritize fixing TS19 before TS18 and TS21 because it blocks core functionality",
+        "Add automatic disk cleanup at startup to prevent future disk\u2011full stalls",
+        "Enable forced restart of any session that exceeds three backoff attempts to avoid indefinite stalls"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -332,7 +370,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-12T18:22:31Z",
-    "completed_at": "2026-05-12T18:22:32Z"
+    "started_at": "2026-05-12T18:23:34Z",
+    "completed_at": "2026-05-12T18:23:34Z"
   }
 }
