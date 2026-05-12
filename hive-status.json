@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T01:02:46Z",
+  "last_updated": "2026-05-12T01:03:58Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-12T01:01:46Z",
+      "last_seen": "2026-05-12T01:03:58Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -684,7 +684,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 94
+    "openrouter_calls_today": 95
   },
   "model_champions": {
     "text": null,
@@ -693,26 +693,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_d22ec75b",
-      "ts": "2026-05-11T22:33:13Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests (TS18, TS19, TS21) and stabilizing resource usage",
-      "summary": "The hive is currently stalled with several high\u2011priority blockers: a long backoff session, high memory/disk usage, and three self\u2011tests failing. No recent achievements have been recorded, and only two pending code actions are listed. Immediate concrete fixes are required to unblock the system and bring it back to normal operation.",
-      "progress": "No new fixes were applied since the last snapshot.",
-      "next_steps": [
-        "Implement fallback cleanup routine in ts18_check() within self_tests/ts1/ts18_check.py",
-        "Add retry and backoff handling to ts19_check() in self_tests/ts1/ts19_check.py to avoid false failures",
-        "Create a comprehensive unit test suite for ts21_check() in self_tests/ts1/ts21_check.py covering edge cases",
-        "Refactor utils/load_manager.py: lower process priority threshold and add alert when disk > 90%",
-        "Add a heartbeat endpoint in orchestrator.py to report self\u2011test statuses and trigger auto\u2011restart on failure"
-      ],
-      "decisions": [
-        "Prioritize fixing TS18 before addressing TS19 and TS21, as it blocks subsequent diagnostics",
-        "Introduce automatic resource throttling in load_manager.py to prevent future high\u2011load stalls",
-        "Deploy a monitoring hook in orchestrator.py to automatically restart sessions that enter long backoff"
-      ]
-    },
     {
       "id": "sess_ff82cf28",
       "ts": "2026-05-11T22:48:42Z",
@@ -892,6 +872,26 @@
         "Add explicit metric emission for load_manager adjustments to enable future alerting",
         "Implement an automated backoff escalation policy to limit restarts and alert operators when thresholds are hit"
       ]
+    },
+    {
+      "id": "sess_3a1c8d1e",
+      "ts": "2026-05-12T01:03:48Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full Hive functionality by fixing failing self-tests and resolving high-load issues.",
+      "summary": "The Hive is currently stalled with multiple critical self-test failures (TS18, TS19, TS21) and a high memory usage situation. Recent attempts to auto\u2011fix have not succeeded, and a key session is in long backoff. Immediate code fixes and resource monitor adjustments are needed to bring the system back online.",
+      "progress": "Implemented a fallback cleanup routine placeholder in ts18_check() and added logging for its execution.",
+      "next_steps": [
+        "Complete the fallback cleanup routine in self_tests/ts18_check() to safely reset TS18 state on failure.",
+        "Fix TS19 by adding missing validation logic in self_tests/ts19_check.py and write corresponding unit tests.",
+        "Resolve TS21 failure by updating the timeout handling in self_tests/ts21_check.py and adding error recovery.",
+        "Modify utils/load_manager.py to lower process priority when mem>80% and add a configurable threshold parameter.",
+        "Add a health check endpoint in orchestrator.py (function health_status()) that reports self\u2011test statuses and load metrics as JSON."
+      ],
+      "decisions": [
+        "Prioritize self-test fixes before addressing the ps5-hive session backoff.",
+        "Introduce configurable memory thresholds to prevent future high\u2011load stalls.",
+        "Ensure all new self-test code includes unit tests to catch regressions early."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -905,7 +905,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-12T01:02:46Z",
-    "completed_at": "2026-05-12T01:02:46Z"
+    "started_at": "2026-05-12T01:03:58Z",
+    "completed_at": "2026-05-12T01:03:58Z"
   }
 }
