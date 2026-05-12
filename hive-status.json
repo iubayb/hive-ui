@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T11:46:54Z",
+  "last_updated": "2026-05-12T11:47:42Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-12T11:45:12Z",
+      "last_seen": "2026-05-12T11:47:14Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 7
+    "openrouter_calls_today": 8
   },
   "model_champions": {
     "text": null,
@@ -397,6 +397,26 @@
         "Treat failing self\u2011tests as blockers and allocate a dedicated fix sprint",
         "Enable automatic alerts for sessions entering long backoff to allow rapid human intervention"
       ]
+    },
+    {
+      "id": "sess_1e53ad80",
+      "ts": "2026-05-12T11:47:31Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self\u2011tests, addressing disk\u2011space exhaustion, and stabilizing the ps5\u2011hive session.",
+      "summary": "The hive is stalled at 50% health with multiple high\u2011priority blockers: disk is full, several self\u2011test suites (TS18, TS19, TS21) are failing, and the ps5\u2011hive session is in a long backoff loop. No recent progress has been recorded, so immediate code fixes are required to unblock the system.",
+      "progress": "No new fixes have been applied since the last snapshot.",
+      "next_steps": [
+        "Implement prune_old_logs() in orchestrator.py to delete files older than 30 days and integrate it into the daily maintenance job.",
+        "Add exponential backoff with jitter to call_llm() in orchestrator.py for HTTP 429 and 5xx responses.",
+        "Fix TS18 failure by updating validate_config_schema() in validators.py to handle missing optional fields gracefully.",
+        "Resolve TS19 failure by correcting the regex patterns in path_filter.py and adding unit tests for edge cases.",
+        "Create a new endpoint /api/health in logstream.py that returns JSON with disk usage, test suite status, and session backoff counters."
+      ],
+      "decisions": [
+        "Prioritize disk\u2011space cleanup before addressing self\u2011test failures to prevent further job drops.",
+        "Apply exponential backoff globally to all LLM calls to reduce rate\u2011limit backoffs.",
+        "Introduce a health\u2011check API to surface critical metrics for automated monitoring."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -410,7 +430,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-12T11:46:23Z",
-    "completed_at": "2026-05-12T11:46:24Z"
+    "started_at": "2026-05-12T11:47:41Z",
+    "completed_at": "2026-05-12T11:47:42Z"
   }
 }
