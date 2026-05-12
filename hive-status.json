@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T14:33:55Z",
+  "last_updated": "2026-05-12T14:34:36Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-12T14:32:02Z",
+      "last_seen": "2026-05-12T14:34:05Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -240,7 +240,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 18
+    "openrouter_calls_today": 19
   },
   "model_champions": {
     "text": null,
@@ -249,26 +249,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_6c6cf23d",
-      "ts": "2026-05-12T12:02:44Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by fixing self-test failures, disk space exhaustion, and LLM call reliability",
-      "summary": "The hive is stalled with critical blockers: disk is full, several self-test suites are failing, and a session is in long backoff. Recent attempts to add a prune function and retry logic are incomplete. Immediate code changes are required to address these issues.",
-      "progress": "Added placeholder comments for prune_old_ in orchestrator.py and noted need for exponential backoff in call_llm().",
-      "next_steps": [
-        "Implement prune_old_logs() in orchestrator.py to delete log files older than 30 days and free at least 20GB of disk space",
-        "Add exponential backoff with jitter to call_llm() in orchestrator.py for HTTP 429 and 5xx responses",
-        "Create unit tests in tests/test_selftest.py to verify TS18, TS19, and TS21 pass after fixes",
-        "Update supervisor.py to monitor disk usage and trigger orchestrator.prune_old_logs() when >85% capacity",
-        "Patch ts_runner.py to retry failed self-test steps up to 3 times before marking TS18/TS19/TS21 as failed"
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before attempting self-test auto\u2011fixes",
-        "Limit LLM retry attempts to 5 with exponential backoff to avoid cascading load",
-        "Fail fast on self\u2011test suites after retries and raise alerts for manual review"
-      ]
-    },
     {
       "id": "sess_ccd1a753",
       "ts": "2026-05-12T12:18:01Z",
@@ -448,6 +428,26 @@
         "Limit call_llm() retries to 5 with exponential backoff to avoid endless loops.",
         "Automate self\u2011test fix attempts via a dedicated script to reduce manual intervention."
       ]
+    },
+    {
+      "id": "sess_b088d1b4",
+      "ts": "2026-05-12T14:34:26Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self\u2011tests, freeing disk space, and improving resilience of orchestrator calls",
+      "summary": "The hive is currently stalled with 50% health due to multiple high\u2011priority blockers: several self\u2011tests are failing, disk is at 100% capacity, and the ps5\u2011hive session is in long backoff. No recent achievements have been recorded, so immediate remediation actions are required.",
+      "progress": "No new tasks were completed since the last snapshot.",
+      "next_steps": [
+        "Implement prune_old_logs() in orchestrator.py to delete log files older than 30 days and call it in the daily maintenance routine",
+        "Add exponential backoff with jitter to call_llm() in orchestrator.py for handling HTTP 429 and network timeouts",
+        "Write unit tests for TS18, TS19, and TS21 in self_test_suite.py and create a fix function for each failing case",
+        "Create a disk\u2011space monitoring alert in health_monitor.py that triggers cleanup when usage exceeds 90%",
+        "Add automatic session restart logic for ps5-hive in session_manager.py with a max\u2011retry limit of 3 and escalation logging"
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before attempting to fix self\u2011tests to ensure enough space for test artifacts",
+        "Use exponential backoff with jitter as the default retry strategy for all external API calls",
+        "Limit automatic restarts for failing sessions to three attempts to avoid endless backoff loops"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -459,9 +459,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-12T14:33:53Z",
-    "completed_at": "2026-05-12T14:33:55Z"
+    "started_at": "2026-05-12T14:34:05Z",
+    "completed_at": "2026-05-12T14:34:26Z"
   }
 }
