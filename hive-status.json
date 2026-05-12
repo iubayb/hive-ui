@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T15:50:52Z",
+  "last_updated": "2026-05-12T15:55:46Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
-      "health_score": 0.5,
-      "last_seen": "2026-05-12T15:49:50Z",
+      "health_score": 0.55,
+      "last_seen": "2026-05-12T15:54:45Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -15,12 +15,11 @@
         "nextjs-prod",
         "opencode",
         "orchestrator",
-        "ps5-hive",
-        "supervisor"
+        "ps5-hive"
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 6,
+      "errors_last_hour": 5,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -28,34 +27,21 @@
   "achievements": [],
   "blockers": [
     {
-      "id": "b_3794cb94",
-      "ts": "2026-05-12T10:03:17Z",
-      "hive": "desktop",
-      "agent": "supervisor",
-      "description": "Session 'ps5-hive' in long backoff (160s) \u2014 5 restart(s), may need manual intervention",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "5d44b7e69b78f35212f5c73ccc29efd3"
-    },
-    {
-      "id": "b_23fa0a50",
-      "ts": "2026-05-12T09:59:44Z",
+      "id": "b_527cd0d4",
+      "ts": "2026-05-12T15:52:54Z",
       "hive": "desktop",
       "agent": "resource-guardian",
-      "description": "HIGH load/core=0.02 mem=58.8GB disk=100% \u2014 jobs reniced",
+      "description": "HIGH load/core=0.09 mem=60.0GB disk=100% \u2014 jobs reniced",
       "severity": "high",
       "status": "open",
       "resolved_at": null,
       "resolution": null,
       "github_issue": null,
-      "_hash": "97a99d505ee8d6032c5eab6ceccaf657"
+      "_hash": "e1ce12bc491ecc03fb323c4612ee92fc"
     },
     {
-      "id": "b_52fa1793",
-      "ts": "2026-05-12T09:59:29Z",
+      "id": "b_ec7f73cc",
+      "ts": "2026-05-12T15:52:39Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS21 failing \u2014 auto-fix attempted but not sufficient",
@@ -67,8 +53,8 @@
       "_hash": "a3a483f5373c25d5e811d82c159a9ebd"
     },
     {
-      "id": "b_75cf6021",
-      "ts": "2026-05-12T09:59:29Z",
+      "id": "b_2297f3e1",
+      "ts": "2026-05-12T15:52:39Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS19 failing \u2014 no auto-fix available or fix failed",
@@ -80,8 +66,8 @@
       "_hash": "abc92bdaab9c773ac4617a356f0b6604"
     },
     {
-      "id": "b_475453be",
-      "ts": "2026-05-12T09:59:29Z",
+      "id": "b_05a66d9e",
+      "ts": "2026-05-12T15:52:39Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS18 failing \u2014 no auto-fix available or fix failed",
@@ -93,8 +79,8 @@
       "_hash": "8db53c687b62ebcd9459cbccdbbf588f"
     },
     {
-      "id": "b_b537c985",
-      "ts": "2026-05-12T09:59:29Z",
+      "id": "b_3479e157",
+      "ts": "2026-05-12T15:52:39Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS17 failing \u2014 no auto-fix available or fix failed",
@@ -106,8 +92,8 @@
       "_hash": "6897daf3e3724c9f078fc0b16f4fe428"
     },
     {
-      "id": "b_0a473305",
-      "ts": "2026-05-12T09:59:29Z",
+      "id": "b_80c2658f",
+      "ts": "2026-05-12T15:52:39Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS14 failing \u2014 no auto-fix available or fix failed",
@@ -119,8 +105,8 @@
       "_hash": "b4c2ed2d4f13f2fecf6ce6f41e3eac7c"
     },
     {
-      "id": "b_f2202c50",
-      "ts": "2026-05-12T09:59:29Z",
+      "id": "b_3991c35a",
+      "ts": "2026-05-12T15:52:39Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS13 failing \u2014 no auto-fix available or fix failed",
@@ -132,8 +118,8 @@
       "_hash": "5c48d095f67370a5d63a500a67d76844"
     },
     {
-      "id": "b_122523ae",
-      "ts": "2026-05-12T09:59:29Z",
+      "id": "b_ce321793",
+      "ts": "2026-05-12T15:52:39Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS5 failing \u2014 auto-fix attempted but not sufficient",
@@ -145,8 +131,8 @@
       "_hash": "36e8de1c6320cf5f4eececa2d548aefd"
     },
     {
-      "id": "b_0d668658",
-      "ts": "2026-05-12T09:59:28Z",
+      "id": "b_0f647085",
+      "ts": "2026-05-12T15:52:38Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "Live UI verification failed: curl failed: [Errno 111] Connection refused",
@@ -158,74 +144,46 @@
       "_hash": "82ed62237b8e342301c173b1539d754e"
     },
     {
-      "id": "b_4967b1ec",
-      "ts": "2026-05-12T09:59:28Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "tmux session 'hive-watch' missing entirely",
-      "severity": "critical",
-      "status": "resolved",
-      "resolved_at": "2026-05-12T10:00:28Z",
-      "resolution": "Session 'hive-watch' is healthy again",
-      "github_issue": null,
-      "_hash": "70b95af380bb338ef8031fb179457ee0"
-    },
-    {
-      "id": "b_cd014f81",
-      "ts": "2026-05-12T09:59:28Z",
+      "id": "b_2861e9d8",
+      "ts": "2026-05-12T15:52:38Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
       "severity": "high",
       "status": "resolved",
-      "resolved_at": "2026-05-12T10:00:28Z",
+      "resolved_at": "2026-05-12T15:53:44Z",
       "resolution": "Session 'hive-dev' is healthy again",
       "github_issue": null,
       "_hash": "217dae28725ae72712be5a39a27334a8"
     },
     {
-      "id": "b_0a594651",
-      "ts": "2026-05-12T09:59:28Z",
+      "id": "b_391447b2",
+      "ts": "2026-05-12T15:52:38Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "tmux session 'hive-watch' missing entirely",
+      "severity": "critical",
+      "status": "resolved",
+      "resolved_at": "2026-05-12T15:53:44Z",
+      "resolution": "Session 'hive-watch' is healthy again",
+      "github_issue": null,
+      "_hash": "70b95af380bb338ef8031fb179457ee0"
+    },
+    {
+      "id": "b_2ce5c385",
+      "ts": "2026-05-12T15:52:38Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "tmux session 'hive-live' missing entirely",
       "severity": "critical",
       "status": "resolved",
-      "resolved_at": "2026-05-12T10:00:28Z",
+      "resolved_at": "2026-05-12T15:53:44Z",
       "resolution": "Session 'hive-live' is healthy again",
       "github_issue": null,
       "_hash": "5e7ea63d56407f4c12743a4f09c67392"
     }
   ],
-  "next_steps": [
-    {
-      "id": "ns_5f994a15",
-      "priority": 1,
-      "description": "Fix the validation logic in self_test.py for TS17, TS18, and TS19 and add detailed error messages",
-      "assigned_to": "opencode",
-      "status": "in_progress",
-      "source": "orchestrator",
-      "ts": "2026-05-12T10:01:53Z"
-    },
-    {
-      "id": "ns_1d3f07fb",
-      "priority": 2,
-      "description": "Implement disk\u2011space cleanup in orchestrator.py by adding a prune_old_logs() function and schedule it in run_maintenance()",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-12T10:01:53Z"
-    },
-    {
-      "id": "ns_ca8f63b3",
-      "priority": 3,
-      "description": "Add exponential backoff retry in call_llm() within orchestrator.py for HTTP 429 and 503 responses",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-12T10:01:53Z"
-    }
-  ],
+  "next_steps": [],
   "capabilities": {
     "learned": []
   },
@@ -240,7 +198,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 24
+    "openrouter_calls_today": 0
   },
   "model_champions": {
     "text": null,
@@ -250,204 +208,44 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_aa37ba73",
-      "ts": "2026-05-12T13:33:29Z",
+      "id": "sess_a31d805d",
+      "ts": "2026-05-12T15:52:39Z",
       "updated_by": "orchestrator",
-      "goal": "Maintain hive health by resolving critical failures and preventing resource exhaustion",
-      "summary": "The hive is currently stalled with high memory usage and disk at full capacity, leading to multiple session backoffs and self-test failures (TS21, TS19, TS18). Recent attempts to auto\u2011fix self\u2011tests have failed, and disk cleanup has not yet been implemented. Immediate remediation is required to restore stability and pass the failing self\u2011tests.",
-      "progress": "Identified key failure points and queued pending tasks for disk cleanup and exponential backoff in orchestrator.py.",
-      "next_steps": [
-        "Implement prune_old_sessions() in orchestrator.py to delete log files older than 30 days and free at least 10GB of disk space",
-        "Add exponential backoff retry logic to call_llm() in orchestrator.py for HTTP 429 and network errors",
-        "Create unit tests for the new prune_old_sessions() function covering edge cases and permission errors",
-        "Modify hive-dev session startup script to lower memory cap to 48GB and enable swap usage",
-        "Write a health check endpoint in health_monitor.py that returns JSON with disk, memory, and self\u2011test statuses"
-      ],
-      "decisions": [
-        "Prioritize disk-space reclamation before attempting further self\u2011test fixes",
-        "Apply exponential backoff globally to all LLM API calls to reduce backoff spikes",
-        "Limit session memory allocation to 48GB until disk cleanup reduces overall load"
-      ]
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     },
     {
-      "id": "sess_5feb2ac6",
-      "ts": "2026-05-12T13:48:42Z",
+      "id": "sess_99177237",
+      "ts": "2026-05-12T15:53:45Z",
       "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by fixing failing self-tests, reducing disk usage, and improving LLM call reliability.",
-      "summary": "The hive is stalled with high memory pressure and full disk, and several self\u2011tests (TS18, TS19, TS21) are failing. Sessions are experiencing backoffs, and core load is low but resources are exhausted. Immediate code fixes are needed to restore health.",
-      "progress": "Identified critical blockers and drafted pending next steps for disk cleanup and LLM retry logic.",
-      "next_steps": [
-        "Implement disk\u2011space cleanup in orchestrator.py by adding a prune_old_sessions() function and schedule it in the main loop.",
-        "Add exponential backoff retry in call_llm() within orchestrator.py for HTTP 429 and network errors, with a max of 5 attempts.",
-        "Fix TS18 failure by updating validate_schema() in self_tests/ts18.py to correctly handle nullable fields.",
-        "Fix TS19 failure by correcting path normalization in utils/path.py and adding unit tests for edge cases.",
-        "Add a health\u2011check endpoint in api/health.py that reports disk usage and self\u2011test status, and integrate it with the monitoring dashboard."
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before adding new features to prevent out\u2011of\u2011disk crashes.",
-        "Limit LLM retry attempts to five with exponential backoff to avoid overwhelming the service.",
-        "Address self\u2011test failures directly in code rather than relying on auto\u2011fix scripts."
-      ]
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     },
     {
-      "id": "sess_66e6ca77",
-      "ts": "2026-05-12T14:04:01Z",
+      "id": "sess_6443d076",
+      "ts": "2026-05-12T15:54:45Z",
       "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by resolving self-test failures, disk space exhaustion, and session backoffs.",
-      "summary": "The hive is currently stalled with critical blockers: multiple self-test failures (TS18, TS19, TS21), a full disk, and a session in long backoff. Recent attempts to add disk cleanup and exponential backoff were noted but not yet implemented. Immediate concrete code actions are required to unblock the system.",
-      "progress": "Identified the need for disk\u2011space cleanup and exponential backoff logic in orchestrator.py.",
-      "next_steps": [
-        "Implement prune_old_logs() in orchestrator.py to delete log files older than 30 days and call it before new job scheduling.",
-        "Add exponential backoff with jitter to call_llm() in orchestrator.py, handling HTTP 429 and 5xx responses.",
-        "Create unit tests for the new prune_old_logs() function in tests/test_orchestrator.py covering edge cases.",
-        "Write integration test for call_llm() backoff behavior using a mock LLM endpoint that returns 429 intermittently.",
-        "Update self_test.py to include retry wrappers for TS18, TS19, and TS21 checks and log detailed failure reasons."
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before implementing backoff to immediately free resources.",
-        "Use a maximum of 5 retry attempts with base delay 2 seconds for LLM calls.",
-        "Fail fast on self-test failures after retries and raise alerts to the supervisor session."
-      ]
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     },
     {
-      "id": "sess_a4ece05d",
-      "ts": "2026-05-12T14:19:06Z",
+      "id": "sess_d8c573fa",
+      "ts": "2026-05-12T15:55:46Z",
       "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving critical self-test failures, disk space exhaustion, and session backoff issues.",
-      "summary": "The hive is currently stalled with high memory usage and full disk, multiple self-test failures, and a key session in long backoff. Recent attempts to auto\u2011fix self\u2011tests and add a prune function have not succeeded, leaving the system at risk of further degradation.",
-      "progress": "Identified the need for disk\u2011space cleanup and exponential backoff retry logic in orchestrator.py.",
-      "next_steps": [
-        "Implement prune_old_sessions() in orchestrator.py to delete log files older than 30 days and free at least 10\u202fGB of disk space.",
-        "Add exponential backoff with jitter to call_llm() in orchestrator.py for HTTP 429 and network errors, capping retries at 5.",
-        "Write unit tests for the new prune_old_sessions() function covering edge cases of empty directories and permission errors.",
-        "Create a health check endpoint in health.py that reports disk usage, memory usage, and self\u2011test status as JSON.",
-        "Develop a remediation script fix_ts18_ts19_ts21.py that parses self\u2011test logs and applies known patches for TS18, TS19, and TS21 failures."
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before retry logic to prevent immediate job failures.",
-        "Limit call_llm() retries to 5 with exponential backoff to avoid endless loops.",
-        "Automate self\u2011test fix attempts via a dedicated script to reduce manual intervention."
-      ]
-    },
-    {
-      "id": "sess_b088d1b4",
-      "ts": "2026-05-12T14:34:26Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self\u2011tests, freeing disk space, and improving resilience of orchestrator calls",
-      "summary": "The hive is currently stalled with 50% health due to multiple high\u2011priority blockers: several self\u2011tests are failing, disk is at 100% capacity, and the ps5\u2011hive session is in long backoff. No recent achievements have been recorded, so immediate remediation actions are required.",
-      "progress": "No new tasks were completed since the last snapshot.",
-      "next_steps": [
-        "Implement prune_old_logs() in orchestrator.py to delete log files older than 30 days and call it in the daily maintenance routine",
-        "Add exponential backoff with jitter to call_llm() in orchestrator.py for handling HTTP 429 and network timeouts",
-        "Write unit tests for TS18, TS19, and TS21 in self_test_suite.py and create a fix function for each failing case",
-        "Create a disk\u2011space monitoring alert in health_monitor.py that triggers cleanup when usage exceeds 90%",
-        "Add automatic session restart logic for ps5-hive in session_manager.py with a max\u2011retry limit of 3 and escalation logging"
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before attempting to fix self\u2011tests to ensure enough space for test artifacts",
-        "Use exponential backoff with jitter as the default retry strategy for all external API calls",
-        "Limit automatic restarts for failing sessions to three attempts to avoid endless backoff loops"
-      ]
-    },
-    {
-      "id": "sess_920426b0",
-      "ts": "2026-05-12T14:49:34Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by fixing failing self-tests, reducing disk usage, and improving LLM call reliability",
-      "summary": "The hive is currently stalled with high memory usage and a full disk, causing multiple sessions to back off. Several self-tests (TS18, TS19, TS21) are failing, and the orchestrator lacks proper disk cleanup and retry logic for LLM calls. Immediate code changes are needed to restore health and prevent future stalls.",
-      "progress": "Identified critical blockers and listed pending code tasks for disk cleanup and exponential backoff.",
-      "next_steps": [
-        "Implement prune_old_logs() in orchestrator.py to delete log files older than 30 days and free at least 20GB of disk space",
-        "Add exponential backoff with jitter to call_llm() in orchestrator.py for handling HTTP 429 and network timeouts",
-        "Create unit tests in tests/orchestrator_test.py for prune_old_logs() covering edge cases of empty directories and permission errors",
-        "Write integration test in tests/selftest_integration.py that simulates TS18, TS19, and TS21 failures and verifies auto-fix routines trigger correctly",
-        "Update hive_config.yaml to lower default job renice values and add a max_memory_threshold parameter of 55GB"
-      ],
-      "decisions": [
-        "Prioritize disk-space cleanup before addressing self-test failures to avoid further resource exhaustion",
-        "Implement exponential backoff as the default LLM call strategy across all sessions",
-        "Introduce automated test coverage for critical self-test fix paths to catch regressions early"
-      ]
-    },
-    {
-      "id": "sess_15c45558",
-      "ts": "2026-05-12T15:04:42Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving critical self-test failures, preventing disk overflow, and improving LLM call reliability.",
-      "summary": "The hive is currently stalled with high memory usage and a full disk, causing several self-test failures (TS18, TS19, TS21) and a backoff loop in the ps5-hive session. Immediate remediation requires disk cleanup, robust retry logic for LLM calls, and targeted fixes for the failing self-tests.",
-      "progress": "Added placeholder functions for disk pruning and exponential backoff in orchestrator.py, but they are not yet integrated or tested.",
-      "next_steps": [
-        "Implement prune_old_logs() in orchestrator.py to delete log files older than 30 days and free at least 20% disk space.",
-        "Integrate prune_old_logs() into the main maintenance loop in orchestrator.py and schedule it to run hourly.",
-        "Add exponential backoff with jitter to call_llm() in orchestrator.py for HTTP 429 and 5xx responses, with a max of 5 retries.",
-        "Fix self-test TS18 by updating validate_schema() in ts_checks.py to handle nullable fields correctly.",
-        "Fix self-test TS19 by correcting the path permission check in ts_checks.py and adding a unit test in tests/test_ts19.py."
-      ],
-      "decisions": [
-        "Prioritize disk-space reclamation before addressing LLM retry logic to unblock self-test execution.",
-        "Limit retry attempts for call_llm() to avoid cascading load during high\u2011traffic periods.",
-        "Add unit tests for all changed self-test functions to ensure future regressions are caught early."
-      ]
-    },
-    {
-      "id": "sess_5037bc1a",
-      "ts": "2026-05-12T15:19:44Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving critical self-test failures, improving orchestrator resilience, and freeing disk space.",
-      "summary": "The hive is currently stalled with high memory usage and a full disk, causing multiple self-test failures (TS18, TS19, TS21). Immediate remediation requires adding disk cleanup logic, implementing exponential backoff retries for LLM calls, and patching the failing self\u2011test modules.",
-      "progress": "Identified the primary failure points and drafted pending next steps for disk cleanup and retry logic.",
-      "next_steps": [
-        "Add prune_old_sessions() in orchestrator.py to delete session logs older than 30 days and call it at startup.",
-        "Integrate exponential backoff retry in call_llm() within orchestrator.py for HTTP 429 and 5xx responses.",
-        "Patch self_test/ts18.py to handle missing config files by adding default fallback values.",
-        "Patch self_test/ts19.py to correct path validation logic and add unit tests for edge cases.",
-        "Create a new endpoint /api/cleanup in logstream.py that triggers disk-space cleanup and returns JSON status."
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before addressing self-test failures to prevent further resource exhaustion.",
-        "Implement exponential backoff as a reusable decorator in utils/retry.py for future API calls.",
-        "Add unit tests for the new cleanup and retry functionality to ensure reliability before deployment."
-      ]
-    },
-    {
-      "id": "sess_bfb66a62",
-      "ts": "2026-05-12T15:35:02Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore hive health by fixing self-test failures, stabilizing session backoffs, and preventing disk exhaustion",
-      "summary": "The hive is stalled with multiple high\u2011severity blockers: several self\u2011test suites are failing, disk usage is at 100%, and the ps5\u2011hive session is stuck in exponential backoff. No recent progress has been recorded. Immediate code changes are needed to add cleanup, retry logic, and test fixes.",
-      "progress": "No new achievements were logged since the last snapshot.",
-      "next_steps": [
-        "Implement prune_old_logs() in orchestrator.py to delete log files older than 30 days and call it before each job batch",
-        "Add exponential backoff retry loop to call_llm() in orchestrator.py handling HTTP 429 and network timeouts",
-        "Create unit tests in tests/self_test/test_ts18.py to verify the fix for TS18 and ensure it passes",
-        "Patch ts19_check() in self_test.py to handle edge\u2011case null pointers and add corresponding tests in tests/self_test/test_ts19.py",
-        "Add a disk usage monitor in health_monitor.py that triggers prune_old_logs() when usage exceeds 85%"
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before attempting self\u2011test auto\u2011fixes to avoid further out\u2011of\u2011space errors",
-        "Limit retry attempts in call_llm() to 5 with jitter to prevent endless backoff loops",
-        "Fail fast on TS18/TS19 errors after applying patches and log detailed diagnostics for future auto\u2011fix attempts"
-      ]
-    },
-    {
-      "id": "sess_0a1439c0",
-      "ts": "2026-05-12T15:50:12Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self\u2011tests, handling backoff issues, and reclaiming disk space",
-      "summary": "The hive is currently stalled with high\u2011priority blockers: several self\u2011tests are failing, the ps5-hive session is in long backoff, and the disk is at 100% capacity. Recent work has not yet produced fixes. Immediate concrete code changes are required to address these issues and bring the system back online.",
-      "progress": "No recent achievements were recorded; the hive remains in a stalled state.",
-      "next_steps": [
-        "Implement prune_old_sessions() in orchestrator.py to delete logs and temporary files older than 30 days and call it before each job batch",
-        "Add exponential backoff with jitter to call_llm() in orchestrator.py for HTTP 429 and network errors",
-        "Create fix_self_test_ts21() in self_test.py that resets the TS21 configuration flag and adds a unit test verifying successful reset",
-        "Add fix_self_test_ts19() in self_test.py that patches the missing dependency path and logs remediation steps",
-        "Add fix_self_test_ts18() in self_test.py that restores default parameter values and includes a regression test"
-      ],
-      "decisions": [
-        "Prioritize disk\u2011space cleanup to prevent further job failures due to full storage",
-        "Introduce robust retry logic in LLM calls to reduce backoff cascades across sessions",
-        "Address failing self\u2011tests (TS18, TS19, TS21) before tackling lower\u2011priority session issues"
-      ]
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -461,7 +259,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-12T15:50:52Z",
-    "completed_at": "2026-05-12T15:50:52Z"
+    "started_at": "2026-05-12T15:55:45Z",
+    "completed_at": "2026-05-12T15:55:46Z"
   }
 }
