@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T16:11:51Z",
+  "last_updated": "2026-05-12T16:12:52Z",
   "updated_by": "agent",
   "hives": {
     "default": {
@@ -240,7 +240,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 1
+    "openrouter_calls_today": 2
   },
   "model_champions": {
     "text": null,
@@ -308,6 +308,26 @@
         "Enable automatic disk cleanup to prevent future 100% saturation events.",
         "Replace the static 160\u2011second backoff for ps5-hive with a configurable exponential strategy."
       ]
+    },
+    {
+      "id": "sess_4799d209",
+      "ts": "2026-05-12T16:12:30Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by resolving critical failures, freeing disk space, and improving session restart reliability",
+      "summary": "The hive is currently stalled with 50% health and multiple high\u2011priority blockers: a PS5 session in backoff, disk at 100% usage, and three self\u2011test failures (TS18\u2011TS21). Automatic fixes have not succeeded, and no recent progress has been recorded. Immediate code actions are required to address disk pressure and session backoff, then tackle failing self\u2011tests.",
+      "progress": "No new achievements were recorded since the last snapshot.",
+      "next_steps": [
+        "Implement disk\u2011space cleanup routine in monitor.py: scan /var/hive/tmp and /var/hive/logs, delete files older than 7 days, and add a low\u2011priority cron\u2011style trigger when usage > 85%",
+        "Add exponential backoff with jitter to the session manager in orchestrator.py (function restart_session) for handling repeated restarts, respecting a max delay of 5 minutes",
+        "Create unit tests in test_self_test.py for TS18, TS19, TS21 to verify expected outputs and facilitate future auto\u2011fixes",
+        "Update self_test.py to return detailed error codes for TS18\u2011TS21 and expose a fix_hook() that can be called by the orchestrator when a test fails",
+        "Add a health\u2011check endpoint in api/health.py that reports disk usage, memory pressure, and recent self\u2011test status as JSON for external monitoring"
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before adjusting session backoff to immediately free resources",
+        "Refactor restart logic to use a shared backoff utility to ensure consistent behavior across all sessions",
+        "Introduce automated self\u2011test verification in CI so future failures are caught before deployment"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -319,9 +339,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-12T16:11:51Z",
-    "completed_at": null
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "status": "completed",
+    "started_at": "2026-05-12T16:12:51Z",
+    "completed_at": "2026-05-12T16:12:52Z"
   }
 }
