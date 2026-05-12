@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T04:18:44Z",
+  "last_updated": "2026-05-12T04:20:02Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -326,7 +326,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 5
+    "openrouter_calls_today": 6
   },
   "model_champions": {
     "text": null,
@@ -335,16 +335,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_5ec532fe",
-      "ts": "2026-05-12T02:58:54Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_95344830",
       "ts": "2026-05-12T02:59:54Z",
@@ -484,6 +474,26 @@
         "Add automatic disk cleanup hooks to prevent future 100% disk saturation.",
         "Enable exponential backoff for LLM calls to reduce transient network errors."
       ]
+    },
+    {
+      "id": "sess_88577bea",
+      "ts": "2026-05-12T04:19:51Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self-test checks and resolving resource saturation",
+      "summary": "The hive is stalled with high memory usage and disk at capacity, while self-test modules TS19 and TS21 are failing. Recent auto-fixes repeatedly addressed TS12, but core issues remain. Immediate focus is on implementing missing validation for TS18 and correcting edge cases in ts19_check(), then mitigating disk pressure.",
+      "progress": "Auto-fix routine successfully patched TS12 invariant across all sessions.",
+      "next_steps": [
+        "Implement detailed validation for TS18 in self_test.py within function validate_ts18()",
+        "Patch ts19_check() in self_test.py to correctly handle missing or malformed config files",
+        "Add log rotation and cleanup in disk_manager.py to free up disk space when usage >90%",
+        "Introduce memory usage guard in resource_monitor.py that triggers gc.collect() and worker throttling when mem>55GB",
+        "Write unit tests for TS19 and TS21 in tests/self_test_test.py covering the new edge cases"
+      ],
+      "decisions": [
+        "Prioritize self-test fixes before addressing backoff sessions",
+        "Enable automatic disk cleanup after each successful self-test run",
+        "Schedule a temporary memory cap to prevent further OOM until root cause is resolved"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -497,7 +507,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-12T04:18:43Z",
-    "completed_at": "2026-05-12T04:18:44Z"
+    "started_at": "2026-05-12T04:20:01Z",
+    "completed_at": "2026-05-12T04:20:02Z"
   }
 }
