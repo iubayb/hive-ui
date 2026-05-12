@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T18:05:34Z",
+  "last_updated": "2026-05-12T18:22:01Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
-      "health_score": 0.55,
-      "last_seen": "2026-05-12T18:05:34Z",
+      "health_score": 0.5,
+      "last_seen": "2026-05-12T18:21:31Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -27,21 +27,34 @@
   "achievements": [],
   "blockers": [
     {
-      "id": "b_2c550457",
-      "ts": "2026-05-12T18:03:44Z",
+      "id": "b_5ddc7f7f",
+      "ts": "2026-05-12T18:13:06Z",
       "hive": "desktop",
-      "agent": "resource-guardian",
-      "description": "HIGH load/core=0.08 mem=58.4GB disk=97% \u2014 jobs reniced",
+      "agent": "supervisor",
+      "description": "Session 'ps5-hive' in long backoff (160s) \u2014 5 restart(s), may need manual intervention",
       "severity": "high",
       "status": "open",
       "resolved_at": null,
       "resolution": null,
       "github_issue": null,
-      "_hash": "c3c23b2dea45406f0a8eacf21ae6877f"
+      "_hash": "5d44b7e69b78f35212f5c73ccc29efd3"
     },
     {
-      "id": "b_969773ea",
-      "ts": "2026-05-12T18:03:29Z",
+      "id": "b_c0ebdd72",
+      "ts": "2026-05-12T18:09:36Z",
+      "hive": "desktop",
+      "agent": "resource-guardian",
+      "description": "HIGH load/core=0.02 mem=59.9GB disk=97% \u2014 jobs reniced",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "e6d980aa1a53b1fb8e814bb0b1a90d29"
+    },
+    {
+      "id": "b_36e9c052",
+      "ts": "2026-05-12T18:09:21Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS21 failing \u2014 auto-fix attempted but not sufficient",
@@ -53,8 +66,8 @@
       "_hash": "a3a483f5373c25d5e811d82c159a9ebd"
     },
     {
-      "id": "b_c06237ec",
-      "ts": "2026-05-12T18:03:29Z",
+      "id": "b_f4a84b64",
+      "ts": "2026-05-12T18:09:21Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS19 failing \u2014 no auto-fix available or fix failed",
@@ -66,8 +79,8 @@
       "_hash": "abc92bdaab9c773ac4617a356f0b6604"
     },
     {
-      "id": "b_53a5e2cd",
-      "ts": "2026-05-12T18:03:29Z",
+      "id": "b_a0000afb",
+      "ts": "2026-05-12T18:09:21Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS18 failing \u2014 no auto-fix available or fix failed",
@@ -79,8 +92,8 @@
       "_hash": "8db53c687b62ebcd9459cbccdbbf588f"
     },
     {
-      "id": "b_0d22bb7f",
-      "ts": "2026-05-12T18:03:29Z",
+      "id": "b_8ba12e05",
+      "ts": "2026-05-12T18:09:21Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS17 failing \u2014 no auto-fix available or fix failed",
@@ -92,8 +105,8 @@
       "_hash": "6897daf3e3724c9f078fc0b16f4fe428"
     },
     {
-      "id": "b_9a7c8960",
-      "ts": "2026-05-12T18:03:29Z",
+      "id": "b_3cf5114a",
+      "ts": "2026-05-12T18:09:21Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS14 failing \u2014 no auto-fix available or fix failed",
@@ -105,8 +118,8 @@
       "_hash": "b4c2ed2d4f13f2fecf6ce6f41e3eac7c"
     },
     {
-      "id": "b_ea49c4be",
-      "ts": "2026-05-12T18:03:29Z",
+      "id": "b_6e13decb",
+      "ts": "2026-05-12T18:09:21Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS13 failing \u2014 no auto-fix available or fix failed",
@@ -118,8 +131,8 @@
       "_hash": "5c48d095f67370a5d63a500a67d76844"
     },
     {
-      "id": "b_e67ec3e0",
-      "ts": "2026-05-12T18:03:29Z",
+      "id": "b_976088e8",
+      "ts": "2026-05-12T18:09:21Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS5 failing \u2014 auto-fix attempted but not sufficient",
@@ -131,8 +144,8 @@
       "_hash": "36e8de1c6320cf5f4eececa2d548aefd"
     },
     {
-      "id": "b_c801272e",
-      "ts": "2026-05-12T18:03:28Z",
+      "id": "b_4dd16811",
+      "ts": "2026-05-12T18:09:20Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "Live UI verification failed: curl failed: [Errno 111] Connection refused",
@@ -144,74 +157,46 @@
       "_hash": "82ed62237b8e342301c173b1539d754e"
     },
     {
-      "id": "b_6dbe9d7d",
-      "ts": "2026-05-12T18:03:28Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "tmux session 'hive-live' missing entirely",
-      "severity": "critical",
-      "status": "resolved",
-      "resolved_at": "2026-05-12T18:04:32Z",
-      "resolution": "Session 'hive-live' is healthy again",
-      "github_issue": null,
-      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
-    },
-    {
-      "id": "b_71e26007",
-      "ts": "2026-05-12T18:03:28Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
-      "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-12T18:04:32Z",
-      "resolution": "Session 'hive-dev' is healthy again",
-      "github_issue": null,
-      "_hash": "217dae28725ae72712be5a39a27334a8"
-    },
-    {
-      "id": "b_c52f35a2",
-      "ts": "2026-05-12T18:03:28Z",
+      "id": "b_31923373",
+      "ts": "2026-05-12T18:09:20Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "tmux session 'hive-watch' missing entirely",
       "severity": "critical",
       "status": "resolved",
-      "resolved_at": "2026-05-12T18:04:32Z",
+      "resolved_at": "2026-05-12T18:10:24Z",
       "resolution": "Session 'hive-watch' is healthy again",
       "github_issue": null,
       "_hash": "70b95af380bb338ef8031fb179457ee0"
-    }
-  ],
-  "next_steps": [
-    {
-      "id": "ns_4f3062d7",
-      "priority": 1,
-      "description": "Add memory usage guard in orchestrator.py: implement limit_memory_usage() to cap process memory at 48GB and log warnings",
-      "assigned_to": "opencode",
-      "status": "in_progress",
-      "source": "orchestrator",
-      "ts": "2026-05-12T18:04:54Z"
     },
     {
-      "id": "ns_e2e07e53",
-      "priority": 2,
-      "description": "Fix TS21 failure by updating check_disk_space() in health_monitor.py to handle 95%+ usage and trigger automatic cleanup of /tmp logs",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-12T18:04:54Z"
+      "id": "b_16ab4979",
+      "ts": "2026-05-12T18:09:20Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-12T18:10:24Z",
+      "resolution": "Session 'hive-dev' is healthy again",
+      "github_issue": null,
+      "_hash": "217dae28725ae72712be5a39a27334a8"
     },
     {
-      "id": "ns_21d706c7",
-      "priority": 3,
-      "description": "Implement retry and backoff logic in call_llm() within orchestrator.py for HTTP 429 responses to reduce load spikes",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-12T18:04:54Z"
+      "id": "b_0de03cdd",
+      "ts": "2026-05-12T18:09:20Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "tmux session 'hive-live' missing entirely",
+      "severity": "critical",
+      "status": "resolved",
+      "resolved_at": "2026-05-12T18:10:24Z",
+      "resolution": "Session 'hive-live' is healthy again",
+      "github_issue": null,
+      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
     }
   ],
+  "next_steps": [],
   "capabilities": {
     "learned": []
   },
@@ -226,7 +211,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 1
+    "openrouter_calls_today": 0
   },
   "model_champions": {
     "text": null,
@@ -236,8 +221,8 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_c8ede693",
-      "ts": "2026-05-12T18:03:28Z",
+      "id": "sess_48c35e50",
+      "ts": "2026-05-12T18:12:26Z",
       "updated_by": "orchestrator",
       "goal": "",
       "summary": "",
@@ -246,24 +231,94 @@
       "decisions": []
     },
     {
-      "id": "sess_30054053",
-      "ts": "2026-05-12T18:04:54Z",
+      "id": "sess_706680a0",
+      "ts": "2026-05-12T18:13:27Z",
       "updated_by": "orchestrator",
-      "goal": "Restore full self-test compliance and reduce resource utilization to normal levels",
-      "summary": "The hive is experiencing high resource usage and multiple self-test failures (TS17-TS21). No recent progress has been logged, and the system is awaiting concrete remediation actions. Immediate code and configuration fixes are required to address the failing tests and resource pressure.",
-      "progress": "No corrective actions have been completed since the last snapshot.",
-      "next_steps": [
-        "Add memory usage guard in orchestrator.py: implement limit_memory_usage() to cap process memory at 48GB and log warnings",
-        "Fix TS21 failure by updating check_disk_space() in health_monitor.py to handle 95%+ usage and trigger automatic cleanup of /tmp logs",
-        "Implement retry and backoff logic in call_llm() within orchestrator.py for HTTP 429 responses to reduce load spikes",
-        "Write unit tests for self_test.check_ts17() in self_test.py covering edge cases of missing config files",
-        "Create a new endpoint /api/health in logstream.py that returns JSON with current self-test statuses and resource metrics"
-      ],
-      "decisions": [
-        "Prioritize fixing self-test failures before addressing performance optimizations",
-        "Introduce automatic log cleanup when disk usage exceeds 90% to prevent TS21 recurrence",
-        "Enforce a hard memory ceiling in the orchestrator to avoid OOM situations"
-      ]
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
+    },
+    {
+      "id": "sess_7b9fac21",
+      "ts": "2026-05-12T18:14:27Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
+    },
+    {
+      "id": "sess_ee672a1b",
+      "ts": "2026-05-12T18:15:28Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
+    },
+    {
+      "id": "sess_bc3d9459",
+      "ts": "2026-05-12T18:16:28Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
+    },
+    {
+      "id": "sess_59535039",
+      "ts": "2026-05-12T18:17:29Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
+    },
+    {
+      "id": "sess_2c260077",
+      "ts": "2026-05-12T18:18:30Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
+    },
+    {
+      "id": "sess_653624a9",
+      "ts": "2026-05-12T18:19:30Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
+    },
+    {
+      "id": "sess_6d849613",
+      "ts": "2026-05-12T18:20:31Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
+    },
+    {
+      "id": "sess_09628db5",
+      "ts": "2026-05-12T18:21:31Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -277,7 +332,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-12T18:05:34Z",
-    "completed_at": "2026-05-12T18:05:34Z"
+    "started_at": "2026-05-12T18:21:31Z",
+    "completed_at": "2026-05-12T18:21:31Z"
   }
 }
