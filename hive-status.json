@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T12:32:35Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-12T12:34:00Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -240,7 +240,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 10
+    "openrouter_calls_today": 11
   },
   "model_champions": {
     "text": null,
@@ -249,26 +249,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_c5a96bcc",
-      "ts": "2026-05-12T10:01:53Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore hive health by fixing failing self-tests and addressing disk saturation",
-      "summary": "The hive is currently stalled with multiple high\u2011priority self\u2011test failures (TS17\u2011TS21) and the disk is at 100% capacity, causing load issues. No recent progress has been made, and the system lacks concrete remediation actions. Immediate coding work is required to repair test logic, improve error handling, and add monitoring endpoints.",
-      "progress": "No new fixes were applied since the last snapshot; all self\u2011test failures remain.",
-      "next_steps": [
-        "Fix the validation logic in self_test.py for TS17, TS18, and TS19 and add detailed error messages",
-        "Implement disk\u2011space cleanup in orchestrator.py by adding a prune_old_logs() function and schedule it in run_maintenance()",
-        "Add exponential backoff retry in call_llm() within orchestrator.py for HTTP 429 and 503 responses",
-        "Write unit tests in tests/test_self_test.py covering all TS17\u2011TS21 scenarios with mocked failures",
-        "Create a new /api/health endpoint in api_server.py that returns JSON with self\u2011test statuses and disk usage metrics"
-      ],
-      "decisions": [
-        "Prioritize fixing TS17\u2011TS19 self\u2011test failures before addressing lower\u2011priority issues",
-        "Introduce automated disk\u2011space management to prevent 100% utilization",
-        "Add health\u2011check endpoint to expose real\u2011time test results for monitoring"
-      ]
-    },
     {
       "id": "sess_46744039",
       "ts": "2026-05-12T10:16:57Z",
@@ -448,6 +428,26 @@
         "Introduce retry logic before attempting manual intervention on LLM call failures.",
         "Defer extensive rewriting of TS19/TS18 until disk space is stabilised."
       ]
+    },
+    {
+      "id": "sess_d66d4610",
+      "ts": "2026-05-12T12:33:19Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self\u2011tests, preventing disk exhaustion, and stabilising backoff loops",
+      "summary": "The hive is stalled at 50% health with critical self\u2011test failures (TS18\u2011TS21) and a full disk. High\u2011priority sessions are in backoff and memory usage is near capacity. Immediate code fixes are required to prune old logs, add robust retry logic, and address the failing test suites.",
+      "progress": "No new achievements were recorded since the last snapshot.",
+      "next_steps": [
+        "Implement prune_old_artifacts() in orchestrator.py to delete files older than 30 days and call it at startup to free disk space",
+        "Add exponential backoff with jitter to call_llm() in orchestrator.py for HTTP 429/503 responses, logging retries to metrics.log",
+        "Fix TS21 failure by updating test expectations in tests/self_test_ts21.py to match the new output format of generate_report()",
+        "Resolve TS19 failure by correcting the path handling bug in utils/path_normalizer.py and adding a unit test for edge\u2011case inputs",
+        "Create a health_check() function in supervisor.py that monitors disk usage and triggers orchestrator.prune_old_artifacts() when usage > 85%"
+      ],
+      "decisions": [
+        "Prioritise disk\u2011space cleanup before addressing backoff logic to prevent further job failures",
+        "Limit retry attempts in call_llm() to 5 with exponential delay to avoid overwhelming the LLM service",
+        "Treat TS18\u2011TS21 as blockers; allocate separate patch branches for each failing test"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -459,9 +459,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-12T12:32:35Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-12T12:33:29Z",
+    "completed_at": "2026-05-12T12:33:30Z"
   }
 }
