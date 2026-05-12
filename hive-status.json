@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T23:38:44Z",
+  "last_updated": "2026-05-12T23:40:02Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-12T23:37:52Z",
+      "last_seen": "2026-05-12T23:40:01Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -19,7 +19,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 4,
+      "errors_last_hour": 5,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 21
+    "openrouter_calls_today": 22
   },
   "model_champions": {
     "text": null,
@@ -248,26 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_6e38ada8",
-      "ts": "2026-05-12T21:08:55Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by resolving critical self-test failures, clearing disk space, and stabilizing the ps5-hive session backoff.",
-      "summary": "The hive is currently stalled with high memory usage and a near\u2011full disk. Critical self\u2011tests TS18, TS19, and TS21 are failing, and the ps5-hive session is in a long backoff loop. Immediate remediation requires disk cleanup, backoff watchdoging, and targeted fixes for the failing self\u2011tests.",
-      "progress": "No new achievements were recorded since the last snapshot.",
-      "next_steps": [
-        "Implement a disk cleanup utility in maintenance.py that deletes temporary files older than 48h and logs reclaimed space.",
-        "Add a watchdog in session_manager.py that monitors ps5-hive backoff state and triggers an immediate restart after 3 consecutive backoffs.",
-        "Create unit tests in tests/self_test.py for TS18, TS19, and TS21 to capture current failure conditions.",
-        "Patch ts18_check() in self_test.py to handle edge\u2011case inputs causing the failure, and add detailed logging.",
-        "Add a health\u2011check endpoint in api/health.py that reports disk usage, memory pressure, and self\u2011test status in JSON."
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before attempting self\u2011test repairs to prevent out\u2011of\u2011space errors.",
-        "Automate ps5-hive backoff recovery via a watchdog rather than manual restarts.",
-        "Lock the failing self\u2011tests until patches are verified, then re\u2011enable them in the regular test suite."
-      ]
-    },
     {
       "id": "sess_f5c1ae8a",
       "ts": "2026-05-12T21:23:54Z",
@@ -447,6 +427,26 @@
         "Use exponential backoff reset logic in the watchdog to avoid endless restart loops for ps5-hive.",
         "Add verbose logging to self_test_runner failures to aid future auto\u2011fix heuristics."
       ]
+    },
+    {
+      "id": "sess_da4aa98f",
+      "ts": "2026-05-12T23:39:51Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self-tests, reducing disk usage, and resolving the ps5-hive backoff issue",
+      "summary": "The hive is currently stalled with high memory and disk pressure; multiple self\u2011tests are failing and the ps5-hive session is in a long backoff loop. Auto\u2011fix attempts have not succeeded, and a disk cleanup utility is pending.",
+      "progress": "Identified the primary blockers and listed pending code tasks for disk cleanup and watchdog creation.",
+      "next_steps": [
+        "Implement clean_temp_files() in maintenance.py to delete files older than 7 days in /tmp/hive and log reclaimed space",
+        "Add unit tests for clean_temp_files() in tests/test_maintenance.py covering empty, missing, and permission\u2011error cases",
+        "Create Watchdog class in session_manager.py with monitor_backoff(session_id) that restarts a session after three consecutive backoff retries",
+        "Integrate Watchdog into the main event loop in orchestrator.py and expose status via /api/watchdog endpoint",
+        "Write integration test in tests/test_watchdog.py to simulate ps5-hive backoff and verify automatic restart"
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before attempting self\u2011test auto\u2011fixes to prevent out\u2011of\u2011space failures",
+        "Handle ps5-hive backoff with an automated watchdog rather than manual restarts",
+        "Add comprehensive unit and integration tests for new maintenance and watchdog code to avoid future stalls"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -460,7 +460,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-12T23:38:44Z",
-    "completed_at": "2026-05-12T23:38:44Z"
+    "started_at": "2026-05-12T23:40:01Z",
+    "completed_at": "2026-05-12T23:40:02Z"
   }
 }
