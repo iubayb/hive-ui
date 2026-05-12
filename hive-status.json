@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T22:53:31Z",
+  "last_updated": "2026-05-12T22:54:43Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 18
+    "openrouter_calls_today": 19
   },
   "model_champions": {
     "text": null,
@@ -248,26 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_08268044",
-      "ts": "2026-05-12T20:23:30Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by clearing disk pressure, fixing failing self-tests, and stabilizing the ps5-hive session.",
-      "summary": "The hive is stalled at 50% health with high memory usage, disk at 97%, and several critical self\u2011test failures. The ps5-hive session is in long backoff and requires intervention. No recent achievements have been recorded.",
-      "progress": "No new tasks were completed since the last snapshot.",
-      "next_steps": [
-        "Implement disk_cleanup() in maintenance.py to delete temporary files and logs older than 7 days and integrate it into the daily cleanup schedule.",
-        "Add a watchdog thread in session_manager.py that monitors ps5-hive backoff counters and triggers an automated restart after 3 consecutive backoffs.",
-        "Create fix_self_test_ts18() in self_test_runner.py that applies the missing configuration patch and adds a verification step.",
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses.",
-        "Write unit tests in tests/test_maintenance.py covering disk_cleanup() edge cases and ensuring safe operation."
-      ],
-      "decisions": [
-        "Prioritize disk cleanup to free space before addressing self\u2011test failures.",
-        "Automate ps5-hive recovery via a watchdog rather than manual restarts.",
-        "Include exponential backoff retries for all LLM API calls to reduce throttling."
-      ]
-    },
     {
       "id": "sess_fcbeb140",
       "ts": "2026-05-12T20:38:39Z",
@@ -447,6 +427,26 @@
         "Deploy a watchdog for the ps5-hive session to automatically recover from prolonged backoff",
         "Add enhanced logging for failing self\u2011tests to aid future automated remediation"
       ]
+    },
+    {
+      "id": "sess_20831d37",
+      "ts": "2026-05-12T22:54:33Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self-tests, clearing disk space, and stabilizing the ps5-hive session.",
+      "summary": "The hive is stalled at 50% health with critical self-test failures (TS18, TS19, TS21) and a full disk (97%). The ps5-hive session is in prolonged backoff, and high memory usage threatens stability. Immediate code fixes are required to clean disk space, address self-test bugs, and add robust session watchdoging.",
+      "progress": "No recent achievements were recorded; the hive remains in a stalled state.",
+      "next_steps": [
+        "Implement disk cleanup utility in maintenance.py that removes files in /tmp/hive_* older than 7 days and logs deletions.",
+        "Add function cleanup_old_logs() in logger.py and invoke it from maintenance.cleanup() to free additional space.",
+        "Create watchdog class Ps5Watchdog in session_manager.py that tracks backoff counters for ps5-hive and triggers immediate restart after 3 consecutive backoffs.",
+        "Fix TS18 failure by updating validate_config_schema() in selftest/ts18.py to handle null values correctly.",
+        "Patch TS19 logic in selftest/ts19.py to include missing edge\u2011case for empty response bodies and add unit tests in tests/selftest_ts19_test.py."
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before any further session restarts to prevent out\u2011of\u2011disk errors.",
+        "Deploy the ps5-hive watchdog as a permanent safety net for any future backoff spikes.",
+        "Allocate a dedicated maintenance window to run self-test auto\u2011fixes after code changes are merged."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -458,9 +458,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=8 health=50% blockers=10",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-12T22:53:11Z",
-    "completed_at": "2026-05-12T22:53:11Z"
+    "started_at": "2026-05-12T22:54:12Z",
+    "completed_at": "2026-05-12T22:54:33Z"
   }
 }
