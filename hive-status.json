@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T12:01:53Z",
+  "last_updated": "2026-05-12T12:02:54Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -240,7 +240,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 8
+    "openrouter_calls_today": 9
   },
   "model_champions": {
     "text": null,
@@ -418,6 +418,26 @@
         "Apply exponential backoff globally to all LLM calls to reduce rate\u2011limit backoffs.",
         "Introduce a health\u2011check API to surface critical metrics for automated monitoring."
       ]
+    },
+    {
+      "id": "sess_6c6cf23d",
+      "ts": "2026-05-12T12:02:44Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by fixing self-test failures, disk space exhaustion, and LLM call reliability",
+      "summary": "The hive is stalled with critical blockers: disk is full, several self-test suites are failing, and a session is in long backoff. Recent attempts to add a prune function and retry logic are incomplete. Immediate code changes are required to address these issues.",
+      "progress": "Added placeholder comments for prune_old_ in orchestrator.py and noted need for exponential backoff in call_llm().",
+      "next_steps": [
+        "Implement prune_old_logs() in orchestrator.py to delete log files older than 30 days and free at least 20GB of disk space",
+        "Add exponential backoff with jitter to call_llm() in orchestrator.py for HTTP 429 and 5xx responses",
+        "Create unit tests in tests/test_selftest.py to verify TS18, TS19, and TS21 pass after fixes",
+        "Update supervisor.py to monitor disk usage and trigger orchestrator.prune_old_logs() when >85% capacity",
+        "Patch ts_runner.py to retry failed self-test steps up to 3 times before marking TS18/TS19/TS21 as failed"
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before attempting self-test auto\u2011fixes",
+        "Limit LLM retry attempts to 5 with exponential backoff to avoid cascading load",
+        "Fail fast on self\u2011test suites after retries and raise alerts for manual review"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -431,7 +451,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-12T12:01:53Z",
-    "completed_at": "2026-05-12T12:01:53Z"
+    "started_at": "2026-05-12T12:02:54Z",
+    "completed_at": "2026-05-12T12:02:54Z"
   }
 }
