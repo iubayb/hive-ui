@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T23:08:51Z",
+  "last_updated": "2026-05-12T23:10:00Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.5,
-      "last_seen": "2026-05-12T23:07:19Z",
+      "status": "running",
+      "health_score": 1.0,
+      "last_seen": "2026-05-12T23:09:58Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 19
+    "openrouter_calls_today": 20
   },
   "model_champions": {
     "text": null,
@@ -248,26 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_fcbeb140",
-      "ts": "2026-05-12T20:38:39Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by resolving failing self-tests, reducing disk usage, and stabilizing the ps5-hive session",
-      "summary": "The hive is stalled with high memory and disk pressure, multiple self-test failures (TS18, TS19, TS21), and the ps5-hive session stuck in backoff. Recent attempts to auto\u2011fix self\u2011tests have failed and a disk cleanup utility is pending.",
-      "progress": "Identified the critical blockers and queued pending tasks for disk cleanup and ps5-hive watchdog.",
-      "next_steps": [
-        "Implement disk_cleanup() in maintenance.py to delete files in /tmp and old log archives, and add a size check to trigger when disk >90%",
-        "Add a watchdog thread in session_manager.py that monitors ps5-hive.backoff_counter and restarts the session after three consecutive backoffs",
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses",
-        "Write unit tests for self_test_runner.py covering TS18, TS19, and TS21 expected failure patterns",
-        "Create a new health_check endpoint in api/health.py that reports self\u2011test statuses and disk usage metrics in JSON"
-      ],
-      "decisions": [
-        "Prioritize fixing self\u2011test failures before further feature work",
-        "Allocate a temporary memory buffer limit of 48\u202fGB until disk cleanup reduces pressure",
-        "Run the new watchdog automatically on hive startup to prevent future backoff loops"
-      ]
-    },
     {
       "id": "sess_7b2bd75f",
       "ts": "2026-05-12T20:53:48Z",
@@ -447,6 +427,26 @@
         "Deploy the ps5-hive watchdog as a permanent safety net for any future backoff spikes.",
         "Allocate a dedicated maintenance window to run self-test auto\u2011fixes after code changes are merged."
       ]
+    },
+    {
+      "id": "sess_336cd551",
+      "ts": "2026-05-12T23:09:37Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by addressing critical blockers and stabilizing session management",
+      "summary": "The hive is currently stalled with high resource usage and multiple self-test failures. Critical sessions are in backoff and disk space is near capacity. Immediate code interventions are required to clean up disk space, improve session backoff handling, and enhance self-test auto\u2011fix mechanisms.",
+      "progress": "No new achievements were recorded since the last update.",
+      "next_steps": [
+        "Implement a disk cleanup utility in maintenance.py that deletes temporary files older than 7 days and frees space when disk usage > 90%",
+        "Create a watchdog in session_manager.py that monitors ps5-hive backoff status and triggers a forced restart after three consecutive backoff intervals",
+        "Add exponential backoff retry logic to orchestrator.py's call_llm() function for HTTP 429 responses, with a max of 5 retries",
+        "Enhance self-test auto\u2011fix in self_test.py to handle TS18 and TS19 failures by invoking remedial scripts and logging outcomes",
+        "Write unit tests for the new watchdog in session_manager_test.py covering detection of backoff spikes and correct restart behavior"
+      ],
+      "decisions": [
+        "Prioritize disk cleanup to prevent out\u2011of\u2011space crashes before tackling session backoff issues",
+        "Introduce exponential backoff retries for LLM calls to reduce high load caused by repeated request failures",
+        "Extend the self-test auto\u2011fix framework to cover currently unhandled test failures (TS18, TS19, TS21)"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -458,9 +458,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: develop\u2192main promotion check + release draft",
     "status": "completed",
-    "started_at": "2026-05-12T23:08:11Z",
-    "completed_at": "2026-05-12T23:08:11Z"
+    "started_at": "2026-05-12T23:09:57Z",
+    "completed_at": "2026-05-12T23:10:00Z"
   }
 }
