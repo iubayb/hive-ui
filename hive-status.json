@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T10:00:58Z",
+  "last_updated": "2026-05-12T10:01:53Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-12T10:00:06Z",
+      "status": "stalled",
+      "health_score": 0.55,
+      "last_seen": "2026-05-12T10:01:28Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -183,7 +183,35 @@
       "_hash": "5e7ea63d56407f4c12743a4f09c67392"
     }
   ],
-  "next_steps": [],
+  "next_steps": [
+    {
+      "id": "ns_5f994a15",
+      "priority": 1,
+      "description": "Fix the validation logic in self_test.py for TS17, TS18, and TS19 and add detailed error messages",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-12T10:01:53Z"
+    },
+    {
+      "id": "ns_1d3f07fb",
+      "priority": 2,
+      "description": "Implement disk\u2011space cleanup in orchestrator.py by adding a prune_old_logs() function and schedule it in run_maintenance()",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-12T10:01:53Z"
+    },
+    {
+      "id": "ns_ca8f63b3",
+      "priority": 3,
+      "description": "Add exponential backoff retry in call_llm() within orchestrator.py for HTTP 429 and 503 responses",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-12T10:01:53Z"
+    }
+  ],
   "capabilities": {
     "learned": []
   },
@@ -198,7 +226,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 0
+    "openrouter_calls_today": 1
   },
   "model_champions": {
     "text": null,
@@ -216,6 +244,26 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_c5a96bcc",
+      "ts": "2026-05-12T10:01:53Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore hive health by fixing failing self-tests and addressing disk saturation",
+      "summary": "The hive is currently stalled with multiple high\u2011priority self\u2011test failures (TS17\u2011TS21) and the disk is at 100% capacity, causing load issues. No recent progress has been made, and the system lacks concrete remediation actions. Immediate coding work is required to repair test logic, improve error handling, and add monitoring endpoints.",
+      "progress": "No new fixes were applied since the last snapshot; all self\u2011test failures remain.",
+      "next_steps": [
+        "Fix the validation logic in self_test.py for TS17, TS18, and TS19 and add detailed error messages",
+        "Implement disk\u2011space cleanup in orchestrator.py by adding a prune_old_logs() function and schedule it in run_maintenance()",
+        "Add exponential backoff retry in call_llm() within orchestrator.py for HTTP 429 and 503 responses",
+        "Write unit tests in tests/test_self_test.py covering all TS17\u2011TS21 scenarios with mocked failures",
+        "Create a new /api/health endpoint in api_server.py that returns JSON with self\u2011test statuses and disk usage metrics"
+      ],
+      "decisions": [
+        "Prioritize fixing TS17\u2011TS19 self\u2011test failures before addressing lower\u2011priority issues",
+        "Introduce automated disk\u2011space management to prevent 100% utilization",
+        "Add health\u2011check endpoint to expose real\u2011time test results for monitoring"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -229,7 +277,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-12T10:00:28Z",
-    "completed_at": "2026-05-12T10:00:28Z"
+    "started_at": "2026-05-12T10:01:28Z",
+    "completed_at": "2026-05-12T10:01:28Z"
   }
 }
