@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T03:18:51Z",
+  "last_updated": "2026-05-12T03:19:50Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.55,
-      "last_seen": "2026-05-12T03:17:20Z",
+      "last_seen": "2026-05-12T03:19:49Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -305,7 +305,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 1
+    "openrouter_calls_today": 2
   },
   "model_champions": {
     "text": null,
@@ -314,16 +314,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_f0ce5117",
-      "ts": "2026-05-12T02:54:45Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_b2d652f2",
       "ts": "2026-05-12T02:55:45Z",
@@ -423,6 +413,26 @@
         "Introduce automated disk cleanup to prevent future 'disk=100%' stalls",
         "Implement comprehensive unit tests for self-test functions to catch regressions early"
       ]
+    },
+    {
+      "id": "sess_142f40ce",
+      "ts": "2026-05-12T03:19:39Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-test modules and resolving high resource usage",
+      "summary": "The hive is stalled with several high-priority self-test failures (TS18, TS19, TS21) and a critical disk full condition. Recent auto-fixes have only addressed TS12, leaving the core issues unresolved. Immediate code changes and resource cleanup are needed to bring the system back to operational status.",
+      "progress": "Auto-fix logic successfully resolved invariant TS12 across multiple attempts.",
+      "next_steps": [
+        "Implement detailed validation for TS18 in self_test.py by completing the unfinished function body and adding unit tests in tests/test_self_test_ts18.py",
+        "Patch ts19_check() in self_test.py to correctly handle missing configuration files and add error logging",
+        "Add disk usage monitoring and automatic log rotation in cleanup.py with a new function clean_temp_logs() targeting /var/log/hive/*.log",
+        "Create a retry wrapper for the LLM diagnosis call in orchestrator.py to handle temporary DNS failures with exponential backoff",
+        "Write integration tests in tests/integration/test_self_test_suite.py to verify TS18, TS19, and TS21 pass under simulated failure conditions"
+      ],
+      "decisions": [
+        "Prioritize fixing self-test failures before addressing lower-priority performance tweaks",
+        "Introduce automated log rotation to prevent disk full states from recurring",
+        "Add robust retry logic to external LLM calls to mitigate temporary network resolution errors"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -436,7 +446,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-12T03:18:21Z",
-    "completed_at": "2026-05-12T03:18:21Z"
+    "started_at": "2026-05-12T03:19:49Z",
+    "completed_at": "2026-05-12T03:19:50Z"
   }
 }
