@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T12:46:26Z",
+  "last_updated": "2026-05-12T12:47:55Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-12T12:44:36Z",
+      "last_seen": "2026-05-12T12:47:27Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -240,7 +240,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 11
+    "openrouter_calls_today": 12
   },
   "model_champions": {
     "text": null,
@@ -249,26 +249,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_46744039",
-      "ts": "2026-05-12T10:16:57Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by freeing disk space, improving LLM call reliability, and fixing failing self\u2011tests.",
-      "summary": "The hive is stalled with critical blockers: disk is full, several self\u2011tests (TS18\u2011TS21) are failing, and the ps5\u2011hive session is in backoff. Recent attempts to add a prune function and retry logic were only outlined, so concrete implementation is needed.",
-      "progress": "Identified missing prune_old_* function and lack of exponential backoff in call_llm(), and pinpointed failing self\u2011test modules.",
-      "next_steps": [
-        "Add prune_old_sessions() in orchestrator.py to delete log and temp files older than 7 days and invoke it at startup.",
-        "Update orchestrator.py to call prune_old_sessions() from the main loop after each job batch.",
-        "Implement exponential backoff retry in call_llm() within orchestrator.py for HTTP 429, 500, and network errors.",
-        "Fix TS21 self\u2011test by adjusting the threshold check in tests/ts21_check.py to match current resource limits.",
-        "Create unit tests in tests/test_orchestrator_cleanup.py covering prune_old_sessions() edge cases."
-      ],
-      "decisions": [
-        "Prioritize disk\u2011space cleanup before tackling other failures.",
-        "Add robust retry logic to LLM calls to reduce backoff chain reactions.",
-        "Address TS21 and TS19 failures first, then revisit TS18 and TS19 after core stability is restored."
-      ]
-    },
     {
       "id": "sess_dac51dd1",
       "ts": "2026-05-12T10:31:56Z",
@@ -448,6 +428,26 @@
         "Limit retry attempts in call_llm() to 5 with exponential delay to avoid overwhelming the LLM service",
         "Treat TS18\u2011TS21 as blockers; allocate separate patch branches for each failing test"
       ]
+    },
+    {
+      "id": "sess_8617807b",
+      "ts": "2026-05-12T12:47:55Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by resolving critical self-test failures and resource constraints.",
+      "summary": "The hive is currently stalled with high load, full disk usage, and several self-test failures (TS18, TS19, TS21). Sessions are in backoff and auto\u2011fixes have not succeeded, requiring targeted code repairs and cleanup actions.",
+      "progress": "Identified key failure points and listed pending tasks for disk cleanup and LLM retry logic.",
+      "next_steps": [
+        "Implement prune_old_sessions() in orchestrator.py to delete logs and temp files older than 30 days and integrate it into the shutdown routine.",
+        "Add exponential backoff with jitter to call_llm() in orchestrator.py for HTTP 429 and 5xx responses, updating the retry decorator.",
+        "Create unit tests in tests/test_selftest.py to simulate TS18, TS19, and TS21 failures and verify auto\u2011fix pathways.",
+        "Modify self_test_runner.py to log detailed diagnostics for TS18, TS19, and TS21 and raise a custom RecoverableError for auto\u2011fix handling.",
+        "Add a health check endpoint /api/health in logstream.py that returns JSON including disk usage, memory pressure, and self\u2011test status."
+      ],
+      "decisions": [
+        "Prioritize disk\u2011space cleanup before adding new retry logic to ensure resources for subsequent fixes.",
+        "Introduce explicit unit tests for failing self\u2011tests to prevent silent regressions.",
+        "Expose health metrics via an API endpoint to allow external monitoring and faster detection of future stalls."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -459,9 +459,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "self-test: running test_system.sh + auto-fix",
-    "status": "running",
-    "started_at": "2026-05-12T12:46:26Z",
-    "completed_at": null
+    "task": "compaction: LLM summarising hive state",
+    "status": "completed",
+    "started_at": "2026-05-12T12:47:38Z",
+    "completed_at": "2026-05-12T12:47:55Z"
   }
 }
