@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T17:26:46Z",
+  "last_updated": "2026-05-12T17:27:52Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-12T17:25:15Z",
+      "last_seen": "2026-05-12T17:27:16Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -240,7 +240,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 6
+    "openrouter_calls_today": 7
   },
   "model_champions": {
     "text": null,
@@ -249,16 +249,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_a31d805d",
-      "ts": "2026-05-12T15:52:39Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_99177237",
       "ts": "2026-05-12T15:53:45Z",
@@ -408,6 +398,26 @@
         "Adopt exponential backoff with jitter as the standard restart policy for all sessions.",
         "Introduce dedicated retry utilities for self\u2011test modules to improve resilience against transient errors."
       ]
+    },
+    {
+      "id": "sess_09db9ddb",
+      "ts": "2026-05-12T17:27:42Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by resolving critical self-test failures, disk space exhaustion, and session backoff issues.",
+      "summary": "The hive is currently stalled with high memory usage and a full disk, causing several self-test failures (TS18, TS19, TS21) and a long backoff for the ps5-hive session. Immediate remediation requires automated disk cleanup, robust session restart logic, and targeted fixes for the failing self\u2011tests.",
+      "progress": "Added placeholders for exponential backoff in session_manager.py but not yet integrated.",
+      "next_steps": [
+        "Implement automatic disk\u2011space cleanup routine in monitor.py: identify stale log files >30d and delete them, then trigger garbage collection.",
+        "Add exponential backoff with jitter to restart_session() in session_manager.py, respecting a max backoff of 300s.",
+        "Create a health\u2011check endpoint in api_status.py that returns JSON with disk usage, memory pressure, and self\u2011test statuses.",
+        "Fix TS21 failure by updating validate_schema() in self_test.py to handle missing optional fields gracefully.",
+        "Write unit tests for the new disk cleanup function in test_monitor.py covering edge cases of empty directories and permission errors."
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before addressing self\u2011test failures to prevent further resource exhaustion.",
+        "Use jittered exponential backoff for all session restarts to reduce thundering herd effects.",
+        "Expose a /api/health endpoint to allow external monitoring tools to alert on resource thresholds."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -419,9 +429,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-12T17:26:15Z",
-    "completed_at": "2026-05-12T17:26:16Z"
+    "started_at": "2026-05-12T17:27:16Z",
+    "completed_at": "2026-05-12T17:27:42Z"
   }
 }
