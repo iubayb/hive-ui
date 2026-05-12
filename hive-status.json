@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T20:23:02Z",
+  "last_updated": "2026-05-12T20:23:40Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 8
+    "openrouter_calls_today": 9
   },
   "model_champions": {
     "text": null,
@@ -248,16 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_6d849613",
-      "ts": "2026-05-12T18:20:31Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_09628db5",
       "ts": "2026-05-12T18:21:31Z",
@@ -427,6 +417,26 @@
         "Automate ps5-hive recovery via watchdog to reduce manual intervention",
         "Integrate self-test remediation into orchestrator's error handling loop"
       ]
+    },
+    {
+      "id": "sess_08268044",
+      "ts": "2026-05-12T20:23:30Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by clearing disk pressure, fixing failing self-tests, and stabilizing the ps5-hive session.",
+      "summary": "The hive is stalled at 50% health with high memory usage, disk at 97%, and several critical self\u2011test failures. The ps5-hive session is in long backoff and requires intervention. No recent achievements have been recorded.",
+      "progress": "No new tasks were completed since the last snapshot.",
+      "next_steps": [
+        "Implement disk_cleanup() in maintenance.py to delete temporary files and logs older than 7 days and integrate it into the daily cleanup schedule.",
+        "Add a watchdog thread in session_manager.py that monitors ps5-hive backoff counters and triggers an automated restart after 3 consecutive backoffs.",
+        "Create fix_self_test_ts18() in self_test_runner.py that applies the missing configuration patch and adds a verification step.",
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses.",
+        "Write unit tests in tests/test_maintenance.py covering disk_cleanup() edge cases and ensuring safe operation."
+      ],
+      "decisions": [
+        "Prioritize disk cleanup to free space before addressing self\u2011test failures.",
+        "Automate ps5-hive recovery via a watchdog rather than manual restarts.",
+        "Include exponential backoff retries for all LLM API calls to reduce throttling."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -440,7 +450,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-12T20:22:21Z",
-    "completed_at": "2026-05-12T20:22:22Z"
+    "started_at": "2026-05-12T20:23:40Z",
+    "completed_at": "2026-05-12T20:23:40Z"
   }
 }
