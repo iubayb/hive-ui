@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T15:49:50Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-12T15:50:52Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -240,7 +240,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 23
+    "openrouter_calls_today": 24
   },
   "model_champions": {
     "text": null,
@@ -249,26 +249,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_32dcc01b",
-      "ts": "2026-05-12T13:18:25Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by fixing failing self\u2011tests, preventing disk exhaustion, and improving LLM call reliability",
-      "summary": "The hive is stalled with high memory pressure and a full disk, causing multiple self\u2011test failures (TS18\u2011TS21). Sessions are in backoff and the orchestrator lacks cleanup and retry logic. Immediate code changes are needed to restore health.",
-      "progress": "Identified the missing prune_old_ function stub and lack of exponential backoff in call_llm().",
-      "next_steps": [
-        "Implement prune_old_logs(days:int) in orchestrator.py to delete log files older than the given threshold and call it from the periodic maintenance loop",
-        "Add exponential backoff with jitter to call_llm() in orchestrator.py, handling HTTP 429 and 5xx responses and raising a custom RetryExceededError after 5 attempts",
-        "Fix self-test TS21 in self_test.py by adjusting the disk\u2011usage threshold logic and adding a detailed failure message",
-        "Implement missing checks for TS18 and TS19 in self_test.py, correcting the core load metric source and adding fallback handling for missing sensors",
-        "Create unit tests in tests/test_self_test.py covering TS18\u2011TS21 scenarios and a test for prune_old_logs() ensuring only files older than the cutoff are removed"
-      ],
-      "decisions": [
-        "Prioritize disk cleanup and LLM retry before tackling high\u2011memory renicing to avoid cascading failures",
-        "Limit prune_old_logs() to a maximum of 20\u202fGB freed per run to prevent aggressive deletions",
-        "Cap exponential backoff retries at 5 attempts to balance responsiveness and load"
-      ]
-    },
     {
       "id": "sess_aa37ba73",
       "ts": "2026-05-12T13:33:29Z",
@@ -448,6 +428,26 @@
         "Limit retry attempts in call_llm() to 5 with jitter to prevent endless backoff loops",
         "Fail fast on TS18/TS19 errors after applying patches and log detailed diagnostics for future auto\u2011fix attempts"
       ]
+    },
+    {
+      "id": "sess_0a1439c0",
+      "ts": "2026-05-12T15:50:12Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self\u2011tests, handling backoff issues, and reclaiming disk space",
+      "summary": "The hive is currently stalled with high\u2011priority blockers: several self\u2011tests are failing, the ps5-hive session is in long backoff, and the disk is at 100% capacity. Recent work has not yet produced fixes. Immediate concrete code changes are required to address these issues and bring the system back online.",
+      "progress": "No recent achievements were recorded; the hive remains in a stalled state.",
+      "next_steps": [
+        "Implement prune_old_sessions() in orchestrator.py to delete logs and temporary files older than 30 days and call it before each job batch",
+        "Add exponential backoff with jitter to call_llm() in orchestrator.py for HTTP 429 and network errors",
+        "Create fix_self_test_ts21() in self_test.py that resets the TS21 configuration flag and adds a unit test verifying successful reset",
+        "Add fix_self_test_ts19() in self_test.py that patches the missing dependency path and logs remediation steps",
+        "Add fix_self_test_ts18() in self_test.py that restores default parameter values and includes a regression test"
+      ],
+      "decisions": [
+        "Prioritize disk\u2011space cleanup to prevent further job failures due to full storage",
+        "Introduce robust retry logic in LLM calls to reduce backoff cascades across sessions",
+        "Address failing self\u2011tests (TS18, TS19, TS21) before tackling lower\u2011priority session issues"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -459,9 +459,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-12T15:49:50Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-12T15:50:52Z",
+    "completed_at": "2026-05-12T15:50:52Z"
   }
 }
