@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T19:37:56Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-12T19:38:33Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 5
+    "openrouter_calls_today": 6
   },
   "model_champions": {
     "text": null,
@@ -248,16 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_59535039",
-      "ts": "2026-05-12T18:17:29Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_2c260077",
       "ts": "2026-05-12T18:18:30Z",
@@ -397,6 +387,26 @@
         "Treat failing self-tests as blockers; allocate one coding agent to each failing suite.",
         "Enable automatic restart of ps5-hive after watchdog triggers to reduce manual intervention."
       ]
+    },
+    {
+      "id": "sess_e97f62f1",
+      "ts": "2026-05-12T19:38:22Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by resolving critical self-test failures, clearing disk space, and stabilizing the ps5-hive session",
+      "summary": "The hive is currently stalled with high memory and disk usage, several self-test suites failing, and the ps5-hive session in long backoff. Immediate remediation is needed to free disk space, add a watchdog for session backoff, and address failing self-tests. Progress so far: no new achievements have been recorded since the last snapshot.",
+      "progress": "No new tasks have been completed since the last state snapshot.",
+      "next_steps": [
+        "Implement disk cleanup utility in maintenance.py that removes temp files older than 7 days and logs reclaimed space",
+        "Create watchdog in session_manager.py that monitors ps5-hive backoff and automatically restarts the session after 3 consecutive backoffs",
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 and network errors",
+        "Write unit tests for self_test_suite.py covering TS18, TS19, and TS21 edge cases and integrate test runner in CI pipeline",
+        "Add a new endpoint /api/metrics in logstream.py that returns JSON with current CPU, memory, and disk usage percentages"
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before attempting to fix self-test failures to prevent further resource exhaustion",
+        "Introduce automatic session restart for ps5-hive to reduce manual intervention risk",
+        "Integrate enhanced retry handling in orchestrator calls to improve resilience under high load"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -408,9 +418,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-12T19:37:56Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-12T19:38:32Z",
+    "completed_at": "2026-05-12T19:38:33Z"
   }
 }
