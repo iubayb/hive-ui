@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T03:48:52Z",
+  "last_updated": "2026-05-12T03:49:58Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -313,7 +313,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 3
+    "openrouter_calls_today": 4
   },
   "model_champions": {
     "text": null,
@@ -322,16 +322,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_636c1f7d",
-      "ts": "2026-05-12T02:56:53Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_38701e19",
       "ts": "2026-05-12T02:57:53Z",
@@ -451,6 +441,26 @@
         "Introduce unit tests for self-test modules to prevent future regressions",
         "Enable log rotation to free disk space and avoid 100% disk usage"
       ]
+    },
+    {
+      "id": "sess_0fa28285",
+      "ts": "2026-05-12T03:49:38Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self-tests and improving resiliency",
+      "summary": "The hive is currently stalled with several high-priority self-test failures (TS18, TS19) and infrastructure issues (disk full, LLM call failures). Recent auto-fixes resolved TS12 repeatedly, but core health remains compromised. Immediate coding work is needed to implement detailed validation for TS18, patch TS19 edge cases, and add robustness to external calls.",
+      "progress": "Auto-fixed system invariant TS12 multiple times, confirming the auto-fix pipeline works for that invariant.",
+      "next_steps": [
+        "Implement detailed validation logic for TS18 in self_test.py within function validate_ts18()",
+        "Patch ts19_check() in self_test.py to correctly handle missing or malformed config files",
+        "Add exponential backoff retry logic to orchestrator.llm_call() when a DNS resolution error occurs",
+        "Create a new health check in health_monitor.py to alert when disk usage exceeds 90% and trigger cleanup",
+        "Write unit tests for the updated TS18 and TS19 validation functions in tests/test_self_test.py"
+      ],
+      "decisions": [
+        "Prioritize fixing TS18 and TS19 before addressing lower priority self-test failures",
+        "Introduce retry mechanisms for all external LLM calls to mitigate temporary network issues",
+        "Add proactive disk usage monitoring to prevent future stalls due to full storage"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -462,9 +472,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-12T03:48:11Z",
-    "completed_at": "2026-05-12T03:48:12Z"
+    "started_at": "2026-05-12T03:49:22Z",
+    "completed_at": "2026-05-12T03:49:38Z"
   }
 }
