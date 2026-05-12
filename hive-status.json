@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T10:15:42Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-12T10:16:57Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 1
+    "openrouter_calls_today": 2
   },
   "model_champions": {
     "text": null,
@@ -277,6 +277,26 @@
         "Introduce automated disk\u2011space management to prevent 100% utilization",
         "Add health\u2011check endpoint to expose real\u2011time test results for monitoring"
       ]
+    },
+    {
+      "id": "sess_46744039",
+      "ts": "2026-05-12T10:16:57Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by freeing disk space, improving LLM call reliability, and fixing failing self\u2011tests.",
+      "summary": "The hive is stalled with critical blockers: disk is full, several self\u2011tests (TS18\u2011TS21) are failing, and the ps5\u2011hive session is in backoff. Recent attempts to add a prune function and retry logic were only outlined, so concrete implementation is needed.",
+      "progress": "Identified missing prune_old_* function and lack of exponential backoff in call_llm(), and pinpointed failing self\u2011test modules.",
+      "next_steps": [
+        "Add prune_old_sessions() in orchestrator.py to delete log and temp files older than 7 days and invoke it at startup.",
+        "Update orchestrator.py to call prune_old_sessions() from the main loop after each job batch.",
+        "Implement exponential backoff retry in call_llm() within orchestrator.py for HTTP 429, 500, and network errors.",
+        "Fix TS21 self\u2011test by adjusting the threshold check in tests/ts21_check.py to match current resource limits.",
+        "Create unit tests in tests/test_orchestrator_cleanup.py covering prune_old_sessions() edge cases."
+      ],
+      "decisions": [
+        "Prioritize disk\u2011space cleanup before tackling other failures.",
+        "Add robust retry logic to LLM calls to reduce backoff chain reactions.",
+        "Address TS21 and TS19 failures first, then revisit TS18 and TS19 after core stability is restored."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -288,9 +308,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-12T10:15:41Z",
-    "completed_at": "2026-05-12T10:15:42Z"
+    "started_at": "2026-05-12T10:16:32Z",
+    "completed_at": "2026-05-12T10:16:57Z"
   }
 }
