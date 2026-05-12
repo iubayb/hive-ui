@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T13:02:47Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-12T13:03:53Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-12T13:01:45Z",
+      "last_seen": "2026-05-12T13:03:53Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -240,7 +240,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 12
+    "openrouter_calls_today": 13
   },
   "model_champions": {
     "text": null,
@@ -249,26 +249,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_dac51dd1",
-      "ts": "2026-05-12T10:31:56Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving critical self-test failures, improving reliability of LLM calls, and preventing disk exhaustion",
-      "summary": "The hive is operating but under high load with several critical self-test failures (TS18, TS19, TS21) and a full disk. Immediate code changes are needed to add disk\u2011space pruning, robust retry logic for LLM calls, and targeted fixes for the failing self\u2011tests.",
-      "progress": "No new achievements were recorded since the last checkpoint.",
-      "next_steps": [
-        "Add disk\u2011space cleanup function prune_old_sessions() in orchestrator.py and invoke it at startup and after each job batch",
-        "Implement exponential backoff retry in call_llm() within orchestrator.py for HTTP 429 and network errors",
-        "Create fix_self_test_ts18() in self_test.py to address TS18's missing environment variable and integrate it into the self\u2011test runner",
-        "Create fix_self_test_ts19() in self_test.py to correct the outdated config path and add a unit test in tests/self_test_test.py",
-        "Add unit tests in tests/orchestrator_test.py for prune_old_sessions() and call_llm() retry behavior"
-      ],
-      "decisions": [
-        "Prioritize disk cleanup to avoid immediate service disruption due to full storage",
-        "Introduce exponential backoff for LLM calls as a permanent reliability pattern",
-        "Address TS18 and TS19 before attempting automated fixes for TS21"
-      ]
-    },
     {
       "id": "sess_a8dac014",
       "ts": "2026-05-12T10:47:03Z",
@@ -448,6 +428,26 @@
         "Introduce explicit unit tests for failing self\u2011tests to prevent silent regressions.",
         "Expose health metrics via an API endpoint to allow external monitoring and faster detection of future stalls."
       ]
+    },
+    {
+      "id": "sess_4d9a6511",
+      "ts": "2026-05-12T13:03:03Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by resolving self-test failures, disk space exhaustion, and session backoff issues",
+      "summary": "The hive is currently stalled with high memory usage and disk at 100% capacity, causing multiple sessions to backoff and self\u2011test suites TS18\u2011TS21 to fail. Recent attempts to auto\u2011fix have been insufficient, and no progress has been recorded.",
+      "progress": "Identified four high\u2011priority blockers and listed two pending code improvements.",
+      "next_steps": [
+        "Implement disk-space cleanup in orchestrator.py by adding a prune_old_sessions() function and schedule it in the main loop",
+        "Add exponential backoff retry logic to call_llm() in orchestrator.py for HTTP 429 and network errors",
+        "Create unit tests in tests/test_selftest.py to simulate TS18, TS19, TS20, and TS21 failures and verify auto\u2011fix handling",
+        "Introduce a health check endpoint in health.py that reports disk usage and triggers prune_old_sessions() when usage > 90%",
+        "Update supervisor.py to restart sessions after backoff exceeds 120 seconds and log the event to /var/log/hive_backoff.log"
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before addressing self\u2011test failures to prevent further resource blockage",
+        "Use exponential backoff with jitter for LLM calls to reduce throttling impact",
+        "Add automated unit tests for self\u2011test repair mechanisms to catch regressions early"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -459,9 +459,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-12T13:02:47Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-12T13:03:53Z",
+    "completed_at": "2026-05-12T13:03:53Z"
   }
 }
