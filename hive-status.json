@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T11:01:55Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-12T11:02:49Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-12T11:00:35Z",
+      "last_seen": "2026-05-12T11:02:39Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 4
+    "openrouter_calls_today": 5
   },
   "model_champions": {
     "text": null,
@@ -337,6 +337,26 @@
         "Limit retry attempts in call_llm() to 5 with exponential backoff to avoid infinite loops",
         "Schedule automated self\u2011test reruns after each remediation to verify stability"
       ]
+    },
+    {
+      "id": "sess_b9d2d0a6",
+      "ts": "2026-05-12T11:02:09Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing self-test failures, clearing disk space, and stabilizing session backoffs.",
+      "summary": "The hive is currently stalled with critical blockers: multiple self-test failures (TS18, TS19, TS21), a full disk, and a key session in long backoff. Recent attempts to auto\u2011fix have not succeeded, and no concrete progress was recorded.",
+      "progress": "Identified high\u2011priority blockers and drafted pending tasks for disk cleanup and LLM retry logic.",
+      "next_steps": [
+        "Implement prune_old_logs() in orchestrator.py to delete log files older than 30 days and call it at startup.",
+        "Add exponential backoff with jitter to call_llm() in orchestrator.py for HTTP 429 and network errors.",
+        "Create unit tests in tests/test_orchestrator.py for the new prune_old_logs() and retry logic.",
+        "Fix TS18 by updating validation_rules.py to handle new schema version and add corresponding test.",
+        "Patch TS19 failure by correcting path permissions in file_access.py and adding a verification step in self_test.py."
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before attempting self-test repairs to ensure sufficient space for logs and temporary files.",
+        "Use exponential backoff with a maximum of 5 retries for LLM calls to mitigate rate\u2011limit throttling.",
+        "Add automated unit tests for each fix to prevent regression in future releases."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -348,9 +368,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-12T11:01:55Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-12T11:02:49Z",
+    "completed_at": "2026-05-12T11:02:49Z"
   }
 }
