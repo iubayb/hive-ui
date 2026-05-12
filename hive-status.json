@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T05:04:52Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-12T05:05:53Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.55,
-      "last_seen": "2026-05-12T05:03:31Z",
+      "last_seen": "2026-05-12T05:05:33Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -339,7 +339,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 8
+    "openrouter_calls_today": 9
   },
   "model_champions": {
     "text": null,
@@ -348,16 +348,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_214c9b39",
-      "ts": "2026-05-12T03:02:02Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_b9e856f8",
       "ts": "2026-05-12T03:03:03Z",
@@ -527,6 +517,26 @@
         "Implement a safe automatic log rotation/cleanup to prevent disk from reaching 100% again",
         "Introduce retry logic for external LLM calls to reduce impact of transient network errors"
       ]
+    },
+    {
+      "id": "sess_15749ad0",
+      "ts": "2026-05-12T05:05:13Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-test checks and stabilizing LLM diagnostic calls",
+      "summary": "The hive is currently stalled with multiple high\u2011severity self\u2011test failures (TS18, TS19, TS21) and a temporary network issue affecting LLM diagnosis. Recent auto\u2011fixes resolved TS12 repeatedly, but core stability remains low. Immediate code fixes to self_test.py and resilient LLM call handling are required.",
+      "progress": "Auto\u2011fixed invariant TS12 across several sessions, confirming the auto\u2011fix mechanism works.",
+      "next_steps": [
+        "Implement comprehensive validation for TS18 in function validate_ts18() within self_test.py",
+        "Patch ts19_check() in self_test.py to correctly handle missing or malformed config files",
+        "Add exponential backoff retry logic to call_llm() in orchestrator.py for HTTP 429 and network errors",
+        "Create unit tests in tests/test_self_test.py covering TS18, TS19, and TS21 edge cases",
+        "Add a health endpoint /api/health in logstream.py that returns JSON with self-test statuses and resource usage"
+      ],
+      "decisions": [
+        "Prioritize fixing self_test.py failures before addressing LLM call reliability",
+        "Introduce automated unit testing for all self-test checks to prevent future regressions",
+        "Expose a health API to monitor real\u2011time test results and system metrics"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -538,9 +548,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-12T05:04:52Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-12T05:05:43Z",
+    "completed_at": "2026-05-12T05:05:43Z"
   }
 }
