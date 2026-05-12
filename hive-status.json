@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T19:22:48Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-12T19:23:54Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-12T19:20:57Z",
+      "last_seen": "2026-05-12T19:23:14Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 4
+    "openrouter_calls_today": 5
   },
   "model_champions": {
     "text": null,
@@ -248,16 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_bc3d9459",
-      "ts": "2026-05-12T18:16:28Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_59535039",
       "ts": "2026-05-12T18:17:29Z",
@@ -387,6 +377,26 @@
         "Allocate additional memory to core processes by lowering non\u2011essential job niceness",
         "Defer non\u2011critical feature work until all high\u2011priority blockers are cleared"
       ]
+    },
+    {
+      "id": "sess_1b27e596",
+      "ts": "2026-05-12T19:23:04Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by fixing critical self-test failures, clearing disk space, and resolving the ps5-hive backoff issue.",
+      "summary": "The hive is currently stalled with high memory usage and disk nearing full capacity. Critical self-test suites TS18, TS19, and TS21 are failing, and the ps5-hive session is in prolonged backoff. Immediate code improvements are needed to automate cleanup and monitoring, and to address the failing self-tests.",
+      "progress": "Implemented initial probes for disk usage logging in maintenance.py.",
+      "next_steps": [
+        "Complete the disk cleanup utility in maintenance.py: add logic to delete temp files in /tmp/hive/* and rotate old logs when disk >90%.",
+        "Add a watchdog thread in session_manager.py: monitor ps5-hive backoff counter and trigger a graceful restart after 3 consecutive backoffs.",
+        "Fix TS21 self-test in tests/self_test_ts21.py: replace deprecated API call with the new get_system_metrics() function.",
+        "Implement missing function get_system_metrics() in metrics.py to return CPU, memory, and disk usage as a dict.",
+        "Write unit tests for the new watchdog in session_manager_test.py covering backoff detection and restart logic."
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before addressing memory pressure to prevent further stalls.",
+        "Treat failing self-tests as blockers; allocate one coding agent to each failing suite.",
+        "Enable automatic restart of ps5-hive after watchdog triggers to reduce manual intervention."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -398,9 +408,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-12T19:22:48Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-12T19:23:14Z",
+    "completed_at": "2026-05-12T19:23:14Z"
   }
 }
