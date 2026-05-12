@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T03:03:33Z",
+  "last_updated": "2026-05-12T03:04:38Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -245,7 +245,35 @@
       "_hash": "5e7ea63d56407f4c12743a4f09c67392"
     }
   ],
-  "next_steps": [],
+  "next_steps": [
+    {
+      "id": "ns_5d3344aa",
+      "priority": 1,
+      "description": "Add disk usage check and automatic cleanup in health_monitor.py: implement free_space_threshold and invoke cleanup_tmp() when usage > 95%",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-12T03:04:18Z"
+    },
+    {
+      "id": "ns_0fe05486",
+      "priority": 2,
+      "description": "Update self_test.py: implement detailed validation for TS18 in function validate_ts18() and raise descriptive errors",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-12T03:04:18Z"
+    },
+    {
+      "id": "ns_d84c098d",
+      "priority": 3,
+      "description": "Patch ts19_check() in self_test.py to handle edge case where config file is missing and create default config",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-12T03:04:18Z"
+    }
+  ],
   "capabilities": {
     "learned": [
       {
@@ -277,7 +305,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 0
+    "openrouter_calls_today": 1
   },
   "model_champions": {
     "text": null,
@@ -286,16 +314,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_943e0ad2",
-      "ts": "2026-05-12T02:53:44Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_f0ce5117",
       "ts": "2026-05-12T02:54:45Z",
@@ -385,6 +403,26 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_86399ce0",
+      "ts": "2026-05-12T03:04:18Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and disk usage issue",
+      "summary": "The hive is stalled with multiple high-priority self-test failures (TS18, TS19, TS21) and the disk is at full capacity, preventing further progress. Recent auto-fixes succeeded for TS12, but the critical failures remain unresolved. Immediate code changes are required to address the failing tests and implement disk cleanup safeguards.",
+      "progress": "Auto-fixed system invariant TS12 multiple times, confirming the auto_fix mechanism works for that invariant.",
+      "next_steps": [
+        "Add disk usage check and automatic cleanup in health_monitor.py: implement free_space_threshold and invoke cleanup_tmp() when usage > 95%",
+        "Update self_test.py: implement detailed validation for TS18 in function validate_ts18() and raise descriptive errors",
+        "Patch ts19_check() in self_test.py to handle edge case where config file is missing and create default config",
+        "Create unit tests for TS18, TS19, and TS21 in tests/test_self_test.py covering expected failure scenarios and successful auto-fix paths",
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py when HTTP 429 or connection errors occur"
+      ],
+      "decisions": [
+        "Prioritize fixing self-test failures before addressing lower priority load issues",
+        "Introduce automated disk cleanup to prevent future 'disk=100%' stalls",
+        "Implement comprehensive unit tests for self-test functions to catch regressions early"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -398,7 +436,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-12T03:03:02Z",
-    "completed_at": "2026-05-12T03:03:02Z"
+    "started_at": "2026-05-12T03:04:03Z",
+    "completed_at": "2026-05-12T03:04:03Z"
   }
 }
