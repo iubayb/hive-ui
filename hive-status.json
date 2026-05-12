@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T16:47:56Z",
+  "last_updated": "2026-05-12T16:48:58Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -379,9 +379,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=9 health=50% blockers=10",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-12T16:47:56Z",
-    "completed_at": "2026-05-12T16:47:56Z"
+    "started_at": "2026-05-12T16:48:16Z",
+    "completed_at": "2026-05-12T16:48:18Z"
   }
 }
