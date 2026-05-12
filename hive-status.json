@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T11:31:37Z",
+  "last_updated": "2026-05-12T11:32:46Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 6
+    "openrouter_calls_today": 7
   },
   "model_champions": {
     "text": null,
@@ -377,6 +377,26 @@
         "Introduce exponential backoff globally for all LLM API calls to reduce backoff loops in sessions like ps5-hive",
         "Defer non\u2011critical UI enhancements until the core stability issues (TS18, TS19, TS21) are resolved"
       ]
+    },
+    {
+      "id": "sess_f5a91bd4",
+      "ts": "2026-05-12T11:32:26Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by resolving critical blockers and stabilizing core services",
+      "summary": "The hive is currently stalled with high load, disk at capacity, and several self\u2011test failures (TS18\u2011TS21). Session 'ps5-hive' is in extended backoff, and no recent progress has been made. Immediate code fixes are required to free disk space, add robust retry logic, and address failing self\u2011tests.",
+      "progress": "No new achievements were recorded since the last snapshot.",
+      "next_steps": [
+        "Implement disk-space cleanup in orchestrator.py by adding a prune_old_sessions() function and schedule it in the main loop",
+        "Add exponential backoff retry in call_llm() within orchestrator.py for HTTP 429 and network errors",
+        "Create unit tests for self_test_TSI() functions in self_test.py covering TS18, TS19, TS21 scenarios",
+        "Modify ps5_hive_manager.py to lower restart backoff after 3 failures and emit a manual\u2011intervention alert",
+        "Introduce memory\u2011usage guard in job_scheduler.py that caps per\u2011job RAM at 8GB and logs warnings"
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before adding new features to prevent immediate service crashes",
+        "Treat failing self\u2011tests as blockers and allocate a dedicated fix sprint",
+        "Enable automatic alerts for sessions entering long backoff to allow rapid human intervention"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -388,9 +408,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-12T11:31:06Z",
-    "completed_at": "2026-05-12T11:31:07Z"
+    "started_at": "2026-05-12T11:32:07Z",
+    "completed_at": "2026-05-12T11:32:26Z"
   }
 }
