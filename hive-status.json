@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T20:37:49Z",
+  "last_updated": "2026-05-12T20:38:59Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-12T20:36:29Z",
+      "last_seen": "2026-05-12T20:38:49Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 9
+    "openrouter_calls_today": 10
   },
   "model_champions": {
     "text": null,
@@ -248,16 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_09628db5",
-      "ts": "2026-05-12T18:21:31Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_c71727be",
       "ts": "2026-05-12T18:23:14Z",
@@ -437,6 +427,26 @@
         "Automate ps5-hive recovery via a watchdog rather than manual restarts.",
         "Include exponential backoff retries for all LLM API calls to reduce throttling."
       ]
+    },
+    {
+      "id": "sess_fcbeb140",
+      "ts": "2026-05-12T20:38:39Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by resolving failing self-tests, reducing disk usage, and stabilizing the ps5-hive session",
+      "summary": "The hive is stalled with high memory and disk pressure, multiple self-test failures (TS18, TS19, TS21), and the ps5-hive session stuck in backoff. Recent attempts to auto\u2011fix self\u2011tests have failed and a disk cleanup utility is pending.",
+      "progress": "Identified the critical blockers and queued pending tasks for disk cleanup and ps5-hive watchdog.",
+      "next_steps": [
+        "Implement disk_cleanup() in maintenance.py to delete files in /tmp and old log archives, and add a size check to trigger when disk >90%",
+        "Add a watchdog thread in session_manager.py that monitors ps5-hive.backoff_counter and restarts the session after three consecutive backoffs",
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses",
+        "Write unit tests for self_test_runner.py covering TS18, TS19, and TS21 expected failure patterns",
+        "Create a new health_check endpoint in api/health.py that reports self\u2011test statuses and disk usage metrics in JSON"
+      ],
+      "decisions": [
+        "Prioritize fixing self\u2011test failures before further feature work",
+        "Allocate a temporary memory buffer limit of 48\u202fGB until disk cleanup reduces pressure",
+        "Run the new watchdog automatically on hive startup to prevent future backoff loops"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -450,7 +460,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-12T20:37:49Z",
-    "completed_at": "2026-05-12T20:37:49Z"
+    "started_at": "2026-05-12T20:38:59Z",
+    "completed_at": "2026-05-12T20:38:59Z"
   }
 }
