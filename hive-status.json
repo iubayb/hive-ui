@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T10:30:46Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-12T10:31:56Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 2
+    "openrouter_calls_today": 3
   },
   "model_champions": {
     "text": null,
@@ -297,6 +297,26 @@
         "Add robust retry logic to LLM calls to reduce backoff chain reactions.",
         "Address TS21 and TS19 failures first, then revisit TS18 and TS19 after core stability is restored."
       ]
+    },
+    {
+      "id": "sess_dac51dd1",
+      "ts": "2026-05-12T10:31:56Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by resolving critical self-test failures, improving reliability of LLM calls, and preventing disk exhaustion",
+      "summary": "The hive is operating but under high load with several critical self-test failures (TS18, TS19, TS21) and a full disk. Immediate code changes are needed to add disk\u2011space pruning, robust retry logic for LLM calls, and targeted fixes for the failing self\u2011tests.",
+      "progress": "No new achievements were recorded since the last checkpoint.",
+      "next_steps": [
+        "Add disk\u2011space cleanup function prune_old_sessions() in orchestrator.py and invoke it at startup and after each job batch",
+        "Implement exponential backoff retry in call_llm() within orchestrator.py for HTTP 429 and network errors",
+        "Create fix_self_test_ts18() in self_test.py to address TS18's missing environment variable and integrate it into the self\u2011test runner",
+        "Create fix_self_test_ts19() in self_test.py to correct the outdated config path and add a unit test in tests/self_test_test.py",
+        "Add unit tests in tests/orchestrator_test.py for prune_old_sessions() and call_llm() retry behavior"
+      ],
+      "decisions": [
+        "Prioritize disk cleanup to avoid immediate service disruption due to full storage",
+        "Introduce exponential backoff for LLM calls as a permanent reliability pattern",
+        "Address TS18 and TS19 before attempting automated fixes for TS21"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -308,9 +328,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-12T10:30:16Z",
-    "completed_at": "2026-05-12T10:30:16Z"
+    "started_at": "2026-05-12T10:31:36Z",
+    "completed_at": "2026-05-12T10:31:56Z"
   }
 }
