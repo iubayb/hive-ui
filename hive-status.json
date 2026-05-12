@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T21:22:57Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-12T21:23:54Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-12T21:21:25Z",
+      "last_seen": "2026-05-12T21:23:27Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 12
+    "openrouter_calls_today": 13
   },
   "model_champions": {
     "text": null,
@@ -248,26 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_c7e6a7ff",
-      "ts": "2026-05-12T18:53:18Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by resolving critical self-test failures, clearing disk space, and stabilizing the ps5-hive session.",
-      "summary": "The hive is currently stalled with high memory usage and disk at 97%, several self-test suites failing, and the ps5-hive session stuck in backoff. Immediate remediation requires disk cleanup, watchdog implementation, and addressing the failing self-tests.",
-      "progress": "No recent achievements were recorded.",
-      "next_steps": [
-        "Implement a disk cleanup utility in maintenance.py that deletes temporary files and logs older than 7 days, then invoke it from the daily cron task.",
-        "Create a watchdog in session_manager.py that monitors ps5-hive backoff status and triggers a controlled restart after 3 consecutive backoff intervals.",
-        "Add missing error handling in self_test_runner.py to catch and log exceptions for TS18, TS19, and TS21, and return detailed diagnostics.",
-        "Write unit tests for the new disk cleanup utility in tests/test_maintenance.py covering edge cases of empty directories and permission errors.",
-        "Update the orchestrator health check in health_monitor.py to include disk usage alerts and self-test suite pass rates."
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before addressing self-test failures to free space for log generation.",
-        "Implement an automated restart policy for ps5-hive rather than manual intervention.",
-        "Enhance self-test reporting to include actionable hints for each failing test case."
-      ]
-    },
     {
       "id": "sess_b0ffd7a8",
       "ts": "2026-05-12T19:08:22Z",
@@ -447,6 +427,26 @@
         "Automate ps5-hive backoff recovery via a watchdog rather than manual restarts.",
         "Lock the failing self\u2011tests until patches are verified, then re\u2011enable them in the regular test suite."
       ]
+    },
+    {
+      "id": "sess_f5c1ae8a",
+      "ts": "2026-05-12T21:23:54Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore the hive to a healthy, fully operational state",
+      "summary": "The hive is currently stalled with high memory and disk usage, and several critical self\u2011tests are failing. Sessions are experiencing backoff issues, especially ps5-hive, and no recent progress has been recorded. Immediate coding work is needed to free resources, improve session resilience, and fix failing self\u2011tests.",
+      "progress": "No new achievements were recorded in the latest interval.",
+      "next_steps": [
+        "Implement a disk cleanup utility in maintenance.py that deletes temporary files and logs when disk usage >90%",
+        "Create a watchdog in session_manager.py that monitors ps5-hive backoff status and triggers a restart after 3 consecutive failures",
+        "Add exponential backoff and retry logic to the HTTP calls in orchestrator.py for status 429 responses",
+        "Extend self_test_auto_fix() in self_test.py to handle TS18, TS19, and TS21 with targeted remediation scripts",
+        "Write unit tests for maintenance.cleanup_disk() and session_manager.watchdog_ps5() covering edge cases"
+      ],
+      "decisions": [
+        "Prioritize disk cleanup to prevent disk saturation before addressing other issues",
+        "Deploy a watchdog for ps5-hive to automatically recover from prolonged backoff",
+        "Enhance self\u2011test auto\u2011fix mechanisms to reduce manual intervention on failing tests"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -458,9 +458,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-12T21:22:37Z",
-    "completed_at": "2026-05-12T21:22:37Z"
+    "started_at": "2026-05-12T21:23:38Z",
+    "completed_at": "2026-05-12T21:23:54Z"
   }
 }
