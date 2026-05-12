@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T15:03:19Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-12T15:04:52Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-12T15:02:19Z",
+      "last_seen": "2026-05-12T15:04:21Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -240,7 +240,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 20
+    "openrouter_calls_today": 21
   },
   "model_champions": {
     "text": null,
@@ -249,26 +249,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_d66d4610",
-      "ts": "2026-05-12T12:33:19Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self\u2011tests, preventing disk exhaustion, and stabilising backoff loops",
-      "summary": "The hive is stalled at 50% health with critical self\u2011test failures (TS18\u2011TS21) and a full disk. High\u2011priority sessions are in backoff and memory usage is near capacity. Immediate code fixes are required to prune old logs, add robust retry logic, and address the failing test suites.",
-      "progress": "No new achievements were recorded since the last snapshot.",
-      "next_steps": [
-        "Implement prune_old_artifacts() in orchestrator.py to delete files older than 30 days and call it at startup to free disk space",
-        "Add exponential backoff with jitter to call_llm() in orchestrator.py for HTTP 429/503 responses, logging retries to metrics.log",
-        "Fix TS21 failure by updating test expectations in tests/self_test_ts21.py to match the new output format of generate_report()",
-        "Resolve TS19 failure by correcting the path handling bug in utils/path_normalizer.py and adding a unit test for edge\u2011case inputs",
-        "Create a health_check() function in supervisor.py that monitors disk usage and triggers orchestrator.prune_old_artifacts() when usage > 85%"
-      ],
-      "decisions": [
-        "Prioritise disk\u2011space cleanup before addressing backoff logic to prevent further job failures",
-        "Limit retry attempts in call_llm() to 5 with exponential delay to avoid overwhelming the LLM service",
-        "Treat TS18\u2011TS21 as blockers; allocate separate patch branches for each failing test"
-      ]
-    },
     {
       "id": "sess_8617807b",
       "ts": "2026-05-12T12:47:55Z",
@@ -448,6 +428,26 @@
         "Implement exponential backoff as the default LLM call strategy across all sessions",
         "Introduce automated test coverage for critical self-test fix paths to catch regressions early"
       ]
+    },
+    {
+      "id": "sess_15c45558",
+      "ts": "2026-05-12T15:04:42Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by resolving critical self-test failures, preventing disk overflow, and improving LLM call reliability.",
+      "summary": "The hive is currently stalled with high memory usage and a full disk, causing several self-test failures (TS18, TS19, TS21) and a backoff loop in the ps5-hive session. Immediate remediation requires disk cleanup, robust retry logic for LLM calls, and targeted fixes for the failing self-tests.",
+      "progress": "Added placeholder functions for disk pruning and exponential backoff in orchestrator.py, but they are not yet integrated or tested.",
+      "next_steps": [
+        "Implement prune_old_logs() in orchestrator.py to delete log files older than 30 days and free at least 20% disk space.",
+        "Integrate prune_old_logs() into the main maintenance loop in orchestrator.py and schedule it to run hourly.",
+        "Add exponential backoff with jitter to call_llm() in orchestrator.py for HTTP 429 and 5xx responses, with a max of 5 retries.",
+        "Fix self-test TS18 by updating validate_schema() in ts_checks.py to handle nullable fields correctly.",
+        "Fix self-test TS19 by correcting the path permission check in ts_checks.py and adding a unit test in tests/test_ts19.py."
+      ],
+      "decisions": [
+        "Prioritize disk-space reclamation before addressing LLM retry logic to unblock self-test execution.",
+        "Limit retry attempts for call_llm() to avoid cascading load during high\u2011traffic periods.",
+        "Add unit tests for all changed self-test functions to ensure future regressions are caught early."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -459,9 +459,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "self-test: running test_system.sh + auto-fix",
-    "status": "running",
-    "started_at": "2026-05-12T15:03:19Z",
-    "completed_at": null
+    "task": "compaction: LLM summarising hive state",
+    "status": "completed",
+    "started_at": "2026-05-12T15:04:21Z",
+    "completed_at": "2026-05-12T15:04:42Z"
   }
 }
