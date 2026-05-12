@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-12T00:31:45Z",
+  "last_updated": "2026-05-12T00:32:48Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -28,17 +28,17 @@
   "achievements": [],
   "blockers": [
     {
-      "id": "b_1e269edd",
-      "ts": "2026-05-11T20:14:05Z",
+      "id": "b_55f3c30b",
+      "ts": "2026-05-12T00:32:42Z",
       "hive": "desktop",
       "agent": "supervisor",
-      "description": "Session 'ps5-hive' in long backoff (300s) \u2014 91 restart(s), may need manual intervention",
+      "description": "Session 'ps5-hive' in long backoff (300s) \u2014 137 restart(s), may need manual intervention",
       "severity": "high",
       "status": "open",
       "resolved_at": null,
       "resolution": null,
       "github_issue": null,
-      "_hash": "051035aaff854f434e6d0a0eb650ba85"
+      "_hash": "d7fe20ea2951529058f20bb50a3d70dd"
     },
     {
       "id": "b_e05b0aed",
@@ -903,9 +903,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: develop\u2192main promotion check + release draft",
     "status": "completed",
-    "started_at": "2026-05-12T00:31:15Z",
-    "completed_at": "2026-05-12T00:31:15Z"
+    "started_at": "2026-05-12T00:32:45Z",
+    "completed_at": "2026-05-12T00:32:48Z"
   }
 }
