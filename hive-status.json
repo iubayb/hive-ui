@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T11:49:48Z",
+  "last_updated": "2026-05-13T11:50:55Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
-      "health_score": 0.65,
-      "last_seen": "2026-05-13T11:48:28Z",
+      "health_score": 0.6,
+      "last_seen": "2026-05-13T11:50:35Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -19,13 +19,35 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 7,
+      "errors_last_hour": 5,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
   },
-  "achievements": [],
+  "achievements": [
+    {
+      "id": "a_78e02209",
+      "ts": "2026-05-13T11:50:23Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "Auto-fixed system invariant TS14",
+      "evidence": "test_system.sh TS14 now passes after auto-fix"
+    }
+  ],
   "blockers": [
+    {
+      "id": "b_cd1de4a3",
+      "ts": "2026-05-13T11:50:18Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "self-test: TS5 failing \u2014 auto-fix attempted but not sufficient",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "36e8de1c6320cf5f4eececa2d548aefd"
+    },
     {
       "id": "b_300b21af",
       "ts": "2026-05-13T11:23:44Z",
@@ -187,7 +209,23 @@
     }
   ],
   "capabilities": {
-    "learned": []
+    "learned": [
+      {
+        "id": "cap_0d6abce1",
+        "ts": "2026-05-13T11:50:23Z",
+        "source_hive": "default",
+        "source_agent": "orchestrator",
+        "skill": "auto_fix_TS14",
+        "description": "Automatically detects and repairs TS14 system invariant failures",
+        "example": "Applied fix for TS14: systemctl restart ollama",
+        "tags": [
+          "self-healing",
+          "system-invariant",
+          "auto-fix"
+        ],
+        "applicable_to": "all"
+      }
+    ]
   },
   "knowledge": {
     "findings": [],
@@ -291,7 +329,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-13T11:49:48Z",
-    "completed_at": "2026-05-13T11:49:48Z"
+    "started_at": "2026-05-13T11:50:55Z",
+    "completed_at": "2026-05-13T11:50:55Z"
   }
 }
