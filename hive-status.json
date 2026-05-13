@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T03:55:51Z",
+  "last_updated": "2026-05-13T03:57:02Z",
   "updated_by": "agent",
   "hives": {
     "default": {
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 38
+    "openrouter_calls_today": 39
   },
   "model_champions": {
     "text": null,
@@ -248,26 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_8d1889e0",
-      "ts": "2026-05-13T01:25:55Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests, freeing disk space, and stabilizing the ps5-hive session.",
-      "summary": "The hive is stalled with critical self-test failures (TS18, TS19, TS21) and a disk at 97% capacity. The ps5-hive session is in long backoff, and memory usage is high. Immediate code actions are needed to automate recovery and prevent future stalls.",
-      "progress": "No new achievements recorded since the last snapshot.",
-      "next_steps": [
-        "Implement disk_cleanup() in maintenance.py to delete files in /tmp/hive/* and log reclaimed space.",
-        "Add Watchdog class in session_manager.py that monitors ps5-hive backoff timers and triggers a forced restart after 5 consecutive backoffs.",
-        "Create fix_self_test_ts21() in selftest_fixer.py that patches the TS21 configuration and validates success.",
-        "Write unit tests for selftest_fixer.py covering TS18, TS19, and TS21 remediation paths.",
-        "Add memory_trim() function to resource_manager.py that evicts least-recently-used cache entries when mem>55GB."
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before attempting self-test auto-fixes to ensure sufficient space for logs and temp files.",
-        "Use a forced session restart strategy for ps5-hive after repeated backoff rather than manual intervention.",
-        "Integrate self-test auto-fix functions into the periodic health_check loop once unit tests pass."
-      ]
-    },
     {
       "id": "sess_5181037d",
       "ts": "2026-05-13T01:40:50Z",
@@ -447,6 +427,26 @@
         "Introduce automated watchdog restart for any session entering long backoff to reduce manual intervention.",
         "Allocate a dedicated test runner to execute self-tests after each code change to catch regressions early."
       ]
+    },
+    {
+      "id": "sess_a61fe45c",
+      "ts": "2026-05-13T03:56:11Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by resolving self-test failures, clearing disk space, and restoring the ps5-hive session.",
+      "summary": "The hive is currently stalled with high memory usage and disk at 97% capacity. Critical self-test suites TS18, TS19, and TS21 are failing, and the ps5-hive session is in a prolonged backoff state. Immediate remediation requires cleanup of disk space and automated monitoring to prevent further backoff cycles.",
+      "progress": "No recent achievements were recorded.",
+      "next_steps": [
+        "Implement disk cleanup utility in maintenance.py to delete temporary files and logs older than 7 days.",
+        "Add a watchdog in session_manager.py that monitors ps5-hive backoff and triggers a forced restart after three consecutive backoffs.",
+        "Create unit tests for the new cleanup utility in tests/test_maintenance.py covering edge cases for file permissions.",
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses.",
+        "Write a new health check function in health_monitor.py to verify TS18, TS19, and TS21 pass after each auto\u2011fix attempt."
+      ],
+      "decisions": [
+        "Prioritize disk cleanup to free space before addressing self-test failures.",
+        "Introduce automated watchdog for ps5-hive to reduce manual intervention.",
+        "Add retry and backoff handling to LLM calls to improve resilience under high load."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -458,9 +458,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "running",
-    "started_at": "2026-05-13T03:55:51Z",
+    "started_at": "2026-05-13T03:57:02Z",
     "completed_at": null
   }
 }
