@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T03:24:55Z",
+  "last_updated": "2026-05-13T03:26:00Z",
   "updated_by": "agent",
   "hives": {
     "default": {
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 36
+    "openrouter_calls_today": 37
   },
   "model_champions": {
     "text": null,
@@ -248,26 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_03914400",
-      "ts": "2026-05-13T00:55:09Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore hive health by addressing critical failures, disk usage, and stalled sessions",
-      "summary": "The hive is currently stalled with high memory and disk pressure, and several self-test failures (TS18, TS19, TS21). Session 'ps5-hive' is in long backoff and the disk is 97% full, risking further instability. Immediate code changes are needed to clean up disk space, monitor backoff, and repair failing self-tests.",
-      "progress": "No recent achievements were recorded; the system remains in a stalled state.",
-      "next_steps": [
-        "Implement a disk cleanup utility in maintenance.py that removes temp files older than 7 days and logs deleted paths",
-        "Add a watchdog in session_manager.py that monitors ps5-hive backoff duration and triggers a restart after 3 consecutive backoffs",
-        "Fix TS18 failure by updating the validation rules in selftest/ts18_validator.py to handle new file schema",
-        "Resolve TS19 failure by adding missing dependency checks in selftest/ts19_checker.py and improving error messages",
-        "Add resource throttling in orchestrator.py to limit memory use per job when mem>55GB, with fallback to swap"
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before attempting to fix self-test failures to free space for log generation",
-        "Implement automated restart logic for ps5-hive rather than manual intervention",
-        "Allocate development time to patch self-test validators before the next scheduled health check"
-      ]
-    },
     {
       "id": "sess_9e4a3139",
       "ts": "2026-05-13T01:10:17Z",
@@ -447,6 +427,26 @@
         "Introduce automatic restart logic for sessions in backoff to reduce manual intervention.",
         "Add unit tests for all modified functions to ensure future regressions are caught early."
       ]
+    },
+    {
+      "id": "sess_0e6a8fd1",
+      "ts": "2026-05-13T03:26:00Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by resolving critical blockers and stabilizing sessions.",
+      "summary": "The hive is stalled at 50% health with several high\u2011priority blockers: a backoff\u2011stuck ps5-hive session, disk usage at 97%, and three failing self\u2011tests (TS18, TS19, TS21). No recent progress has been recorded, and urgent code changes are needed to clear disk space, monitor the problematic session, and improve self\u2011test auto\u2011fixes.",
+      "progress": "No recent achievements were logged.",
+      "next_steps": [
+        "Implement disk_cleanup() in maintenance.py to delete temporary files and log reclaimed space.",
+        "Add a watchdog loop in session_manager.py that detects ps5-hive backoff >120s and triggers a forced session restart.",
+        "Create retry logic in self_test_runner.py for TS18, TS19, and TS21 to attempt alternative fix scripts before marking failure.",
+        "Write unit tests in tests/test_maintenance.py covering disk_cleanup edge cases and safety checks.",
+        "Expose a /api/health endpoint in api_server.py that returns JSON with session backoff timers, disk usage, and self\u2011test statuses."
+      ],
+      "decisions": [
+        "Prioritize fixing the ps5-hive backoff issue before addressing other sessions.",
+        "Allocate immediate development effort to disk cleanup to prevent out\u2011of\u2011space failures.",
+        "Enhance self\u2011test auto\u2011fix mechanisms to reduce manual intervention for TS18, TS19, and TS21."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -458,9 +458,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=8 health=50% blockers=10",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-13T03:24:55Z",
-    "completed_at": "2026-05-13T03:24:55Z"
+    "started_at": "2026-05-13T03:25:45Z",
+    "completed_at": "2026-05-13T03:26:00Z"
   }
 }
