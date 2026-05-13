@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T16:15:15Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T16:16:45Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-13T16:14:43Z",
+      "health_score": 0.7,
+      "last_seen": "2026-05-13T16:16:15Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -144,7 +144,35 @@
       "_hash": "5e7ea63d56407f4c12743a4f09c67392"
     }
   ],
-  "next_steps": [],
+  "next_steps": [
+    {
+      "id": "ns_9600bb0a",
+      "priority": 1,
+      "description": "Implement detailed exception logging in self_test/ts17.py and add unit tests in tests/self_test/test_ts17.py to capture edge cases.",
+      "assigned_to": "opencode",
+      "status": "in_progress",
+      "source": "orchestrator",
+      "ts": "2026-05-13T16:16:05Z"
+    },
+    {
+      "id": "ns_e2d133c0",
+      "priority": 2,
+      "description": "Fix off\u2011by\u2011one error in self_test/ts18.py by correcting the index calculation in validate_sequence().",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-13T16:16:05Z"
+    },
+    {
+      "id": "ns_6768f445",
+      "priority": 3,
+      "description": "Add missing input validation to self_test/ts19.py's check_params() function and write corresponding tests in tests/self_test/test_ts19.py.",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-13T16:16:05Z"
+    }
+  ],
   "capabilities": {
     "learned": []
   },
@@ -159,7 +187,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 0
+    "openrouter_calls_today": 1
   },
   "model_champions": {
     "text": null,
@@ -177,6 +205,26 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_8008c61f",
+      "ts": "2026-05-13T16:16:05Z",
+      "updated_by": "orchestrator",
+      "goal": "Resolve all failing self-test modules (TS17\u2011TS21) and restore full hive health",
+      "summary": "The hive is operational but several critical self\u2011tests (TS17, TS18, TS19, TS21) are failing, indicating hidden bugs in core validation routines. High resource usage is also approaching disk capacity, but jobs have been reniced to mitigate load. No recent progress has been recorded.",
+      "progress": "Reniced all running jobs to lower core priority, reducing immediate CPU pressure.",
+      "next_steps": [
+        "Implement detailed exception logging in self_test/ts17.py and add unit tests in tests/self_test/test_ts17.py to capture edge cases.",
+        "Fix off\u2011by\u2011one error in self_test/ts18.py by correcting the index calculation in validate_sequence().",
+        "Add missing input validation to self_test/ts19.py's check_params() function and write corresponding tests in tests/self_test/test_ts19.py.",
+        "Create a retry wrapper in orchestrator.py for call_self_test() that retries up to 3 times on transient IOError.",
+        "Add a cleanup routine in system_monitor.py to archive logs when disk usage exceeds 90% and expose a new /api/cleanup endpoint."
+      ],
+      "decisions": [
+        "Prioritize fixing self\u2011test code before addressing non\u2011critical performance issues.",
+        "Enforce 100% test coverage for all self\u2011test modules moving forward.",
+        "Introduce automated alerts for disk usage >95% to prevent future hard\u2011disk saturation."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -190,7 +238,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-13T16:15:14Z",
-    "completed_at": "2026-05-13T16:15:15Z"
+    "started_at": "2026-05-13T16:16:15Z",
+    "completed_at": "2026-05-13T16:16:15Z"
   }
 }
