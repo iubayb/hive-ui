@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T12:23:56Z",
+  "last_updated": "2026-05-13T12:25:02Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -238,7 +238,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 4
+    "openrouter_calls_today": 5
   },
   "model_champions": {
     "text": null,
@@ -356,6 +356,26 @@
         "Introduce exponential backoff as the standard retry mechanism for all session restarts",
         "Allocate additional temporary disk space by enabling log rotation to prevent 98% disk saturation"
       ]
+    },
+    {
+      "id": "sess_78c56298",
+      "ts": "2026-05-13T12:24:42Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by resolving failing self-tests and session restart issues",
+      "summary": "The hive is currently stalled with multiple high-priority self-test failures (TS5, TS19, TS21) and a session in long backoff. Recent auto-fix succeeded for TS14, but core load and disk usage remain critical. Immediate code changes are needed to improve resilience and fix validation logic.",
+      "progress": "TS14 self-test was auto-fixed successfully.",
+      "next_steps": [
+        "Add retry and exponential backoff logic to restart_session() in orchestrator.py, handling HTTP 429 and connection errors",
+        "Implement detailed logging and failure counters in restart_session() to track backoff attempts",
+        "Update validation logic in selftests/ts18_ch.py to align with new schema expectations",
+        "Create unit tests for restart_session() in tests/test_orchestrator.py covering backoff scenarios",
+        "Add a health check endpoint in health.py that returns JSON with self-test statuses and resource usage"
+      ],
+      "decisions": [
+        "Prioritize fixing TS5, TS19, and TS21 before addressing lower-priority tests",
+        "Apply exponential backoff with jitter to all session restart calls to reduce cascade failures",
+        "Increase disk usage monitoring frequency until disk usage drops below 90%"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -369,7 +389,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-13T12:23:36Z",
-    "completed_at": "2026-05-13T12:23:36Z"
+    "started_at": "2026-05-13T12:24:52Z",
+    "completed_at": "2026-05-13T12:24:52Z"
   }
 }
