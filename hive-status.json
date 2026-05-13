@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T19:49:00Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T19:49:35Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -446,8 +446,8 @@
   "active_task": {
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
-    "status": "running",
+    "status": "completed",
     "started_at": "2026-05-13T19:49:00Z",
-    "completed_at": null
+    "completed_at": "2026-05-13T19:49:05Z"
   }
 }
