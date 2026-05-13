@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T19:22:28Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T19:24:06Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.55,
-      "last_seen": "2026-05-13T19:21:27Z",
+      "last_seen": "2026-05-13T19:23:30Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -226,7 +226,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 11
+    "openrouter_calls_today": 12
   },
   "model_champions": {
     "text": null,
@@ -235,26 +235,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_842a720a",
-      "ts": "2026-05-13T16:51:13Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by fixing failing self-tests and stabilizing critical sessions",
-      "summary": "The hive is currently stalled with multiple high\u2011priority self\u2011test failures (TS14, TS5, TS19, TS18, TS21) and a key session in long backoff. Load is high and disk space is near capacity, but jobs have been reniced. No recent progress has been recorded.",
-      "progress": "No new fixes have been applied since the last snapshot.",
-      "next_steps": [
-        "Update validate_job_schema() in self_tests/ts19/validate.py to align with the new job JSON schema and add missing field checks",
-        "Correct path handling in orchestrator.py's load_job_config() to properly join directory components and prevent TS18 errors",
-        "Add missing exception handling for FileNotFoundError in self_tests/ts14/check_disk.py and adjust threshold logic",
-        "Refactor self_tests/ts5/resource_monitor.py to include retry logic when reading /proc/meminfo fails, and update the test expectations",
-        "Implement a disk cleanup helper in utils/maintenance.py and invoke it from orchestrator.start() to address TS21 failure due to low free space"
-      ],
-      "decisions": [
-        "Prioritize fixing self\u2011test failures before addressing the long\u2011backoff session, as passing tests are required for automated recovery",
-        "Introduce explicit retry and exception handling in file I/O across self\u2011tests to reduce flaky failures",
-        "Schedule a one\u2011time disk purge using the new maintenance helper to free space and prevent future TS21 failures"
-      ]
-    },
     {
       "id": "sess_90002211",
       "ts": "2026-05-13T17:06:53Z",
@@ -434,6 +414,26 @@
         "Allocate additional temporary disk space by clearing old log files before applying code patches.",
         "Schedule a restart of the 'ps5-hive' session after TS19 and TS18 are resolved to verify backoff recovery."
       ]
+    },
+    {
+      "id": "sess_01fb621f",
+      "ts": "2026-05-13T19:23:56Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self-tests and stabilizing critical sessions",
+      "summary": "The hive is stalled at 55% health with several high\u2011priority self\u2011test failures (TS5, TS14, TS18, TS19, TS21) and a critical session in backoff. Recent attempts to auto\u2011fix have not succeeded, and resource usage is near limits. Immediate code changes are needed to pass the tests and reduce load.",
+      "progress": "Auto\u2011fix attempts were made for TS5, TS14, and TS21, but they remained failing.",
+      "next_steps": [
+        "Update validate_job_schema() in self_tests/ts19/validate_job_schema.py to align with the new job JSON schema.",
+        "Correct path handling in orchestrator.py's load_job() function to fix TS18 path errors.",
+        "Add missing exception handling for JSONDecodeError in self_tests/ts14/check_config.py to resolve TS14 failure.",
+        "Refactor ts5_test_runner.py in self_tests/ts5 to use the new async API and add a fallback retry loop.",
+        "Implement a memory usage guard in orchestrator.py's schedule_job() that aborts new jobs when mem>55GB to prevent disk saturation."
+      ],
+      "decisions": [
+        "Prioritize fixing self\u2011test failures before addressing the backoff session, as passing tests unlocks automatic recovery mechanisms.",
+        "Introduce explicit resource guards in orchestrator.py to avoid hitting disk limits during job scheduling.",
+        "Lock the codebase to a stable commit after TS5 and TS14 are passing, then resume normal job processing."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -445,9 +445,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "self-test: running test_system.sh + auto-fix",
-    "status": "running",
-    "started_at": "2026-05-13T19:22:28Z",
-    "completed_at": null
+    "task": "compaction: LLM summarising hive state",
+    "status": "completed",
+    "started_at": "2026-05-13T19:23:30Z",
+    "completed_at": "2026-05-13T19:23:56Z"
   }
 }
