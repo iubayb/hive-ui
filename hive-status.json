@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T16:28:56Z",
+  "last_updated": "2026-05-13T16:29:56Z",
   "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 0.7,
-      "last_seen": "2026-05-13T16:27:46Z",
+      "status": "stalled",
+      "health_score": 0.65,
+      "last_seen": "2026-05-13T16:29:46Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -26,6 +26,19 @@
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_1ec7b2e7",
+      "ts": "2026-05-13T16:29:31Z",
+      "hive": "desktop",
+      "agent": "supervisor",
+      "description": "Session 'ps5-hive' in long backoff (160s) \u2014 5 restart(s), may need manual intervention",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "5d44b7e69b78f35212f5c73ccc29efd3"
+    },
     {
       "id": "b_6cc1759d",
       "ts": "2026-05-13T16:25:59Z",
@@ -238,7 +251,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-13T16:28:56Z",
-    "completed_at": "2026-05-13T16:28:56Z"
+    "started_at": "2026-05-13T16:29:56Z",
+    "completed_at": "2026-05-13T16:29:56Z"
   }
 }
