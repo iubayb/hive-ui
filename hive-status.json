@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T14:10:02Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T14:10:53Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -238,7 +238,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 11
+    "openrouter_calls_today": 12
   },
   "model_champions": {
     "text": null,
@@ -247,26 +247,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_40cc866f",
-      "ts": "2026-05-13T11:39:32Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by fixing critical self-test failures (TS18, TS19, TS21) and improving session restart reliability.",
-      "summary": "The hive is currently stalled with high resource usage and multiple self-test failures. Sessions are experiencing long backoffs, and automated fixes have not resolved the test issues. Immediate coding work is needed to add robust retry logic and correct validation logic.",
-      "progress": "Identified the need for exponential backoff in restart_session and flagged TS18 validation as the next fix.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to restart_session() in orchestrator.py, handling HTTP 429 and other transient errors.",
-        "Write unit tests for restart_session() in tests/test_orchestrator.py covering success, backoff, and max-retry scenarios.",
-        "Update the validation logic in selftests/ts18_ch.py to align with the new schema definitions.",
-        "Create a fallback wrapper for selftests/ts19.py that logs detailed diagnostics and attempts a secondary validation path.",
-        "Add a cleanup routine in maintenance.py to monitor disk usage and delete old log files when usage exceeds 90%."
-      ],
-      "decisions": [
-        "Prioritize fixing TS18 before addressing TS19 and TS21.",
-        "Implement retry/backoff in restart_session as a top priority to reduce session stalls.",
-        "Defer non-critical UI enhancements until self-test stability is restored."
-      ]
-    },
     {
       "id": "sess_2086634f",
       "ts": "2026-05-13T11:54:33Z",
@@ -446,6 +426,26 @@
         "Introduce exponential backoff globally for session restarts to prevent cascading backoff loops",
         "Enforce stricter logging for self-test failures to aid future auto-fix algorithm improvements"
       ]
+    },
+    {
+      "id": "sess_8b4090ac",
+      "ts": "2026-05-13T14:10:43Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self\u2011tests and stabilizing session restarts",
+      "summary": "The hive is currently stalled with several high\u2011priority self\u2011test failures (TS5, TS19, TS21) and a session in prolonged backoff. Recent auto\u2011fix resolved TS14, but core resources are strained and disk usage is critical. Immediate coding work is needed to add robust retry logic and address validation bugs causing test failures.",
+      "progress": "Auto\u2011fixed invariant TS14 using the newly learned auto_fix_TS14 capability.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to restart_session() in orchestrator.py, handling HTTP 429 and network errors",
+        "Update validation rules in selftests/ts18_ch.py to correctly parse the new schema and prevent TS18 failures",
+        "Implement detailed logging and metrics in orchestrator.py for session restart attempts, exposing them via /api/metrics endpoint",
+        "Write unit tests for the new retry/backoff implementation in orchestrator_test.py covering success, retry, and max\u2011retry paths",
+        "Create a cleanup script clean_disk.py to purge old log files when disk usage exceeds 90%, and schedule it via cron"
+      ],
+      "decisions": [
+        "Prioritize adding robust retry/backoff to session restarts before addressing lower\u2011priority test failures",
+        "Allocate additional memory buffer by adjusting job renice thresholds to mitigate high memory pressure",
+        "Defer non\u2011critical UI enhancements until core stability and self\u2011test pass rates are restored"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -457,9 +457,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
-    "status": "running",
-    "started_at": "2026-05-13T14:10:02Z",
-    "completed_at": null
+    "task": "compaction: LLM summarising hive state",
+    "status": "completed",
+    "started_at": "2026-05-13T14:10:12Z",
+    "completed_at": "2026-05-13T14:10:43Z"
   }
 }
