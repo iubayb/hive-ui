@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T01:09:58Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T01:10:40Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 27
+    "openrouter_calls_today": 28
   },
   "model_champions": {
     "text": null,
@@ -248,26 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_a139cc8b",
-      "ts": "2026-05-12T22:39:43Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by fixing failing self-tests, clearing disk space, and stabilizing the ps5-hive session.",
-      "summary": "The hive is stalled with critical self-test failures (TS18, TS19, TS21) and disk usage at 97%, causing high load and session backoffs. No recent achievements have been recorded, and immediate remediation is required to unblock the system.",
-      "progress": "Identified key blockers and listed pending coding tasks for disk cleanup and session watchdog.",
-      "next_steps": [
-        "Implement disk_cleanup() in maintenance.py to delete files in /tmp and old log archives when disk usage > 90%",
-        "Add unit tests for disk_cleanup() in test_maintenance.py covering size thresholds and safety checks",
-        "Create Watchdog class in session_manager.py that monitors ps5-hive backoff counters and triggers a graceful restart after 3 consecutive backoffs",
-        "Write integration test for Watchdog in test_session_manager.py simulating backoff spikes",
-        "Update self_test_runner.py to log detailed failure reasons for TS18, TS19, and TS21 and mark them as 'auto-fix pending'"
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before attempting self-test auto-fixes to prevent out\u2011of\u2011space errors",
-        "Deploy a watchdog for the ps5-hive session to automatically recover from prolonged backoff",
-        "Add enhanced logging for failing self\u2011tests to aid future automated remediation"
-      ]
-    },
     {
       "id": "sess_20831d37",
       "ts": "2026-05-12T22:54:33Z",
@@ -447,6 +427,26 @@
         "Implement automated restart logic for ps5-hive rather than manual intervention",
         "Allocate development time to patch self-test validators before the next scheduled health check"
       ]
+    },
+    {
+      "id": "sess_9e4a3139",
+      "ts": "2026-05-13T01:10:17Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests, clearing disk space, and stabilizing the ps5-hive session.",
+      "summary": "The hive is running but under high load with 97% disk usage and multiple self-test failures (TS18, TS19, TS21). The ps5-hive session is in long backoff, and disk cleanup is pending. Immediate coding actions are needed to free space, add monitoring, and address failing tests.",
+      "progress": "No new achievements were recorded since the last snapshot.",
+      "next_steps": [
+        "Implement disk cleanup utility in maintenance.py to delete temporary files and logs older than 7 days.",
+        "Create a watchdog function in session_manager.py that monitors ps5-hive backoff duration and triggers an automatic restart after 5 consecutive backoffs.",
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses.",
+        "Write unit tests for self_test.py covering TS18, TS19, and TS21 scenarios and assert proper error handling.",
+        "Add a new endpoint /api/health in logstream.py that returns JSON with current disk usage, memory, and self-test status."
+      ],
+      "decisions": [
+        "Prioritize disk cleanup to prevent disk saturation before tackling self-test failures.",
+        "Introduce automated watchdog for ps5-hive to reduce manual intervention.",
+        "Enhance LLM call reliability with retry/backoff to mitigate high load impact."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -458,9 +458,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-13T01:09:58Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-13T01:10:39Z",
+    "completed_at": "2026-05-13T01:10:40Z"
   }
 }
