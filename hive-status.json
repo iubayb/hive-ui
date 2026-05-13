@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T10:54:59Z",
+  "last_updated": "2026-05-13T10:55:44Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.5,
-      "last_seen": "2026-05-13T10:54:09Z",
+      "status": "running",
+      "health_score": 1.0,
+      "last_seen": "2026-05-13T10:55:22Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -437,7 +437,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 16
+    "openrouter_calls_today": 17
   },
   "model_champions": {
     "text": null,
@@ -446,26 +446,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_105e634c",
-      "ts": "2026-05-13T08:36:14Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by fixing self-test failures and improving session restart reliability",
-      "summary": "The hive is currently stalled with multiple high\u2011severity self\u2011test failures (TS18, TS19, TS21) and a session in long backoff. Recent attempts to auto\u2011fix have not succeeded, and disk usage is near capacity. Immediate code changes are needed to add robust retry logic, correct the failing tests, and free disk space.",
-      "progress": "Added a placeholder exponential backoff comment in session_manager.restart_session but not yet implemented.",
-      "next_steps": [
-        "Implement exponential backoff retry in session_manager.restart_session() in session_manager.py, handling HTTP 429 and other transient errors",
-        "Write comprehensive unit tests for self_test.check_ts18() in self_test.py covering success and failure scenarios",
-        "Add missing validation and fix logic in self_test.check_ts19() in self_test.py to address the current failure",
-        "Create a log rotation and cleanup routine in maintenance.py that deletes logs older than 30 days and integrate it into the daily maintenance job",
-        "Expose a new /api/metrics endpoint in api/metrics.py that returns JSON with counts of passed/failed self\u2011tests and current disk usage"
-      ],
-      "decisions": [
-        "Adopt exponential backoff with jitter for all session restarts to mitigate transient failures",
-        "Prioritize fixing self\u2011test TS18 and TS19 before addressing TS21, as they block core functionality",
-        "Implement automated log cleanup to keep disk usage below 90% and prevent future stalls"
-      ]
-    },
     {
       "id": "sess_21415055",
       "ts": "2026-05-13T08:51:05Z",
@@ -645,6 +625,26 @@
         "Introduce exponential backoff for all session restarts to reduce backoff loops and manual intervention",
         "Add a health API endpoint to provide real\u2011time visibility for monitoring tools"
       ]
+    },
+    {
+      "id": "sess_a0bd73d9",
+      "ts": "2026-05-13T10:55:34Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by fixing critical self-test failures and improving session restart reliability",
+      "summary": "The hive is running but several high\u2011priority blockers remain: four self\u2011test suites (TS18, TS19, TS21) are failing and the ps5-hive session is in long backoff. Disk usage is at 98% and memory pressure is high. No recent progress has been recorded.",
+      "progress": "No new fixes were completed since the last snapshot.",
+      "next_steps": [
+        "Add exponential backoff with jitter to session_manager.restart_session() in session_manager.py and log retry attempts",
+        "Write comprehensive unit tests for self_test.check_ts18() in self_test.py covering success, failure, and edge cases",
+        "Implement auto\u2011fix logic for TS19 in self_test.py by adding a fallback remediation function",
+        "Create a cleanup script clean_disk.py that archives and deletes logs older than 30 days, and schedule it in hive_cron.yaml",
+        "Add a /api/health endpoint in api_server.py that returns JSON with self\u2011test status, disk usage, and session backoff counters"
+      ],
+      "decisions": [
+        "Prioritize fixing TS18 and TS19 failures before addressing TS21",
+        "Implement exponential backoff for session restarts as the first concrete reliability improvement",
+        "Defer low\u2011priority UI enhancements until critical health blockers are resolved"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -656,9 +656,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-13T10:54:19Z",
-    "completed_at": "2026-05-13T10:54:19Z"
+    "started_at": "2026-05-13T10:55:20Z",
+    "completed_at": "2026-05-13T10:55:34Z"
   }
 }
