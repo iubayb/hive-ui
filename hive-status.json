@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T10:09:58Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T10:10:44Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -437,7 +437,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 13
+    "openrouter_calls_today": 14
   },
   "model_champions": {
     "text": null,
@@ -446,16 +446,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_203be3d2",
-      "ts": "2026-05-13T08:04:20Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_552d19f8",
       "ts": "2026-05-13T08:05:56Z",
@@ -635,6 +625,26 @@
         "Use exponential backoff with jitter for session restarts to avoid thundering herd",
         "Enforce unit test coverage >90% for all self_test modules"
       ]
+    },
+    {
+      "id": "sess_cd100fb6",
+      "ts": "2026-05-13T10:10:32Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self\u2011tests and improving session restart reliability",
+      "summary": "The hive is stalled at 50% health with multiple high\u2011priority self\u2011test failures (TS18, TS19, TS21) and a critical session in backoff. Recent attempts to auto\u2011fix have not succeeded, and disk usage is near capacity.",
+      "progress": "No new fixes were applied since the last snapshot.",
+      "next_steps": [
+        "Add exponential backoff and jitter to session_manager.restart_session() in session_manager.py and handle HTTP 429 responses",
+        "Implement a recovery routine for TS18 in self_test.py: detect missing cache files, recreate them, and log actions",
+        "Write comprehensive unit tests for self_test.check_ts18() in tests/self_test_test.py covering success and failure paths",
+        "Fix TS19 failure by updating validation logic in self_test.py to handle new schema version and add corresponding tests in tests/self_test_test.py",
+        "Create a disk\u2011cleanup helper in utils/maintenance.py that removes old log files when disk usage > 95% and invoke it during hive startup"
+      ],
+      "decisions": [
+        "Prioritize fixing self\u2011test failures before addressing lower\u2011priority performance issues",
+        "Add exponential backoff to session restarts to reduce backoff loops for critical sessions",
+        "Introduce automated disk\u2011cleanup to prevent future stalls due to disk saturation"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -646,9 +656,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-13T10:09:58Z",
-    "completed_at": null
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "status": "completed",
+    "started_at": "2026-05-13T10:10:42Z",
+    "completed_at": "2026-05-13T10:10:44Z"
   }
 }
