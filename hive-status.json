@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T14:55:01Z",
+  "last_updated": "2026-05-13T14:55:54Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -238,7 +238,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 14
+    "openrouter_calls_today": 15
   },
   "model_champions": {
     "text": null,
@@ -247,26 +247,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_78c56298",
-      "ts": "2026-05-13T12:24:42Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving failing self-tests and session restart issues",
-      "summary": "The hive is currently stalled with multiple high-priority self-test failures (TS5, TS19, TS21) and a session in long backoff. Recent auto-fix succeeded for TS14, but core load and disk usage remain critical. Immediate code changes are needed to improve resilience and fix validation logic.",
-      "progress": "TS14 self-test was auto-fixed successfully.",
-      "next_steps": [
-        "Add retry and exponential backoff logic to restart_session() in orchestrator.py, handling HTTP 429 and connection errors",
-        "Implement detailed logging and failure counters in restart_session() to track backoff attempts",
-        "Update validation logic in selftests/ts18_ch.py to align with new schema expectations",
-        "Create unit tests for restart_session() in tests/test_orchestrator.py covering backoff scenarios",
-        "Add a health check endpoint in health.py that returns JSON with self-test statuses and resource usage"
-      ],
-      "decisions": [
-        "Prioritize fixing TS5, TS19, and TS21 before addressing lower-priority tests",
-        "Apply exponential backoff with jitter to all session restart calls to reduce cascade failures",
-        "Increase disk usage monitoring frequency until disk usage drops below 90%"
-      ]
-    },
     {
       "id": "sess_e7a4435d",
       "ts": "2026-05-13T12:39:44Z",
@@ -446,6 +426,26 @@
         "Apply exponential backoff globally to session restart mechanisms to reduce backoff overload",
         "Allocate additional memory resources to the hive to prevent disk saturation-related stalls"
       ]
+    },
+    {
+      "id": "sess_4d5f24f8",
+      "ts": "2026-05-13T14:55:54Z",
+      "updated_by": "orchestrator",
+      "goal": "Resolve critical self-test failures and stabilize stalled sessions",
+      "summary": "The hive is stalled with several high priority self-test failures (TS5, TS19, TS21, TS18) and a long backoff session. Recent auto-fix succeeded for TS14, but core load is high and disk is near capacity. Immediate coding actions are needed to improve retry mechanisms and validation logic.",
+      "progress": "Auto-fixed self-test TS14, reducing one failure point.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to restart_session() in orchestrator/orchestrator.py handling HTTP 429 and connection errors",
+        "Update validation rules in selftests/ts18_ch.py to match new schema and add unit tests in tests/test_ts18.py",
+        "Implement detailed logging for TS5 failure points in selftests/ts5_check.py and add fallback handling",
+        "Create a cleanup script cleanup_disk.py to archive old logs and free disk space above 95% usage",
+        "Add a health check endpoint /api/health in logstream.py that returns JSON with session statuses and resource metrics"
+      ],
+      "decisions": [
+        "Prioritize fixing self-test failures before addressing load issues",
+        "Introduce exponential backoff for session restarts to reduce backoff storms",
+        "Allocate a temporary disk cleanup task to prevent disk exhaustion"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -457,9 +457,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-13T14:55:00Z",
-    "completed_at": "2026-05-13T14:55:01Z"
+    "started_at": "2026-05-13T14:55:31Z",
+    "completed_at": "2026-05-13T14:55:54Z"
   }
 }
