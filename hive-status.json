@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T09:15:53Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T09:16:47Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -26,45 +26,6 @@
   },
   "achievements": [],
   "blockers": [
-    {
-      "id": "b_31376303",
-      "ts": "2026-05-13T09:15:53Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[orchestrator] Repeated self\u2011test TS21 reports failure even after the automated cleanup fix was applied, indicating the underlying issue persists (e.g., residual log files or a timing race).",
-      "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "68a8bbaadec6cd183906121c428580ff"
-    },
-    {
-      "id": "b_bf7a7b22",
-      "ts": "2026-05-13T09:15:13Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "tmux session 'hive-live' missing entirely",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
-    },
-    {
-      "id": "b_711d22d4",
-      "ts": "2026-05-13T09:15:13Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "tmux session 'hive-watch' missing entirely",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "70b95af380bb338ef8031fb179457ee0"
-    },
     {
       "id": "b_e049d4cb",
       "ts": "2026-05-13T08:03:19Z",
@@ -194,6 +155,58 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "82ed62237b8e342301c173b1539d754e"
+    },
+    {
+      "id": "b_31376303",
+      "ts": "2026-05-13T09:15:53Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[orchestrator] Repeated self\u2011test TS21 reports failure even after the automated cleanup fix was applied, indicating the underlying issue persists (e.g., residual log files or a timing race).",
+      "severity": "medium",
+      "status": "resolved",
+      "resolved_at": "2026-05-13T09:16:17Z",
+      "resolution": "auto-pruned: orchestrator is now alive",
+      "github_issue": null,
+      "_hash": "68a8bbaadec6cd183906121c428580ff"
+    },
+    {
+      "id": "b_02bac34b",
+      "ts": "2026-05-13T09:16:05Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[orchestrator] Self\u2011test TS21 (temp file cleanup & journal vacuum) ran but the underlying failure persists, indicating that disk pressure is still high or another resource limit is being hit.",
+      "severity": "medium",
+      "status": "resolved",
+      "resolved_at": "2026-05-13T09:16:17Z",
+      "resolution": "auto-pruned: orchestrator is now alive",
+      "github_issue": null,
+      "_hash": "76560d0bfae4dc23a66b46bc90a16b92"
+    },
+    {
+      "id": "b_711d22d4",
+      "ts": "2026-05-13T09:15:13Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "tmux session 'hive-watch' missing entirely",
+      "severity": "critical",
+      "status": "resolved",
+      "resolved_at": "2026-05-13T09:16:17Z",
+      "resolution": "Session 'hive-watch' is healthy again",
+      "github_issue": null,
+      "_hash": "70b95af380bb338ef8031fb179457ee0"
+    },
+    {
+      "id": "b_bf7a7b22",
+      "ts": "2026-05-13T09:15:13Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "tmux session 'hive-live' missing entirely",
+      "severity": "critical",
+      "status": "resolved",
+      "resolved_at": "2026-05-13T09:16:17Z",
+      "resolution": "Session 'hive-live' is healthy again",
+      "github_issue": null,
+      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
     },
     {
       "id": "b_49e0a370",
@@ -348,6 +361,13 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_42fc9f34",
+        "ts": "2026-05-13T09:16:05Z",
+        "hive": "default",
+        "summary": "The orchestrator session remains in error after TS21; a broader disk\u2011space cleanup and service restart are applied to restore normal operation.",
+        "source": "doctor"
+      },
+      {
         "id": "f_3bb7d7f7",
         "ts": "2026-05-13T09:15:53Z",
         "hive": "default",
@@ -378,7 +398,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 9
+    "openrouter_calls_today": 10
   },
   "model_champions": {
     "text": null,
@@ -557,9 +577,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: develop\u2192main promotion check + release draft",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-13T09:15:34Z",
-    "completed_at": "2026-05-13T09:15:37Z"
+    "started_at": "2026-05-13T09:16:17Z",
+    "completed_at": "2026-05-13T09:16:17Z"
   }
 }
