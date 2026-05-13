@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T07:32:52Z",
+  "last_updated": "2026-05-13T07:36:37Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.5,
-      "last_seen": "2026-05-13T07:31:21Z",
+      "status": "running",
+      "health_score": 1.0,
+      "last_seen": "2026-05-13T07:36:05Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -19,7 +19,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 4,
+      "errors_last_hour": 5,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -27,34 +27,21 @@
   "achievements": [],
   "blockers": [
     {
-      "id": "b_5ddc7f7f",
-      "ts": "2026-05-12T18:13:06Z",
-      "hive": "desktop",
-      "agent": "supervisor",
-      "description": "Session 'ps5-hive' in long backoff (160s) \u2014 5 restart(s), may need manual intervention",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "5d44b7e69b78f35212f5c73ccc29efd3"
-    },
-    {
-      "id": "b_c0ebdd72",
-      "ts": "2026-05-12T18:09:36Z",
+      "id": "b_3255df7d",
+      "ts": "2026-05-13T07:35:43Z",
       "hive": "desktop",
       "agent": "resource-guardian",
-      "description": "HIGH load/core=0.02 mem=59.9GB disk=97% \u2014 jobs reniced",
+      "description": "HIGH load/core=0.02 mem=59.5GB disk=98% \u2014 jobs reniced",
       "severity": "high",
       "status": "open",
       "resolved_at": null,
       "resolution": null,
       "github_issue": null,
-      "_hash": "e6d980aa1a53b1fb8e814bb0b1a90d29"
+      "_hash": "35343fe092b4f146fb3fee2686037061"
     },
     {
-      "id": "b_36e9c052",
-      "ts": "2026-05-12T18:09:21Z",
+      "id": "b_535941d1",
+      "ts": "2026-05-13T07:35:28Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS21 failing \u2014 auto-fix attempted but not sufficient",
@@ -66,8 +53,8 @@
       "_hash": "a3a483f5373c25d5e811d82c159a9ebd"
     },
     {
-      "id": "b_f4a84b64",
-      "ts": "2026-05-12T18:09:21Z",
+      "id": "b_c9822af3",
+      "ts": "2026-05-13T07:35:28Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS19 failing \u2014 no auto-fix available or fix failed",
@@ -79,8 +66,8 @@
       "_hash": "abc92bdaab9c773ac4617a356f0b6604"
     },
     {
-      "id": "b_a0000afb",
-      "ts": "2026-05-12T18:09:21Z",
+      "id": "b_c3fa49c4",
+      "ts": "2026-05-13T07:35:28Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS18 failing \u2014 no auto-fix available or fix failed",
@@ -92,8 +79,8 @@
       "_hash": "8db53c687b62ebcd9459cbccdbbf588f"
     },
     {
-      "id": "b_8ba12e05",
-      "ts": "2026-05-12T18:09:21Z",
+      "id": "b_33994969",
+      "ts": "2026-05-13T07:35:28Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS17 failing \u2014 no auto-fix available or fix failed",
@@ -105,8 +92,8 @@
       "_hash": "6897daf3e3724c9f078fc0b16f4fe428"
     },
     {
-      "id": "b_3cf5114a",
-      "ts": "2026-05-12T18:09:21Z",
+      "id": "b_fe6f417a",
+      "ts": "2026-05-13T07:35:28Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS14 failing \u2014 no auto-fix available or fix failed",
@@ -118,8 +105,8 @@
       "_hash": "b4c2ed2d4f13f2fecf6ce6f41e3eac7c"
     },
     {
-      "id": "b_6e13decb",
-      "ts": "2026-05-12T18:09:21Z",
+      "id": "b_16b4144c",
+      "ts": "2026-05-13T07:35:28Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS13 failing \u2014 no auto-fix available or fix failed",
@@ -131,8 +118,8 @@
       "_hash": "5c48d095f67370a5d63a500a67d76844"
     },
     {
-      "id": "b_976088e8",
-      "ts": "2026-05-12T18:09:21Z",
+      "id": "b_55bfc296",
+      "ts": "2026-05-13T07:35:28Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS5 failing \u2014 auto-fix attempted but not sufficient",
@@ -144,8 +131,8 @@
       "_hash": "36e8de1c6320cf5f4eececa2d548aefd"
     },
     {
-      "id": "b_4dd16811",
-      "ts": "2026-05-12T18:09:20Z",
+      "id": "b_7a501525",
+      "ts": "2026-05-13T07:35:27Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "Live UI verification failed: curl failed: [Errno 111] Connection refused",
@@ -157,74 +144,46 @@
       "_hash": "82ed62237b8e342301c173b1539d754e"
     },
     {
-      "id": "b_31923373",
-      "ts": "2026-05-12T18:09:20Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "tmux session 'hive-watch' missing entirely",
-      "severity": "critical",
-      "status": "resolved",
-      "resolved_at": "2026-05-12T18:10:24Z",
-      "resolution": "Session 'hive-watch' is healthy again",
-      "github_issue": null,
-      "_hash": "70b95af380bb338ef8031fb179457ee0"
-    },
-    {
-      "id": "b_16ab4979",
-      "ts": "2026-05-12T18:09:20Z",
+      "id": "b_acfaeb59",
+      "ts": "2026-05-13T07:35:27Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
       "severity": "high",
       "status": "resolved",
-      "resolved_at": "2026-05-12T18:10:24Z",
+      "resolved_at": "2026-05-13T07:36:36Z",
       "resolution": "Session 'hive-dev' is healthy again",
       "github_issue": null,
       "_hash": "217dae28725ae72712be5a39a27334a8"
     },
     {
-      "id": "b_0de03cdd",
-      "ts": "2026-05-12T18:09:20Z",
+      "id": "b_ca3269b6",
+      "ts": "2026-05-13T07:35:27Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "tmux session 'hive-live' missing entirely",
       "severity": "critical",
       "status": "resolved",
-      "resolved_at": "2026-05-12T18:10:24Z",
+      "resolved_at": "2026-05-13T07:36:36Z",
       "resolution": "Session 'hive-live' is healthy again",
       "github_issue": null,
       "_hash": "5e7ea63d56407f4c12743a4f09c67392"
-    }
-  ],
-  "next_steps": [
-    {
-      "id": "ns_d72a9c05",
-      "priority": 1,
-      "description": "Add detailed exception handling and retry logic to run_self_test() in self_test.py for TS18, TS19, and TS21, including fallback to safe defaults on repeated failures",
-      "assigned_to": "opencode",
-      "status": "in_progress",
-      "source": "orchestrator",
-      "ts": "2026-05-12T18:23:14Z"
     },
     {
-      "id": "ns_62661bba",
-      "priority": 2,
-      "description": "Implement a disk cleanup utility in maintenance.py that deletes temp files older than 7 days and logs freed space, then call it from the start-up sequence",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-12T18:23:14Z"
-    },
-    {
-      "id": "ns_12f44f39",
-      "priority": 3,
-      "description": "Create a watchdog in session_manager.py that monitors ps5-hive backoff counters and triggers an immediate forced restart after 3 consecutive backoffs",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-12T18:23:14Z"
+      "id": "b_8139f6b2",
+      "ts": "2026-05-13T07:35:27Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "tmux session 'hive-watch' missing entirely",
+      "severity": "critical",
+      "status": "resolved",
+      "resolved_at": "2026-05-13T07:36:36Z",
+      "resolution": "Session 'hive-watch' is healthy again",
+      "github_issue": null,
+      "_hash": "70b95af380bb338ef8031fb179457ee0"
     }
   ],
+  "next_steps": [],
   "capabilities": {
     "learned": []
   },
@@ -239,7 +198,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 53
+    "openrouter_calls_today": 0
   },
   "model_champions": {
     "text": null,
@@ -249,204 +208,24 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_a5c47de0",
-      "ts": "2026-05-13T05:11:34Z",
+      "id": "sess_c12924d0",
+      "ts": "2026-05-13T07:35:27Z",
       "updated_by": "orchestrator",
-      "goal": "Restore full hive health by clearing disk space, fixing failing self-tests, and stabilizing the ps5-hive session.",
-      "summary": "The hive is currently stalled at 50% health with critical blockers: ps5-hive is in long backoff, disk usage is at 97%, and three self\u2011tests (TS18, TS19, TS21) are failing. Pending work includes a disk cleanup utility and a watchdog for ps5\u2011hive backoff. No recent progress has been recorded.",
-      "progress": "No new achievements were recorded in the latest snapshot.",
-      "next_steps": [
-        "Implement disk cleanup utility in maintenance.py that deletes temporary files older than 7 days and logs reclaimed space.",
-        "Add watchdog loop in session_manager.py to monitor ps5-hive backoff counters and trigger immediate restart after three consecutive failures.",
-        "Add retry and exponential backoff logic to restart_session() in orchestrator.py for handling HTTP 429 and network timeouts.",
-        "Write unit tests for self_test_runner.py covering TS18, TS19, and TS21 failure paths and auto\u2011fix attempts.",
-        "Create /api/health endpoint in api_server.py that returns JSON with disk usage, memory load, and self\u2011test status for real\u2011time monitoring."
-      ],
-      "decisions": [
-        "Prioritize disk cleanup to reduce disk usage below 85% before addressing self\u2011test failures.",
-        "Deploy the ps5-hive watchdog immediately to prevent further backoff escalation.",
-        "Allocate additional CPU priority to self\u2011test auto\u2011fix scripts after storage and session stability are restored."
-      ]
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     },
     {
-      "id": "sess_5b1ddcab",
-      "ts": "2026-05-13T05:26:37Z",
+      "id": "sess_fcccda8f",
+      "ts": "2026-05-13T07:36:37Z",
       "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self\u2011tests, reducing disk usage, and stabilizing the ps5\u2011hive session.",
-      "summary": "The hive is currently stalled with several critical self\u2011test failures (TS18\u2011TS21) and disk usage at 97%. High\u2011priority sessions are in backoff and system resources are strained. Immediate coding work is needed to clean disk space, add monitoring, and improve resiliency.",
-      "progress": "No recent achievements; the hive remains in a stalled state.",
-      "next_steps": [
-        "Implement a disk cleanup utility in maintenance.py that deletes temporary files older than 7 days and logs reclaimed space.",
-        "Create a watchdog in session_manager.py that monitors ps5-hive backoff counters and triggers an automated restart after three consecutive backoffs.",
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses.",
-        "Write unit tests for self_test_handlers.py covering TS18, TS19, TS20, and TS21 failure scenarios and expected auto\u2011fix paths.",
-        "Introduce log rotation in logger.py to cap log file size at 100\u202fMB and automatically archive older logs."
-      ],
-      "decisions": [
-        "Prioritize fixing self\u2011test failures (TS18\u2011TS21) before addressing lower\u2011priority sessions.",
-        "Run the new disk cleanup utility immediately to free space and prevent further stalls.",
-        "Defer manual intervention on ps5-hive until the watchdog is operational."
-      ]
-    },
-    {
-      "id": "sess_102d4e06",
-      "ts": "2026-05-13T05:41:30Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests, clearing disk space, and resolving the ps5-hive backoff issue.",
-      "summary": "The hive is stalled at 50% health with several high\u2011priority blockers: disk usage at 97%, failing self\u2011tests TS18\u2011TS21, and the ps5-hive session stuck in backoff. Recent attempts to auto\u2011fix self\u2011tests have failed, and a disk cleanup utility is pending.",
-      "progress": "Implemented a preliminary disk cleanup stub in maintenance.py and added logging for backoff events.",
-      "next_steps": [
-        "Complete disk cleanup utility in maintenance.py: recursively delete /tmp/hive_* files and enforce a 10\u202fGB free\u2011space target.",
-        "Add watchdog logic to session_manager.py: monitor ps5-hive backoff counter and trigger a forced restart after 3 consecutive backoffs.",
-        "Implement retry with exponential backoff in orchestrator.py's call_llm() for HTTP 429 responses.",
-        "Fix self\u2011test TS18 in self_tests.py by correcting the path validation regex and adding a missing import.",
-        "Write unit tests for org_guard.py covering all forbidden path patterns and add them to the CI pipeline."
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before attempting further self\u2011test fixes to avoid out\u2011of\u2011space failures.",
-        "Introduce a forced restart policy for any session that exceeds 3 backoff cycles.",
-        "Expand test coverage for path\u2011guarding modules to prevent future TS failures."
-      ]
-    },
-    {
-      "id": "sess_1bc8eb51",
-      "ts": "2026-05-13T05:56:38Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by clearing disk space, fixing failing self-tests, and stabilizing the ps5-hive session.",
-      "summary": "The hive is stalled with high memory usage and 97% disk utilization, and several self\u2011test suites are failing. The ps5-hive session is in a long backoff loop, preventing further progress. No recent achievements have been recorded.",
-      "progress": "No new tasks were completed since the last snapshot.",
-      "next_steps": [
-        "Implement disk cleanup utility in maintenance.py: scan /tmp and hive cache directories, delete files older than 7 days, and log reclaimed space.",
-        "Create watchdog in session_manager.py: monitor ps5-hive backoff counter and automatically reset the session after 3 consecutive backoffs.",
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses.",
-        "Write unit tests for self_test_suite.py covering TS18, TS19, and TS21 error paths and assert proper auto\u2011fix handling.",
-        "Add a /api/metrics endpoint in logstream.py that returns JSON with current disk usage, memory load, and session backoff statuses."
-      ],
-      "decisions": [
-        "Prioritize disk cleanup to free space before attempting self\u2011test fixes.",
-        "Introduce a watchdog for ps5-hive to avoid indefinite backoff loops.",
-        "Enhance LLM call robustness with retry logic to reduce future high\u2011load incidents."
-      ]
-    },
-    {
-      "id": "sess_8a3b61dc",
-      "ts": "2026-05-13T06:11:48Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by resolving critical self-test failures and resource constraints",
-      "summary": "The hive is under high load with disk usage at 97% and several self-test failures (TS18, TS19, TS21). Session 'ps5-hive' is in prolonged backoff, and no recent achievements have been recorded. Immediate remediation of resource pressure and test failures is required to restore stability.",
-      "progress": "No new fixes were completed since the last report.",
-      "next_steps": [
-        "Implement a disk cleanup utility in maintenance.py that deletes temporary files older than 7 days and logs freed space",
-        "Create a watchdog in session_manager.py that monitors ps5-hive backoff counters and triggers a forced restart after 3 consecutive backoffs",
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses",
-        "Write unit tests for self_test_runner.py covering TS18, TS19, and TS21 failure detection and auto-fix pathways",
-        "Introduce a new endpoint /api/health in api_server.py that returns JSON with disk usage, memory load, and self-test status"
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before attempting auto-fixes for self-test failures",
-        "Limit automatic restarts of ps5-hive to three attempts before raising a manual alert",
-        "Enable exponential backoff retries for LLM calls to reduce HTTP 429 throttling"
-      ]
-    },
-    {
-      "id": "sess_711cc3bb",
-      "ts": "2026-05-13T06:26:52Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving critical self-test failures, clearing disk space, and addressing the ps5-hive backoff issue.",
-      "summary": "The hive is currently stalled with high memory usage and disk at 97% capacity. Critical self-tests TS18, TS19, and TS21 are failing, and the ps5-hive session is in prolonged backoff. Immediate code changes are needed to free disk space, improve watchdog handling, and add missing test fixes.",
-      "progress": "Implemented a basic disk cleanup stub in maintenance.py, but it was not completed.",
-      "next_steps": [
-        "Finish implementation of clean_temp_files() in maintenance.py to delete files older than 7 days in /tmp and log actions.",
-        "Add a periodic disk usage check in maintenance.py that triggers clean_temp_files() when usage > 90% and sends alert via send_alert().",
-        "Create a watchdog loop in session_manager.py that monitors ps5-hive backoff counter and force-restarts the session after 3 consecutive backoffs.",
-        "Implement fix_self_test_ts18() in self_tests.py to handle missing dependency errors and add unit tests in tests/test_self_tests.py.",
-        "Update orchestrator.py to retry failed self-test calls with exponential backoff and log each retry."
-      ],
-      "decisions": [
-        "Prioritize disk cleanup and watchdog before tackling self-test logic.",
-        "Limit automatic restarts of ps5-hive to three attempts to avoid endless backoff loops.",
-        "Add unit test coverage for all new maintenance and watchdog functions to prevent regressions."
-      ]
-    },
-    {
-      "id": "sess_7d246665",
-      "ts": "2026-05-13T06:41:53Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving critical session backoffs, self-test failures, and disk usage issues",
-      "summary": "The hive is currently stalled with high memory and disk utilization, and several core self-tests (TS18, TS19, TS21) are failing. Critical sessions like ps5-hive are in long backoff, preventing normal operation. Immediate code changes are needed to clean disk space, improve session recovery, and address failing self-tests.",
-      "progress": "No new achievements were recorded since the last snapshot.",
-      "next_steps": [
-        "Implement a disk cleanup utility in maintenance.py that deletes temporary files older than 48h and logs actions",
-        "Create a watchdog in session_manager.py that monitors ps5-hive backoff state and triggers an automated restart after three consecutive 160s backoffs",
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses",
-        "Write unit tests for self_test_suite.py covering TS18, TS19, and TS21 error paths and ensure they assert proper error handling",
-        "Introduce a memory usage guard in resource_manager.py that logs a warning and spills cache to disk when usage exceeds 55GB"
-      ],
-      "decisions": [
-        "Prioritize disk cleanup and ps5-hive watchdog before addressing self-test failures",
-        "Adopt exponential backoff retry for all external LLM calls to mitigate rate-limit stalls",
-        "Enforce unit test coverage for all self-test modules to catch regressions early"
-      ]
-    },
-    {
-      "id": "sess_35327fc0",
-      "ts": "2026-05-13T06:56:48Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by fixing failing self-tests, clearing disk space, and resolving the ps5-hive backoff issue",
-      "summary": "The hive is currently stalled with several high\u2011priority blockers: four self\u2011test failures (TS18\u2011TS21) and a ps5-hive session stuck in backoff. Disk usage is at 97% and a maintenance utility is pending. No recent achievements were recorded.",
-      "progress": "Identified and listed the critical blockers and pending tasks.",
-      "next_steps": [
-        "Implement disk_cleanup() in maintenance.py to delete temporary files older than 7 days and log freed space",
-        "Add a watchdog thread in session_manager.py that monitors ps5_hive backoff count and triggers a forced session reset after 3 consecutive backoffs",
-        "Fix TS21 failure by updating validate_schema() in selftest/ts21.py to handle nullable fields correctly",
-        "Fix TS19 failure by adding missing import in selftest/ts19.py and expanding error handling in run_checks()",
-        "Add retry logic with exponential backoff to orchestrator.call_llm() in orchestrator.py for HTTP 429 responses"
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before running any further self\u2011tests to avoid out\u2011of\u2011space errors",
-        "Treat ps5-hive backoff as a separate emergency task and implement an automated reset mechanism",
-        "Address self\u2011test failures in order of dependency: TS21, TS19, then TS18 and TS18"
-      ]
-    },
-    {
-      "id": "sess_6196bcb7",
-      "ts": "2026-05-13T07:12:03Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests, clearing disk space, and stabilizing the ps5-hive session",
-      "summary": "The hive is currently stalled with critical blockers: several self-test failures, disk nearing capacity, and the ps5-hive session stuck in backoff. No recent achievements have been recorded, and immediate code work is required to address cleanup, watchdog monitoring, and self-test remediation.",
-      "progress": "No new actions were completed since the last snapshot.",
-      "next_steps": [
-        "Implement disk cleanup utility in maintenance.py: add function clean_temp_files() that deletes *.tmp in /var/hive/tmp and logs freed space",
-        "Add unit tests for clean_temp_files() in tests/test_maintenance.py covering empty and full temp directories",
-        "Create watchdog in session_manager.py: add class Ps5HiveWatchdog with method monitor_backoff() that logs backoff duration and triggers session restart after 5 consecutive 160s delays",
-        "Write integration test for Ps5HiveWatchdog in tests/test_session_manager.py simulating backoff scenario",
-        "Fix self-test TS21 in self_tests/ts21_check.py: add missing environment variable validation and update expected output assertions"
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before attempting self-test fixes to avoid false failures due to low space",
-        "Implement automated restart logic for ps5-hive instead of manual intervention",
-        "Add comprehensive unit tests for new maintenance and watchdog code to prevent future regressions"
-      ]
-    },
-    {
-      "id": "sess_c4008661",
-      "ts": "2026-05-13T07:27:07Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests, clearing disk space, and stabilizing the ps5-hive session",
-      "summary": "The hive is stalled with high resource usage and several self-test failures (TS18, TS19, TS21). Disk usage is at 97% and the ps5-hive session is in long backoff, risking further downtime. Immediate code actions are needed to clean disk space, improve session backoff handling, and address self-test failures.",
-      "progress": "Implemented initial disk cleanup scaffolding in maintenance.py but it is incomplete and not yet scheduled.",
-      "next_steps": [
-        "Complete disk cleanup utility in maintenance.py: add logic to identify and delete temp files older than 48h and log reclaimed space",
-        "Add unit tests for cleanup_utility() in tests/test_maintenance.py covering edge cases and safety checks",
-        "Implement a watchdog in session_manager.py that monitors ps5-hive backoff counters and triggers a forced restart after 3 consecutive backoffs",
-        "Fix TS18 failure by updating validation rules in self_test/ts18_check.py and adding a corresponding test in tests/test_ts18.py",
-        "Create a retry wrapper for self-test execution in self_test/runner.py to automatically re-run failing tests up to 2 times before marking them as blocked"
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before addressing self-test failures to free necessary resources",
-        "Limit automatic restarts of ps5-hive to avoid endless backoff loops; use watchdog to enforce a hard reset after threshold",
-        "Add extensive logging to maintenance and session_manager modules to aid future diagnostics"
-      ]
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -460,7 +239,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-13T07:32:31Z",
-    "completed_at": "2026-05-13T07:32:32Z"
+    "started_at": "2026-05-13T07:36:36Z",
+    "completed_at": "2026-05-13T07:36:36Z"
   }
 }
