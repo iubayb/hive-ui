@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T11:09:54Z",
+  "last_updated": "2026-05-13T11:10:58Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-13T11:08:23Z",
+      "last_seen": "2026-05-13T11:10:24Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -437,7 +437,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 17
+    "openrouter_calls_today": 18
   },
   "model_champions": {
     "text": null,
@@ -446,26 +446,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_21415055",
-      "ts": "2026-05-13T08:51:05Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by fixing failing self-tests and improving session restart reliability",
-      "summary": "The hive is currently stalled with several high-priority blockers: multiple sessions in backoff, high resource usage, and three failing self-tests (TS18, TS19, TS21). Recent attempts to auto-fix self-tests have not succeeded, and no new achievements have been recorded. Immediate coding work is required to add robust retry logic and bolster test coverage.",
-      "progress": "Added a placeholder exponential backoff stub to session_manager.restart_session but it has not been integrated fully.",
-      "next_steps": [
-        "Implement exponential backoff with jitter in session_manager.restart_session() in session_manager.py and ensure it respects max retries",
-        "Add detailed logging and metrics to session_manager.restart_session() to record backoff attempts and failures",
-        "Fix self_test.check_ts18() in self_test.py by correcting the validation logic and handling edge cases",
-        "Write comprehensive unit tests for self_test.check_ts18() in tests/self_test_test.py covering normal, boundary, and error scenarios",
-        "Create a new test harness in tests/self_test_test.py to simulate failures for TS19 and TS21 and verify auto-fix mechanisms"
-      ],
-      "decisions": [
-        "Prioritize fixing self-test TS18 before addressing TS19 and TS21, as TS18 failure blocks subsequent auto-fix steps",
-        "Integrate retry backoff directly into the session manager rather than a wrapper to ensure all restart paths benefit",
-        "Introduce unit test coverage for all self-test check functions to prevent future silent failures"
-      ]
-    },
     {
       "id": "sess_ba13501a",
       "ts": "2026-05-13T09:06:26Z",
@@ -645,6 +625,26 @@
         "Implement exponential backoff for session restarts as the first concrete reliability improvement",
         "Defer low\u2011priority UI enhancements until critical health blockers are resolved"
       ]
+    },
+    {
+      "id": "sess_4260b6af",
+      "ts": "2026-05-13T11:10:38Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and stabilizing session restarts",
+      "summary": "The hive is currently stalled with several critical self-test failures (TS18, TS19, TS21) and a session in prolonged backoff. High memory and disk usage are also stressing the system, but jobs have been reniced. Immediate code fixes and test coverage are needed to unblock the hive.",
+      "progress": "Added a placeholder for exponential backoff in session_manager.restart_session but not yet integrated.",
+      "next_steps": [
+        "Implement exponential backoff with jitter in session_manager.restart_session() in session_manager.py and add logging for each retry attempt",
+        "Add unit tests for self_test.check_ts18() in tests/self_test/test_ts18.py covering both passing and failing scenarios",
+        "Fix TS19 failure by updating the validation logic in self_test.py's check_ts19() function to handle edge-case inputs",
+        "Create a monitoring endpoint in api/health.py that returns JSON with current self-test statuses and resource usage",
+        "Add cleanup routine in maintenance.py to purge old log files when disk usage exceeds 90%"
+      ],
+      "decisions": [
+        "Prioritize code fixes for self-test failures before addressing resource exhaustion",
+        "Integrate exponential backoff directly into the session manager rather than a wrapper",
+        "Enforce unit test coverage >90% for all self-test modules before further deployment"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -658,7 +658,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-13T11:09:34Z",
-    "completed_at": "2026-05-13T11:09:34Z"
+    "started_at": "2026-05-13T11:10:48Z",
+    "completed_at": "2026-05-13T11:10:48Z"
   }
 }
