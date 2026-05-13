@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T15:39:59Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-13T15:45:02Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.6,
-      "last_seen": "2026-05-13T15:39:09Z",
+      "status": "running",
+      "health_score": 1.0,
+      "last_seen": "2026-05-13T15:45:02Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -19,64 +19,29 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 5,
+      "errors_last_hour": 7,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
   },
-  "achievements": [
-    {
-      "id": "a_78e02209",
-      "ts": "2026-05-13T11:50:23Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "Auto-fixed system invariant TS14",
-      "evidence": "test_system.sh TS14 now passes after auto-fix"
-    }
-  ],
+  "achievements": [],
   "blockers": [
     {
-      "id": "b_cd1de4a3",
-      "ts": "2026-05-13T11:50:18Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "self-test: TS5 failing \u2014 auto-fix attempted but not sufficient",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "36e8de1c6320cf5f4eececa2d548aefd"
-    },
-    {
-      "id": "b_300b21af",
-      "ts": "2026-05-13T11:23:44Z",
-      "hive": "desktop",
-      "agent": "supervisor",
-      "description": "Session 'ps5-hive' in long backoff (160s) \u2014 5 restart(s), may need manual intervention",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "5d44b7e69b78f35212f5c73ccc29efd3"
-    },
-    {
-      "id": "b_0916c977",
-      "ts": "2026-05-13T11:20:12Z",
+      "id": "b_29a812f9",
+      "ts": "2026-05-13T15:44:40Z",
       "hive": "desktop",
       "agent": "resource-guardian",
-      "description": "HIGH load/core=0.03 mem=59.0GB disk=98% \u2014 jobs reniced",
+      "description": "HIGH load/core=0.07 mem=57.6GB disk=98% \u2014 jobs reniced",
       "severity": "high",
       "status": "open",
       "resolved_at": null,
       "resolution": null,
       "github_issue": null,
-      "_hash": "51bafe558a260f74fd486a7b01d21dd5"
+      "_hash": "054b28b1c26f69fc5cb3af4bb73ed802"
     },
     {
-      "id": "b_8a539236",
-      "ts": "2026-05-13T11:19:57Z",
+      "id": "b_514c6592",
+      "ts": "2026-05-13T15:44:25Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS21 failing \u2014 auto-fix attempted but not sufficient",
@@ -88,8 +53,8 @@
       "_hash": "a3a483f5373c25d5e811d82c159a9ebd"
     },
     {
-      "id": "b_7441e92b",
-      "ts": "2026-05-13T11:19:57Z",
+      "id": "b_226aefc2",
+      "ts": "2026-05-13T15:44:25Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS19 failing \u2014 no auto-fix available or fix failed",
@@ -101,8 +66,8 @@
       "_hash": "abc92bdaab9c773ac4617a356f0b6604"
     },
     {
-      "id": "b_92b011ed",
-      "ts": "2026-05-13T11:19:57Z",
+      "id": "b_454f86b6",
+      "ts": "2026-05-13T15:44:25Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS18 failing \u2014 no auto-fix available or fix failed",
@@ -114,8 +79,8 @@
       "_hash": "8db53c687b62ebcd9459cbccdbbf588f"
     },
     {
-      "id": "b_de6db982",
-      "ts": "2026-05-13T11:19:57Z",
+      "id": "b_dcb1b419",
+      "ts": "2026-05-13T15:44:25Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS17 failing \u2014 no auto-fix available or fix failed",
@@ -127,8 +92,8 @@
       "_hash": "6897daf3e3724c9f078fc0b16f4fe428"
     },
     {
-      "id": "b_6f413c0d",
-      "ts": "2026-05-13T11:19:56Z",
+      "id": "b_66e62491",
+      "ts": "2026-05-13T15:44:24Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "Live UI verification failed: curl failed: [Errno 111] Connection refused",
@@ -140,92 +105,48 @@
       "_hash": "82ed62237b8e342301c173b1539d754e"
     },
     {
-      "id": "b_1f395c9c",
-      "ts": "2026-05-13T11:19:56Z",
+      "id": "b_f9e26cff",
+      "ts": "2026-05-13T15:44:24Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "tmux session 'hive-watch' missing entirely",
       "severity": "critical",
-      "status": "resolved",
-      "resolved_at": "2026-05-13T11:21:05Z",
-      "resolution": "Session 'hive-watch' is healthy again",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
       "github_issue": null,
       "_hash": "70b95af380bb338ef8031fb179457ee0"
     },
     {
-      "id": "b_69936721",
-      "ts": "2026-05-13T11:19:56Z",
+      "id": "b_7cef7a8b",
+      "ts": "2026-05-13T15:44:24Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "tmux session 'hive-live' missing entirely",
       "severity": "critical",
-      "status": "resolved",
-      "resolved_at": "2026-05-13T11:21:05Z",
-      "resolution": "Session 'hive-live' is healthy again",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
       "github_issue": null,
       "_hash": "5e7ea63d56407f4c12743a4f09c67392"
     },
     {
-      "id": "b_b6a76c68",
-      "ts": "2026-05-13T11:19:56Z",
+      "id": "b_7b996017",
+      "ts": "2026-05-13T15:44:24Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
       "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-13T11:21:05Z",
-      "resolution": "Session 'hive-dev' is healthy again",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
       "github_issue": null,
       "_hash": "217dae28725ae72712be5a39a27334a8"
     }
   ],
-  "next_steps": [
-    {
-      "id": "ns_5912209e",
-      "priority": 1,
-      "description": "Implement a disk cleanup routine in utils/maintenance.py that deletes old log files and rotates snapshots, then call it from orchestrator.py on start\u2011up.",
-      "assigned_to": "opencode",
-      "status": "in_progress",
-      "source": "orchestrator",
-      "ts": "2026-05-13T11:24:27Z"
-    },
-    {
-      "id": "ns_87ad0520",
-      "priority": 2,
-      "description": "Add retry and exponential backoff logic to restart_session() in orchestrator.py for the ps5-hive session, handling HTTP 429 and connection errors.",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-13T11:24:27Z"
-    },
-    {
-      "id": "ns_edb376cc",
-      "priority": 3,
-      "description": "Fix TS18 failure by updating the validation logic in selftests/ts18_check.py to correctly handle edge\u2011case inputs and add a unit test in tests/test_ts18.py.",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-13T11:24:27Z"
-    }
-  ],
+  "next_steps": [],
   "capabilities": {
-    "learned": [
-      {
-        "id": "cap_0d6abce1",
-        "ts": "2026-05-13T11:50:23Z",
-        "source_hive": "default",
-        "source_agent": "orchestrator",
-        "skill": "auto_fix_TS14",
-        "description": "Automatically detects and repairs TS14 system invariant failures",
-        "example": "Applied fix for TS14: systemctl restart ollama",
-        "tags": [
-          "self-healing",
-          "system-invariant",
-          "auto-fix"
-        ],
-        "applicable_to": "all"
-      }
-    ]
+    "learned": []
   },
   "knowledge": {
     "findings": [],
@@ -238,7 +159,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 17
+    "openrouter_calls_today": 0
   },
   "model_champions": {
     "text": null,
@@ -248,204 +169,14 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_86b31212",
-      "ts": "2026-05-13T13:10:13Z",
+      "id": "sess_de63f945",
+      "ts": "2026-05-13T15:44:24Z",
       "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by resolving failing self-test suites and stabilizing session restarts.",
-      "summary": "The hive is currently stalled with several high-priority self-test failures (TS5, TS19, TS21) and a session stuck in backoff. Recent auto-fix succeeded for TS14, but critical issues remain, and load is high with disk nearing capacity.",
-      "progress": "TS14 self-test was auto-fixed and now passes.",
-      "next_steps": [
-        "Implement exponential backoff and retry logic in restart_session() within orchestrator.py, handling HTTP 429 and connection errors.",
-        "Update validation rules in selftests/ts18_ch.py to align with the new schema and ensure TS18 passes.",
-        "Add comprehensive unit tests for TS5 in selftests/ts5.py covering edge cases that previously caused failures.",
-        "Create a monitoring hook in healthcheck.py to alert when disk usage exceeds 95% and trigger log rotation.",
-        "Refactor ps5_hive session start-up in sessions/ps5_hive.py to include a watchdog timer that aborts after 3 failed attempts."
-      ],
-      "decisions": [
-        "Prioritize fixing TS5, TS19, and TS21 before addressing lower priority tests.",
-        "Introduce exponential backoff globally for session restarts to mitigate backoff loops.",
-        "Allocate additional disk cleanup scripts to prevent future disk saturation."
-      ]
-    },
-    {
-      "id": "sess_fab8adbb",
-      "ts": "2026-05-13T13:25:03Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by resolving critical self-test failures and session backoff issues",
-      "summary": "The hive is currently stalled with multiple high-priority self-test failures (TS5, TS19, TS21) and a long backoff session. Recent auto-fix succeeded for TS14, but further code changes are needed to address remaining failures and improve session restart reliability.",
-      "progress": "Auto-fix for TS14 was applied successfully, clearing that self-test failure.",
-      "next_steps": [
-        "Implement exponential backoff and retry logic in restart_session() within orchestrator.py to handle HTTP 429 and other transient errors",
-        "Update validation rules in selftests/ts18_ch.py to correctly handle edge cases causing TS18 failures",
-        "Add detailed logging and a fallback path in self_test_runner.py for TS5 to capture failure context",
-        "Create unit tests for TS19 validation logic in selftests/ts19_checker.py covering all known failure scenarios",
-        "Introduce a health check endpoint in health_monitor.py that reports self-test statuses and session backoff states as JSON"
-      ],
-      "decisions": [
-        "Prioritize fixing TS5, TS19, and TS21 before addressing lower priority failures",
-        "Apply exponential backoff globally to all session restart calls",
-        "Expand test coverage for self-test modules to prevent future silent failures"
-      ]
-    },
-    {
-      "id": "sess_9f302c0c",
-      "ts": "2026-05-13T13:40:33Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by fixing failing self\u2011tests and improving session restart reliability",
-      "summary": "The hive is currently stalled with high memory and disk usage and several critical self\u2011test failures (TS5, TS19, TS21). Recent auto\u2011fixes resolved TS14, but TS5, TS19, TS21, and TS18 remain problematic. Load mitigation actions have been applied, but further code changes are needed to restore full health.",
-      "progress": "Auto\u2011fixed system invariant TS14 via the auto_fix_TS14 capability.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to restart_session() in orchestrator.py, handling HTTP 429 and connection errors",
-        "Update selftests/ts18_ch validation logic in selftests/ts18_ch.py to match the new schema definitions",
-        "Implement detailed error handling and logging in ts5_check() within selftests/ts5.py to capture root causes",
-        "Create unit tests for restart_session() in tests/test_orchestrator.py covering backoff scenarios",
-        "Add a cleanup routine in system_monitor.py to purge old log files when disk usage exceeds 90%"
-      ],
-      "decisions": [
-        "Prioritize fixing TS5, TS19, and TS21 before addressing lower\u2011priority tests",
-        "Introduce exponential backoff for session restarts as a standard error\u2011handling pattern",
-        "Allocate additional temporary disk space by enabling log rotation until disk pressure subsides"
-      ]
-    },
-    {
-      "id": "sess_91166b97",
-      "ts": "2026-05-13T13:55:23Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests and stabilizing session restarts",
-      "summary": "The hive is currently stalled with high resource usage and several critical self-test failures (TS5, TS19, TS21). Recent auto-fix resolved TS14, but TS18, TS5, TS19, and TS21 remain problematic, and session 'ps5-hive' is in a long backoff loop. Immediate code improvements are needed to enable automatic recovery and reduce manual intervention.",
-      "progress": "TS14 self-test was successfully auto-fixed, reducing the number of failing invariants.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to restart_session() in orchestrator.py, handling HTTP 429 and connection errors",
-        "Update validation logic in selftests/ts18_ch.py to match the new schema and add detailed error logging",
-        "Implement a fallback handler in self_test_runner.py to automatically retry TS5 and TS21 after a brief delay",
-        "Create unit tests for the new restart_session() backoff mechanism in tests/test_orchestrator.py",
-        "Add a health check endpoint in health_monitor.py that reports the status of all self-tests and triggers auto-restart for failed sessions"
-      ],
-      "decisions": [
-        "Prioritize fixing TS5, TS19, and TS21 before addressing lower priority tests",
-        "Introduce exponential backoff globally for session restarts to prevent cascading backoff loops",
-        "Enforce stricter logging for self-test failures to aid future auto-fix algorithm improvements"
-      ]
-    },
-    {
-      "id": "sess_8b4090ac",
-      "ts": "2026-05-13T14:10:43Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by fixing failing self\u2011tests and stabilizing session restarts",
-      "summary": "The hive is currently stalled with several high\u2011priority self\u2011test failures (TS5, TS19, TS21) and a session in prolonged backoff. Recent auto\u2011fix resolved TS14, but core resources are strained and disk usage is critical. Immediate coding work is needed to add robust retry logic and address validation bugs causing test failures.",
-      "progress": "Auto\u2011fixed invariant TS14 using the newly learned auto_fix_TS14 capability.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to restart_session() in orchestrator.py, handling HTTP 429 and network errors",
-        "Update validation rules in selftests/ts18_ch.py to correctly parse the new schema and prevent TS18 failures",
-        "Implement detailed logging and metrics in orchestrator.py for session restart attempts, exposing them via /api/metrics endpoint",
-        "Write unit tests for the new retry/backoff implementation in orchestrator_test.py covering success, retry, and max\u2011retry paths",
-        "Create a cleanup script clean_disk.py to purge old log files when disk usage exceeds 90%, and schedule it via cron"
-      ],
-      "decisions": [
-        "Prioritize adding robust retry/backoff to session restarts before addressing lower\u2011priority test failures",
-        "Allocate additional memory buffer by adjusting job renice thresholds to mitigate high memory pressure",
-        "Defer non\u2011critical UI enhancements until core stability and self\u2011test pass rates are restored"
-      ]
-    },
-    {
-      "id": "sess_b0776969",
-      "ts": "2026-05-13T14:25:41Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving critical self-test failures and improving session restart reliability",
-      "summary": "The hive is currently stalled with high memory and disk pressure, and several self-tests (TS19, TS21, TS5) are failing. Recent auto-fix of TS14 succeeded, but urgent code fixes are needed for restart logic and remaining test failures.",
-      "progress": "Auto-fix applied successfully to system invariant TS14.",
-      "next_steps": [
-        "Add retry and exponential backoff logic to restart_session() in orchestrator.py",
-        "Update validation logic in selftests/ts18_ch.py to correctly handle the edge case causing TS18 failure",
-        "Enhance health_check.py to trigger alerts and auto-cleanup when disk usage exceeds 95%",
-        "Write unit tests for TS19 validation in selftests/ts19_validator.py covering all failure patterns",
-        "Refactor load_large_dataset() in data_loader.py to use streaming reads and reduce memory usage"
-      ],
-      "decisions": [
-        "Prioritize implementing retry/backoff for session restarts before addressing lower\u2011priority test failures",
-        "Defer TS5 and TS21 fixes until TS18 and TS19 are resolved and the system is no longer stalled",
-        "Allocate a temporary cleanup script to run nightly for /tmp to mitigate disk saturation"
-      ]
-    },
-    {
-      "id": "sess_072fa2fb",
-      "ts": "2026-05-13T14:40:41Z",
-      "updated_by": "orchestrator",
-      "goal": "Resolve critical self-test failures and stabilize stalled hive sessions",
-      "summary": "The hive is stalled at 60% health with multiple high-priority self-test failures (TS5, TS19, TS21) and a long backoff session. Recent auto-fix of TS14 succeeded, but further concrete code changes are needed to address remaining failures and improve session restart robustness.",
-      "progress": "Auto-fixed invariant TS14 using the new auto_fix_TS14 capability.",
-      "next_steps": [
-        "Implement exponential backoff and retry logic in restart_session() within orchestrator.py to handle HTTP 429 and connection errors",
-        "Update validation logic in selftests/ts18_ch.py to correctly handle edge-case inputs causing TS18 failure",
-        "Add detailed logging and error handling to self_test_runner.py for TS5 to capture failure context",
-        "Create unit tests for TS19 in tests/selftests/test_ts19.py covering the previously unhandled scenario",
-        "Introduce a health check endpoint in health_monitor.py that returns JSON with current session statuses and resource usage"
-      ],
-      "decisions": [
-        "Prioritize fixing TS5, TS19, and TS21 before addressing lower priority test failures",
-        "Apply exponential backoff globally to session restart mechanisms to reduce backoff overload",
-        "Allocate additional memory resources to the hive to prevent disk saturation-related stalls"
-      ]
-    },
-    {
-      "id": "sess_4d5f24f8",
-      "ts": "2026-05-13T14:55:54Z",
-      "updated_by": "orchestrator",
-      "goal": "Resolve critical self-test failures and stabilize stalled sessions",
-      "summary": "The hive is stalled with several high priority self-test failures (TS5, TS19, TS21, TS18) and a long backoff session. Recent auto-fix succeeded for TS14, but core load is high and disk is near capacity. Immediate coding actions are needed to improve retry mechanisms and validation logic.",
-      "progress": "Auto-fixed self-test TS14, reducing one failure point.",
-      "next_steps": [
-        "Add exponential backoff and retry logic to restart_session() in orchestrator/orchestrator.py handling HTTP 429 and connection errors",
-        "Update validation rules in selftests/ts18_ch.py to match new schema and add unit tests in tests/test_ts18.py",
-        "Implement detailed logging for TS5 failure points in selftests/ts5_check.py and add fallback handling",
-        "Create a cleanup script cleanup_disk.py to archive old logs and free disk space above 95% usage",
-        "Add a health check endpoint /api/health in logstream.py that returns JSON with session statuses and resource metrics"
-      ],
-      "decisions": [
-        "Prioritize fixing self-test failures before addressing load issues",
-        "Introduce exponential backoff for session restarts to reduce backoff storms",
-        "Allocate a temporary disk cleanup task to prevent disk exhaustion"
-      ]
-    },
-    {
-      "id": "sess_7fc51094",
-      "ts": "2026-05-13T15:11:08Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving critical self-test failures and session backoff issues.",
-      "summary": "The hive is currently stalled with high memory usage and several critical self-test failures (TS5, TS19, TS21, TS18). Recent auto-fix succeeded for TS14, but TS5, TS19, and TS21 remain unresolved, and a session is in long backoff. Immediate code changes are needed to improve resilience and fix validation logic.",
-      "progress": "Auto-fixed self-test TS14 using the newly learned auto_fix_TS14 capability.",
-      "next_steps": [
-        "Add retry and exponential backoff logic to restart_session() in orchestrator.py, handling HTTP 429 and other transient errors.",
-        "Update validation logic in selftests/ts18_ch.py to correctly handle edge-case input patterns causing TS18 failure.",
-        "Implement a memory usage watchdog in resource_manager.py that triggers session throttling when RAM > 55GB.",
-        "Add unit tests for restart_session() in tests/test_orchestrator.py covering backoff and retry scenarios.",
-        "Create a health check endpoint /api/health in logstream.py that reports self-test statuses and current load metrics."
-      ],
-      "decisions": [
-        "Prioritize fixing self-test failures over adding new features.",
-        "Introduce exponential backoff for session restarts to mitigate long backoff loops.",
-        "Allocate additional memory monitoring to prevent disk saturation during high load."
-      ]
-    },
-    {
-      "id": "sess_ba120ec2",
-      "ts": "2026-05-13T15:26:08Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by resolving failing self\u2011tests and stabilizing session restarts under high load.",
-      "summary": "The hive is currently stalled with several critical self\u2011test failures (TS5, TS19, TS21) and a session in backoff. Load is high and disk usage near capacity, but recent auto\u2011fix of TS14 succeeded. Immediate code fixes and resource mitigations are required to bring the system back to a healthy state.",
-      "progress": "TS14 was auto\u2011fixed, clearing that invariant and demonstrating the auto\u2011fix pipeline works.",
-      "next_steps": [
-        "Add retry and exponential backoff logic to restart_session() in orchestrator.py, handling HTTP 429 and connection errors.",
-        "Update validation logic in selftests/ts18_ch.py to match the new schema and add unit tests in tests/selftest_ts18.py.",
-        "Implement a fallback cleanup in self_test_runner.py for TS5 that resets the affected cache directory before re\u2011validation.",
-        "Patch selftests/ts21.py to relax the timeout threshold and log detailed timing metrics for future analysis.",
-        "Create a disk\u2011usage guard in resource_manager.py that triggers log rotation when /var/hive exceeds 95%."
-      ],
-      "decisions": [
-        "Prioritize code fixes for self\u2011tests over hardware scaling until core invariants pass.",
-        "Enable exponential backoff on session restarts to reduce repeated failures under high load.",
-        "Add automated unit tests for each modified self\u2011test to prevent regression."
-      ]
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     }
   ],
   "tracked_researchers": [],
@@ -457,9 +188,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: develop\u2192main promotion check + release draft",
     "status": "completed",
-    "started_at": "2026-05-13T15:39:59Z",
-    "completed_at": "2026-05-13T15:39:59Z"
+    "started_at": "2026-05-13T15:44:28Z",
+    "completed_at": "2026-05-13T15:44:28Z"
   }
 }
