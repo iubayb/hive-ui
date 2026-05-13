@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T10:24:54Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-13T10:25:57Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-13T10:23:41Z",
+      "last_seen": "2026-05-13T10:25:45Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -19,7 +19,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 5,
+      "errors_last_hour": 4,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -437,7 +437,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 14
+    "openrouter_calls_today": 15
   },
   "model_champions": {
     "text": null,
@@ -446,26 +446,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_552d19f8",
-      "ts": "2026-05-13T08:05:56Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests, resolving session backoff, and reducing disk usage",
-      "summary": "The hive is currently stalled with critical blockers: a ps5-hive session in long backoff, high memory and disk usage, and three self-test failures (TS18, TS19, TS21). No recent progress has been made, and the system needs immediate code interventions to automate fixes and add safeguards.",
-      "progress": "No new fixes were applied; the auto-fix attempts for TS21 were insufficient.",
-      "next_steps": [
-        "Implement a disk cleanup routine in maintenance.py that deletes log files older than 30 days and compresses large audit logs, then schedule it via cron_job()",
-        "Add retry with exponential backoff to session_manager.restart_session() in orchestrator.py for sessions stuck in backoff, logging each attempt",
-        "Write unit tests for self_test.check_ts18() in self_test.py covering expected failure modes and assert proper error codes",
-        "Modify self_test.run_all() in self_test.py to fallback to a safe mode when TS18, TS19, or TS21 fail, and emit a detailed JSON report via /api/selftest endpoint",
-        "Create a monitoring endpoint in health_check.py (/api/health/metrics) that returns current memory, disk, and core load metrics in JSON for external alerting"
-      ],
-      "decisions": [
-        "Prioritize automated disk cleanup to free space before attempting self-test repairs",
-        "Enable exponential backoff on session restarts to reduce repeated failures for ps5-hive",
-        "Add detailed self-test reporting so future failures can be auto\u2011fixed without manual intervention"
-      ]
-    },
     {
       "id": "sess_cf3352a1",
       "ts": "2026-05-13T08:20:42Z",
@@ -645,6 +625,26 @@
         "Add exponential backoff to session restarts to reduce backoff loops for critical sessions",
         "Introduce automated disk\u2011cleanup to prevent future stalls due to disk saturation"
       ]
+    },
+    {
+      "id": "sess_a16edfbb",
+      "ts": "2026-05-13T10:25:25Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by fixing failing self-tests and preventing resource exhaustion",
+      "summary": "The hive is currently stalled with high memory and disk usage, multiple self-test failures (TS18, TS19, TS21), and a critical session in backoff. Immediate code fixes and safeguards are required to bring the system back to healthy operation.",
+      "progress": "No new achievements were recorded since the last snapshot.",
+      "next_steps": [
+        "Add exponential backoff and jitter to session_manager.restart_session() in session_manager.py to reduce rapid restarts of the 'ps5-hive' session",
+        "Implement a disk usage guard in health_monitor.py that triggers graceful job pausing when disk > 95% and sends alerts",
+        "Write comprehensive unit tests for self_test.check_ts18() in self_test.py covering all edge cases and error paths",
+        "Add a fallback implementation for self_test.check_ts19() in self_test.py, including mock data generation for missing resources",
+        "Create a self_test.fix_ts21() function in self_test.py that automatically resolves the TS21 failure and update orchestrator.py to invoke it on startup"
+      ],
+      "decisions": [
+        "Prioritize fixing TS18 and TS19 before addressing TS21 to unblock the self-test suite",
+        "Introduce resource guards (disk, memory) directly in the core health monitor rather than relying on external alerts",
+        "Define exponential backoff parameters (initial 5s, max 300s, jitter 0.2) for session restarts as the standard policy"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -656,9 +656,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: develop\u2192main promotion check + release draft",
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
     "status": "completed",
-    "started_at": "2026-05-13T10:24:51Z",
-    "completed_at": "2026-05-13T10:24:54Z"
+    "started_at": "2026-05-13T10:25:55Z",
+    "completed_at": "2026-05-13T10:25:57Z"
   }
 }
