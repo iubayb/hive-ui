@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T09:38:55Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-13T09:40:02Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
@@ -437,7 +437,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 11
+    "openrouter_calls_today": 12
   },
   "model_champions": {
     "text": null,
@@ -446,16 +446,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_8e5abbcc",
-      "ts": "2026-05-13T08:02:19Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_b3c041a8",
       "ts": "2026-05-13T08:03:20Z",
@@ -615,6 +605,26 @@
         "Adopt exponential backoff for all session restarts to reduce rapid failure loops",
         "Increase test coverage of self-test modules before deploying further changes"
       ]
+    },
+    {
+      "id": "sess_1b25a806",
+      "ts": "2026-05-13T09:40:02Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and improving session restart reliability",
+      "summary": "The hive is currently stalled with high memory and disk usage, and three critical self-tests (TS18, TS19, TS21) are failing. Session restart logic lacks proper exponential backoff, causing repeated backoff delays. Immediate code fixes and test coverage are needed to bring the system back to stable operation.",
+      "progress": "No new achievements were recorded since the last snapshot.",
+      "next_steps": [
+        "Add exponential backoff with jitter to session_manager.restart_session() in orchestrator.py and log retry attempts",
+        "Implement a robust fix for self_test.check_ts18() in self_test.py, handling edge-case inputs and updating related config files",
+        "Write comprehensive unit tests for self_test.check_ts19() covering all failure modes in tests/self_test_test.py",
+        "Create a monitoring script in utils/disk_monitor.py that alerts when disk usage exceeds 90% and triggers cleanup",
+        "Refactor self_test.run_all() in self_test.py to aggregate failures and produce a summary JSON report"
+      ],
+      "decisions": [
+        "Prioritize fixing TS18 before TS19 and TS21 to unblock critical functionality",
+        "Integrate exponential backoff into all session management calls, not just restart_session",
+        "Add automated alerts for disk usage >90% to prevent future stalls"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -626,9 +636,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-13T09:38:55Z",
-    "completed_at": "2026-05-13T09:38:55Z"
+    "started_at": "2026-05-13T09:39:45Z",
+    "completed_at": "2026-05-13T09:40:02Z"
   }
 }
