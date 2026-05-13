@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T02:54:42Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-13T02:56:00Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 34
+    "openrouter_calls_today": 35
   },
   "model_champions": {
     "text": null,
@@ -248,26 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_9aec8775",
-      "ts": "2026-05-13T00:25:03Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving critical self-test failures, clearing disk space, and preventing session backoff loops.",
-      "summary": "The hive is stalled with high resource usage and several self-test failures (TS18, TS19, TS21). Critical sessions are in backoff and disk usage is at 97%. Immediate remediation is needed to free space, monitor problematic sessions, and improve self-test recovery.",
-      "progress": "Identified the need for a disk cleanup utility and a backoff watchdog for the ps5-hive session.",
-      "next_steps": [
-        "Implement disk_cleanup() in maintenance.py to delete files in /tmp/hive/* older than 7 days and log reclaimed space.",
-        "Add a call to disk_cleanup() in the daily_maintenance() routine and schedule it via cron in orchestrator.py.",
-        "Create a Watchdog class in session_manager.py that watches session backoff counters and resets ps5-hive after three consecutive backoffs.",
-        "Integrate the Watchdog into the main event loop of orchestrator.py and emit a warning metric to /api/metrics.",
-        "Enhance self_test_runner.py to retry TS18, TS19, and TS21 up to three times with exponential backoff and log detailed error reports."
-      ],
-      "decisions": [
-        "Prioritize disk space reclamation to prevent further stalls.",
-        "Deploy a watchdog for ps5-hive to break backoff cycles automatically.",
-        "Improve self-test resilience before adding new feature work."
-      ]
-    },
     {
       "id": "sess_b77a134b",
       "ts": "2026-05-13T00:40:13Z",
@@ -447,6 +427,26 @@
         "Introduce automated session restart logic for ps5-hive to break the backoff cycle without manual intervention.",
         "Expand retry logic for external API calls to improve resilience under rate limiting."
       ]
+    },
+    {
+      "id": "sess_b1bdca78",
+      "ts": "2026-05-13T02:55:49Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests, clearing disk space, and stabilizing the ps5-hive session.",
+      "summary": "The hive is stalled at 50% health with critical blockers: high disk usage, multiple failing self-tests, and the ps5-hive session in long backoff. No recent achievements were recorded, and immediate code changes are needed to address these issues.",
+      "progress": "No new tasks were completed since the last snapshot.",
+      "next_steps": [
+        "Implement a disk cleanup utility in maintenance.py that deletes temporary files older than 7 days and frees at least 15% disk space.",
+        "Create a watchdog in session_manager.py that monitors ps5-hive backoff, logs backoff events, and triggers an automatic restart after three consecutive backoffs.",
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses.",
+        "Write unit tests for self-test modules TS18, TS19, and TS21 in tests/self_tests/, mocking failure conditions and verifying auto-fix pathways.",
+        "Introduce a health check endpoint /api/health in api_server.py that returns JSON with CPU, memory, disk, and test status metrics."
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before addressing self-test failures to prevent further resource exhaustion.",
+        "Automate ps5-hive session recovery via watchdog rather than manual intervention.",
+        "Extend retry mechanisms for all external LLM calls to improve resilience under rate limiting."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -458,9 +458,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
-    "status": "completed",
-    "started_at": "2026-05-13T02:54:42Z",
-    "completed_at": "2026-05-13T02:54:42Z"
+    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "status": "running",
+    "started_at": "2026-05-13T02:56:00Z",
+    "completed_at": null
   }
 }
