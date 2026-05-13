@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T13:54:52Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-13T13:56:53Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.6,
-      "last_seen": "2026-05-13T13:53:01Z",
+      "last_seen": "2026-05-13T13:55:02Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -238,7 +238,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 10
+    "openrouter_calls_today": 11
   },
   "model_champions": {
     "text": null,
@@ -247,26 +247,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_e36a8777",
-      "ts": "2026-05-13T11:24:27Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests, clearing disk pressure, and recovering the ps5-hive session.",
-      "summary": "The hive is stalled at 65% health with critical self-test failures (TS18, TS19, TS21) and disk usage at 98%. The ps5-hive session is in prolonged backoff, and overall load is high. Immediate code actions are needed to auto\u2011repair tests, free disk space, and improve session restart resilience.",
-      "progress": "No recent achievements; the hive remains in a stalled state.",
-      "next_steps": [
-        "Implement a disk cleanup routine in utils/maintenance.py that deletes old log files and rotates snapshots, then call it from orchestrator.py on start\u2011up.",
-        "Add retry and exponential backoff logic to restart_session() in orchestrator.py for the ps5-hive session, handling HTTP 429 and connection errors.",
-        "Fix TS18 failure by updating the validation logic in selftests/ts18_check.py to correctly handle edge\u2011case inputs and add a unit test in tests/test_ts18.py.",
-        "Resolve TS19 by correcting the missing dependency import in selftests/ts19_check.py and adding integration tests in tests/integration/test_ts19.py.",
-        "Patch TS21 in selftests/ts21_check.py to adjust the timeout threshold and log detailed diagnostics; add a regression test in tests/test_ts21.py."
-      ],
-      "decisions": [
-        "Prioritize auto\u2011fixes for self\u2011tests TS18, TS19, and TS21 before addressing disk pressure.",
-        "Introduce automated disk cleanup on each orchestrator cycle to prevent 98% disk usage.",
-        "Apply robust retry logic to session restarts to eliminate long backoff loops."
-      ]
-    },
     {
       "id": "sess_40cc866f",
       "ts": "2026-05-13T11:39:32Z",
@@ -446,6 +426,26 @@
         "Introduce exponential backoff for session restarts as a standard error\u2011handling pattern",
         "Allocate additional temporary disk space by enabling log rotation until disk pressure subsides"
       ]
+    },
+    {
+      "id": "sess_91166b97",
+      "ts": "2026-05-13T13:55:23Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and stabilizing session restarts",
+      "summary": "The hive is currently stalled with high resource usage and several critical self-test failures (TS5, TS19, TS21). Recent auto-fix resolved TS14, but TS18, TS5, TS19, and TS21 remain problematic, and session 'ps5-hive' is in a long backoff loop. Immediate code improvements are needed to enable automatic recovery and reduce manual intervention.",
+      "progress": "TS14 self-test was successfully auto-fixed, reducing the number of failing invariants.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to restart_session() in orchestrator.py, handling HTTP 429 and connection errors",
+        "Update validation logic in selftests/ts18_ch.py to match the new schema and add detailed error logging",
+        "Implement a fallback handler in self_test_runner.py to automatically retry TS5 and TS21 after a brief delay",
+        "Create unit tests for the new restart_session() backoff mechanism in tests/test_orchestrator.py",
+        "Add a health check endpoint in health_monitor.py that reports the status of all self-tests and triggers auto-restart for failed sessions"
+      ],
+      "decisions": [
+        "Prioritize fixing TS5, TS19, and TS21 before addressing lower priority tests",
+        "Introduce exponential backoff globally for session restarts to prevent cascading backoff loops",
+        "Enforce stricter logging for self-test failures to aid future auto-fix algorithm improvements"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -459,7 +459,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-13T13:54:52Z",
-    "completed_at": "2026-05-13T13:54:52Z"
+    "started_at": "2026-05-13T13:56:53Z",
+    "completed_at": "2026-05-13T13:56:53Z"
   }
 }
