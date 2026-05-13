@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T11:53:56Z",
+  "last_updated": "2026-05-13T11:54:43Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.6,
-      "last_seen": "2026-05-13T11:52:35Z",
+      "last_seen": "2026-05-13T11:54:43Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -238,7 +238,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 2
+    "openrouter_calls_today": 3
   },
   "model_champions": {
     "text": null,
@@ -316,6 +316,26 @@
         "Implement retry/backoff in restart_session as a top priority to reduce session stalls.",
         "Defer non-critical UI enhancements until self-test stability is restored."
       ]
+    },
+    {
+      "id": "sess_2086634f",
+      "ts": "2026-05-13T11:54:33Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests and stabilizing session restarts",
+      "summary": "The hive is currently stalled with several high\u2011priority self\u2011test failures (TS5, TS19, TS21) and a session stuck in backoff. Recent auto\u2011fix of TS14 shows the auto\u2011fix pipeline works, but more targeted code changes are needed. Load is high and disk usage at 98% is a risk.",
+      "progress": "Auto\u2011fixed self\u2011test TS14 using the newly learned auto_fix_TS14 capability.",
+      "next_steps": [
+        "Add retry and exponential backoff logic to restart_session() in orchestrator.py to handle long backoff cases like ps5-hive",
+        "Update validation logic in selftests/ts18_ch.py to resolve TS18 failure",
+        "Implement improved disk usage monitoring and alert in system_monitor.py, triggering a graceful job pause when disk > 95%",
+        "Create unit tests for TS19 in selftests/test_ts19.py covering the missing edge cases",
+        "Refactor self_test_runner.py to expose a hook for custom auto\u2011fix functions and register auto_fix_TS19 placeholder"
+      ],
+      "decisions": [
+        "Prioritize fixing TS5, TS19, and TS21 before addressing lower\u2011priority failures",
+        "Introduce exponential backoff for all session restarts to reduce cascade failures",
+        "Add explicit disk\u2011threshold handling to prevent stalls due to full storage"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -327,9 +347,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=8 health=60% blockers=8",
     "status": "completed",
-    "started_at": "2026-05-13T11:53:56Z",
-    "completed_at": "2026-05-13T11:53:56Z"
+    "started_at": "2026-05-13T11:54:43Z",
+    "completed_at": "2026-05-13T11:54:43Z"
   }
 }
