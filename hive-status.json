@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T07:37:37Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T07:38:42Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -183,7 +183,35 @@
       "_hash": "70b95af380bb338ef8031fb179457ee0"
     }
   ],
-  "next_steps": [],
+  "next_steps": [
+    {
+      "id": "ns_6a2e3b25",
+      "priority": 1,
+      "description": "Implement missing validation in self_test_T17() within tests/self_tests.py to return proper pass/fail codes",
+      "assigned_to": "opencode",
+      "status": "in_progress",
+      "source": "orchestrator",
+      "ts": "2026-05-13T07:38:01Z"
+    },
+    {
+      "id": "ns_7aaa55d5",
+      "priority": 2,
+      "description": "Add retry and fallback logic to run_self_test() in orchestrator.py for TS18, TS19, and TS20 failures",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-13T07:38:01Z"
+    },
+    {
+      "id": "ns_0e197d12",
+      "priority": 3,
+      "description": "Create a disk cleanup routine in utils/maintenance.py and schedule it in scheduler.py to keep /var/data below 85% usage",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-13T07:38:01Z"
+    }
+  ],
   "capabilities": {
     "learned": []
   },
@@ -198,7 +226,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 0
+    "openrouter_calls_today": 1
   },
   "model_champions": {
     "text": null,
@@ -226,6 +254,26 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_92c66892",
+      "ts": "2026-05-13T07:38:01Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by resolving failing self-tests and mitigating high resource usage",
+      "summary": "The hive is currently stalled with multiple high\u2011priority self\u2011test failures (TS17\u2011TS21) and disk usage at 98%. No recent progress has been made. Immediate code fixes and monitoring enhancements are required to bring the system back to a healthy state.",
+      "progress": "No recent achievements; the hive remains stalled.",
+      "next_steps": [
+        "Implement missing validation in self_test_T17() within tests/self_tests.py to return proper pass/fail codes",
+        "Add retry and fallback logic to run_self_test() in orchestrator.py for TS18, TS19, and TS20 failures",
+        "Create a disk cleanup routine in utils/maintenance.py and schedule it in scheduler.py to keep /var/data below 85% usage",
+        "Write unit tests in tests/self_tests_test.py covering all TS17\u2011TS21 scenarios and assert expected metrics",
+        "Add a health\u2011check endpoint in api/health.py that reports self\u2011test status and disk usage as JSON"
+      ],
+      "decisions": [
+        "Prioritize fixing self\u2011test failures before addressing lower\u2011priority performance tweaks",
+        "Introduce automatic disk cleanup as a permanent safeguard against future stalls",
+        "Enforce code coverage thresholds for self\u2011test modules to prevent regressions"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -239,7 +287,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-13T07:37:37Z",
-    "completed_at": "2026-05-13T07:37:37Z"
+    "started_at": "2026-05-13T07:38:41Z",
+    "completed_at": "2026-05-13T07:38:42Z"
   }
 }
