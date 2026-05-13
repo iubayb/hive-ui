@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T10:39:54Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T10:40:50Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -437,7 +437,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 15
+    "openrouter_calls_today": 16
   },
   "model_champions": {
     "text": null,
@@ -446,26 +446,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_cf3352a1",
-      "ts": "2026-05-13T08:20:42Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving failing self-tests and preventing session restart backoffs",
-      "summary": "The hive is currently stalled with high resource usage and multiple self-test failures (TS18, TS19, TS21). Sessions are experiencing prolonged backoff, and disk usage is near capacity. Immediate code fixes and test coverage are needed to restore health.",
-      "progress": "No recent achievements were recorded since the last snapshot.",
-      "next_steps": [
-        "Add exponential backoff with jitter to session_manager.restart_session() in session_manager.py and handle HTTP 429 errors",
-        "Implement a disk cleanup routine in resource_monitor.py that triggers when disk usage exceeds 95% and logs actions to /api/metrics",
-        "Write comprehensive unit tests for self_test.check_ts18() in self_test.py covering all edge cases",
-        "Write comprehensive unit tests for self_test.check_ts19() and self_test.check_ts21() in self_test.py",
-        "Modify self_test.run_all() in self_test.py to auto\u2011retry TS18, TS19, and TS21 up to 3 times before marking them failed"
-      ],
-      "decisions": [
-        "Prioritize fixing self-test failures before addressing session backoff issues",
-        "Introduce automated disk cleanup as a preventive measure for future stalls",
-        "Enforce higher test coverage for self_test modules to catch regressions early"
-      ]
-    },
     {
       "id": "sess_105e634c",
       "ts": "2026-05-13T08:36:14Z",
@@ -645,6 +625,26 @@
         "Introduce resource guards (disk, memory) directly in the core health monitor rather than relying on external alerts",
         "Define exponential backoff parameters (initial 5s, max 300s, jitter 0.2) for session restarts as the standard policy"
       ]
+    },
+    {
+      "id": "sess_80284723",
+      "ts": "2026-05-13T10:40:30Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive and achieve passing status for all self-test checks",
+      "summary": "The hive is currently stalled with high resource usage and several self-test failures (TS18, TS19, TS21). Critical sessions are in backoff and automatic fixes have not resolved the issues. Immediate code fixes and test coverage are required to restore health.",
+      "progress": "Added exponential backoff placeholder to session_manager.restart_session but not yet integrated.",
+      "next_steps": [
+        "Implement exponential backoff with jitter in session_manager.restart_session() in session_manager.py and handle HTTP 429 responses",
+        "Add detailed logging and telemetry to self_test.check_ts18() in self_test.py to capture failure context",
+        "Write comprehensive unit tests for self_test.check_ts18() covering success, failure, and edge cases in tests/test_self_test_ts18.py",
+        "Refactor resource monitoring in metrics_collector.py to trigger alerts when disk > 95% and memory > 85%",
+        "Create a /api/health endpoint in api/router.py that returns JSON with self-test statuses and resource metrics"
+      ],
+      "decisions": [
+        "Prioritize fixing TS18 before addressing TS19 and TS21, as TS18 failure blocks subsequent checks",
+        "Introduce exponential backoff for all session restarts to reduce backoff loops and manual intervention",
+        "Add a health API endpoint to provide real\u2011time visibility for monitoring tools"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -656,9 +656,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "heartbeat \u00b7 sessions=8 health=50% blockers=10",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-13T10:39:54Z",
-    "completed_at": "2026-05-13T10:39:54Z"
+    "started_at": "2026-05-13T10:40:14Z",
+    "completed_at": "2026-05-13T10:40:30Z"
   }
 }
