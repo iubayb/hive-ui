@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T00:24:43Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T00:25:43Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 24
+    "openrouter_calls_today": 25
   },
   "model_champions": {
     "text": null,
@@ -248,26 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_8fe7c767",
-      "ts": "2026-05-12T21:54:07Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by fixing failing self-tests, clearing disk space, and stabilizing the ps5-hive session",
-      "summary": "The hive is currently stalled with several high\u2011priority blockers: disk usage at 97%, multiple self\u2011test failures (TS18, TS19, TS21), and the ps5\u2011hive session in prolonged backoff. Immediate code changes are required to free disk space, add monitoring, and address self\u2011test logic.",
-      "progress": "No recent achievements were recorded.",
-      "next_steps": [
-        "Implement disk cleanup utility in maintenance.py to delete temp files and logs older than 7 days, and integrate it with the daily scheduler.",
-        "Add a watchdog function in session_manager.py that monitors ps5-hive backoff counters and triggers a forced restart after three consecutive backoff intervals.",
-        "Refactor self_test.py to isolate TS18, TS19, and TS21 checks into separate functions and add detailed error logging.",
-        "Write unit tests for the new cleanup_utility() in maintenance.py covering edge cases such as read\u2011only files and insufficient permissions.",
-        "Create a health endpoint in api/status.py that returns JSON with current disk usage, self\u2011test statuses, and session backoff metrics."
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before addressing self\u2011test failures to prevent out\u2011of\u2011space crashes.",
-        "Introduce automated restart logic for sessions with repeated backoff to reduce manual intervention.",
-        "Separate self\u2011test logic into modular units to simplify future debugging and automated fixing."
-      ]
-    },
     {
       "id": "sess_2e69625f",
       "ts": "2026-05-12T22:09:42Z",
@@ -447,6 +427,26 @@
         "Implement automated monitoring and recovery for the ps5-hive session.",
         "Enhance resilience of LLM calls by adding retry logic."
       ]
+    },
+    {
+      "id": "sess_9aec8775",
+      "ts": "2026-05-13T00:25:03Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by resolving critical self-test failures, clearing disk space, and preventing session backoff loops.",
+      "summary": "The hive is stalled with high resource usage and several self-test failures (TS18, TS19, TS21). Critical sessions are in backoff and disk usage is at 97%. Immediate remediation is needed to free space, monitor problematic sessions, and improve self-test recovery.",
+      "progress": "Identified the need for a disk cleanup utility and a backoff watchdog for the ps5-hive session.",
+      "next_steps": [
+        "Implement disk_cleanup() in maintenance.py to delete files in /tmp/hive/* older than 7 days and log reclaimed space.",
+        "Add a call to disk_cleanup() in the daily_maintenance() routine and schedule it via cron in orchestrator.py.",
+        "Create a Watchdog class in session_manager.py that watches session backoff counters and resets ps5-hive after three consecutive backoffs.",
+        "Integrate the Watchdog into the main event loop of orchestrator.py and emit a warning metric to /api/metrics.",
+        "Enhance self_test_runner.py to retry TS18, TS19, and TS21 up to three times with exponential backoff and log detailed error reports."
+      ],
+      "decisions": [
+        "Prioritize disk space reclamation to prevent further stalls.",
+        "Deploy a watchdog for ps5-hive to break backoff cycles automatically.",
+        "Improve self-test resilience before adding new feature work."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -458,9 +458,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-13T00:24:43Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-13T00:25:43Z",
+    "completed_at": "2026-05-13T00:25:43Z"
   }
 }
