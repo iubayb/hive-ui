@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T11:38:49Z",
+  "last_updated": "2026-05-13T11:39:42Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -200,7 +200,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 1
+    "openrouter_calls_today": 2
   },
   "model_champions": {
     "text": null,
@@ -258,6 +258,26 @@
         "Introduce automated disk cleanup on each orchestrator cycle to prevent 98% disk usage.",
         "Apply robust retry logic to session restarts to eliminate long backoff loops."
       ]
+    },
+    {
+      "id": "sess_40cc866f",
+      "ts": "2026-05-13T11:39:32Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by fixing critical self-test failures (TS18, TS19, TS21) and improving session restart reliability.",
+      "summary": "The hive is currently stalled with high resource usage and multiple self-test failures. Sessions are experiencing long backoffs, and automated fixes have not resolved the test issues. Immediate coding work is needed to add robust retry logic and correct validation logic.",
+      "progress": "Identified the need for exponential backoff in restart_session and flagged TS18 validation as the next fix.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to restart_session() in orchestrator.py, handling HTTP 429 and other transient errors.",
+        "Write unit tests for restart_session() in tests/test_orchestrator.py covering success, backoff, and max-retry scenarios.",
+        "Update the validation logic in selftests/ts18_ch.py to align with the new schema definitions.",
+        "Create a fallback wrapper for selftests/ts19.py that logs detailed diagnostics and attempts a secondary validation path.",
+        "Add a cleanup routine in maintenance.py to monitor disk usage and delete old log files when usage exceeds 90%."
+      ],
+      "decisions": [
+        "Prioritize fixing TS18 before addressing TS19 and TS21.",
+        "Implement retry/backoff in restart_session as a top priority to reduce session stalls.",
+        "Defer non-critical UI enhancements until self-test stability is restored."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -271,7 +291,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-13T11:38:19Z",
-    "completed_at": "2026-05-13T11:38:19Z"
+    "started_at": "2026-05-13T11:39:42Z",
+    "completed_at": "2026-05-13T11:39:42Z"
   }
 }
