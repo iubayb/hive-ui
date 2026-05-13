@@ -1,26 +1,44 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T09:06:01Z",
-  "updated_by": "system",
+  "last_updated": "2026-05-13T09:06:49Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "error",
-      "health_score": 0.0,
-      "last_seen": "2026-05-13T09:06:00Z",
+      "status": "running",
+      "health_score": 0.875,
+      "last_seen": "2026-05-13T09:06:38Z",
       "sessions": [
+        "build_monitor",
         "hive-dev",
+        "hive-live",
+        "hive-watch",
         "nextjs-prod",
-        "orchestrator"
+        "opencode",
+        "orchestrator",
+        "ps5-hive"
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 4,
+      "errors_last_hour": 8,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_152dee7c",
+      "ts": "2026-05-13T09:06:49Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[orchestrator] Self\u2011test TS21 continues to fail after the cleanup script ran, indicating the underlying issue (e.g., leftover stale temporary files or insufficient journal rotation) was not fully resolved.",
+      "severity": "medium",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "6d8d257298ce221a62560d2fa645aa0a"
+    },
     {
       "id": "b_d33a15df",
       "ts": "2026-05-13T09:06:00Z",
@@ -263,7 +281,15 @@
     "learned": []
   },
   "knowledge": {
-    "findings": [],
+    "findings": [
+      {
+        "id": "f_2f0f4685",
+        "ts": "2026-05-13T09:06:49Z",
+        "hive": "default",
+        "summary": "TS21 self\u2011test failure persists; run a thorough journal vacuum, delete all files older than 1\u202fday in /tmp, and restart the orchestrator service to re\u2011initialize its environment.",
+        "source": "doctor"
+      }
+    ],
     "patterns": [],
     "solutions": []
   },
@@ -273,7 +299,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 4
+    "openrouter_calls_today": 6
   },
   "model_champions": {
     "text": null,
@@ -282,16 +308,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_f123b801",
-      "ts": "2026-05-13T07:59:08Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_806bb542",
       "ts": "2026-05-13T08:00:18Z",
@@ -421,6 +437,26 @@
         "Integrate retry backoff directly into the session manager rather than a wrapper to ensure all restart paths benefit",
         "Introduce unit test coverage for all self-test check functions to prevent future silent failures"
       ]
+    },
+    {
+      "id": "sess_ba13501a",
+      "ts": "2026-05-13T09:06:26Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality and eliminate critical errors",
+      "summary": "The hive is currently in an error state with missing tmux sessions and high resource usage. Critical blockers include missing 'hive-live' and 'hive-watch' sessions, a failing self-test (TS21), and a session in long backoff. Immediate coding actions are needed to automate recovery and improve test coverage.",
+      "progress": "No recent achievements were recorded.",
+      "next_steps": [
+        "Add exponential backoff retry logic to session_manager.restart_session() in session_manager.py, handling HTTP 429 and connection errors",
+        "Write comprehensive unit tests for self_test.check_ts18() in self_test.py, covering success, failure, and edge cases",
+        "Implement a fallback fix for TS21 in self_test.py by adding a corrective routine in the check_ts21() function",
+        "Create a new /api/health endpoint in logstream.py that returns JSON with session statuses, disk usage, and memory metrics",
+        "Add a cleanup script in maintenance/cleanup_disk.py to purge old log files when disk usage exceeds 90%"
+      ],
+      "decisions": [
+        "Prioritize adding retry logic to session restarts to reduce backoff delays",
+        "Increase test coverage for self-test modules to catch failures early",
+        "Expose health metrics via an API endpoint for easier monitoring"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -432,9 +468,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-13T09:06:00Z",
-    "completed_at": null
+    "task": "gitops: develop\u2192main promotion check + release draft",
+    "status": "completed",
+    "started_at": "2026-05-13T09:06:27Z",
+    "completed_at": "2026-05-13T09:06:30Z"
   }
 }
