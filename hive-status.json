@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T16:39:24Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T16:40:56Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 0.7,
-      "last_seen": "2026-05-13T16:38:23Z",
+      "status": "stalled",
+      "health_score": 0.55,
+      "last_seen": "2026-05-13T16:40:26Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -26,6 +26,19 @@
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_e4d0a907",
+      "ts": "2026-05-13T16:40:14Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "self-test: TS14 failing \u2014 no auto-fix available or fix failed",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "b4c2ed2d4f13f2fecf6ce6f41e3eac7c"
+    },
     {
       "id": "b_b40edade",
       "ts": "2026-05-13T16:39:24Z",
@@ -262,9 +275,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "self-test: running test_system.sh + auto-fix",
-    "status": "running",
-    "started_at": "2026-05-13T16:39:24Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-13T16:40:26Z",
+    "completed_at": "2026-05-13T16:40:26Z"
   }
 }
