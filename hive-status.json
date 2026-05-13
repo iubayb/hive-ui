@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T05:40:56Z",
+  "last_updated": "2026-05-13T05:41:40Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-13T05:39:58Z",
+      "status": "stalled",
+      "health_score": 0.5,
+      "last_seen": "2026-05-13T05:41:06Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 45
+    "openrouter_calls_today": 46
   },
   "model_champions": {
     "text": null,
@@ -248,26 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_a5a0f157",
-      "ts": "2026-05-13T03:11:13Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by clearing disk space, fixing failing self-tests, and stabilizing the ps5-hive session.",
-      "summary": "The hive is stalled with a critical disk usage of 97% and several self-test failures (TS18, TS19, TS21). The ps5-hive session is in long backoff, causing operational delays. Immediate code actions are needed to free space, add monitoring, and address test failures.",
-      "progress": "Implemented a placeholder for the disk cleanup utility in maintenance.py.",
-      "next_steps": [
-        "Complete the disk cleanup utility in maintenance.py: add logic to identify and delete temp files older than 7 days and log deletions.",
-        "Add a watchdog function in session_manager.py that detects backoff >120s for ps5-hive and triggers an automatic restart with exponential backoff reset.",
-        "Fix self-test TS21 in self_tests.py by correcting the path validation regex and adding a unit test to verify proper handling.",
-        "Implement missing functionality for TS18 in health_check.py: add missing metric collection for core usage and write a test case.",
-        "Create a new endpoint in api/metrics.py to expose current disk usage and memory stats as JSON for monitoring dashboards."
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before addressing self-test failures to prevent immediate resource exhaustion.",
-        "Introduce automatic restart logic for sessions in backoff to reduce manual intervention.",
-        "Add unit tests for all modified functions to ensure future regressions are caught early."
-      ]
-    },
     {
       "id": "sess_0e6a8fd1",
       "ts": "2026-05-13T03:26:00Z",
@@ -447,6 +427,26 @@
         "Run the new disk cleanup utility immediately to free space and prevent further stalls.",
         "Defer manual intervention on ps5-hive until the watchdog is operational."
       ]
+    },
+    {
+      "id": "sess_102d4e06",
+      "ts": "2026-05-13T05:41:30Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests, clearing disk space, and resolving the ps5-hive backoff issue.",
+      "summary": "The hive is stalled at 50% health with several high\u2011priority blockers: disk usage at 97%, failing self\u2011tests TS18\u2011TS21, and the ps5-hive session stuck in backoff. Recent attempts to auto\u2011fix self\u2011tests have failed, and a disk cleanup utility is pending.",
+      "progress": "Implemented a preliminary disk cleanup stub in maintenance.py and added logging for backoff events.",
+      "next_steps": [
+        "Complete disk cleanup utility in maintenance.py: recursively delete /tmp/hive_* files and enforce a 10\u202fGB free\u2011space target.",
+        "Add watchdog logic to session_manager.py: monitor ps5-hive backoff counter and trigger a forced restart after 3 consecutive backoffs.",
+        "Implement retry with exponential backoff in orchestrator.py's call_llm() for HTTP 429 responses.",
+        "Fix self\u2011test TS18 in self_tests.py by correcting the path validation regex and adding a missing import.",
+        "Write unit tests for org_guard.py covering all forbidden path patterns and add them to the CI pipeline."
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before attempting further self\u2011test fixes to avoid out\u2011of\u2011space failures.",
+        "Introduce a forced restart policy for any session that exceeds 3 backoff cycles.",
+        "Expand test coverage for path\u2011guarding modules to prevent future TS failures."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -458,9 +458,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-13T05:40:05Z",
-    "completed_at": "2026-05-13T05:40:06Z"
+    "started_at": "2026-05-13T05:41:16Z",
+    "completed_at": "2026-05-13T05:41:30Z"
   }
 }
