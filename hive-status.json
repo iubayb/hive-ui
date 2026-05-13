@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T17:21:16Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T17:22:46Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -226,7 +226,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 3
+    "openrouter_calls_today": 4
   },
   "model_champions": {
     "text": null,
@@ -304,6 +304,26 @@
         "Introduce explicit path normalization across the codebase to prevent TS18 errors",
         "Add automated cleanup of log files to mitigate disk\u2011capacity risk"
       ]
+    },
+    {
+      "id": "sess_1c78e6d2",
+      "ts": "2026-05-13T17:22:05Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self\u2011tests and resolving stalled health state",
+      "summary": "The hive is currently stalled at 55% health with multiple high\u2011priority self\u2011test failures (TS14, TS5, TS21) and pending schema/path fixes (TS19, TS18). Resource usage is high and one session is in backoff, preventing progress.",
+      "progress": "No recent achievements were recorded.",
+      "next_steps": [
+        "Patch validate_job_schema() in self_tests/ts19/validate_job_schema.py to accept the new 'priority' field and run the updated test suite.",
+        "Correct path handling in orchestrator.py's load_job() function to properly join base_dir and job_path, then rerun TS18.",
+        "Update self_tests/ts14.py to handle API rate\u2011limit errors by adding exponential backoff and retry logic.",
+        "Improve self_tests/ts5.py by fixing the missing import of utils.logger and adding a fallback logger stub.",
+        "Enhance self_tests/ts21.py to validate JSON schema versions and add missing default values for new fields."
+      ],
+      "decisions": [
+        "Prioritize fixing self\u2011test failures before addressing the stalled health metric.",
+        "Apply code changes directly to the failing test files rather than creating wrapper scripts.",
+        "Run the full self\u2011test suite after each patch to confirm individual failures are resolved before proceeding."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -315,9 +335,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-13T17:21:16Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-13T17:22:25Z",
+    "completed_at": "2026-05-13T17:22:26Z"
   }
 }
