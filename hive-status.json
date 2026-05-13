@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T11:24:59Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T11:25:40Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -162,8 +162,8 @@
       "id": "ns_5912209e",
       "priority": 1,
       "description": "Implement a disk cleanup routine in utils/maintenance.py that deletes old log files and rotates snapshots, then call it from orchestrator.py on start\u2011up.",
-      "assigned_to": "default",
-      "status": "pending",
+      "assigned_to": "opencode",
+      "status": "in_progress",
       "source": "orchestrator",
       "ts": "2026-05-13T11:24:27Z"
     },
@@ -269,9 +269,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: polling open PRs \u2014 auto-merge if CI green",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-13T11:24:57Z",
-    "completed_at": "2026-05-13T11:24:59Z"
+    "started_at": "2026-05-13T11:25:09Z",
+    "completed_at": "2026-05-13T11:25:10Z"
   }
 }
