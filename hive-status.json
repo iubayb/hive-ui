@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T19:07:15Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T19:08:56Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -226,7 +226,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 10
+    "openrouter_calls_today": 11
   },
   "model_champions": {
     "text": null,
@@ -235,26 +235,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_14bcaea9",
-      "ts": "2026-05-13T16:35:43Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by fixing failing self\u2011test modules and stabilizing resource usage",
-      "summary": "The hive is currently healthy overall but six high\u2011priority issues block operation, including a near\u2011full disk and four self\u2011test failures (TS17\u2011TS21). No recent progress has been logged, so immediate code fixes and resource mitigation are required.",
-      "progress": "Auto\u2011fix attempts were made for TS21 but did not resolve the failure.",
-      "next_steps": [
-        "Implement disk usage safeguard in resource_manager.py: add check to trigger log rotation and prune old files when disk usage exceeds 90%",
-        "Fix TS19 failure by updating validate_job_schema() in self_tests/ts19.py to handle new field 'priority' and add detailed error logging",
-        "Resolve TS18 error by correcting path handling in orchestrator.py's load_module() function to use pathlib.Path.resolve() safely",
-        "Add missing fallback in TS17 within health_checker.py: ensure check_self_test('TS17') returns False instead of raising KeyError",
-        "Create unit tests in tests/self_test_tests.py covering TS17\u2011TS21 edge cases and assert proper error codes"
-      ],
-      "decisions": [
-        "Prioritize fixing self\u2011test modules before scaling new workloads",
-        "Introduce automatic log rotation to prevent disk saturation",
-        "Enforce stricter schema validation for job submissions to avoid future test failures"
-      ]
-    },
     {
       "id": "sess_842a720a",
       "ts": "2026-05-13T16:51:13Z",
@@ -434,6 +414,26 @@
         "Introduce unit tests for the updated validate_job_schema() and load_job_config() functions to prevent regressions",
         "Schedule a temporary resource cleanup script to free disk space before applying code fixes"
       ]
+    },
+    {
+      "id": "sess_fcea3094",
+      "ts": "2026-05-13T19:08:56Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self-tests and stabilizing critical sessions",
+      "summary": "The hive is currently stalled with multiple high-priority self-test failures (TS14, TS5, TS19, TS18, TS21) and a critical session in long backoff. Resource usage is near disk capacity, and recent attempts to auto\u2011fix have been insufficient, so targeted code changes are required.",
+      "progress": "No new fixes have been applied since the last snapshot.",
+      "next_steps": [
+        "Update validate_job_schema() in self_tests/ts19/validator.py to align with the new job schema definitions.",
+        "Correct path handling in orchestrator.py's load_job() function to fix TS18 path resolution errors.",
+        "Refactor ts14_check() in self_tests/ts14.py to properly handle edge\u2011case inputs and add missing exception handling.",
+        "Enhance ts5_validation() in self_tests/ts5.py by adding comprehensive input sanitization and updating the expected output format.",
+        "Patch ts21_resource_check() in self_tests/ts21.py to correctly calculate disk usage thresholds and log detailed diagnostics."
+      ],
+      "decisions": [
+        "Prioritize fixing TS14 and TS5 first as they block downstream tests.",
+        "Allocate additional temporary disk space by clearing old log files before applying code patches.",
+        "Schedule a restart of the 'ps5-hive' session after TS19 and TS18 are resolved to verify backoff recovery."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -445,9 +445,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "self-test: running test_system.sh + auto-fix",
-    "status": "running",
-    "started_at": "2026-05-13T19:07:15Z",
-    "completed_at": null
+    "task": "compaction: LLM summarising hive state",
+    "status": "completed",
+    "started_at": "2026-05-13T19:08:22Z",
+    "completed_at": "2026-05-13T19:08:56Z"
   }
 }
