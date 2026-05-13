@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T15:46:01Z",
+  "last_updated": "2026-05-13T15:47:01Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-13T15:45:02Z",
+      "health_score": 0.7,
+      "last_seen": "2026-05-13T15:46:31Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -149,8 +149,8 @@
       "id": "ns_61d42c9b",
       "priority": 1,
       "description": "Add detailed error logging to run_self_test() in selftest_manager.py for TS17\u2011TS21 and capture stack traces to logs/selftest_errors.log.",
-      "assigned_to": "default",
-      "status": "pending",
+      "assigned_to": "opencode",
+      "status": "in_progress",
       "source": "orchestrator",
       "ts": "2026-05-13T15:45:51Z"
     },
@@ -238,7 +238,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-13T15:45:28Z",
-    "completed_at": "2026-05-13T15:45:28Z"
+    "started_at": "2026-05-13T15:46:31Z",
+    "completed_at": "2026-05-13T15:46:31Z"
   }
 }
