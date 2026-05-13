@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T08:19:46Z",
+  "last_updated": "2026-05-13T08:20:52Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 1
+    "openrouter_calls_today": 2
   },
   "model_champions": {
     "text": null,
@@ -327,6 +327,26 @@
         "Enable exponential backoff on session restarts to reduce repeated failures for ps5-hive",
         "Add detailed self-test reporting so future failures can be auto\u2011fixed without manual intervention"
       ]
+    },
+    {
+      "id": "sess_cf3352a1",
+      "ts": "2026-05-13T08:20:42Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by resolving failing self-tests and preventing session restart backoffs",
+      "summary": "The hive is currently stalled with high resource usage and multiple self-test failures (TS18, TS19, TS21). Sessions are experiencing prolonged backoff, and disk usage is near capacity. Immediate code fixes and test coverage are needed to restore health.",
+      "progress": "No recent achievements were recorded since the last snapshot.",
+      "next_steps": [
+        "Add exponential backoff with jitter to session_manager.restart_session() in session_manager.py and handle HTTP 429 errors",
+        "Implement a disk cleanup routine in resource_monitor.py that triggers when disk usage exceeds 95% and logs actions to /api/metrics",
+        "Write comprehensive unit tests for self_test.check_ts18() in self_test.py covering all edge cases",
+        "Write comprehensive unit tests for self_test.check_ts19() and self_test.check_ts21() in self_test.py",
+        "Modify self_test.run_all() in self_test.py to auto\u2011retry TS18, TS19, and TS21 up to 3 times before marking them failed"
+      ],
+      "decisions": [
+        "Prioritize fixing self-test failures before addressing session backoff issues",
+        "Introduce automated disk cleanup as a preventive measure for future stalls",
+        "Enforce higher test coverage for self_test modules to catch regressions early"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -340,7 +360,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-13T08:19:36Z",
-    "completed_at": "2026-05-13T08:19:36Z"
+    "started_at": "2026-05-13T08:20:52Z",
+    "completed_at": "2026-05-13T08:20:52Z"
   }
 }
