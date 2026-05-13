@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T18:37:46Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T18:38:54Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.55,
-      "last_seen": "2026-05-13T18:36:38Z",
+      "last_seen": "2026-05-13T18:38:44Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -226,7 +226,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 8
+    "openrouter_calls_today": 9
   },
   "model_champions": {
     "text": null,
@@ -404,6 +404,26 @@
         "Introduce detailed logging in auto\u2011fix routines to aid future debugging.",
         "Allocate additional temporary disk space (10GB) to allow self\u2011test scripts to complete while fixes are applied."
       ]
+    },
+    {
+      "id": "sess_a9b9cf25",
+      "ts": "2026-05-13T18:38:14Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests, reducing session backoff, and alleviating resource pressure",
+      "summary": "The hive is currently stalled with several high\u2011priority self\u2011test failures (TS14, TS5, TS21, TS19, TS18) and a critical session in backoff. Resource usage is high (disk at 98%) and a PS5\u2011hive session requires manual intervention. No recent achievements have been recorded.",
+      "progress": "No new fixes were completed since the last snapshot.",
+      "next_steps": [
+        "Update validate_job_schema() in self_tests/ts19/validate_job_schema.py to match the latest schema and add error logging",
+        "Correct path handling in orchestrator.py's load_job() function to fix TS18 failure",
+        "Add exponential backoff with jitter to session_restart() in orchestrator.py for the 'ps5-hive' session",
+        "Implement a disk cleanup routine in utils/maintenance.py and schedule it in cron_jobs/cleanup.yaml to free space when usage > 90%",
+        "Write comprehensive unit tests for self_tests/ts5 and ts21 in tests/self_test_suite.py covering edge cases"
+      ],
+      "decisions": [
+        "Prioritize fixing TS19 and TS18 as they unblock subsequent self\u2011test runs",
+        "Introduce retry/backoff logic for session restarts to prevent long backoff loops",
+        "Add automated disk cleanup to address the critical disk usage issue"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -415,9 +435,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-13T18:37:46Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-13T18:38:44Z",
+    "completed_at": "2026-05-13T18:38:44Z"
   }
 }
