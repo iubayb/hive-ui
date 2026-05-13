@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T06:55:43Z",
+  "last_updated": "2026-05-13T06:56:58Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-13T06:54:32Z",
+      "last_seen": "2026-05-13T06:56:33Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 50
+    "openrouter_calls_today": 51
   },
   "model_champions": {
     "text": null,
@@ -248,26 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_2fc46183",
-      "ts": "2026-05-13T04:26:25Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by fixing failing self-tests, clearing disk space, and stabilizing the ps5-hive session.",
-      "summary": "The hive is currently stalled with critical self-test failures (TS18, TS19, TS21) and a disk that is 97% full, risking further outages. The ps5-hive session is in a long backoff loop, and no recent progress has been made. Immediate code changes are required to clean disk space, improve watchdog handling, and address self-test issues.",
-      "progress": "Attempted auto-fix for TS21 self-test failure, but the issue remains unresolved.",
-      "next_steps": [
-        "Implement disk cleanup utility in maintenance.py: add function clean_temp_dirs() that removes files older than 7 days in /tmp and logs reclaimed space.",
-        "Add watchdog in session_manager.py: create class Ps5HiveWatchdog with monitor_backoff() that resets backoff counter after 5 consecutive failures.",
-        "Fix TS18 self-test in self_tests/ts18_check.py: add proper exception handling and ensure required environment variable is loaded.",
-        "Update TS19 test script in self_tests/ts19_network.py to retry network calls with exponential backoff and log failures.",
-        "Create unit tests in tests/test_maintenance.py covering clean_temp_dirs() edge cases and verify no deletion of non\u2011temp files."
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before addressing self-test failures to prevent out\u2011of\u2011space errors.",
-        "Introduce a dedicated watchdog for ps5-hive to automatically reset backoff without manual intervention.",
-        "Enhance failing self-tests with retry and robust error handling rather than relying solely on auto\u2011fix."
-      ]
-    },
     {
       "id": "sess_b681e162",
       "ts": "2026-05-13T04:41:18Z",
@@ -447,6 +427,26 @@
         "Adopt exponential backoff retry for all external LLM calls to mitigate rate-limit stalls",
         "Enforce unit test coverage for all self-test modules to catch regressions early"
       ]
+    },
+    {
+      "id": "sess_35327fc0",
+      "ts": "2026-05-13T06:56:48Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by fixing failing self-tests, clearing disk space, and resolving the ps5-hive backoff issue",
+      "summary": "The hive is currently stalled with several high\u2011priority blockers: four self\u2011test failures (TS18\u2011TS21) and a ps5-hive session stuck in backoff. Disk usage is at 97% and a maintenance utility is pending. No recent achievements were recorded.",
+      "progress": "Identified and listed the critical blockers and pending tasks.",
+      "next_steps": [
+        "Implement disk_cleanup() in maintenance.py to delete temporary files older than 7 days and log freed space",
+        "Add a watchdog thread in session_manager.py that monitors ps5_hive backoff count and triggers a forced session reset after 3 consecutive backoffs",
+        "Fix TS21 failure by updating validate_schema() in selftest/ts21.py to handle nullable fields correctly",
+        "Fix TS19 failure by adding missing import in selftest/ts19.py and expanding error handling in run_checks()",
+        "Add retry logic with exponential backoff to orchestrator.call_llm() in orchestrator.py for HTTP 429 responses"
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before running any further self\u2011tests to avoid out\u2011of\u2011space errors",
+        "Treat ps5-hive backoff as a separate emergency task and implement an automated reset mechanism",
+        "Address self\u2011test failures in order of dependency: TS21, TS19, then TS18 and TS18"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -458,9 +458,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-13T06:55:32Z",
-    "completed_at": "2026-05-13T06:55:33Z"
+    "started_at": "2026-05-13T06:56:33Z",
+    "completed_at": "2026-05-13T06:56:48Z"
   }
 }
