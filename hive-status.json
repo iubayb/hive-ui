@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T09:54:51Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T09:56:01Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.5,
-      "last_seen": "2026-05-13T09:53:11Z",
+      "status": "running",
+      "health_score": 1.0,
+      "last_seen": "2026-05-13T09:55:22Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -19,7 +19,7 @@
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 7,
+      "errors_last_hour": 5,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -437,7 +437,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 12
+    "openrouter_calls_today": 13
   },
   "model_champions": {
     "text": null,
@@ -446,16 +446,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_b3c041a8",
-      "ts": "2026-05-13T08:03:20Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_203be3d2",
       "ts": "2026-05-13T08:04:20Z",
@@ -625,6 +615,26 @@
         "Integrate exponential backoff into all session management calls, not just restart_session",
         "Add automated alerts for disk usage >90% to prevent future stalls"
       ]
+    },
+    {
+      "id": "sess_a19004bc",
+      "ts": "2026-05-13T09:55:08Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by fixing self-test failures and improving session restart robustness",
+      "summary": "The hive is currently stalled with high resource usage and multiple self-test checks (TS18, TS19, TS21) failing. Session 'ps5-hive' is in backoff and the system health is degrading. Immediate coding work is needed to add retry logic and create targeted unit tests.",
+      "progress": "No recent achievements were recorded.",
+      "next_steps": [
+        "Add exponential backoff retry handling to session_manager.restart_session() in session_manager.py, handling HTTP 429 and connection errors",
+        "Implement detailed logging in session_manager.restart_session() to capture retry attempts and outcomes",
+        "Write unit tests for self_test.check_ts18() in self_test.py covering expected pass and failure scenarios",
+        "Create a mock environment in tests/self_test_mock.py to simulate TS18 conditions and verify auto-fix behavior",
+        "Add a health check endpoint in api/health.py that reports self-test statuses and resource metrics as JSON"
+      ],
+      "decisions": [
+        "Prioritize fixing self-test TS18 and TS19 before adding new features",
+        "Use exponential backoff with jitter for session restarts to avoid thundering herd",
+        "Enforce unit test coverage >90% for all self_test modules"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -636,9 +646,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-13T09:54:51Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-13T09:55:30Z",
+    "completed_at": "2026-05-13T09:55:31Z"
   }
 }
