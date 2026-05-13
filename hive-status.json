@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T20:24:38Z",
+  "last_updated": "2026-05-13T20:25:42Z",
   "updated_by": "agent",
   "hives": {
     "default": {
@@ -226,7 +226,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 15
+    "openrouter_calls_today": 16
   },
   "model_champions": {
     "text": null,
@@ -235,26 +235,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_d3409a3b",
-      "ts": "2026-05-13T17:52:24Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive functionality by fixing failing self-test suites and stabilizing critical sessions.",
-      "summary": "The hive is currently stalled with multiple high\u2011priority self\u2011test failures (TS14, TS5, TS19, TS18, TS21) and a critical session in backoff. Recent attempts to auto\u2011fix some tests were insufficient, and resource pressure is high. Immediate code fixes are needed to clear the test failures and prevent further session backoffs.",
-      "progress": "Identified specific failing test cases and queued pending actions for TS19 and TS18.",
-      "next_steps": [
-        "Update validate_job_schema() in self_tests/ts19.py to match the new job JSON schema and add missing field checks.",
-        "Correct path handling in orchestrator.py's load_job() function to fix TS18 path normalization errors.",
-        "Patch self_tests/ts14.py to handle edge\u2011case timestamp formats and add a fallback parser.",
-        "Refactor self_tests/ts5.py to improve data validation logic that caused the auto\u2011fix to be insufficient.",
-        "Add comprehensive unit tests for self_tests/ts21 in ts21_test.py covering the newly fixed validation branch."
-      ],
-      "decisions": [
-        "Prioritize fixing TS14, TS5, TS19, TS18, and TS21 before addressing resource renicing.",
-        "Run the full self\u2011test suite after each code change to ensure no regressions.",
-        "If a test remains failing after two iterations, open a manual review ticket for deeper analysis."
-      ]
-    },
     {
       "id": "sess_0726a36f",
       "ts": "2026-05-13T18:07:53Z",
@@ -434,6 +414,26 @@
         "Introduce automatic disk\u2011cleanup before launching new jobs to prevent future 98% disk saturation",
         "Enable detailed logging in orchestrator.py for schema validation failures to aid future debugging"
       ]
+    },
+    {
+      "id": "sess_e8c99108",
+      "ts": "2026-05-13T20:25:22Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self-tests and stabilizing critical sessions.",
+      "summary": "The hive is currently stalled with multiple high\u2011priority self\u2011test failures (TS5, TS14, TS21) and a critical session in backoff. Resource usage is high and disk is near capacity, but jobs have been reniced. No recent achievements, so immediate remediation is required.",
+      "progress": "Attempted auto\u2011fixes for TS5 and TS21 were applied but did not resolve the failures.",
+      "next_steps": [
+        "Update validate_job_schema() in self_tests/ts19/validate.py to handle new field types and run unit tests.",
+        "Fix path handling bug in orchestrator.py's load_job() function to resolve TS18 failure.",
+        "Add explicit retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses.",
+        "Implement disk cleanup script in maintenance/cleanup.py to prune logs older than 30 days and free space.",
+        "Write comprehensive unit tests for self_tests/ts5 and ts14 modules covering edge cases and error paths."
+      ],
+      "decisions": [
+        "Prioritize fixing self\u2011test failures before addressing resource constraints.",
+        "Apply a temporary disk cleanup to prevent out\u2011of\u2011space errors while code fixes are deployed.",
+        "Enable detailed logging for orchestrator.py load_job() to aid future debugging."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -445,9 +445,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-13T20:24:38Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-13T20:25:42Z",
+    "completed_at": "2026-05-13T20:25:42Z"
   }
 }
