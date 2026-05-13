@@ -1,24 +1,25 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T16:25:59Z",
+  "last_updated": "2026-05-13T16:26:47Z",
   "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "error",
-      "health_score": 0.0,
-      "last_seen": "2026-05-13T16:25:43Z",
+      "status": "running",
+      "health_score": 1.0,
+      "last_seen": "2026-05-13T16:26:21Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
         "hive-live",
         "hive-watch",
         "nextjs-prod",
+        "opencode",
         "orchestrator",
         "ps5-hive"
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 0,
+      "errors_last_hour": 7,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -104,17 +105,17 @@
       "_hash": "82ed62237b8e342301c173b1539d754e"
     },
     {
-      "id": "b_633ddeae",
+      "id": "b_78639256",
       "ts": "2026-05-13T16:25:43Z",
       "hive": "default",
       "agent": "orchestrator",
-      "description": "tmux session 'hive-watch' missing entirely",
+      "description": "tmux session 'hive-live' missing entirely",
       "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-13T16:26:47Z",
+      "resolution": "Session 'hive-live' is healthy again",
       "github_issue": null,
-      "_hash": "70b95af380bb338ef8031fb179457ee0"
+      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
     },
     {
       "id": "b_35cac15e",
@@ -123,24 +124,24 @@
       "agent": "orchestrator",
       "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
       "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-13T16:26:47Z",
+      "resolution": "Session 'hive-dev' is healthy again",
       "github_issue": null,
       "_hash": "217dae28725ae72712be5a39a27334a8"
     },
     {
-      "id": "b_78639256",
+      "id": "b_633ddeae",
       "ts": "2026-05-13T16:25:43Z",
       "hive": "default",
       "agent": "orchestrator",
-      "description": "tmux session 'hive-live' missing entirely",
+      "description": "tmux session 'hive-watch' missing entirely",
       "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-13T16:26:47Z",
+      "resolution": "Session 'hive-watch' is healthy again",
       "github_issue": null,
-      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
+      "_hash": "70b95af380bb338ef8031fb179457ee0"
     }
   ],
   "next_steps": [],
@@ -187,9 +188,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: develop\u2192main promotion check + release draft",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-13T16:25:47Z",
-    "completed_at": "2026-05-13T16:25:47Z"
+    "started_at": "2026-05-13T16:26:47Z",
+    "completed_at": "2026-05-13T16:26:47Z"
   }
 }
