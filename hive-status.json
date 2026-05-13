@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T15:50:54Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T15:51:58Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-13T15:50:26Z",
+      "health_score": 0.7,
+      "last_seen": "2026-05-13T15:51:57Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -144,7 +144,35 @@
       "_hash": "217dae28725ae72712be5a39a27334a8"
     }
   ],
-  "next_steps": [],
+  "next_steps": [
+    {
+      "id": "ns_41353608",
+      "priority": 1,
+      "description": "Add detailed error logging to tests/ts21.py around the failing assertion and store logs in logs/ts21_debug.log",
+      "assigned_to": "opencode",
+      "status": "in_progress",
+      "source": "orchestrator",
+      "ts": "2026-05-13T15:51:17Z"
+    },
+    {
+      "id": "ns_d476b53e",
+      "priority": 2,
+      "description": "Implement a fallback retry wrapper in utils/self_test_runner.py for TS19 to handle transient resource limits",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-13T15:51:17Z"
+    },
+    {
+      "id": "ns_c9bc6818",
+      "priority": 3,
+      "description": "Refactor the resource cleanup logic in core/resource_manager.py to ensure temporary files are deleted, reducing disk pressure",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-13T15:51:17Z"
+    }
+  ],
   "capabilities": {
     "learned": []
   },
@@ -159,7 +187,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 0
+    "openrouter_calls_today": 1
   },
   "model_champions": {
     "text": null,
@@ -177,6 +205,26 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_d898d394",
+      "ts": "2026-05-13T15:51:17Z",
+      "updated_by": "orchestrator",
+      "goal": "Resolve failing self-test suites TS17\u2011TS21 and stabilize hive health",
+      "summary": "The hive is currently running but several high\u2011priority self\u2011tests (TS17, TS18, TS19, TS21) are failing, and disk usage is at 98%. No recent fixes have been applied, and the system is awaiting concrete remediation steps.",
+      "progress": "Auto\u2011fix attempts were made for TS21 but did not resolve the failure.",
+      "next_steps": [
+        "Add detailed error logging to tests/ts21.py around the failing assertion and store logs in logs/ts21_debug.log",
+        "Implement a fallback retry wrapper in utils/self_test_runner.py for TS19 to handle transient resource limits",
+        "Refactor the resource cleanup logic in core/resource_manager.py to ensure temporary files are deleted, reducing disk pressure",
+        "Write unit tests in tests/test_resource_cleanup.py to verify that temp directories are removed after each self\u2011test",
+        "Add a new health check in health_monitor.py that alerts when disk usage exceeds 95% and triggers cleanup_all_temp()"
+      ],
+      "decisions": [
+        "Prioritize fixing TS21 first, then TS19, followed by TS17 and TS18",
+        "Introduce explicit retry logic for self\u2011test executions to mitigate intermittent failures",
+        "Create automated alerts for disk usage to prevent future 98% threshold breaches"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -190,7 +238,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-13T15:50:53Z",
-    "completed_at": "2026-05-13T15:50:54Z"
+    "started_at": "2026-05-13T15:51:57Z",
+    "completed_at": "2026-05-13T15:51:58Z"
   }
 }
