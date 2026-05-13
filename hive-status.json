@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T16:26:47Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T16:27:56Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-13T16:26:21Z",
+      "health_score": 0.7,
+      "last_seen": "2026-05-13T16:27:46Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -144,7 +144,35 @@
       "_hash": "70b95af380bb338ef8031fb179457ee0"
     }
   ],
-  "next_steps": [],
+  "next_steps": [
+    {
+      "id": "ns_b6764fa1",
+      "priority": 1,
+      "description": "Add detailed error logging and retry logic to run_self_test() in self_test_manager.py for TS17-TS21 failures",
+      "assigned_to": "opencode",
+      "status": "in_progress",
+      "source": "orchestrator",
+      "ts": "2026-05-13T16:27:26Z"
+    },
+    {
+      "id": "ns_46bee0bc",
+      "priority": 2,
+      "description": "Implement disk cleanup routine in resource_monitor.py that deletes old log files when disk usage exceeds 90%",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-13T16:27:26Z"
+    },
+    {
+      "id": "ns_a15b5ec9",
+      "priority": 3,
+      "description": "Write unit tests for TS17-TS21 in tests/self_test_tests.py covering expected error paths and success recovery",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-13T16:27:26Z"
+    }
+  ],
   "capabilities": {
     "learned": []
   },
@@ -159,7 +187,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 0
+    "openrouter_calls_today": 1
   },
   "model_champions": {
     "text": null,
@@ -177,6 +205,26 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_c55d383e",
+      "ts": "2026-05-13T16:27:26Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full self-test pass rate and stabilize hive resource usage",
+      "summary": "The hive is currently experiencing multiple high-priority self-test failures (TS17-TS21) and disk utilization at 98%. No recent progress has been logged, and there are no pending actions. Immediate code and configuration fixes are required to address the failing tests and prevent resource exhaustion.",
+      "progress": "No recent achievements have been recorded; the hive remains in a degraded state.",
+      "next_steps": [
+        "Add detailed error logging and retry logic to run_self_test() in self_test_manager.py for TS17-TS21 failures",
+        "Implement disk cleanup routine in resource_monitor.py that deletes old log files when disk usage exceeds 90%",
+        "Write unit tests for TS17-TS21 in tests/self_test_tests.py covering expected error paths and success recovery",
+        "Update configuration in config.yaml to lower renice priority thresholds for high-load jobs and enable automatic throttling",
+        "Create /api/health endpoint in api_server.py that returns JSON with self-test statuses and disk usage metrics"
+      ],
+      "decisions": [
+        "Prioritize fixing self-test failures before addressing performance optimizations",
+        "Introduce automated disk cleanup to prevent future 98% disk saturation",
+        "Expose health metrics via a new API endpoint for external monitoring"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -190,7 +238,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-13T16:26:47Z",
-    "completed_at": "2026-05-13T16:26:47Z"
+    "started_at": "2026-05-13T16:27:56Z",
+    "completed_at": "2026-05-13T16:27:56Z"
   }
 }
