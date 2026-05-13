@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T16:34:55Z",
-  "updated_by": "hive-doctor",
+  "last_updated": "2026-05-13T16:35:53Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -105,17 +105,17 @@
       "_hash": "82ed62237b8e342301c173b1539d754e"
     },
     {
-      "id": "b_6a9c299a",
+      "id": "b_41f17139",
       "ts": "2026-05-13T16:34:17Z",
       "hive": "default",
       "agent": "orchestrator",
-      "description": "tmux session 'hive-watch' missing entirely",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-13T16:35:21Z",
+      "resolution": "Session 'hive-dev' is healthy again",
       "github_issue": null,
-      "_hash": "70b95af380bb338ef8031fb179457ee0"
+      "_hash": "217dae28725ae72712be5a39a27334a8"
     },
     {
       "id": "b_0064f720",
@@ -124,27 +124,55 @@
       "agent": "orchestrator",
       "description": "tmux session 'hive-live' missing entirely",
       "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "status": "resolved",
+      "resolved_at": "2026-05-13T16:35:21Z",
+      "resolution": "Session 'hive-live' is healthy again",
       "github_issue": null,
       "_hash": "5e7ea63d56407f4c12743a4f09c67392"
     },
     {
-      "id": "b_41f17139",
+      "id": "b_6a9c299a",
       "ts": "2026-05-13T16:34:17Z",
       "hive": "default",
       "agent": "orchestrator",
-      "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
+      "description": "tmux session 'hive-watch' missing entirely",
+      "severity": "critical",
+      "status": "resolved",
+      "resolved_at": "2026-05-13T16:35:21Z",
+      "resolution": "Session 'hive-watch' is healthy again",
       "github_issue": null,
-      "_hash": "217dae28725ae72712be5a39a27334a8"
+      "_hash": "70b95af380bb338ef8031fb179457ee0"
     }
   ],
-  "next_steps": [],
+  "next_steps": [
+    {
+      "id": "ns_219b99ab",
+      "priority": 1,
+      "description": "Implement disk usage safeguard in resource_manager.py: add check to trigger log rotation and prune old files when disk usage exceeds 90%",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-13T16:35:43Z"
+    },
+    {
+      "id": "ns_ad7b0805",
+      "priority": 2,
+      "description": "Fix TS19 failure by updating validate_job_schema() in self_tests/ts19.py to handle new field 'priority' and add detailed error logging",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-13T16:35:43Z"
+    },
+    {
+      "id": "ns_fcde00ce",
+      "priority": 3,
+      "description": "Resolve TS18 error by correcting path handling in orchestrator.py's load_module() function to use pathlib.Path.resolve() safely",
+      "assigned_to": "default",
+      "status": "pending",
+      "source": "orchestrator",
+      "ts": "2026-05-13T16:35:43Z"
+    }
+  ],
   "capabilities": {
     "learned": []
   },
@@ -159,7 +187,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 0
+    "openrouter_calls_today": 1
   },
   "model_champions": {
     "text": null,
@@ -177,6 +205,26 @@
       "progress": "",
       "next_steps": [],
       "decisions": []
+    },
+    {
+      "id": "sess_14bcaea9",
+      "ts": "2026-05-13T16:35:43Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing failing self\u2011test modules and stabilizing resource usage",
+      "summary": "The hive is currently healthy overall but six high\u2011priority issues block operation, including a near\u2011full disk and four self\u2011test failures (TS17\u2011TS21). No recent progress has been logged, so immediate code fixes and resource mitigation are required.",
+      "progress": "Auto\u2011fix attempts were made for TS21 but did not resolve the failure.",
+      "next_steps": [
+        "Implement disk usage safeguard in resource_manager.py: add check to trigger log rotation and prune old files when disk usage exceeds 90%",
+        "Fix TS19 failure by updating validate_job_schema() in self_tests/ts19.py to handle new field 'priority' and add detailed error logging",
+        "Resolve TS18 error by correcting path handling in orchestrator.py's load_module() function to use pathlib.Path.resolve() safely",
+        "Add missing fallback in TS17 within health_checker.py: ensure check_self_test('TS17') returns False instead of raising KeyError",
+        "Create unit tests in tests/self_test_tests.py covering TS17\u2011TS21 edge cases and assert proper error codes"
+      ],
+      "decisions": [
+        "Prioritize fixing self\u2011test modules before scaling new workloads",
+        "Introduce automatic log rotation to prevent disk saturation",
+        "Enforce stricter schema validation for job submissions to avoid future test failures"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -188,9 +236,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: develop\u2192main promotion check + release draft",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-13T16:34:21Z",
-    "completed_at": "2026-05-13T16:34:21Z"
+    "started_at": "2026-05-13T16:35:21Z",
+    "completed_at": "2026-05-13T16:35:21Z"
   }
 }
