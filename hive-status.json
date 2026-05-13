@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T07:57:41Z",
+  "last_updated": "2026-05-13T08:05:56Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.5,
-      "last_seen": "2026-05-13T07:56:01Z",
+      "last_seen": "2026-05-13T08:05:21Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -27,8 +27,8 @@
   "achievements": [],
   "blockers": [
     {
-      "id": "b_912e7cee",
-      "ts": "2026-05-13T07:39:13Z",
+      "id": "b_e049d4cb",
+      "ts": "2026-05-13T08:03:19Z",
       "hive": "desktop",
       "agent": "supervisor",
       "description": "Session 'ps5-hive' in long backoff (160s) \u2014 5 restart(s), may need manual intervention",
@@ -40,21 +40,21 @@
       "_hash": "5d44b7e69b78f35212f5c73ccc29efd3"
     },
     {
-      "id": "b_3255df7d",
-      "ts": "2026-05-13T07:35:43Z",
+      "id": "b_8b8e2668",
+      "ts": "2026-05-13T07:59:24Z",
       "hive": "desktop",
       "agent": "resource-guardian",
-      "description": "HIGH load/core=0.02 mem=59.5GB disk=98% \u2014 jobs reniced",
+      "description": "HIGH load/core=0.01 mem=59.5GB disk=98% \u2014 jobs reniced",
       "severity": "high",
       "status": "open",
       "resolved_at": null,
       "resolution": null,
       "github_issue": null,
-      "_hash": "35343fe092b4f146fb3fee2686037061"
+      "_hash": "21272d163770822e01c16f8756095b09"
     },
     {
-      "id": "b_535941d1",
-      "ts": "2026-05-13T07:35:28Z",
+      "id": "b_20334249",
+      "ts": "2026-05-13T07:59:09Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS21 failing \u2014 auto-fix attempted but not sufficient",
@@ -66,8 +66,8 @@
       "_hash": "a3a483f5373c25d5e811d82c159a9ebd"
     },
     {
-      "id": "b_c9822af3",
-      "ts": "2026-05-13T07:35:28Z",
+      "id": "b_ede27d4e",
+      "ts": "2026-05-13T07:59:09Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS19 failing \u2014 no auto-fix available or fix failed",
@@ -79,8 +79,8 @@
       "_hash": "abc92bdaab9c773ac4617a356f0b6604"
     },
     {
-      "id": "b_c3fa49c4",
-      "ts": "2026-05-13T07:35:28Z",
+      "id": "b_4ac80757",
+      "ts": "2026-05-13T07:59:09Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS18 failing \u2014 no auto-fix available or fix failed",
@@ -92,8 +92,8 @@
       "_hash": "8db53c687b62ebcd9459cbccdbbf588f"
     },
     {
-      "id": "b_33994969",
-      "ts": "2026-05-13T07:35:28Z",
+      "id": "b_de4071d4",
+      "ts": "2026-05-13T07:59:09Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS17 failing \u2014 no auto-fix available or fix failed",
@@ -105,8 +105,8 @@
       "_hash": "6897daf3e3724c9f078fc0b16f4fe428"
     },
     {
-      "id": "b_fe6f417a",
-      "ts": "2026-05-13T07:35:28Z",
+      "id": "b_f01291ad",
+      "ts": "2026-05-13T07:59:09Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS14 failing \u2014 no auto-fix available or fix failed",
@@ -118,8 +118,8 @@
       "_hash": "b4c2ed2d4f13f2fecf6ce6f41e3eac7c"
     },
     {
-      "id": "b_16b4144c",
-      "ts": "2026-05-13T07:35:28Z",
+      "id": "b_4c1b3df1",
+      "ts": "2026-05-13T07:59:09Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS13 failing \u2014 no auto-fix available or fix failed",
@@ -131,8 +131,8 @@
       "_hash": "5c48d095f67370a5d63a500a67d76844"
     },
     {
-      "id": "b_55bfc296",
-      "ts": "2026-05-13T07:35:28Z",
+      "id": "b_9289088a",
+      "ts": "2026-05-13T07:59:09Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS5 failing \u2014 auto-fix attempted but not sufficient",
@@ -144,8 +144,8 @@
       "_hash": "36e8de1c6320cf5f4eececa2d548aefd"
     },
     {
-      "id": "b_7a501525",
-      "ts": "2026-05-13T07:35:27Z",
+      "id": "b_3684893a",
+      "ts": "2026-05-13T07:59:08Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "Live UI verification failed: curl failed: [Errno 111] Connection refused",
@@ -157,72 +157,72 @@
       "_hash": "82ed62237b8e342301c173b1539d754e"
     },
     {
-      "id": "b_acfaeb59",
-      "ts": "2026-05-13T07:35:27Z",
+      "id": "b_bbd253c0",
+      "ts": "2026-05-13T07:59:08Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
       "severity": "high",
       "status": "resolved",
-      "resolved_at": "2026-05-13T07:36:36Z",
+      "resolved_at": "2026-05-13T08:00:17Z",
       "resolution": "Session 'hive-dev' is healthy again",
       "github_issue": null,
       "_hash": "217dae28725ae72712be5a39a27334a8"
     },
     {
-      "id": "b_ca3269b6",
-      "ts": "2026-05-13T07:35:27Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "tmux session 'hive-live' missing entirely",
-      "severity": "critical",
-      "status": "resolved",
-      "resolved_at": "2026-05-13T07:36:36Z",
-      "resolution": "Session 'hive-live' is healthy again",
-      "github_issue": null,
-      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
-    },
-    {
-      "id": "b_8139f6b2",
-      "ts": "2026-05-13T07:35:27Z",
+      "id": "b_8eed0615",
+      "ts": "2026-05-13T07:59:08Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "tmux session 'hive-watch' missing entirely",
       "severity": "critical",
       "status": "resolved",
-      "resolved_at": "2026-05-13T07:36:36Z",
+      "resolved_at": "2026-05-13T08:00:17Z",
       "resolution": "Session 'hive-watch' is healthy again",
       "github_issue": null,
       "_hash": "70b95af380bb338ef8031fb179457ee0"
+    },
+    {
+      "id": "b_5c166fbe",
+      "ts": "2026-05-13T07:59:08Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "tmux session 'hive-live' missing entirely",
+      "severity": "critical",
+      "status": "resolved",
+      "resolved_at": "2026-05-13T08:00:17Z",
+      "resolution": "Session 'hive-live' is healthy again",
+      "github_issue": null,
+      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
     }
   ],
   "next_steps": [
     {
-      "id": "ns_6a2e3b25",
+      "id": "ns_4afa1629",
       "priority": 1,
-      "description": "Implement missing validation in self_test_T17() within tests/self_tests.py to return proper pass/fail codes",
-      "assigned_to": "opencode",
-      "status": "in_progress",
+      "description": "Implement a disk cleanup routine in maintenance.py that deletes log files older than 30 days and compresses large audit logs, then schedule it via cron_job()",
+      "assigned_to": "default",
+      "status": "pending",
       "source": "orchestrator",
-      "ts": "2026-05-13T07:38:01Z"
+      "ts": "2026-05-13T08:05:56Z"
     },
     {
-      "id": "ns_7aaa55d5",
+      "id": "ns_cccd3793",
       "priority": 2,
-      "description": "Add retry and fallback logic to run_self_test() in orchestrator.py for TS18, TS19, and TS20 failures",
+      "description": "Add retry with exponential backoff to session_manager.restart_session() in orchestrator.py for sessions stuck in backoff, logging each attempt",
       "assigned_to": "default",
       "status": "pending",
       "source": "orchestrator",
-      "ts": "2026-05-13T07:38:01Z"
+      "ts": "2026-05-13T08:05:56Z"
     },
     {
-      "id": "ns_0e197d12",
+      "id": "ns_6d80bbd5",
       "priority": 3,
-      "description": "Create a disk cleanup routine in utils/maintenance.py and schedule it in scheduler.py to keep /var/data below 85% usage",
+      "description": "Write unit tests for self_test.check_ts18() in self_test.py covering expected failure modes and assert proper error codes",
       "assigned_to": "default",
       "status": "pending",
       "source": "orchestrator",
-      "ts": "2026-05-13T07:38:01Z"
+      "ts": "2026-05-13T08:05:56Z"
     }
   ],
   "capabilities": {
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 2
+    "openrouter_calls_today": 1
   },
   "model_champions": {
     "text": null,
@@ -249,8 +249,8 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_c12924d0",
-      "ts": "2026-05-13T07:35:27Z",
+      "id": "sess_f123b801",
+      "ts": "2026-05-13T07:59:08Z",
       "updated_by": "orchestrator",
       "goal": "",
       "summary": "",
@@ -259,8 +259,8 @@
       "decisions": []
     },
     {
-      "id": "sess_fcccda8f",
-      "ts": "2026-05-13T07:36:37Z",
+      "id": "sess_806bb542",
+      "ts": "2026-05-13T08:00:18Z",
       "updated_by": "orchestrator",
       "goal": "",
       "summary": "",
@@ -269,43 +269,63 @@
       "decisions": []
     },
     {
-      "id": "sess_92c66892",
-      "ts": "2026-05-13T07:38:01Z",
+      "id": "sess_e855108d",
+      "ts": "2026-05-13T08:01:18Z",
       "updated_by": "orchestrator",
-      "goal": "Restore full hive health by resolving failing self-tests and mitigating high resource usage",
-      "summary": "The hive is currently stalled with multiple high\u2011priority self\u2011test failures (TS17\u2011TS21) and disk usage at 98%. No recent progress has been made. Immediate code fixes and monitoring enhancements are required to bring the system back to a healthy state.",
-      "progress": "No recent achievements; the hive remains stalled.",
-      "next_steps": [
-        "Implement missing validation in self_test_T17() within tests/self_tests.py to return proper pass/fail codes",
-        "Add retry and fallback logic to run_self_test() in orchestrator.py for TS18, TS19, and TS20 failures",
-        "Create a disk cleanup routine in utils/maintenance.py and schedule it in scheduler.py to keep /var/data below 85% usage",
-        "Write unit tests in tests/self_tests_test.py covering all TS17\u2011TS21 scenarios and assert expected metrics",
-        "Add a health\u2011check endpoint in api/health.py that reports self\u2011test status and disk usage as JSON"
-      ],
-      "decisions": [
-        "Prioritize fixing self\u2011test failures before addressing lower\u2011priority performance tweaks",
-        "Introduce automatic disk cleanup as a permanent safeguard against future stalls",
-        "Enforce code coverage thresholds for self\u2011test modules to prevent regressions"
-      ]
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
     },
     {
-      "id": "sess_eb9ea036",
-      "ts": "2026-05-13T07:52:58Z",
+      "id": "sess_8e5abbcc",
+      "ts": "2026-05-13T08:02:19Z",
       "updated_by": "orchestrator",
-      "goal": "Stabilize hive operations by fixing failing self-tests and preventing resource exhaustion",
-      "summary": "The hive is currently stalled with several critical self-test failures (TS18, TS19, TS21) and a disk near capacity. High-load conditions have triggered job renicing, and the ps5-hive session is in long backoff, indicating systemic instability.",
-      "progress": "Added initial retry placeholders to run_self_test() in orchestrator.py but they remain unimplemented.",
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
+    },
+    {
+      "id": "sess_b3c041a8",
+      "ts": "2026-05-13T08:03:20Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
+    },
+    {
+      "id": "sess_203be3d2",
+      "ts": "2026-05-13T08:04:20Z",
+      "updated_by": "orchestrator",
+      "goal": "",
+      "summary": "",
+      "progress": "",
+      "next_steps": [],
+      "decisions": []
+    },
+    {
+      "id": "sess_552d19f8",
+      "ts": "2026-05-13T08:05:56Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by fixing failing self-tests, resolving session backoff, and reducing disk usage",
+      "summary": "The hive is currently stalled with critical blockers: a ps5-hive session in long backoff, high memory and disk usage, and three self-test failures (TS18, TS19, TS21). No recent progress has been made, and the system needs immediate code interventions to automate fixes and add safeguards.",
+      "progress": "No new fixes were applied; the auto-fix attempts for TS21 were insufficient.",
       "next_steps": [
-        "Implement exponential backoff and fallback handling in run_self_test() in orchestrator.py for TS18, TS19, and TS21 failures",
-        "Add unit tests for run_self_test() covering success, retry, and fallback paths in tests/test_orchestrator.py",
-        "Create disk_cleanup() in utils/maintenance.py that deletes temp files older than 7 days and logs actions",
-        "Schedule disk_cleanup() to run hourly via a new cron job entry in orchestrator_cron.yaml",
-        "Add health check endpoint /api/health in logstream.py that returns JSON with self-test statuses and disk usage"
+        "Implement a disk cleanup routine in maintenance.py that deletes log files older than 30 days and compresses large audit logs, then schedule it via cron_job()",
+        "Add retry with exponential backoff to session_manager.restart_session() in orchestrator.py for sessions stuck in backoff, logging each attempt",
+        "Write unit tests for self_test.check_ts18() in self_test.py covering expected failure modes and assert proper error codes",
+        "Modify self_test.run_all() in self_test.py to fallback to a safe mode when TS18, TS19, or TS21 fail, and emit a detailed JSON report via /api/selftest endpoint",
+        "Create a monitoring endpoint in health_check.py (/api/health/metrics) that returns current memory, disk, and core load metrics in JSON for external alerting"
       ],
       "decisions": [
-        "Prioritize fixing self-test failures before addressing session backoff issues",
-        "Use exponential backoff with a max of 5 retries for self-test calls",
-        "Implement automated disk cleanup to keep usage below 85% to avoid resource stalls"
+        "Prioritize automated disk cleanup to free space before attempting self-test repairs",
+        "Enable exponential backoff on session restarts to reduce repeated failures for ps5-hive",
+        "Add detailed self-test reporting so future failures can be auto\u2011fixed without manual intervention"
       ]
     }
   ],
@@ -320,7 +340,7 @@
     "agent": "orchestrator",
     "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-13T07:57:11Z",
-    "completed_at": "2026-05-13T07:57:11Z"
+    "started_at": "2026-05-13T08:05:21Z",
+    "completed_at": "2026-05-13T08:05:21Z"
   }
 }
