@@ -1,19 +1,18 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T09:23:51Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-13T09:24:52Z",
+  "updated_by": "system",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.5,
-      "last_seen": "2026-05-13T09:23:20Z",
+      "status": "error",
+      "health_score": 0.0,
+      "last_seen": "2026-05-13T09:24:44Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
         "hive-live",
         "hive-watch",
         "nextjs-prod",
-        "opencode",
         "orchestrator",
         "ps5-hive"
       ],
@@ -26,6 +25,32 @@
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_febcf898",
+      "ts": "2026-05-13T09:24:44Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "tmux session 'hive-watch' missing entirely",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "70b95af380bb338ef8031fb179457ee0"
+    },
+    {
+      "id": "b_f807146e",
+      "ts": "2026-05-13T09:24:44Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "tmux session 'hive-live' missing entirely",
+      "severity": "critical",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
+    },
     {
       "id": "b_e049d4cb",
       "ts": "2026-05-13T08:03:19Z",
@@ -155,6 +180,19 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "82ed62237b8e342301c173b1539d754e"
+    },
+    {
+      "id": "b_0b3a9419",
+      "ts": "2026-05-13T09:24:44Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
+      "severity": "high",
+      "status": "resolved",
+      "resolved_at": "2026-05-13T09:24:44Z",
+      "resolution": "auto-pruned: hive-dev is now alive",
+      "github_issue": null,
+      "_hash": "217dae28725ae72712be5a39a27334a8"
     },
     {
       "id": "b_31376303",
@@ -577,9 +615,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
-    "status": "completed",
-    "started_at": "2026-05-13T09:23:20Z",
-    "completed_at": "2026-05-13T09:23:21Z"
+    "task": "compaction: LLM summarising hive state",
+    "status": "running",
+    "started_at": "2026-05-13T09:24:44Z",
+    "completed_at": null
   }
 }
