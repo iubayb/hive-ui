@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T19:37:50Z",
+  "last_updated": "2026-05-13T19:38:57Z",
   "updated_by": "agent",
   "hives": {
     "default": {
@@ -445,9 +445,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "self-test: running test_system.sh + auto-fix",
+    "task": "compaction: LLM summarising hive state",
     "status": "running",
-    "started_at": "2026-05-13T19:37:50Z",
+    "started_at": "2026-05-13T19:38:57Z",
     "completed_at": null
   }
 }
