@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T06:10:38Z",
+  "last_updated": "2026-05-13T06:12:02Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "running",
-      "health_score": 1.0,
-      "last_seen": "2026-05-13T06:09:58Z",
+      "status": "stalled",
+      "health_score": 0.5,
+      "last_seen": "2026-05-13T06:11:58Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 47
+    "openrouter_calls_today": 48
   },
   "model_champions": {
     "text": null,
@@ -248,26 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_16a7d9fd",
-      "ts": "2026-05-13T03:41:13Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by clearing disk space, fixing failing self-tests, and restoring the ps5-hive session.",
-      "summary": "The hive is under high load with disk usage at 97% and several critical self-test failures (TS18, TS19, TS21). The ps5-hive session is in a long backoff state, and no recent progress has been recorded. Immediate coding actions are needed to free disk space, add monitoring, and address test failures.",
-      "progress": "No new achievements were recorded since the last snapshot.",
-      "next_steps": [
-        "Implement a disk cleanup utility in maintenance.py that deletes temporary files older than 7 days and logs deleted paths.",
-        "Add a watchdog in session_manager.py that monitors the ps5-hive session backoff timer and triggers an automatic restart after 5 failed attempts.",
-        "Create unit tests for the new disk cleanup utility in tests/test_maintenance.py covering edge cases and dry-run mode.",
-        "Fix self-test TS21 by updating the validation logic in selftest/ts21_check.py to handle new schema version.",
-        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses."
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before addressing self-test failures to prevent service disruption.",
-        "Introduce automated watchdog restart for any session entering long backoff to reduce manual intervention.",
-        "Allocate a dedicated test runner to execute self-tests after each code change to catch regressions early."
-      ]
-    },
     {
       "id": "sess_a61fe45c",
       "ts": "2026-05-13T03:56:11Z",
@@ -447,6 +427,26 @@
         "Introduce a watchdog for ps5-hive to avoid indefinite backoff loops.",
         "Enhance LLM call robustness with retry logic to reduce future high\u2011load incidents."
       ]
+    },
+    {
+      "id": "sess_8a3b61dc",
+      "ts": "2026-05-13T06:11:48Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by resolving critical self-test failures and resource constraints",
+      "summary": "The hive is under high load with disk usage at 97% and several self-test failures (TS18, TS19, TS21). Session 'ps5-hive' is in prolonged backoff, and no recent achievements have been recorded. Immediate remediation of resource pressure and test failures is required to restore stability.",
+      "progress": "No new fixes were completed since the last report.",
+      "next_steps": [
+        "Implement a disk cleanup utility in maintenance.py that deletes temporary files older than 7 days and logs freed space",
+        "Create a watchdog in session_manager.py that monitors ps5-hive backoff counters and triggers a forced restart after 3 consecutive backoffs",
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses",
+        "Write unit tests for self_test_runner.py covering TS18, TS19, and TS21 failure detection and auto-fix pathways",
+        "Introduce a new endpoint /api/health in api_server.py that returns JSON with disk usage, memory load, and self-test status"
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before attempting auto-fixes for self-test failures",
+        "Limit automatic restarts of ps5-hive to three attempts before raising a manual alert",
+        "Enable exponential backoff retries for LLM calls to reduce HTTP 429 throttling"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -458,9 +458,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: develop\u2192main promotion check + release draft",
     "status": "completed",
-    "started_at": "2026-05-13T06:10:37Z",
-    "completed_at": "2026-05-13T06:10:38Z"
+    "started_at": "2026-05-13T06:11:58Z",
+    "completed_at": "2026-05-13T06:12:02Z"
   }
 }
