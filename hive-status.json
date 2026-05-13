@@ -1,25 +1,24 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T16:23:49Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-13T16:25:59Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.65,
-      "last_seen": "2026-05-13T16:22:18Z",
+      "status": "error",
+      "health_score": 0.0,
+      "last_seen": "2026-05-13T16:25:43Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
         "hive-live",
         "hive-watch",
         "nextjs-prod",
-        "opencode",
         "orchestrator",
         "ps5-hive"
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 7,
+      "errors_last_hour": 0,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
@@ -27,34 +26,21 @@
   "achievements": [],
   "blockers": [
     {
-      "id": "b_adc0d714",
-      "ts": "2026-05-13T16:17:53Z",
-      "hive": "desktop",
-      "agent": "supervisor",
-      "description": "Session 'ps5-hive' in long backoff (160s) \u2014 5 restart(s), may need manual intervention",
-      "severity": "high",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "5d44b7e69b78f35212f5c73ccc29efd3"
-    },
-    {
-      "id": "b_1cb89509",
-      "ts": "2026-05-13T16:14:21Z",
+      "id": "b_6cc1759d",
+      "ts": "2026-05-13T16:25:59Z",
       "hive": "desktop",
       "agent": "resource-guardian",
-      "description": "HIGH load/core=0.03 mem=58.9GB disk=98% \u2014 jobs reniced",
+      "description": "HIGH load/core=0.04 mem=58.6GB disk=98% \u2014 jobs reniced",
       "severity": "high",
       "status": "open",
       "resolved_at": null,
       "resolution": null,
       "github_issue": null,
-      "_hash": "b1f817bbd0e4d00aff435220765c60bf"
+      "_hash": "5d729cc583dbee4e35f7f4e0105c0700"
     },
     {
-      "id": "b_98e1b0d7",
-      "ts": "2026-05-13T16:14:05Z",
+      "id": "b_6b495081",
+      "ts": "2026-05-13T16:25:44Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS21 failing \u2014 auto-fix attempted but not sufficient",
@@ -66,8 +52,8 @@
       "_hash": "a3a483f5373c25d5e811d82c159a9ebd"
     },
     {
-      "id": "b_4e94e5fd",
-      "ts": "2026-05-13T16:14:05Z",
+      "id": "b_8c81831c",
+      "ts": "2026-05-13T16:25:44Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS19 failing \u2014 no auto-fix available or fix failed",
@@ -79,8 +65,8 @@
       "_hash": "abc92bdaab9c773ac4617a356f0b6604"
     },
     {
-      "id": "b_dce09bd1",
-      "ts": "2026-05-13T16:14:05Z",
+      "id": "b_e8ba6304",
+      "ts": "2026-05-13T16:25:44Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS18 failing \u2014 no auto-fix available or fix failed",
@@ -92,8 +78,8 @@
       "_hash": "8db53c687b62ebcd9459cbccdbbf588f"
     },
     {
-      "id": "b_664052e2",
-      "ts": "2026-05-13T16:14:05Z",
+      "id": "b_5d88fbf2",
+      "ts": "2026-05-13T16:25:44Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "self-test: TS17 failing \u2014 no auto-fix available or fix failed",
@@ -105,8 +91,8 @@
       "_hash": "6897daf3e3724c9f078fc0b16f4fe428"
     },
     {
-      "id": "b_b6810782",
-      "ts": "2026-05-13T16:14:05Z",
+      "id": "b_d1da668e",
+      "ts": "2026-05-13T16:25:43Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "Live UI verification failed: curl failed: [Errno 111] Connection refused",
@@ -118,74 +104,46 @@
       "_hash": "82ed62237b8e342301c173b1539d754e"
     },
     {
-      "id": "b_42b4d9f3",
-      "ts": "2026-05-13T16:14:05Z",
+      "id": "b_633ddeae",
+      "ts": "2026-05-13T16:25:43Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "tmux session 'hive-watch' missing entirely",
       "severity": "critical",
-      "status": "resolved",
-      "resolved_at": "2026-05-13T16:15:14Z",
-      "resolution": "Session 'hive-watch' is healthy again",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
       "github_issue": null,
       "_hash": "70b95af380bb338ef8031fb179457ee0"
     },
     {
-      "id": "b_0b385a55",
-      "ts": "2026-05-13T16:14:05Z",
+      "id": "b_35cac15e",
+      "ts": "2026-05-13T16:25:43Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "Session 'hive-dev' dead \u2014 supervisor should restart it",
       "severity": "high",
-      "status": "resolved",
-      "resolved_at": "2026-05-13T16:15:14Z",
-      "resolution": "Session 'hive-dev' is healthy again",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
       "github_issue": null,
       "_hash": "217dae28725ae72712be5a39a27334a8"
     },
     {
-      "id": "b_f04ec34c",
-      "ts": "2026-05-13T16:14:05Z",
+      "id": "b_78639256",
+      "ts": "2026-05-13T16:25:43Z",
       "hive": "default",
       "agent": "orchestrator",
       "description": "tmux session 'hive-live' missing entirely",
       "severity": "critical",
-      "status": "resolved",
-      "resolved_at": "2026-05-13T16:15:14Z",
-      "resolution": "Session 'hive-live' is healthy again",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
       "github_issue": null,
       "_hash": "5e7ea63d56407f4c12743a4f09c67392"
     }
   ],
-  "next_steps": [
-    {
-      "id": "ns_9600bb0a",
-      "priority": 1,
-      "description": "Implement detailed exception logging in self_test/ts17.py and add unit tests in tests/self_test/test_ts17.py to capture edge cases.",
-      "assigned_to": "opencode",
-      "status": "in_progress",
-      "source": "orchestrator",
-      "ts": "2026-05-13T16:16:05Z"
-    },
-    {
-      "id": "ns_e2d133c0",
-      "priority": 2,
-      "description": "Fix off\u2011by\u2011one error in self_test/ts18.py by correcting the index calculation in validate_sequence().",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-13T16:16:05Z"
-    },
-    {
-      "id": "ns_6768f445",
-      "priority": 3,
-      "description": "Add missing input validation to self_test/ts19.py's check_params() function and write corresponding tests in tests/self_test/test_ts19.py.",
-      "assigned_to": "default",
-      "status": "pending",
-      "source": "orchestrator",
-      "ts": "2026-05-13T16:16:05Z"
-    }
-  ],
+  "next_steps": [],
   "capabilities": {
     "learned": []
   },
@@ -200,7 +158,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 1
+    "openrouter_calls_today": 0
   },
   "model_champions": {
     "text": null,
@@ -210,34 +168,14 @@
   "pending_questions": [],
   "orchestrator_sessions": [
     {
-      "id": "sess_e19d4a3c",
-      "ts": "2026-05-13T16:14:05Z",
+      "id": "sess_14679fe4",
+      "ts": "2026-05-13T16:25:44Z",
       "updated_by": "orchestrator",
       "goal": "",
       "summary": "",
       "progress": "",
       "next_steps": [],
       "decisions": []
-    },
-    {
-      "id": "sess_8008c61f",
-      "ts": "2026-05-13T16:16:05Z",
-      "updated_by": "orchestrator",
-      "goal": "Resolve all failing self-test modules (TS17\u2011TS21) and restore full hive health",
-      "summary": "The hive is operational but several critical self\u2011tests (TS17, TS18, TS19, TS21) are failing, indicating hidden bugs in core validation routines. High resource usage is also approaching disk capacity, but jobs have been reniced to mitigate load. No recent progress has been recorded.",
-      "progress": "Reniced all running jobs to lower core priority, reducing immediate CPU pressure.",
-      "next_steps": [
-        "Implement detailed exception logging in self_test/ts17.py and add unit tests in tests/self_test/test_ts17.py to capture edge cases.",
-        "Fix off\u2011by\u2011one error in self_test/ts18.py by correcting the index calculation in validate_sequence().",
-        "Add missing input validation to self_test/ts19.py's check_params() function and write corresponding tests in tests/self_test/test_ts19.py.",
-        "Create a retry wrapper in orchestrator.py for call_self_test() that retries up to 3 times on transient IOError.",
-        "Add a cleanup routine in system_monitor.py to archive logs when disk usage exceeds 90% and expose a new /api/cleanup endpoint."
-      ],
-      "decisions": [
-        "Prioritize fixing self\u2011test code before addressing non\u2011critical performance issues.",
-        "Enforce 100% test coverage for all self\u2011test modules moving forward.",
-        "Introduce automated alerts for disk usage >95% to prevent future hard\u2011disk saturation."
-      ]
     }
   ],
   "tracked_researchers": [],
@@ -249,9 +187,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "gitops: develop\u2192main promotion check + release draft",
     "status": "completed",
-    "started_at": "2026-05-13T16:23:19Z",
-    "completed_at": "2026-05-13T16:23:19Z"
+    "started_at": "2026-05-13T16:25:47Z",
+    "completed_at": "2026-05-13T16:25:47Z"
   }
 }
