@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T13:39:52Z",
+  "last_updated": "2026-05-13T13:40:53Z",
   "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.6,
-      "last_seen": "2026-05-13T13:38:52Z",
+      "last_seen": "2026-05-13T13:40:53Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -238,7 +238,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 9
+    "openrouter_calls_today": 10
   },
   "model_champions": {
     "text": null,
@@ -247,16 +247,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_394b5071",
-      "ts": "2026-05-13T11:22:06Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_e36a8777",
       "ts": "2026-05-13T11:24:27Z",
@@ -436,6 +426,26 @@
         "Apply exponential backoff globally to all session restart calls",
         "Expand test coverage for self-test modules to prevent future silent failures"
       ]
+    },
+    {
+      "id": "sess_9f302c0c",
+      "ts": "2026-05-13T13:40:33Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by fixing failing self\u2011tests and improving session restart reliability",
+      "summary": "The hive is currently stalled with high memory and disk usage and several critical self\u2011test failures (TS5, TS19, TS21). Recent auto\u2011fixes resolved TS14, but TS5, TS19, TS21, and TS18 remain problematic. Load mitigation actions have been applied, but further code changes are needed to restore full health.",
+      "progress": "Auto\u2011fixed system invariant TS14 via the auto_fix_TS14 capability.",
+      "next_steps": [
+        "Add exponential backoff and retry logic to restart_session() in orchestrator.py, handling HTTP 429 and connection errors",
+        "Update selftests/ts18_ch validation logic in selftests/ts18_ch.py to match the new schema definitions",
+        "Implement detailed error handling and logging in ts5_check() within selftests/ts5.py to capture root causes",
+        "Create unit tests for restart_session() in tests/test_orchestrator.py covering backoff scenarios",
+        "Add a cleanup routine in system_monitor.py to purge old log files when disk usage exceeds 90%"
+      ],
+      "decisions": [
+        "Prioritize fixing TS5, TS19, and TS21 before addressing lower\u2011priority tests",
+        "Introduce exponential backoff for session restarts as a standard error\u2011handling pattern",
+        "Allocate additional temporary disk space by enabling log rotation until disk pressure subsides"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -447,9 +457,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-13T13:39:52Z",
-    "completed_at": null
+    "task": "heartbeat \u00b7 sessions=8 health=60% blockers=8",
+    "status": "completed",
+    "started_at": "2026-05-13T13:40:53Z",
+    "completed_at": "2026-05-13T13:40:53Z"
   }
 }
