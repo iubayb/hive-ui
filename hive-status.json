@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T16:38:54Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-13T16:39:24Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "running",
@@ -26,6 +26,32 @@
   },
   "achievements": [],
   "blockers": [
+    {
+      "id": "b_b40edade",
+      "ts": "2026-05-13T16:39:24Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "self-test: TS5 failing \u2014 auto-fix attempted but not sufficient",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "36e8de1c6320cf5f4eececa2d548aefd"
+    },
+    {
+      "id": "b_3ca48543",
+      "ts": "2026-05-13T16:39:18Z",
+      "hive": "desktop",
+      "agent": "supervisor",
+      "description": "Session 'ps5-hive' in long backoff (160s) \u2014 5 restart(s), may need manual intervention",
+      "severity": "high",
+      "status": "open",
+      "resolved_at": null,
+      "resolution": null,
+      "github_issue": null,
+      "_hash": "5d44b7e69b78f35212f5c73ccc29efd3"
+    },
     {
       "id": "b_c21394fb",
       "ts": "2026-05-13T16:34:33Z",
@@ -236,9 +262,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
-    "status": "completed",
-    "started_at": "2026-05-13T16:38:23Z",
-    "completed_at": "2026-05-13T16:38:24Z"
+    "task": "self-test: running test_system.sh + auto-fix",
+    "status": "running",
+    "started_at": "2026-05-13T16:39:24Z",
+    "completed_at": null
   }
 }
