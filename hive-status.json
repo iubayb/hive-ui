@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T03:10:39Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T03:11:58Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 35
+    "openrouter_calls_today": 36
   },
   "model_champions": {
     "text": null,
@@ -248,26 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_b77a134b",
-      "ts": "2026-05-13T00:40:13Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by fixing failing self-tests, reducing disk usage, and recovering the ps5-hive session.",
-      "summary": "The hive is running but under high memory pressure and disk near capacity, with several self-test failures and a critical backoff issue for the ps5-hive session. Recent attempts to auto-fix self-tests have failed, and no progress has been logged.",
-      "progress": "Implemented renicing of jobs to mitigate high load and identified the need for a disk cleanup utility.",
-      "next_steps": [
-        "Implement disk cleanup utility in maintenance.py to delete temporary files older than 7 days and log actions.",
-        "Add a watchdog in session_manager.py that monitors ps5-hive backoff and triggers a forced restart after 3 consecutive failures.",
-        "Fix TS21 self-test by updating the health check logic in self_test.py to handle missing config files gracefully.",
-        "Create unit tests for TS18 and TS19 in tests/self_test_test.py to cover edge cases and ensure future auto-fix reliability.",
-        "Add metrics endpoint in api/metrics.py to report current disk usage, memory consumption, and backoff status for all sessions."
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before attempting further self-test auto-fixes.",
-        "Introduce forced restart logic for sessions stuck in backoff to prevent indefinite stalls.",
-        "Expand test coverage for self-test modules to reduce reliance on brittle auto-fix scripts."
-      ]
-    },
     {
       "id": "sess_03914400",
       "ts": "2026-05-13T00:55:09Z",
@@ -447,6 +427,26 @@
         "Automate ps5-hive session recovery via watchdog rather than manual intervention.",
         "Extend retry mechanisms for all external LLM calls to improve resilience under rate limiting."
       ]
+    },
+    {
+      "id": "sess_a5a0f157",
+      "ts": "2026-05-13T03:11:13Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive health by clearing disk space, fixing failing self-tests, and stabilizing the ps5-hive session.",
+      "summary": "The hive is stalled with a critical disk usage of 97% and several self-test failures (TS18, TS19, TS21). The ps5-hive session is in long backoff, causing operational delays. Immediate code actions are needed to free space, add monitoring, and address test failures.",
+      "progress": "Implemented a placeholder for the disk cleanup utility in maintenance.py.",
+      "next_steps": [
+        "Complete the disk cleanup utility in maintenance.py: add logic to identify and delete temp files older than 7 days and log deletions.",
+        "Add a watchdog function in session_manager.py that detects backoff >120s for ps5-hive and triggers an automatic restart with exponential backoff reset.",
+        "Fix self-test TS21 in self_tests.py by correcting the path validation regex and adding a unit test to verify proper handling.",
+        "Implement missing functionality for TS18 in health_check.py: add missing metric collection for core usage and write a test case.",
+        "Create a new endpoint in api/metrics.py to expose current disk usage and memory stats as JSON for monitoring dashboards."
+      ],
+      "decisions": [
+        "Prioritize disk cleanup before addressing self-test failures to prevent immediate resource exhaustion.",
+        "Introduce automatic restart logic for sessions in backoff to reduce manual intervention.",
+        "Add unit tests for all modified functions to ensure future regressions are caught early."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -458,9 +458,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-13T03:10:39Z",
-    "completed_at": null
+    "task": "gitops: develop\u2192main promotion check + release draft",
+    "status": "completed",
+    "started_at": "2026-05-13T03:11:25Z",
+    "completed_at": "2026-05-13T03:11:28Z"
   }
 }
