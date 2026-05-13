@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T09:06:49Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T09:07:40Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "running",
@@ -26,45 +26,6 @@
   },
   "achievements": [],
   "blockers": [
-    {
-      "id": "b_152dee7c",
-      "ts": "2026-05-13T09:06:49Z",
-      "hive": "default",
-      "agent": "hive-doctor",
-      "description": "[orchestrator] Self\u2011test TS21 continues to fail after the cleanup script ran, indicating the underlying issue (e.g., leftover stale temporary files or insufficient journal rotation) was not fully resolved.",
-      "severity": "medium",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "6d8d257298ce221a62560d2fa645aa0a"
-    },
-    {
-      "id": "b_d33a15df",
-      "ts": "2026-05-13T09:06:00Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "tmux session 'hive-live' missing entirely",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
-    },
-    {
-      "id": "b_7a5c8c0b",
-      "ts": "2026-05-13T09:06:00Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "tmux session 'hive-watch' missing entirely",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "70b95af380bb338ef8031fb179457ee0"
-    },
     {
       "id": "b_e049d4cb",
       "ts": "2026-05-13T08:03:19Z",
@@ -196,6 +157,58 @@
       "_hash": "82ed62237b8e342301c173b1539d754e"
     },
     {
+      "id": "b_152dee7c",
+      "ts": "2026-05-13T09:06:49Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[orchestrator] Self\u2011test TS21 continues to fail after the cleanup script ran, indicating the underlying issue (e.g., leftover stale temporary files or insufficient journal rotation) was not fully resolved.",
+      "severity": "medium",
+      "status": "resolved",
+      "resolved_at": "2026-05-13T09:07:10Z",
+      "resolution": "auto-pruned: orchestrator is now alive",
+      "github_issue": null,
+      "_hash": "6d8d257298ce221a62560d2fa645aa0a"
+    },
+    {
+      "id": "b_0afeb90b",
+      "ts": "2026-05-13T09:07:04Z",
+      "hive": "default",
+      "agent": "hive-doctor",
+      "description": "[orchestrator] TS21 self\u2011test continues to fail after applying the temporary /tmp cleanup and journal vacuum; the underlying issue is likely insufficient free space or lingering large log files that were not fully removed.",
+      "severity": "medium",
+      "status": "resolved",
+      "resolved_at": "2026-05-13T09:07:10Z",
+      "resolution": "auto-pruned: orchestrator is now alive",
+      "github_issue": null,
+      "_hash": "aca02e1f458b005f605fe641a03626a4"
+    },
+    {
+      "id": "b_7a5c8c0b",
+      "ts": "2026-05-13T09:06:00Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "tmux session 'hive-watch' missing entirely",
+      "severity": "critical",
+      "status": "resolved",
+      "resolved_at": "2026-05-13T09:07:10Z",
+      "resolution": "Session 'hive-watch' is healthy again",
+      "github_issue": null,
+      "_hash": "70b95af380bb338ef8031fb179457ee0"
+    },
+    {
+      "id": "b_d33a15df",
+      "ts": "2026-05-13T09:06:00Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "tmux session 'hive-live' missing entirely",
+      "severity": "critical",
+      "status": "resolved",
+      "resolved_at": "2026-05-13T09:07:10Z",
+      "resolution": "Session 'hive-live' is healthy again",
+      "github_issue": null,
+      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
+    },
+    {
       "id": "b_6e95e770",
       "ts": "2026-05-13T09:06:00Z",
       "hive": "default",
@@ -283,6 +296,13 @@
   "knowledge": {
     "findings": [
       {
+        "id": "f_b00933a7",
+        "ts": "2026-05-13T09:07:04Z",
+        "hive": "default",
+        "summary": "Orchestrator\u2019s TS21 test still fails; free up additional log space and ensure logging services restart.",
+        "source": "doctor"
+      },
+      {
         "id": "f_2f0f4685",
         "ts": "2026-05-13T09:06:49Z",
         "hive": "default",
@@ -299,7 +319,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 6
+    "openrouter_calls_today": 7
   },
   "model_champions": {
     "text": null,
@@ -468,9 +488,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "gitops: develop\u2192main promotion check + release draft",
+    "task": "triage: checking sessions + service health",
     "status": "completed",
-    "started_at": "2026-05-13T09:06:27Z",
-    "completed_at": "2026-05-13T09:06:30Z"
+    "started_at": "2026-05-13T09:07:10Z",
+    "completed_at": "2026-05-13T09:07:10Z"
   }
 }
