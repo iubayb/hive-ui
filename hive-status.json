@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T20:33:45Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T20:34:55Z",
+  "updated_by": "hive-doctor",
   "hives": {
     "default": {
-      "status": "stalled",
-      "health_score": 0.55,
-      "last_seen": "2026-05-13T20:32:44Z",
+      "status": "running",
+      "health_score": 1.0,
+      "last_seen": "2026-05-13T20:34:55Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -445,9 +445,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "self-test: running test_system.sh + auto-fix",
-    "status": "running",
-    "started_at": "2026-05-13T20:33:45Z",
-    "completed_at": null
+    "task": "gitops: develop\u2192main promotion check + release draft",
+    "status": "completed",
+    "started_at": "2026-05-13T20:34:47Z",
+    "completed_at": "2026-05-13T20:34:49Z"
   }
 }
