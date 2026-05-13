@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T14:24:34Z",
+  "last_updated": "2026-05-13T14:25:51Z",
   "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.6,
-      "last_seen": "2026-05-13T14:23:24Z",
+      "last_seen": "2026-05-13T14:25:51Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -238,7 +238,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 12
+    "openrouter_calls_today": 13
   },
   "model_champions": {
     "text": null,
@@ -247,26 +247,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_2086634f",
-      "ts": "2026-05-13T11:54:33Z",
-      "updated_by": "orchestrator",
-      "goal": "Restore full hive health by fixing failing self-tests and stabilizing session restarts",
-      "summary": "The hive is currently stalled with several high\u2011priority self\u2011test failures (TS5, TS19, TS21) and a session stuck in backoff. Recent auto\u2011fix of TS14 shows the auto\u2011fix pipeline works, but more targeted code changes are needed. Load is high and disk usage at 98% is a risk.",
-      "progress": "Auto\u2011fixed self\u2011test TS14 using the newly learned auto_fix_TS14 capability.",
-      "next_steps": [
-        "Add retry and exponential backoff logic to restart_session() in orchestrator.py to handle long backoff cases like ps5-hive",
-        "Update validation logic in selftests/ts18_ch.py to resolve TS18 failure",
-        "Implement improved disk usage monitoring and alert in system_monitor.py, triggering a graceful job pause when disk > 95%",
-        "Create unit tests for TS19 in selftests/test_ts19.py covering the missing edge cases",
-        "Refactor self_test_runner.py to expose a hook for custom auto\u2011fix functions and register auto_fix_TS19 placeholder"
-      ],
-      "decisions": [
-        "Prioritize fixing TS5, TS19, and TS21 before addressing lower\u2011priority failures",
-        "Introduce exponential backoff for all session restarts to reduce cascade failures",
-        "Add explicit disk\u2011threshold handling to prevent stalls due to full storage"
-      ]
-    },
     {
       "id": "sess_8877ec35",
       "ts": "2026-05-13T12:09:34Z",
@@ -446,6 +426,26 @@
         "Allocate additional memory buffer by adjusting job renice thresholds to mitigate high memory pressure",
         "Defer non\u2011critical UI enhancements until core stability and self\u2011test pass rates are restored"
       ]
+    },
+    {
+      "id": "sess_b0776969",
+      "ts": "2026-05-13T14:25:41Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by resolving critical self-test failures and improving session restart reliability",
+      "summary": "The hive is currently stalled with high memory and disk pressure, and several self-tests (TS19, TS21, TS5) are failing. Recent auto-fix of TS14 succeeded, but urgent code fixes are needed for restart logic and remaining test failures.",
+      "progress": "Auto-fix applied successfully to system invariant TS14.",
+      "next_steps": [
+        "Add retry and exponential backoff logic to restart_session() in orchestrator.py",
+        "Update validation logic in selftests/ts18_ch.py to correctly handle the edge case causing TS18 failure",
+        "Enhance health_check.py to trigger alerts and auto-cleanup when disk usage exceeds 95%",
+        "Write unit tests for TS19 validation in selftests/ts19_validator.py covering all failure patterns",
+        "Refactor load_large_dataset() in data_loader.py to use streaming reads and reduce memory usage"
+      ],
+      "decisions": [
+        "Prioritize implementing retry/backoff for session restarts before addressing lower\u2011priority test failures",
+        "Defer TS5 and TS21 fixes until TS18 and TS19 are resolved and the system is no longer stalled",
+        "Allocate a temporary cleanup script to run nightly for /tmp to mitigate disk saturation"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -457,9 +457,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "heartbeat \u00b7 sessions=8 health=60% blockers=8",
     "status": "completed",
-    "started_at": "2026-05-13T14:24:14Z",
-    "completed_at": "2026-05-13T14:24:14Z"
+    "started_at": "2026-05-13T14:25:51Z",
+    "completed_at": "2026-05-13T14:25:51Z"
   }
 }
