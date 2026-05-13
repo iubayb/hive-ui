@@ -1,56 +1,31 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T09:24:52Z",
-  "updated_by": "system",
+  "last_updated": "2026-05-13T09:25:48Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
-      "status": "error",
-      "health_score": 0.0,
-      "last_seen": "2026-05-13T09:24:44Z",
+      "status": "running",
+      "health_score": 1.0,
+      "last_seen": "2026-05-13T09:25:22Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
         "hive-live",
         "hive-watch",
         "nextjs-prod",
+        "opencode",
         "orchestrator",
         "ps5-hive"
       ],
       "current_goal": "",
       "active_model": "openai/gpt-oss-120b:free",
-      "errors_last_hour": 8,
+      "errors_last_hour": 7,
       "tasks_completed_today": 0,
       "silent_minutes": 0
     }
   },
   "achievements": [],
   "blockers": [
-    {
-      "id": "b_febcf898",
-      "ts": "2026-05-13T09:24:44Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "tmux session 'hive-watch' missing entirely",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "70b95af380bb338ef8031fb179457ee0"
-    },
-    {
-      "id": "b_f807146e",
-      "ts": "2026-05-13T09:24:44Z",
-      "hive": "default",
-      "agent": "orchestrator",
-      "description": "tmux session 'hive-live' missing entirely",
-      "severity": "critical",
-      "status": "open",
-      "resolved_at": null,
-      "resolution": null,
-      "github_issue": null,
-      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
-    },
     {
       "id": "b_e049d4cb",
       "ts": "2026-05-13T08:03:19Z",
@@ -180,6 +155,32 @@
       "resolution": null,
       "github_issue": null,
       "_hash": "82ed62237b8e342301c173b1539d754e"
+    },
+    {
+      "id": "b_f807146e",
+      "ts": "2026-05-13T09:24:44Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "tmux session 'hive-live' missing entirely",
+      "severity": "critical",
+      "status": "resolved",
+      "resolved_at": "2026-05-13T09:25:48Z",
+      "resolution": "Session 'hive-live' is healthy again",
+      "github_issue": null,
+      "_hash": "5e7ea63d56407f4c12743a4f09c67392"
+    },
+    {
+      "id": "b_febcf898",
+      "ts": "2026-05-13T09:24:44Z",
+      "hive": "default",
+      "agent": "orchestrator",
+      "description": "tmux session 'hive-watch' missing entirely",
+      "severity": "critical",
+      "status": "resolved",
+      "resolved_at": "2026-05-13T09:25:48Z",
+      "resolution": "Session 'hive-watch' is healthy again",
+      "github_issue": null,
+      "_hash": "70b95af380bb338ef8031fb179457ee0"
     },
     {
       "id": "b_0b3a9419",
@@ -436,7 +437,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 10
+    "openrouter_calls_today": 11
   },
   "model_champions": {
     "text": null,
@@ -445,16 +446,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_e855108d",
-      "ts": "2026-05-13T08:01:18Z",
-      "updated_by": "orchestrator",
-      "goal": "",
-      "summary": "",
-      "progress": "",
-      "next_steps": [],
-      "decisions": []
-    },
     {
       "id": "sess_8e5abbcc",
       "ts": "2026-05-13T08:02:19Z",
@@ -604,6 +595,26 @@
         "Automate tmux session recreation to eliminate manual dependency on missing sessions",
         "Increase test coverage on self_test functions to catch regressions early"
       ]
+    },
+    {
+      "id": "sess_e1afebf5",
+      "ts": "2026-05-13T09:25:03Z",
+      "updated_by": "orchestrator",
+      "goal": "Restore full hive functionality by fixing critical session issues and improving reliability of self-test checks",
+      "summary": "The hive is currently in an error state with missing tmux sessions and failing self-test TS21. High load and disk usage are being mitigated, but critical sessions need immediate restoration and retry logic must be added. Recent work has not yet produced fixes.",
+      "progress": "Identified missing tmux sessions and added a placeholder for exponential backoff in session_manager.restart_session().",
+      "next_steps": [
+        "Implement tmux session creation fallback in orchestrator.py's ensure_sessions() to automatically recreate 'hive-watch' and 'hive-live' if missing",
+        "Add exponential backoff retry logic to session_manager.restart_session() in session_manager.py and log each attempt",
+        "Write comprehensive unit tests for self_test.check_ts18() in tests/self_test_test.py covering success and failure paths",
+        "Add disk usage monitoring and alert in health_monitor.py to trigger cleanup when usage exceeds 95%",
+        "Refactor self_test.check_ts21() in self_test.py to return detailed error codes and integrate with the new retry mechanism"
+      ],
+      "decisions": [
+        "Prioritize automatic recreation of missing tmux sessions to unblock critical workflows",
+        "Adopt exponential backoff for all session restarts to reduce rapid failure loops",
+        "Increase test coverage of self-test modules before deploying further changes"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -615,9 +626,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "compaction: LLM summarising hive state",
-    "status": "running",
-    "started_at": "2026-05-13T09:24:44Z",
-    "completed_at": null
+    "task": "triage: checking sessions + service health",
+    "status": "completed",
+    "started_at": "2026-05-13T09:25:48Z",
+    "completed_at": "2026-05-13T09:25:48Z"
   }
 }
