@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T18:21:15Z",
-  "updated_by": "agent",
+  "last_updated": "2026-05-13T18:22:54Z",
+  "updated_by": "orchestrator",
   "hives": {
     "default": {
       "status": "stalled",
       "health_score": 0.55,
-      "last_seen": "2026-05-13T18:20:15Z",
+      "last_seen": "2026-05-13T18:22:17Z",
       "sessions": [
         "build_monitor",
         "hive-dev",
@@ -226,7 +226,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 7
+    "openrouter_calls_today": 8
   },
   "model_champions": {
     "text": null,
@@ -384,6 +384,26 @@
         "Allocate additional memory buffer by adjusting MEM_LIMIT in config.yaml to mitigate high load impact",
         "Schedule a manual restart of the 'ps5-hive' session after applying the path handling fix"
       ]
+    },
+    {
+      "id": "sess_d18204d1",
+      "ts": "2026-05-13T18:22:54Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by fixing failing self-test suites and unblocking stalled sessions.",
+      "summary": "The hive is currently stalled at 55% health with multiple high\u2011priority self\u2011test failures (TS14, TS5, TS21) and a long backoff session. Immediate code fixes are needed for schema validation and path handling, and a review of the auto\u2011fix mechanisms is required to prevent future stalls.",
+      "progress": "No new achievements were recorded since the last update.",
+      "next_steps": [
+        "Update validate_job_schema() in self_tests/ts19/validate_job_schema.py to handle new field types and add missing default values.",
+        "Correct path handling in orchestrator.py's load_job_config() function to fix TS18 error (ensure os.path.join used consistently).",
+        "Patch self_tests/ts14/check_disk.py to include retry logic when disk usage query returns transient errors.",
+        "Add comprehensive unit tests in self_tests/ts5/test_resource_limits.py covering edge cases for memory and CPU throttling.",
+        "Refactor auto_fix_self_test() in orchestrator.py to log detailed failure reasons and fallback to manual intervention after two unsuccessful attempts."
+      ],
+      "decisions": [
+        "Prioritize fixing TS19 and TS18 before addressing TS14, TS5, and TS21.",
+        "Introduce detailed logging in auto\u2011fix routines to aid future debugging.",
+        "Allocate additional temporary disk space (10GB) to allow self\u2011test scripts to complete while fixes are applied."
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -395,9 +415,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "self-test: running test_system.sh + auto-fix",
-    "status": "running",
-    "started_at": "2026-05-13T18:21:15Z",
-    "completed_at": null
+    "task": "compaction: LLM summarising hive state",
+    "status": "completed",
+    "started_at": "2026-05-13T18:22:17Z",
+    "completed_at": "2026-05-13T18:22:54Z"
   }
 }
