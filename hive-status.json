@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T07:51:51Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-13T07:52:58Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 1
+    "openrouter_calls_today": 2
   },
   "model_champions": {
     "text": null,
@@ -287,6 +287,26 @@
         "Introduce automatic disk cleanup as a permanent safeguard against future stalls",
         "Enforce code coverage thresholds for self\u2011test modules to prevent regressions"
       ]
+    },
+    {
+      "id": "sess_eb9ea036",
+      "ts": "2026-05-13T07:52:58Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize hive operations by fixing failing self-tests and preventing resource exhaustion",
+      "summary": "The hive is currently stalled with several critical self-test failures (TS18, TS19, TS21) and a disk near capacity. High-load conditions have triggered job renicing, and the ps5-hive session is in long backoff, indicating systemic instability.",
+      "progress": "Added initial retry placeholders to run_self_test() in orchestrator.py but they remain unimplemented.",
+      "next_steps": [
+        "Implement exponential backoff and fallback handling in run_self_test() in orchestrator.py for TS18, TS19, and TS21 failures",
+        "Add unit tests for run_self_test() covering success, retry, and fallback paths in tests/test_orchestrator.py",
+        "Create disk_cleanup() in utils/maintenance.py that deletes temp files older than 7 days and logs actions",
+        "Schedule disk_cleanup() to run hourly via a new cron job entry in orchestrator_cron.yaml",
+        "Add health check endpoint /api/health in logstream.py that returns JSON with self-test statuses and disk usage"
+      ],
+      "decisions": [
+        "Prioritize fixing self-test failures before addressing session backoff issues",
+        "Use exponential backoff with a max of 5 retries for self-test calls",
+        "Implement automated disk cleanup to keep usage below 85% to avoid resource stalls"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -298,9 +318,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-13T07:51:50Z",
-    "completed_at": "2026-05-13T07:51:51Z"
+    "started_at": "2026-05-13T07:52:41Z",
+    "completed_at": "2026-05-13T07:52:58Z"
   }
 }
