@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T06:40:42Z",
-  "updated_by": "orchestrator",
+  "last_updated": "2026-05-13T06:41:53Z",
+  "updated_by": "agent",
   "hives": {
     "default": {
       "status": "stalled",
@@ -239,7 +239,7 @@
     "avg_task_duration_s": 0,
     "model_usage": {},
     "error_rate_24h": 0.0,
-    "openrouter_calls_today": 49
+    "openrouter_calls_today": 50
   },
   "model_champions": {
     "text": null,
@@ -248,26 +248,6 @@
   },
   "pending_questions": [],
   "orchestrator_sessions": [
-    {
-      "id": "sess_97ba2ac7",
-      "ts": "2026-05-13T04:11:18Z",
-      "updated_by": "orchestrator",
-      "goal": "Stabilize the hive by resolving critical self-test failures, clearing disk space, and fixing the ps5-hive backoff issue.",
-      "summary": "The hive is currently healthy but under high memory pressure and disk usage of 97%, with several self-test failures (TS18, TS19, TS21). The ps5-hive session is in long backoff, and a disk cleanup utility and watchdog are pending. Immediate coding actions are required to free space, improve test reliability, and automate session recovery.",
-      "progress": "Identified and listed the critical blockers and pending next steps.",
-      "next_steps": [
-        "Implement disk cleanup utility in maintenance.py: add function clean_temp_files() that deletes /tmp/* older than 24h and logs actions.",
-        "Add unit tests for clean_temp_files() in tests/test_maintenance.py covering edge cases and permission errors.",
-        "Create watchdog in session_manager.py: add class Ps5HiveWatchdog with method monitor_backoff() that restarts ps5-hive after 3 consecutive backoff intervals.",
-        "Write integration test for Ps5HiveWatchdog in tests/test_session_manager.py to simulate backoff and verify restart.",
-        "Fix self-test TS21 in selftests/ts21.py by updating the validation logic to handle new schema version and add regression test."
-      ],
-      "decisions": [
-        "Prioritize disk cleanup before addressing self-test failures to prevent imminent out\u2011of\u2011disk crashes.",
-        "Implement automated watchdog for ps5-hive rather than manual intervention to reduce downtime.",
-        "Allocate additional memory resources after cleanup to lower core load and improve overall stability."
-      ]
-    },
     {
       "id": "sess_2fc46183",
       "ts": "2026-05-13T04:26:25Z",
@@ -447,6 +427,26 @@
         "Limit automatic restarts of ps5-hive to three attempts to avoid endless backoff loops.",
         "Add unit test coverage for all new maintenance and watchdog functions to prevent regressions."
       ]
+    },
+    {
+      "id": "sess_7d246665",
+      "ts": "2026-05-13T06:41:53Z",
+      "updated_by": "orchestrator",
+      "goal": "Stabilize the hive by resolving critical session backoffs, self-test failures, and disk usage issues",
+      "summary": "The hive is currently stalled with high memory and disk utilization, and several core self-tests (TS18, TS19, TS21) are failing. Critical sessions like ps5-hive are in long backoff, preventing normal operation. Immediate code changes are needed to clean disk space, improve session recovery, and address failing self-tests.",
+      "progress": "No new achievements were recorded since the last snapshot.",
+      "next_steps": [
+        "Implement a disk cleanup utility in maintenance.py that deletes temporary files older than 48h and logs actions",
+        "Create a watchdog in session_manager.py that monitors ps5-hive backoff state and triggers an automated restart after three consecutive 160s backoffs",
+        "Add retry logic with exponential backoff to call_llm() in orchestrator.py for HTTP 429 responses",
+        "Write unit tests for self_test_suite.py covering TS18, TS19, and TS21 error paths and ensure they assert proper error handling",
+        "Introduce a memory usage guard in resource_manager.py that logs a warning and spills cache to disk when usage exceeds 55GB"
+      ],
+      "decisions": [
+        "Prioritize disk cleanup and ps5-hive watchdog before addressing self-test failures",
+        "Adopt exponential backoff retry for all external LLM calls to mitigate rate-limit stalls",
+        "Enforce unit test coverage for all self-test modules to catch regressions early"
+      ]
     }
   ],
   "tracked_researchers": [],
@@ -458,9 +458,9 @@
   },
   "active_task": {
     "agent": "orchestrator",
-    "task": "triage: checking sessions + service health",
+    "task": "compaction: LLM summarising hive state",
     "status": "completed",
-    "started_at": "2026-05-13T06:40:21Z",
-    "completed_at": "2026-05-13T06:40:22Z"
+    "started_at": "2026-05-13T06:41:32Z",
+    "completed_at": "2026-05-13T06:41:53Z"
   }
 }
